@@ -118,14 +118,14 @@ conda install --channel conda-forge r-gdalraster
 
 ### From R-universe
 
-[R-universe](https://usdaforestservice.r-universe.dev/gdalraster)
-provides pre-compiled binary packages for Windows and macOS that track
-the development version of **gdalraster**. New packages are built
-usually within ~1 hour of the most recent commit in branch `main`.
+[R-universe](https://firelab.r-universe.dev/gdalraster) provides
+pre-compiled binary packages for Windows and macOS that track the
+development version of **gdalraster**. New packages are built usually
+within ~1 hour of the most recent commit in branch `main`.
 
 ``` r
 # Install the development version from r-universe
-install.packages("gdalraster", repos = c("https://usdaforestservice.r-universe.dev", "https://cran.r-project.org"))
+install.packages("gdalraster", repos = c("https://firelab.r-universe.dev", "https://cran.r-project.org"))
 ```
 
 ### From source code
