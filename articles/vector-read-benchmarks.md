@@ -1,27 +1,30 @@
 # Vector Read Benchmarks
 
 Vector read benchmarks for R package **gdalraster**  
-(last updated 2025-07-06)
+(last updated 2025-12-013)
 
 The following benchmark tests follow the format of benchmarks described
 in GDAL [RFC 86: Column-oriented read API for vector
 layers](https://gdal.org/en/stable/development/rfc/rfc86_column_oriented_api.html#benchmarks)
 using the same dataset. The timings here cannot be compared directly
 with the GDAL timings due to hardware differences (hardware used for the
-GDAL benchmarks is not specified). The timings reported here should be
-conservative in the sense that hardware was a relatively slow, six-year
-old laptop at the time of writing (Intel(R) Core(TM) i5-8250U CPU @
-1.60GHz, 8 GB RAM, SSD). The benchmarks are intended as a sanity check
-on read performance in the context of ranges seen for two different I/O
-methods (traditional GetNextFeature() iteration vs. column-oriented
-ArrowArrayStream), and multiple implementations in both plain C++ and
-using Python libraries as described for the GDAL benchmarks, and using R
-packages described here.
+GDAL benchmarks is not specified). The benchmarks are intended as a
+sanity check on read performance in the context of ranges seen for two
+different I/O methods (traditional GetNextFeature() iteration
+vs. column-oriented ArrowArrayStream), and multiple implementations in
+both plain C++ and using Python libraries as described for the GDAL
+benchmarks, and using R packages described here.
+
+## Hardware
+
+Dell XPS 13 laptop (9350) 2024, Intel® Core™ Ultra 7 258V x 8 cores up
+to 4.8 GHz Lunar Lake CPU, 32GB LPDDR5X RAM 8533MT/s integrated, 1 TB
+SSD
 
 ## Software environment
 
-Linux Ubuntu 24.04, R 4.5.0, GDAL 3.10.3, gdalraster 2.0.0.9002, sf
-1.0.21
+Ubuntu Linux 24.04.3 LTS, R 4.5.2 (2025-10-31), GDAL 3.12.0 (released
+2025-11-03), **gdalraster** 2.3.0.9007, **sf** 1.0.23
 
 ## Vector data
 
@@ -81,11 +84,11 @@ experimental columnar interface introduced in GDAL 3.6”.
 
 | Bench program                       | Time (s) | Data frame class | Geom list column  |
 |:------------------------------------|---------:|:-----------------|:------------------|
-| bench_gdalraster_fetch.R            |    25.90 | OGRFeatureSet    | WKB `raw` vectors |
-| bench_gdalraster_arrow_stream.R     |     5.90 | base data.frame  | WKB `raw` vectors |
-| bench_gdalraster_fetch_conv_to_sf.R |    56.98 | sf               | classed sfc       |
-| bench_sf_read_sf.R                  |   176.56 | sf               | classed sfc       |
-| bench_sf_read_sf_use_stream.R       |    25.30 | sf               | classed sfc       |
+| bench_gdalraster_fetch.R            |    11.20 | OGRFeatureSet    | WKB `raw` vectors |
+| bench_gdalraster_arrow_stream.R     |     2.87 | base data.frame  | WKB `raw` vectors |
+| bench_gdalraster_fetch_conv_to_sf.R |    25.01 | sf               | classed sfc       |
+| bench_sf_read_sf.R                  |    77.24 | sf               | classed sfc       |
+| bench_sf_read_sf_use_stream.R       |    11.17 | sf               | classed sfc       |
 
 Read nz-building-outlines.gpkg (1.5 GB) and populate a data frame.
 
@@ -111,7 +114,7 @@ lyr$getFeatureCount()
 
 system.time(d <- lyr$fetch(-1))
 #>    user  system elapsed 
-#>  25.006   0.881  25.901
+#>  10.383   0.702  11.200
 
 (nrow(d) == lyr$getFeatureCount())
 #> [1] TRUE
@@ -150,7 +153,7 @@ head(d)
 lyr$close()
 ```
 
-^(Created on 2025-05-25 with [reprex v2.1.1](https://reprex.tidyverse.org))
+^(Created on 2025-12-13 with [reprex v2.1.1](https://reprex.tidyverse.org))
 
 ### bench_gdalraster_arrow_stream.R
 
@@ -183,7 +186,7 @@ options(nanoarrow.warn_unregistered_extension = FALSE)
 
 system.time(d <- as.data.frame(stream))
 #>    user  system elapsed 
-#>   7.388   1.390   5.895
+#>   3.223   0.856   2.870
 
 stream$release()
 
@@ -223,7 +226,7 @@ head(d)
 lyr$close()
 ```
 
-^(Created on 2025-05-25 with [reprex v2.1.1](https://reprex.tidyverse.org))
+^(Created on 2025-12-13 with [reprex v2.1.1](https://reprex.tidyverse.org))
 
 ### bench_gdalraster_fetch_conv_to_sf.R
 
@@ -248,7 +251,7 @@ system.time({
     d <- sf::st_sf(d, crs = lyr$getSpatialRef())
 })
 #>    user  system elapsed 
-#>  54.795   1.938  56.979
+#>  23.533   1.395  25.010
 
 (nrow(d) == lyr$getFeatureCount())
 #> [1] TRUE
@@ -291,7 +294,7 @@ head(d)
 lyr$close()
 ```
 
-^(Created on 2025-05-25 with [reprex v2.1.1](https://reprex.tidyverse.org))
+^(Created on 2025-12-13 with [reprex v2.1.1](https://reprex.tidyverse.org))
 
 ### bench_sf_read_sf.R
 
@@ -302,7 +305,7 @@ library(sf)
 f <- '/home/ctoney/data/gis/nz-building-outlines/nz-building-outlines.gpkg'
 system.time(d <- read_sf(f, "nz_building_outlines"))
 #>    user  system elapsed 
-#> 156.162   7.710 176.556
+#> 74.969   2.079  77.238
 
 nrow(d)
 #> [1] 3289574
@@ -328,7 +331,7 @@ head(d)
 #> #   geom <MULTIPOLYGON [m]>
 ```
 
-^(Created on 2025-05-25 with [reprex v2.1.1](https://reprex.tidyverse.org))
+^(Created on 2025-12-13 with [reprex v2.1.1](https://reprex.tidyverse.org))
 
 ### bench_sf_read_sf_use_stream.R
 
@@ -339,7 +342,7 @@ library(sf)
 f <- '/home/ctoney/data/gis/nz-building-outlines/nz-building-outlines.gpkg'
 system.time(d <- read_sf(f, "nz_building_outlines", use_stream = TRUE))
 #>    user  system elapsed 
-#>  25.749   2.556  25.295
+#>  10.876   1.453  11.168
 
 nrow(d)
 #> [1] 3289574
@@ -365,4 +368,4 @@ head(d)
 #> #   geom <MULTIPOLYGON [m]>
 ```
 
-^(Created on 2025-05-25 with [reprex v2.1.1](https://reprex.tidyverse.org))
+^(Created on 2025-12-13 with [reprex v2.1.1](https://reprex.tidyverse.org))

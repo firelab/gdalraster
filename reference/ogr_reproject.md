@@ -204,7 +204,7 @@ ynp_dsn <- file.path(tempdir(), "ynp_features.gpkg")
 (bnd <- new(GDALVector, ynp_dsn, "ynp_bnd"))
 #> C++ object of class GDALVector
 #>  Driver : GeoPackage (GPKG)
-#>  DSN    : /tmp/RtmpSIrHh1/ynp_features.gpkg
+#>  DSN    : /tmp/RtmpxYp3TR/ynp_features.gpkg
 #>  Layer  : ynp_bnd
 #>  CRS    : NAD83 (EPSG:4269)
 #>  Geom   : POLYGON
@@ -217,7 +217,7 @@ out_dsn <- tempfile(fileext = ".gpkg")
 (bnd_mtsp <- ogr_reproject(ynp_dsn, "ynp_bnd", out_dsn, mtbs$getSpatialRef()))
 #> C++ object of class GDALVector
 #>  Driver : GeoPackage (GPKG)
-#>  DSN    : /tmp/RtmpSIrHh1/file1fe34b3f7e29.gpkg
+#>  DSN    : /tmp/RtmpxYp3TR/file1fe42523b1f0.gpkg
 #>  Layer  : ynp_bnd
 #>  CRS    : NAD83 / Montana (EPSG:32100)
 #>  Geom   : POLYGON

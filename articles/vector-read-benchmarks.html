@@ -85,26 +85,31 @@
     
 <p>Vector read benchmarks for R package
 <strong>gdalraster</strong><br>
-(last updated 2025-07-06)</p>
+(last updated 2025-12-013)</p>
 <p>The following benchmark tests follow the format of benchmarks
 described in GDAL <a href="https://gdal.org/en/stable/development/rfc/rfc86_column_oriented_api.html#benchmarks" class="external-link">RFC
 86: Column-oriented read API for vector layers</a> using the same
 dataset. The timings here cannot be compared directly with the GDAL
 timings due to hardware differences (hardware used for the GDAL
-benchmarks is not specified). The timings reported here should be
-conservative in the sense that hardware was a relatively slow, six-year
-old laptop at the time of writing (Intel(R) Core(TM) i5-8250U CPU @
-1.60GHz, 8 GB RAM, SSD). The benchmarks are intended as a sanity check
-on read performance in the context of ranges seen for two different I/O
-methods (traditional GetNextFeature() iteration vs. column-oriented
-ArrowArrayStream), and multiple implementations in both plain C++ and
-using Python libraries as described for the GDAL benchmarks, and using R
-packages described here.</p>
+benchmarks is not specified). The benchmarks are intended as a sanity
+check on read performance in the context of ranges seen for two
+different I/O methods (traditional GetNextFeature() iteration
+vs. column-oriented ArrowArrayStream), and multiple implementations in
+both plain C++ and using Python libraries as described for the GDAL
+benchmarks, and using R packages described here.</p>
+<div class="section level2">
+<h2 id="hardware">Hardware<a class="anchor" aria-label="anchor" href="#hardware"></a>
+</h2>
+<p>Dell XPS 13 laptop (9350) 2024, Intel® Core™ Ultra 7 258V x 8 cores
+up to 4.8 GHz Lunar Lake CPU, 32GB LPDDR5X RAM 8533MT/s integrated, 1 TB
+SSD</p>
+</div>
 <div class="section level2">
 <h2 id="software-environment">Software environment<a class="anchor" aria-label="anchor" href="#software-environment"></a>
 </h2>
-<p>Linux Ubuntu 24.04, R 4.5.0, GDAL 3.10.3, gdalraster 2.0.0.9002, sf
-1.0.21</p>
+<p>Ubuntu Linux 24.04.3 LTS, R 4.5.2 (2025-10-31), GDAL 3.12.0 (released
+2025-11-03), <strong>gdalraster</strong> 2.3.0.9007, <strong>sf</strong>
+1.0.23</p>
 </div>
 <div class="section level2">
 <h2 id="vector-data">Vector data<a class="anchor" aria-label="anchor" href="#vector-data"></a>
@@ -177,31 +182,31 @@ frame.</caption>
 <tbody>
 <tr class="odd">
 <td align="left">bench_gdalraster_fetch.R</td>
-<td align="right">25.90</td>
+<td align="right">11.20</td>
 <td align="left">OGRFeatureSet</td>
 <td align="left">WKB <code>raw</code> vectors</td>
 </tr>
 <tr class="even">
 <td align="left">bench_gdalraster_arrow_stream.R</td>
-<td align="right">5.90</td>
+<td align="right">2.87</td>
 <td align="left">base data.frame</td>
 <td align="left">WKB <code>raw</code> vectors</td>
 </tr>
 <tr class="odd">
 <td align="left">bench_gdalraster_fetch_conv_to_sf.R</td>
-<td align="right">56.98</td>
+<td align="right">25.01</td>
 <td align="left">sf</td>
 <td align="left">classed sfc</td>
 </tr>
 <tr class="even">
 <td align="left">bench_sf_read_sf.R</td>
-<td align="right">176.56</td>
+<td align="right">77.24</td>
 <td align="left">sf</td>
 <td align="left">classed sfc</td>
 </tr>
 <tr class="odd">
 <td align="left">bench_sf_read_sf_use_stream.R</td>
-<td align="right">25.30</td>
+<td align="right">11.17</td>
 <td align="left">sf</td>
 <td align="left">classed sfc</td>
 </tr>
@@ -232,7 +237,7 @@ frame.</caption>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">fetch</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  25.006   0.881  25.901</span></span>
+<span><span class="co">#&gt;  10.383   0.702  11.200</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">==</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -269,7 +274,7 @@ frame.</caption>
 <span><span class="co">#&gt; 6        2016-04-21    2019-01-04 WKB MULTIPOLYGON: raw 01 06 00 00 ...</span></span>
 <span></span>
 <span><span class="va">lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><sup>Created on 2025-05-25 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
+<p><sup>Created on 2025-12-13 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
 </div>
 <div class="section level3">
 <h3 id="bench_gdalraster_arrow_stream-r">bench_gdalraster_arrow_stream.R<a class="anchor" aria-label="anchor" href="#bench_gdalraster_arrow_stream-r"></a>
@@ -303,7 +308,7 @@ frame.</caption>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">stream</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   7.388   1.390   5.895</span></span>
+<span><span class="co">#&gt;   3.223   0.856   2.870</span></span>
 <span></span>
 <span><span class="va">stream</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -341,7 +346,7 @@ frame.</caption>
 <span><span class="co">#&gt; 6        2016-04-21    2019-01-04 blob[102 B]</span></span>
 <span></span>
 <span><span class="va">lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><sup>Created on 2025-05-25 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
+<p><sup>Created on 2025-12-13 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
 </div>
 <div class="section level3">
 <h3 id="bench_gdalraster_fetch_conv_to_sf-r">bench_gdalraster_fetch_conv_to_sf.R<a class="anchor" aria-label="anchor" href="#bench_gdalraster_fetch_conv_to_sf-r"></a>
@@ -367,7 +372,7 @@ frame.</caption>
 <span>    <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu">st_sf</span><span class="op">(</span><span class="va">d</span>, crs <span class="op">=</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">getSpatialRef</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  54.795   1.938  56.979</span></span>
+<span><span class="co">#&gt;  23.533   1.395  25.010</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">==</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -408,7 +413,7 @@ frame.</caption>
 <span><span class="co">#&gt; 6        2016-04-21    2019-01-04 MULTIPOLYGON (((1818436 554...</span></span>
 <span></span>
 <span><span class="va">lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><sup>Created on 2025-05-25 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
+<p><sup>Created on 2025-12-13 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
 </div>
 <div class="section level3">
 <h3 id="bench_sf_read_sf-r">bench_sf_read_sf.R<a class="anchor" aria-label="anchor" href="#bench_sf_read_sf-r"></a>
@@ -420,7 +425,7 @@ frame.</caption>
 <span><span class="va">f</span> <span class="op">&lt;-</span> <span class="st">'/home/ctoney/data/gis/nz-building-outlines/nz-building-outlines.gpkg'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">read_sf</span><span class="op">(</span><span class="va">f</span>, <span class="st">"nz_building_outlines"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt; 156.162   7.710 176.556</span></span>
+<span><span class="co">#&gt; 74.969   2.079  77.238</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3289574</span></span>
@@ -444,7 +449,7 @@ frame.</caption>
 <span><span class="co">#&gt; #   capture_source_id &lt;int&gt;, capture_source_name &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   capture_source_from &lt;date&gt;, capture_source_to &lt;date&gt;, last_modified &lt;date&gt;,</span></span>
 <span><span class="co">#&gt; #   geom &lt;MULTIPOLYGON [m]&gt;</span></span></code></pre></div>
-<p><sup>Created on 2025-05-25 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
+<p><sup>Created on 2025-12-13 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
 </div>
 <div class="section level3">
 <h3 id="bench_sf_read_sf_use_stream-r">bench_sf_read_sf_use_stream.R<a class="anchor" aria-label="anchor" href="#bench_sf_read_sf_use_stream-r"></a>
@@ -456,7 +461,7 @@ frame.</caption>
 <span><span class="va">f</span> <span class="op">&lt;-</span> <span class="st">'/home/ctoney/data/gis/nz-building-outlines/nz-building-outlines.gpkg'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">read_sf</span><span class="op">(</span><span class="va">f</span>, <span class="st">"nz_building_outlines"</span>, use_stream <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;  25.749   2.556  25.295</span></span>
+<span><span class="co">#&gt;  10.876   1.453  11.168</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 3289574</span></span>
@@ -480,7 +485,7 @@ frame.</caption>
 <span><span class="co">#&gt; #   capture_source_id &lt;int&gt;, capture_source_name &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   capture_source_from &lt;date&gt;, capture_source_to &lt;date&gt;, last_modified &lt;date&gt;,</span></span>
 <span><span class="co">#&gt; #   geom &lt;MULTIPOLYGON [m]&gt;</span></span></code></pre></div>
-<p><sup>Created on 2025-05-25 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
+<p><sup>Created on 2025-12-13 with <a href="https://reprex.tidyverse.org" class="external-link">reprex v2.1.1</a></sup></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
