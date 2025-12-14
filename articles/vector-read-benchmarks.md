@@ -1,7 +1,7 @@
 # Vector Read Benchmarks
 
 Vector read benchmarks for R package **gdalraster**  
-(last updated 2025-12-013)
+(last updated 2025-12-13)
 
 The following benchmark tests follow the format of benchmarks described
 in GDAL [RFC 86: Column-oriented read API for vector
