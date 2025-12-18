@@ -108,11 +108,11 @@ experimental columnar interface introduced in GDAL 3.6”.
 
 | Bench program                       | Time (s) | Data frame class | Geom list column  |
 |:------------------------------------|---------:|:-----------------|:------------------|
-| bench_ogr.cpp                       |     2.63 | none             | n/a               |
+| bench_ogr.cpp (C++ raw perf)        |     2.63 | none             | n/a               |
 | bench_gdalraster_fetch.R            |    11.20 | OGRFeatureSet    | WKB `raw` vectors |
 | bench_gdalraster_fetch_conv_to_sf.R |    25.01 | sf               | classed sfc       |
 | bench_sf_read_sf.R                  |    77.24 | sf               | classed sfc       |
-| bench_ogr_batch.cpp                 |     0.45 | none             | n/a               |
+| bench_ogr_batch.cpp (C++ raw perf)  |     0.45 | none             | n/a               |
 | bench_gdalraster_arrow_stream.R     |     2.87 | base data.frame  | WKB `raw` vectors |
 | bench_sf_read_sf_use_stream.R       |    11.17 | sf               | classed sfc       |
 
