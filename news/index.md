@@ -1,5 +1,12 @@
 # Changelog
 
+## gdalraster 2.4.0.9000 (dev)
+
+- (internal) class `GDALAlg`: use
+  `GDALAlgorithmRegistryInstantiateAlgFromPath()` if GDAL \>= 3.12
+  ([\#859](https://github.com/firelab/gdalraster/issues/859))
+  (2025-12-26)
+
 ## gdalraster 2.4.0
 
 CRAN release: 2025-12-18
