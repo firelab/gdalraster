@@ -12,7 +12,7 @@ and
 [`GDALVector`](https://firelab.github.io/gdalraster/reference/GDALVector-class.html),
 along with several [stand-alone
 functions](https://firelab.github.io/gdalraster/reference/index.html#stand-alone-functions).
-Initial bindings are provided to the “gdal” command line interface (CLI)
+Initial bindings are provided to the `gdal` command line interface (CLI)
 algorithms added in GDAL 3.11. Bindings to the GDAL Virtual Systems
 Interface ([VSI](https://gdal.org/en/stable/api/cpl.html#cpl-vsi-h)) are
 also included to support file system operations on URLs, cloud storage
