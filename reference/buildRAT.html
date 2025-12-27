@@ -161,11 +161,12 @@ to either a single pixel value or a range of values, and might have
 attributes such as the histogram count for that value (or range), the color
 that pixels of that value (or range) should be displayed, names of classes,
 or various other information.</p>
-<p>Each column in a raster attribute table has a name, a type (integer,
-double, or string), and a <code>GDALRATFieldUsage</code>. The usage
-distinguishes columns with particular understood purposes (such as color,
-histogram count, class name), and columns that have other purposes not
-understood by the library (long labels, ancillary attributes, etc).</p>
+<p>Each column in a raster attribute table has a name, a type (Integer,
+Double, String, and with GDAL &gt;= 3.12, Boolean, DateTime, or WKBGeometry),
+and a <code>GDALRATFieldUsage</code>. The usage distinguishes columns with particular
+understood purposes (such as color, histogram count, class name), and
+columns that have other purposes not understood by the library (long labels,
+ancillary attributes, etc).</p>
 <p>In the general case, each row has a field indicating the minimum pixel
 value falling into that category, and a field indicating the maximum pixel
 value. In the GDAL API, these are indicated with usage values of <code>GFU_Min</code>

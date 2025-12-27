@@ -12,12 +12,14 @@ building new tables, and setting a default RAT on a raster band.
 
 ## Format of GDAL RAT
 
-Each column in a raster attribute table has a name, a type (integer,
-floating point or string), and a `GDALRATFieldUsage`. The field usage
-distinguishes columns with particular understood purposes (such as
-color, histogram count, class name), and columns that have other
-purposes not understood by the library (long labels, ancillary
-attributes, etc).
+Each column in a raster attribute table has a name, a type (Integer,
+Double, String, and with GDAL \>= 3.12, Boolean, DateTime, or
+WKBGeometry), and a `GDALRATFieldUsage`. The field usage distinguishes
+columns with particular understood purposes (such as color, histogram
+count, class name), and columns that have other purposes not understood
+by the library (long labels, ancillary attributes, etc). With GDAL \>=
+3.12, a WKBGeometry field is meant to help GIS software find (zoom to)
+areas where specific rows are present in the RAT.
 
 In the general case, each row has a field indicating the minimum pixel
 value falling into that category, and a field indicating the maximum
