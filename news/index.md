@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9021 (dev)
+## gdalraster 2.4.0.9022 (dev)
+
+- add
+  [`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md):
+  get file and directory names matching a pattern that may contain
+  wildcards, wrapper of `VSIGlob()` in GDAL \>= 3.11
+  ([\#864](https://github.com/firelab/gdalraster/issues/864))
+  (2026-01-14)
 
 - add
   [`g_build_polygon_from_edges()`](https://firelab.github.io/gdalraster/reference/g_factory.md):
