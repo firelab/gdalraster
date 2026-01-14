@@ -29,6 +29,15 @@ g_get_geom(
   as_iso = FALSE,
   byte_order = "LSB"
 )
+
+g_build_polygon_from_edges(
+  lines,
+  auto_close = TRUE,
+  tolerance = 0,
+  as_wkb = TRUE,
+  as_iso = FALSE,
+  byte_order = "LSB"
+)
 ```
 
 ## Arguments
@@ -75,12 +84,28 @@ g_get_geom(
   An integer value giving the 1-based index of a sub-geometry (numeric
   values will be coerced to integer by truncation).
 
+- lines:
+
+  Either a raw vector of WKB or a character string of WKT for a
+  GeometryCollection or MultiLineString.
+
+- auto_close:
+
+  A logical value, `TRUE` if the polygon should be closed when first and
+  last points of the ring are the same (the default).
+
+- tolerance:
+
+  A numeric value giving the tolerance into which two arcs are
+  considered close enough to be joined.
+
 ## Value
 
 A geometry as WKB raw vector by default, or a WKT string if
 `as_wkb = FALSE`. In the case of multiple input points for creating
 Point geometry type, a list of WKB raw vectors or character vector of
-WKT strings will be returned.
+WKT strings will be returned. `NULL` is returned with a warning if the
+an error occurs in the geometry operation.
 
 ## Details
 
@@ -106,6 +131,9 @@ the container geometry is not modified.
 indexing). For a polygon, requesting the first sub-geometry returns the
 exterior ring (`sub_geom_idx = 1`), and the interior rings are returned
 for `sub_geom_idx > 1`.
+
+`g_build_polygon_from_edges()` builds a polygon from a set of arcs given
+in a `GeometryCollection` or `MultiLineString`.
 
 ## Note
 

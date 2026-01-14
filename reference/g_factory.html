@@ -84,6 +84,15 @@ container geometry types from sub-geometries.</p>
 <span>  as_wkb <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  as_iso <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  byte_order <span class="op">=</span> <span class="st">"LSB"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">g_build_polygon_from_edges</span><span class="op">(</span></span>
+<span>  <span class="va">lines</span>,</span>
+<span>  auto_close <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  as_wkb <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  as_iso <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  byte_order <span class="op">=</span> <span class="st">"LSB"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -133,13 +142,29 @@ a container geometry type.</p></dd>
 <dd><p>An integer value giving the 1-based index of a
 sub-geometry (numeric values will be coerced to integer by truncation).</p></dd>
 
+
+<dt id="arg-lines">lines<a class="anchor" aria-label="anchor" href="#arg-lines"></a></dt>
+<dd><p>Either a raw vector of WKB or a character string of WKT for
+a GeometryCollection or MultiLineString.</p></dd>
+
+
+<dt id="arg-auto-close">auto_close<a class="anchor" aria-label="anchor" href="#arg-auto-close"></a></dt>
+<dd><p>A logical value, <code>TRUE</code> if the polygon should be closed
+when first and last points of the ring are the same (the default).</p></dd>
+
+
+<dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
+<dd><p>A numeric value giving the tolerance into which two arcs are
+considered close enough to be joined.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A geometry as WKB raw vector by default, or a WKT string if
 <code>as_wkb = FALSE</code>. In the case of multiple input points for creating Point
 geometry type, a list of WKB raw vectors or character vector of WKT strings
-will be returned.</p>
+will be returned. <code>NULL</code> is returned with a warning if the an error occurs
+in the geometry operation.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -162,6 +187,8 @@ the container geometry is not modified.</p>
 indexing). For a polygon, requesting the first sub-geometry returns the
 exterior ring (<code>sub_geom_idx = 1</code>), and the interior rings are returned for
 <code>sub_geom_idx &gt; 1</code>.</p>
+<p><code>g_build_polygon_from_edges()</code> builds a polygon from a set of arcs given
+in a <code>GeometryCollection</code> or <code>MultiLineString</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
