@@ -366,6 +366,9 @@
   : Return the list of virtual file system handlers currently registered
 - [`vsi_get_signed_url()`](https://firelab.github.io/gdalraster/reference/vsi_get_signed_url.md)
   : Returns a signed URL for a supplied VSI filename
+- [`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md)
+  : Get file and directory names matching a pattern that may contain
+  wildcards
 - [`vsi_is_local()`](https://firelab.github.io/gdalraster/reference/vsi_is_local.md)
   : Returns if the file/filesystem is "local".
 - [`vsi_mkdir()`](https://firelab.github.io/gdalraster/reference/vsi_mkdir.md)

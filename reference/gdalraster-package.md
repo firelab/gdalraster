@@ -152,6 +152,7 @@ implemented in several stand-alone functions:
   [`vsi_get_file_metadata()`](https://firelab.github.io/gdalraster/reference/vsi_get_file_metadata.md),
   [`vsi_get_fs_options()`](https://firelab.github.io/gdalraster/reference/vsi_get_fs_options.md),
   [`vsi_get_fs_prefixes()`](https://firelab.github.io/gdalraster/reference/vsi_get_fs_prefixes.md),
+  [`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md),
   [`vsi_is_local()`](https://firelab.github.io/gdalraster/reference/vsi_is_local.md),
   [`vsi_mkdir()`](https://firelab.github.io/gdalraster/reference/vsi_mkdir.md),
   [`vsi_read_dir()`](https://firelab.github.io/gdalraster/reference/vsi_read_dir.md),

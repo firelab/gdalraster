@@ -56,6 +56,7 @@ ignored when `recursive = TRUE`.
 
 ## See also
 
+[`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md),
 [`vsi_mkdir()`](https://firelab.github.io/gdalraster/reference/vsi_mkdir.md),
 [`vsi_rmdir()`](https://firelab.github.io/gdalraster/reference/vsi_rmdir.md),
 [`vsi_stat()`](https://firelab.github.io/gdalraster/reference/vsi_stat.md),
