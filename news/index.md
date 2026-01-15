@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9022 (dev)
+## gdalraster 2.4.0.9023 (dev)
+
+- add
+  [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md):
+  return VSI compatible paths from URIs / URLs, wrapper of
+  `VSIURIToVSIPath()` in GDAL \>= 3.12
+  ([\#865](https://github.com/firelab/gdalraster/issues/865))
+  (2026-01-14)
 
 - add
   [`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md):
