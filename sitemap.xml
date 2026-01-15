@@ -143,6 +143,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/vsi_sync.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/vsi_unlink.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/vsi_unlink_batch.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/warp.html</loc></url>
 </urlset>
 

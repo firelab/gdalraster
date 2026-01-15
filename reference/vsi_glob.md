@@ -92,6 +92,7 @@ remote server to the host where the filtering is done.
 
 ``` r
 if (FALSE) { # gdal_version_num() >= gdal_compute_version(3, 11, 0)
+# Requires GDAL >= 3.11
 data_dir <- system.file("extdata", package="gdalraster")
 vsi_glob(file.path(data_dir, "ynp*"))
 }

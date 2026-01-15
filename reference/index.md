@@ -396,6 +396,8 @@
   : Delete a file
 - [`vsi_unlink_batch()`](https://firelab.github.io/gdalraster/reference/vsi_unlink_batch.md)
   : Delete several files in a batch
+- [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md)
+  : Return VSI compatible paths from URIs / URLs
 
 ### GDAL configuration
 

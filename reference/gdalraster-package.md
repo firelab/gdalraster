@@ -164,7 +164,8 @@ implemented in several stand-alone functions:
   [`vsi_supports_seq_write()`](https://firelab.github.io/gdalraster/reference/vsi_supports_seq_write.md),
   [`vsi_sync()`](https://firelab.github.io/gdalraster/reference/vsi_sync.md),
   [`vsi_unlink()`](https://firelab.github.io/gdalraster/reference/vsi_unlink.md),
-  [`vsi_unlink_batch()`](https://firelab.github.io/gdalraster/reference/vsi_unlink_batch.md)
+  [`vsi_unlink_batch()`](https://firelab.github.io/gdalraster/reference/vsi_unlink_batch.md),
+  [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md)
 
 - GDAL configuration:
   [`gdal_version`](https://firelab.github.io/gdalraster/reference/gdal_version.md),
