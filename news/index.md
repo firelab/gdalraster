@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.4.0.9030 (dev)
+## gdalraster 2.4.0.9040 (dev)
+
+- (internal) use `CSLConstList` with `GDALGetMetadata()`,
+  `GDALSetMetadata()`,
+  <https://gdal.org/en/latest/user/migration_guide.html>
+  ([\#868](https://github.com/firelab/gdalraster/issues/868), thanks to
+  [@mdsumner](https://github.com/mdsumner)) (2026-01-17)
 
 - add
   [`g_build_collection()`](https://firelab.github.io/gdalraster/reference/g_factory.md):

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9030</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9040</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9030" id="gdalraster-2409030-dev">gdalraster 2.4.0.9030 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409030-dev"></a></h2>
-<ul><li><p>add <code><a href="../reference/g_factory.html">g_build_collection()</a></code>: build a collection-type geometry from a set of input geometries given as a list of WKB <code>raw</code> vectors or a <code>character</code> vector of WKT strings (<a href="https://github.com/firelab/gdalraster/issues/867" class="external-link">#867</a>) (2026-01-16)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9040" id="gdalraster-2409040-dev">gdalraster 2.4.0.9040 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409040-dev"></a></h2>
+<ul><li><p>(internal) use <code>CSLConstList</code> with <code>GDALGetMetadata()</code>, <code>GDALSetMetadata()</code>, <a href="https://gdal.org/en/latest/user/migration_guide.html" class="external-link uri">https://gdal.org/en/latest/user/migration_guide.html</a> (<a href="https://github.com/firelab/gdalraster/issues/868" class="external-link">#868</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-17)</p></li>
+<li><p>add <code><a href="../reference/g_factory.html">g_build_collection()</a></code>: build a collection-type geometry from a set of input geometries given as a list of WKB <code>raw</code> vectors or a <code>character</code> vector of WKT strings (<a href="https://github.com/firelab/gdalraster/issues/867" class="external-link">#867</a>) (2026-01-16)</p></li>
 <li><p>add <code><a href="../reference/vsi_uri_to_vsi_path.html">vsi_uri_to_vsi_path()</a></code>: return VSI compatible paths from URIs / URLs, wrapper of <code>VSIURIToVSIPath()</code> in GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/865" class="external-link">#865</a>) (2026-01-14)</p></li>
 <li><p>add <code><a href="../reference/vsi_glob.html">vsi_glob()</a></code>: get file and directory names matching a pattern that may contain wildcards, wrapper of <code>VSIGlob()</code> in GDAL &gt;= 3.11 (<a href="https://github.com/firelab/gdalraster/issues/864" class="external-link">#864</a>) (2026-01-14)</p></li>
 <li><p>add <code><a href="../reference/g_factory.html">g_build_polygon_from_edges()</a></code>: build a polygon from a set of arcs, wrapper of <code>OGRBuildPolygonFromEdges()</code> (<a href="https://github.com/firelab/gdalraster/issues/863" class="external-link">#863</a>) (2026-01-13)</p></li>
