@@ -267,8 +267,9 @@
 - [`g_create()`](https://firelab.github.io/gdalraster/reference/g_factory.md)
   [`g_add_geom()`](https://firelab.github.io/gdalraster/reference/g_factory.md)
   [`g_get_geom()`](https://firelab.github.io/gdalraster/reference/g_factory.md)
+  [`g_build_collection()`](https://firelab.github.io/gdalraster/reference/g_factory.md)
   [`g_build_polygon_from_edges()`](https://firelab.github.io/gdalraster/reference/g_factory.md)
-  : Create WKB/WKT geometries from vertices, and add/get sub-geometries
+  : Geometry factory functions
 - [`g_wk2wk()`](https://firelab.github.io/gdalraster/reference/g_wk2wk.md)
   : Geometry WKB/WKT conversion
 - [`g_is_empty()`](https://firelab.github.io/gdalraster/reference/g_query.md)
