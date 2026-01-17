@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9023 (dev)
+## gdalraster 2.4.0.9030 (dev)
+
+- add
+  [`g_build_collection()`](https://firelab.github.io/gdalraster/reference/g_factory.md):
+  build a collection-type geometry from a set of input geometries given
+  as a list of WKB `raw` vectors or a `character` vector of WKT strings
+  ([\#867](https://github.com/firelab/gdalraster/issues/867))
+  (2026-01-16)
 
 - add
   [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md):
