@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9040 (dev)
+## gdalraster 2.4.0.9050 (dev)
+
+- add
+  [`is_los_visible()`](https://firelab.github.io/gdalraster/reference/is_los_visible.md):
+  check line of sight between pairs of point locations using
+  `GDALIsLineOfSightVisible()`
+  ([\#869](https://github.com/firelab/gdalraster/issues/869))
+  (2026-01-18)
 
 - (internal) use `CSLConstList` with `GDALGetMetadata()`,
   `GDALSetMetadata()`,
