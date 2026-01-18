@@ -86,6 +86,8 @@
   : Fill selected pixels by interpolation from surrounding areas
 - [`footprint()`](https://firelab.github.io/gdalraster/reference/footprint.md)
   : Compute footprint of a raster
+- [`is_los_visible()`](https://firelab.github.io/gdalraster/reference/is_los_visible.md)
+  : Check line of sight between pairs of point locations
 - [`make_chunk_index()`](https://firelab.github.io/gdalraster/reference/make_chunk_index.md)
   : Generate an index of chunk offsets and sizes for iterating a raster
 - [`polygonize()`](https://firelab.github.io/gdalraster/reference/polygonize.md)

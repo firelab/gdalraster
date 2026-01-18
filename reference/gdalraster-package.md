@@ -47,6 +47,7 @@ related stand-alone functions:
   [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md),
   [`fillNodata()`](https://firelab.github.io/gdalraster/reference/fillNodata.md),
   [`footprint()`](https://firelab.github.io/gdalraster/reference/footprint.md),
+  [`is_los_visible()`](https://firelab.github.io/gdalraster/reference/is_los_visible.md),
   [`make_chunk_index()`](https://firelab.github.io/gdalraster/reference/make_chunk_index.md),
   [`polygonize()`](https://firelab.github.io/gdalraster/reference/polygonize.md),
   [`rasterize()`](https://firelab.github.io/gdalraster/reference/rasterize.md),
