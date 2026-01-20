@@ -5,8 +5,8 @@
 **GDAL is by**: Frank Warmerdam, Even Rouault and others ([GDAL
 contributors](https://github.com/OSGeo/gdal/graphs/contributors))
 
-- **[Chris Toney](https://github.com/ctoney)**. Author, maintainer.  
-  R interface/additional functionality
+- **[Chris Toney](https://github.com/ctoney)**. Author, maintainer.
+  [](https://orcid.org/0000-0001-5734-6510)
 
 - **Michael D. Sumner**. Contributor.
 
