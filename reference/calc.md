@@ -23,13 +23,14 @@ calc(
   dstfile = tempfile("rastcalc", fileext = ".tif"),
   fmt = NULL,
   dtName = "Int16",
-  out_band = NULL,
+  out_band = 1L,
   options = NULL,
   nodata_value = NULL,
   setRasterNodataValue = FALSE,
-  usePixelLonLat = NULL,
   write_mode = "safe",
-  quiet = FALSE
+  quiet = FALSE,
+  return_obj = FALSE,
+  ...
 )
 ```
 
@@ -41,7 +42,9 @@ calc(
 
 - rasterfiles:
 
-  Character vector of source raster filenames.
+  Input rasters, either a character vector of filenames, or a list with
+  each element either a character string filename or an object of class
+  `GDALRaster` (must be an open dataset for the latter).
 
 - bands:
 
@@ -53,7 +56,12 @@ calc(
 
 - dstfile:
 
-  Character filename of output raster.
+  Either a character string with the output raster filename, or an
+  object of class `GDALRaster` with which to write output. If given as
+  an object, the dataset must be open for write access, and the
+  arguments below related to raster creation are ignored (i.e., `fmt`,
+  `dtName`, `options`, `setRasterNodataValue`). The `write_mode` must be
+  set to `"update"` for writing with an existing dataset object.
 
 - fmt:
 
@@ -68,7 +76,7 @@ calc(
 - out_band:
 
   Integer band number(s) in `dstfile` for writing output. Defaults to
-  `1`. Multiband output is supported as of gdalraster 1.11.0, in which
+  `1`. Multi-band output is supported as of gdalraster 1.11.0, in which
   case `out_band` would be a vector of band numbers.
 
 - options:
@@ -83,37 +91,43 @@ calc(
 
 - setRasterNodataValue:
 
-  Logical. `TRUE` will attempt to set the raster format nodata value to
-  `nodata_value`, or `FALSE` not to set a raster nodata value.
-
-- usePixelLonLat:
-
-  This argument is deprecated and will be removed in a future version.
-  Variable names `pixelLon` and `pixelLat` can be used in `expr`, and
-  the pixel x/y coordinates will be inverse projected to
-  longitude/latitude (adds computation time).
+  Logical value. `TRUE` will attempt to set the raster format nodata
+  value to `nodata_value`, or `FALSE` not to set a raster nodata value.
 
 - write_mode:
 
-  Character. Name of the file write mode for output. One of:
+  Character string. Name of the file write mode for output. One of:
 
   - `safe` - execution stops if `dstfile` already exists (no output
     written)
 
-  - `overwrite` - if `dstfile` exists if will be overwritten with a new
+  - `overwrite` - if `dstfile` exists it will be overwritten with a new
     file
 
-  - `update` - if `dstfile` exists, will attempt to open in update mode
-    and write output to `out_band`
+  - `update` - if `dstfile` exists, will attempt to open in update mode,
+    or write to the existing dataset if `dstfile` is given as an object
 
 - quiet:
 
-  Logical scalar. If `TRUE`, a progress bar will not be displayed.
+  Logical value. If `TRUE`, a progress bar will not be displayed.
   Defaults to `FALSE`.
+
+- return_obj:
+
+  Logical value. If `TRUE`, an object of class
+  [`GDALRaster`](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md)
+  opened on the newly created dataset will be returned. The default is
+  `FALSE`.
+
+- ...:
+
+  Additional arguments, none currently supported.
 
 ## Value
 
-Returns the output filename invisibly.
+By default, returns the output filename invisibly. An object of class
+[`GDALRaster`](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md)
+open on the output dataset will be returned if `return_obj = TRUE`.
 
 ## Details
 
@@ -139,7 +153,7 @@ Output will be written to `dstfile`. To update a file that already
 exists, set `write_mode = "update"` and set `out_band` to an existing
 band number(s) in `dstfile` (new bands cannot be created in `dstfile`).
 
-To write multiband output, `expr` must return a vector of values
+To write multi-band output, `expr` must return a vector of values
 interleaved by band. This is equivalent to, and can also be returned as,
 a matrix `m` with `nrow(m)` equal to
 [`length()`](https://rdrr.io/r/base/length.html) of an input vector, and
@@ -184,9 +198,9 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> calculating from 1 input layer(s)...
+#> calculating from 1 input raster...
 #> ================================================================================
-#> output written to: /tmp/Rtmp3DImNA/rastcalc22312ef7e65e.tif
+#> output written to /tmp/Rtmpa99Sv9/rastcalc223411752ada.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -197,29 +211,40 @@ ds$close()
 
 
 ## Calculate normalized difference vegetation index (NDVI)
+## input rasters given as dataset objects
+## output to an in-memory raster (MEM)
 
 # Landast band 4 (red) and band 5 (near infrared):
 b4_file <- system.file("extdata/sr_b4_20200829.tif", package="gdalraster")
+b4 <- new(GDALRaster, b4_file)
 b5_file <- system.file("extdata/sr_b5_20200829.tif", package="gdalraster")
+b5 <- new(GDALRaster, b5_file)
 
 expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
          ((B5 * 0.0000275 - 0.2) + (B4 * 0.0000275 - 0.2))"
-ndvi_file <- calc(expr = expr,
-                  rasterfiles = c(b4_file, b5_file),
-                  var.names = c("B4", "B5"),
-                  dtName = "Float32",
-                  nodata_value = -32767,
-                  setRasterNodataValue = TRUE)
-#> calculating from 2 input layer(s)...
+
+(ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
+              dtName = "Float32", setRasterNodataValue = TRUE,
+              return_obj = TRUE))
+#> calculating from 2 input rasters...
 #> ================================================================================
-#> output written to: /tmp/Rtmp3DImNA/rastcalc223153b30034.tif
+#> output written to in-memory-raster
+#> C++ object of class GDALRaster
+#>  Driver : In Memory Raster (MEM)
+#>  DSN    : in-memory-raster
+#>  Dim    : 149, 112, 1
+#>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)
+#>  Res    : 30.000000, 30.000000
+#>  Bbox   : 323400.853100, 5101815.783500, 327870.853100, 5105175.783500
 
-ds <- new(GDALRaster, ndvi_file)
-ds$getStatistics(band=1, approx_ok=FALSE, force=TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
-#> [1] -0.8182735  0.8522529  0.4707456  0.2269492
-ds$close()
+plot_raster(ndvi, legend = TRUE,
+            col_map_fn = c("#7b3294", "#c2a5cf", "#a6dba0", "#008837"),
+            main = "Storm Lake NDVI 2020-08-29")
 
+
+ndvi$close()
+b4$close()
+b5$close()
 
 ## Reclassify a variable by rule set
 
@@ -282,9 +307,9 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> calculating from 2 input layer(s)...
+#> calculating from 2 input rasters...
 #> ================================================================================
-#> output written to: /tmp/Rtmp3DImNA/storml_lndscp.tif
+#> output written to /tmp/Rtmpa99Sv9/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

@@ -103,13 +103,14 @@ Multiband output is supported as of gdalraster 1.11.0.</p>
 <span>  dstfile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"rastcalc"</span>, fileext <span class="op">=</span> <span class="st">".tif"</span><span class="op">)</span>,</span>
 <span>  fmt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dtName <span class="op">=</span> <span class="st">"Int16"</span>,</span>
-<span>  out_band <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  out_band <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nodata_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  setRasterNodataValue <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  usePixelLonLat <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  write_mode <span class="op">=</span> <span class="st">"safe"</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  return_obj <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -122,7 +123,9 @@ Multiband output is supported as of gdalraster 1.11.0.</p>
 
 
 <dt id="arg-rasterfiles">rasterfiles<a class="anchor" aria-label="anchor" href="#arg-rasterfiles"></a></dt>
-<dd><p>Character vector of source raster filenames.</p></dd>
+<dd><p>Input rasters, either a character vector of filenames,
+or a list with each element either a character string filename or an object
+of class <code>GDALRaster</code> (must be an open dataset for the latter).</p></dd>
 
 
 <dt id="arg-bands">bands<a class="anchor" aria-label="anchor" href="#arg-bands"></a></dt>
@@ -135,7 +138,12 @@ layer.</p></dd>
 
 
 <dt id="arg-dstfile">dstfile<a class="anchor" aria-label="anchor" href="#arg-dstfile"></a></dt>
-<dd><p>Character filename of output raster.</p></dd>
+<dd><p>Either a character string with the output raster filename, or
+an object of class <code>GDALRaster</code> with which to write output. If given as an
+object, the dataset must be open for write access, and the arguments below
+related to raster creation are ignored (i.e., <code>fmt</code>, <code>dtName</code>, <code>options</code>,
+<code>setRasterNodataValue</code>). The <code>write_mode</code> must be set to <code>"update"</code> for
+writing with an existing dataset object.</p></dd>
 
 
 <dt id="arg-fmt">fmt<a class="anchor" aria-label="anchor" href="#arg-fmt"></a></dt>
@@ -150,7 +158,7 @@ UInt16, Int32, UInt32, Float32).</p></dd>
 
 <dt id="arg-out-band">out_band<a class="anchor" aria-label="anchor" href="#arg-out-band"></a></dt>
 <dd><p>Integer band number(s) in <code>dstfile</code> for writing output.
-Defaults to <code>1</code>. Multiband output is supported as of gdalraster 1.11.0,
+Defaults to <code>1</code>. Multi-band output is supported as of gdalraster 1.11.0,
 in which case <code>out_band</code> would be a vector of band numbers.</p></dd>
 
 
@@ -166,35 +174,40 @@ during creation of a GTiff file).</p></dd>
 
 
 <dt id="arg-setrasternodatavalue">setRasterNodataValue<a class="anchor" aria-label="anchor" href="#arg-setrasternodatavalue"></a></dt>
-<dd><p>Logical. <code>TRUE</code> will attempt to set the raster
-format nodata value to <code>nodata_value</code>, or <code>FALSE</code> not to set a raster
+<dd><p>Logical value. <code>TRUE</code> will attempt to set the
+raster format nodata value to <code>nodata_value</code>, or <code>FALSE</code> not to set a raster
 nodata value.</p></dd>
 
 
-<dt id="arg-usepixellonlat">usePixelLonLat<a class="anchor" aria-label="anchor" href="#arg-usepixellonlat"></a></dt>
-<dd><p>This argument is deprecated and will be removed in a
-future version. Variable names <code>pixelLon</code> and <code>pixelLat</code> can be used in
-<code>expr</code>, and the pixel x/y coordinates will be inverse projected to
-longitude/latitude (adds computation time).</p></dd>
-
-
 <dt id="arg-write-mode">write_mode<a class="anchor" aria-label="anchor" href="#arg-write-mode"></a></dt>
-<dd><p>Character. Name of the file write mode for output.
+<dd><p>Character string. Name of the file write mode for output.
 One of:</p><ul><li><p><code>safe</code> - execution stops if <code>dstfile</code> already exists (no output written)</p></li>
-<li><p><code>overwrite</code> - if <code>dstfile</code> exists if will be overwritten with a new file</p></li>
-<li><p><code>update</code> - if <code>dstfile</code> exists, will attempt to open in update mode
-and write output to <code>out_band</code></p></li>
+<li><p><code>overwrite</code> - if <code>dstfile</code> exists it will be overwritten with a new file</p></li>
+<li><p><code>update</code> - if <code>dstfile</code> exists, will attempt to open in update mode, or
+write to the existing dataset if <code>dstfile</code> is given as an object</p></li>
 </ul></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
-<dd><p>Logical scalar. If <code>TRUE</code>, a progress bar will not be
+<dd><p>Logical value. If <code>TRUE</code>, a progress bar will not be
 displayed. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-return-obj">return_obj<a class="anchor" aria-label="anchor" href="#arg-return-obj"></a></dt>
+<dd><p>Logical value. If <code>TRUE</code>, an object of class
+<code><a href="GDALRaster-class.html">GDALRaster</a></code> opened on the newly created dataset will be
+returned. The default is <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Additional arguments, none currently supported.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns the output filename invisibly.</p>
+    <p>By default, returns the output filename invisibly. An object of
+class <code><a href="GDALRaster-class.html">GDALRaster</a></code> open on the output dataset will be returned
+if <code>return_obj = TRUE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -219,7 +232,7 @@ optional variable names in <code>var.names</code>, for example,</p><div class="s
 <p>Output will be written to <code>dstfile</code>. To update a file that already
 exists, set <code>write_mode = "update"</code> and set <code>out_band</code> to an existing
 band number(s) in <code>dstfile</code> (new bands cannot be created in <code>dstfile</code>).</p>
-<p>To write multiband output, <code>expr</code> must return a vector of values
+<p>To write multi-band output, <code>expr</code> must return a vector of values
 interleaved by band. This is equivalent to, and can also be returned as,
 a matrix <code>m</code> with <code>nrow(m)</code> equal to <code><a href="https://rdrr.io/r/base/length.html" class="external-link">length()</a></code> of an input vector, and
 <code>ncol(m)</code> equal to the number of output bands. In matrix form, each column
@@ -261,9 +274,9 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span>                dtName <span class="op">=</span> <span class="st">"Int16"</span>,</span></span>
 <span class="r-in"><span>                nodata_value <span class="op">=</span> <span class="op">-</span><span class="fl">32767</span>,</span></span>
 <span class="r-in"><span>                setRasterNodataValue <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 1 input layer(s)...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 1 input raster...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ================================================================================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to: /tmp/Rtmp3DImNA/rastcalc22312ef7e65e.tif</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to /tmp/Rtmpa99Sv9/rastcalc223411752ada.tif</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">hi_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># min, max, mean, sd</span></span></span>
@@ -274,29 +287,40 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Calculate normalized difference vegetation index (NDVI)</span></span></span>
+<span class="r-in"><span><span class="co">## input rasters given as dataset objects</span></span></span>
+<span class="r-in"><span><span class="co">## output to an in-memory raster (MEM)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Landast band 4 (red) and band 5 (near infrared):</span></span></span>
 <span class="r-in"><span><span class="va">b4_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sr_b4_20200829.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b4</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">b4_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">b5_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/sr_b5_20200829.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b5</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">b5_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">expr</span> <span class="op">&lt;-</span> <span class="st">"((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /</span></span></span>
 <span class="r-in"><span><span class="st">         ((B5 * 0.0000275 - 0.2) + (B4 * 0.0000275 - 0.2))"</span></span></span>
-<span class="r-in"><span><span class="va">ndvi_file</span> <span class="op">&lt;-</span> <span class="fu">calc</span><span class="op">(</span>expr <span class="op">=</span> <span class="va">expr</span>,</span></span>
-<span class="r-in"><span>                  rasterfiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">b4_file</span>, <span class="va">b5_file</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B4"</span>, <span class="st">"B5"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  dtName <span class="op">=</span> <span class="st">"Float32"</span>,</span></span>
-<span class="r-in"><span>                  nodata_value <span class="op">=</span> <span class="op">-</span><span class="fl">32767</span>,</span></span>
-<span class="r-in"><span>                  setRasterNodataValue <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 2 input layer(s)...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">ndvi</span> <span class="op">&lt;-</span> <span class="fu">calc</span><span class="op">(</span><span class="va">expr</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">b4</span>, <span class="va">b5</span><span class="op">)</span>, var.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B4"</span>, <span class="st">"B5"</span><span class="op">)</span>, fmt <span class="op">=</span> <span class="st">"MEM"</span>,</span></span>
+<span class="r-in"><span>              dtName <span class="op">=</span> <span class="st">"Float32"</span>, setRasterNodataValue <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>              return_obj <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 2 input rasters...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ================================================================================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to: /tmp/Rtmp3DImNA/rastcalc223153b30034.tif</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to in-memory-raster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C++ object of class GDALRaster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Driver : In Memory Raster (MEM)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  DSN    : in-memory-raster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Dim    : 149, 112, 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Res    : 30.000000, 30.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Bbox   : 323400.853100, 5101815.783500, 327870.853100, 5105175.783500</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">ndvi_file</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span>band<span class="op">=</span><span class="fl">1</span>, approx_ok<span class="op">=</span><span class="cn">FALSE</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.8182735  0.8522529  0.4707456  0.2269492</span>
-<span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ndvi</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>            col_map_fn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#7b3294"</span>, <span class="st">"#c2a5cf"</span>, <span class="st">"#a6dba0"</span>, <span class="st">"#008837"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            main <span class="op">=</span> <span class="st">"Storm Lake NDVI 2020-08-29"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="calc-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ndvi</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b4</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b5</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Reclassify a variable by rule set</span></span></span>
 <span class="r-in"><span></span></span>
@@ -359,9 +383,9 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span>     dstfile <span class="op">=</span> <span class="va">tif_file</span>,</span></span>
 <span class="r-in"><span>     out_band <span class="op">=</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>     write_mode <span class="op">=</span> <span class="st">"update"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 2 input layer(s)...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating from 2 input rasters...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ================================================================================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to: /tmp/Rtmp3DImNA/storml_lndscp.tif</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> output written to /tmp/Rtmpa99Sv9/storml_lndscp.tif</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># verify the ouput</span></span></span>
 <span class="r-in"><span><span class="va">rasterfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">tif_file</span>, <span class="va">tif_file</span><span class="op">)</span></span></span>

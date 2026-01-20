@@ -54,7 +54,7 @@ str(ds)
 #>  $ infoOptions  : chr(0) 
 #>  $ quiet        : logi FALSE
 #>  $ readByteAsRaw: logi FALSE
-#>  and 91 methods, of which 77 are  possibly relevant:
+#>  and 92 methods, of which 78 are  possibly relevant:
 #>    addBand, apply_geotransform, bbox, buildOverviews, clearColorTable,
 #>    clearStatistics, close, deleteNoDataValue, dim, fillRaster, finalize,
 #>    flushCache, get_block_indexing, get_pixel_line, getActualBlockSize,
@@ -66,10 +66,10 @@ str(ds)
 #>    getOverviewCount, getPaletteInterp, getProjection, getProjectionRef,
 #>    getRasterColorInterp, getRasterCount, getRasterXSize, getRasterYSize,
 #>    getScale, getSpatialRef, getStatistics, getUnitType, info, infoAsJSON,
-#>    initialize, isOpen, make_chunk_index, open, pixel_extract, read, readBlock,
-#>    readChunk, res, setColorTable, setDefaultRAT, setDescription, setFilename,
-#>    setGeoTransform, setMetadata, setMetadataItem, setNoDataValue, setOffset,
-#>    setProjection, setRasterColorInterp, setScale, setUnitType,
+#>    initialize, isOpen, isReadOnly, make_chunk_index, open, pixel_extract, read,
+#>    readBlock, readChunk, res, setColorTable, setDefaultRAT, setDescription,
+#>    setFilename, setGeoTransform, setMetadata, setMetadataItem, setNoDataValue,
+#>    setOffset, setProjection, setRasterColorInterp, setScale, setUnitType,
 #>    show#envRefClass, write, writeBlock, writeChunk
 ```
 

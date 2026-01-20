@@ -102,6 +102,7 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
     ds$setFilename(filename)
     ds$open(read_only)
     ds$isOpen()
+    ds$isReadOnly()
     ds$getFileList()
 
     ds$info()
@@ -270,8 +271,11 @@ is not required to call `$close()` explicitly in this case. No return
 value, called for side effects.
 
 `$isOpen()`  
-Returns logical indicating whether the associated raster dataset is
-open.
+Returns a logical value, `TRUE` if the raster dataset is open.
+
+`$isReadOnly()`  
+Returns a logical value, `TRUE` if the raster dataset has read-only
+access or `FALSE` if it is writable.
 
 `$getFileList()`  
 Returns a character vector of files believed to be part of this dataset.
