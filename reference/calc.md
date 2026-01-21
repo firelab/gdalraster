@@ -1,16 +1,16 @@
 # Raster calculation
 
 `calc()` evaluates an R expression for each pixel in a raster layer or
-stack of layers. Each layer is defined by a raster filename, band
-number, and a variable name to use in the R expression. If not
-specified, band defaults to 1 for each input raster. Variable names
-default to `LETTERS` if not specified (`A` (layer 1), `B` (layer 2),
-...). All of the input layers must have the same extent and cell size.
-The projection will be read from the first raster in the list of inputs.
-Individual pixel coordinates are also available as variables in the R
-expression, as either x/y in the raster projected coordinate system or
-inverse projected longitude/latitude. Multiband output is supported as
-of gdalraster 1.11.0.
+stack of layers. Each layer is defined by a raster filename or dataset
+object, band number, and a variable name to use in the R expression. If
+not specified, band defaults to `1` for each input raster. Variable
+names default to `LETTERS` if not specified (`A` (layer 1), `B` (layer
+2), ...). All of the input layers must have the same extent and cell
+size. The projection will be read from the first raster in the list of
+inputs. Individual pixel coordinates are also available as variables in
+the R expression, as either x/y in the raster projected coordinate
+system or inverse projected longitude/latitude. Multi-band output is
+supported as of gdalraster 1.11.0.
 
 ## Usage
 
@@ -43,8 +43,8 @@ calc(
 - rasterfiles:
 
   Input rasters, either a character vector of filenames, or a list with
-  each element either a character string filename or an object of class
-  `GDALRaster` (must be an open dataset for the latter).
+  each element either a filename as character string or an object of
+  class `GDALRaster` (must be an open dataset for the latter).
 
 - bands:
 
@@ -76,23 +76,24 @@ calc(
 - out_band:
 
   Integer band number(s) in `dstfile` for writing output. Defaults to
-  `1`. Multi-band output is supported as of gdalraster 1.11.0, in which
+  `1L`. Multi-band output is supported as of gdalraster 1.11.0, in which
   case `out_band` would be a vector of band numbers.
 
 - options:
 
   Optional list of format-specific creation options in a vector of
-  "NAME=VALUE" pairs (e.g., `options = c("COMPRESS=LZW")` to set LZW
-  compression during creation of a GTiff file).
+  "NAME=VALUE" pairs (e.g., `options = c("TILED=YES", "COMPRESS=LZW")`
+  to set LZW compression during creation of a tiled GTiff file).
 
 - nodata_value:
 
-  Numeric value to assign if `expr` returns NA.
+  Numeric value to assign if `expr` returns `NA`.
 
 - setRasterNodataValue:
 
   Logical value. `TRUE` will attempt to set the raster format nodata
-  value to `nodata_value`, or `FALSE` not to set a raster nodata value.
+  value to `nodata_value`, or `FALSE` not to set a raster nodata value
+  on the output dataset.
 
 - write_mode:
 
@@ -109,8 +110,8 @@ calc(
 
 - quiet:
 
-  Logical value. If `TRUE`, a progress bar will not be displayed.
-  Defaults to `FALSE`.
+  Logical value. If `TRUE`, a progress bar and informational messages
+  will not be displayed. Defaults to `FALSE`.
 
 - return_obj:
 
@@ -131,19 +132,21 @@ open on the output dataset will be returned if `return_obj = TRUE`.
 
 ## Details
 
-The variables in `expr` are vectors of length raster xsize (row vectors
-of the input raster layer(s)). The expression should return a vector
-also of length raster xsize (an output row). Four special variable names
-are available in `expr`: `pixelX` and `pixelY` provide pixel center
-coordinates in projection units. `pixelLon` and `pixelLat` can also be
-used, in which case the pixel x/y coordinates will be inverse projected
-to longitude/latitude (in the same geographic coordinate system used by
-the input projection, which is read from the first input raster). Note
-that inverse projection adds computation time.
+The variables in `expr` are vectors of length raster xsize (i.e., row
+vectors of the input raster layer(s), with length the number of raster
+columns). The expression should return a vector also of length raster
+xsize (an output row). Four special variable names are available in
+`expr`: `pixelX` and `pixelY` provide pixel center coordinates in
+projection units. `pixelLon` and `pixelLat` can also be used, in which
+case the pixel x/y coordinates will be inverse projected to
+longitude/latitude (in the same geographic coordinate system used by the
+input projection, which is read from the first input raster). Note that
+inverse projection adds computation time.
 
 To refer to specific bands in a multi-band input file, repeat the
-filename in `rasterfiles` and specify corresponding band numbers in
-`bands`, along with optional variable names in `var.names`, for example,
+filename or dataset object in `rasterfiles` and specify corresponding
+band numbers in `bands`, along with optional variable names in
+`var.names`, e.g.,
 
     rasterfiles = c("multiband.tif", "multiband.tif")
     bands = c(4, 5)
@@ -152,6 +155,8 @@ filename in `rasterfiles` and specify corresponding band numbers in
 Output will be written to `dstfile`. To update a file that already
 exists, set `write_mode = "update"` and set `out_band` to an existing
 band number(s) in `dstfile` (new bands cannot be created in `dstfile`).
+`dstfile` can optionally be given as an object of class `GDALRaster`
+open for write access.
 
 To write multi-band output, `expr` must return a vector of values
 interleaved by band. This is equivalent to, and can also be returned as,
@@ -200,7 +205,7 @@ hi_file <- calc(expr = expr,
                 setRasterNodataValue = TRUE)
 #> calculating from 1 input raster...
 #> ================================================================================
-#> output written to /tmp/Rtmp20RT2D/rastcalc223b68a97250.tif
+#> output written to /tmp/RtmpjNCnlS/rastcalc22316085d862.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -209,10 +214,9 @@ ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
 #> [1] 37.000000 57.000000 44.928763  4.384622
 ds$close()
 
-
 ## Calculate normalized difference vegetation index (NDVI)
 ## input rasters given as dataset objects
-## output to an in-memory raster (MEM)
+## output to an in-memory raster (MEM format)
 
 # Landast band 4 (red) and band 5 (near infrared):
 b4_file <- system.file("extdata/sr_b4_20200829.tif", package="gdalraster")
@@ -309,7 +313,7 @@ calc(expr = expr,
      write_mode = "update")
 #> calculating from 2 input rasters...
 #> ================================================================================
-#> output written to /tmp/Rtmp20RT2D/storml_lndscp.tif
+#> output written to /tmp/RtmpjNCnlS/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
