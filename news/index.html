@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9060</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9061</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9060" id="gdalraster-2409060-dev">gdalraster 2.4.0.9060 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409060-dev"></a></h2>
-<ul><li><p><code><a href="../reference/calc.html">calc()</a></code>: add support for input and output rasters as dataset objects, instead of only as file names (<a href="https://github.com/firelab/gdalraster/issues/870" class="external-link">#870</a>) (2026-01-19)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9061" id="gdalraster-2409061-dev">gdalraster 2.4.0.9061 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409061-dev"></a></h2>
+<ul><li><p>add <code>GDALVector::isReadOnly()</code> (2026-01-20)</p></li>
+<li><p><code><a href="../reference/calc.html">calc()</a></code>: add support for input and output rasters as dataset objects, instead of only as file names (<a href="https://github.com/firelab/gdalraster/issues/870" class="external-link">#870</a>) (2026-01-19)</p></li>
 <li><p>add <code><a href="../reference/is_los_visible.html">is_los_visible()</a></code>: check line of sight between pairs of point locations using <code>GDALIsLineOfSightVisible()</code> (<a href="https://github.com/firelab/gdalraster/issues/869" class="external-link">#869</a>) (2026-01-18)</p></li>
 <li><p>(internal) use <code>CSLConstList</code> with <code>GDALGetMetadata()</code>, <code>GDALSetMetadata()</code>, <a href="https://gdal.org/en/latest/user/migration_guide.html" class="external-link uri">https://gdal.org/en/latest/user/migration_guide.html</a> (<a href="https://github.com/firelab/gdalraster/issues/868" class="external-link">#868</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-17)</p></li>
 <li><p>add <code><a href="../reference/g_factory.html">g_build_collection()</a></code>: build a collection-type geometry from a set of input geometries given as a list of WKB <code>raw</code> vectors or a <code>character</code> vector of WKT strings (<a href="https://github.com/firelab/gdalraster/issues/867" class="external-link">#867</a>) (2026-01-16)</p></li>

@@ -106,6 +106,7 @@ assignment).
     ## Methods
     lyr$open(read_only)
     lyr$isOpen()
+    lyr$isReadOnly()
     lyr$getDsn()
     lyr$getFileList()
     lyr$info()
@@ -290,6 +291,10 @@ called for side effects.
 
 `$isOpen()`  
 Returns a `logical` value indicating whether the vector dataset is open.
+
+`$isReadOnly()`  
+Returns a logical value, `TRUE` if the vector dataset has read-only
+access or `FALSE` if it is writable.
 
 `$getDsn()`  
 Returns a character string containing the `dsn` associated with this
@@ -840,7 +845,7 @@ file.copy(f, dsn)
 (lyr <- new(GDALVector, dsn, "mtbs_perims"))
 #> C++ object of class GDALVector
 #>  Driver : GeoPackage (GPKG)
-#>  DSN    : /tmp/RtmpjNCnlS/ynp_fires_1984_2022.gpkg
+#>  DSN    : /tmp/RtmpUR48xH/ynp_fires_1984_2022.gpkg
 #>  Layer  : mtbs_perims
 #>  CRS    : NAD83 / Montana (EPSG:32100)
 #>  Geom   : MULTIPOLYGON
@@ -858,7 +863,7 @@ str(lyr)
 #>  $ returnGeomAs      : chr "WKB"
 #>  $ transactionsForce : logi FALSE
 #>  $ wkbByteOrder      : chr "LSB"
-#>  and 73 methods, of which 59 are  possibly relevant:
+#>  and 74 methods, of which 60 are  possibly relevant:
 #>    OGRFeatureFromList_dumpReadble, batchCreateFeature, bbox,
 #>    clearSpatialFilter, close, commitTransaction, createFeature, deleteFeature,
 #>    fetch, finalize, getArrowStream, getAttributeFilter, getDriverLongName,
@@ -866,7 +871,7 @@ str(lyr)
 #>    getFieldDomain, getFieldNames, getFileList, getGeomType, getGeometryColumn,
 #>    getIgnoredFields, getLastWriteFID, getLayerDefn, getMetadata,
 #>    getMetadataItem, getName, getNextFeature, getSpatialFilter, getSpatialRef,
-#>    info, initialize, isOpen, layerClip, layerErase, layerIdentity,
+#>    info, initialize, isOpen, isReadOnly, layerClip, layerErase, layerIdentity,
 #>    layerIntersection, layerSymDifference, layerUnion, layerUpdate, open,
 #>    releaseArrowStream, resetReading, rollbackTransaction, setAttributeFilter,
 #>    setFeature, setIgnoredFields, setMetadata, setNextByIndex,
@@ -879,7 +884,7 @@ lyr$getDriverShortName()
 lyr$getDriverLongName()
 #> [1] "GeoPackage"
 lyr$getFileList()
-#> [1] "/tmp/RtmpjNCnlS/ynp_fires_1984_2022.gpkg"
+#> [1] "/tmp/RtmpUR48xH/ynp_fires_1984_2022.gpkg"
 
 ## layer info
 lyr$getName()
@@ -1383,7 +1388,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-01-21 03:49:25" "2026-01-21 03:49:25"
+#>  $ dt_modified: POSIXct, format: "2026-01-21 04:14:15" "2026-01-21 04:14:15"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...
@@ -1409,7 +1414,7 @@ str(feat)
 #>  $ doubles    : num 2.35
 #>  $ strings    : chr "A test string 2"
 #>  $ dates      : Date, format: "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-01-21 03:49:25"
+#>  $ dt_modified: POSIXct, format: "2026-01-21 04:14:15"
 #>  $ blobs      :List of 1
 #>   ..$ : raw  41 20 62 69 ...
 #>  $ geom       :List of 1
@@ -1449,7 +1454,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2 - edited"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-01-21 03:49:25" "2026-01-21 03:49:26"
+#>  $ dt_modified: POSIXct, format: "2026-01-21 04:14:15" "2026-01-21 04:14:16"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...

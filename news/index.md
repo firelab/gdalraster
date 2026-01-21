@@ -1,6 +1,8 @@
 # Changelog
 
-## gdalraster 2.4.0.9060 (dev)
+## gdalraster 2.4.0.9061 (dev)
+
+- add `GDALVector::isReadOnly()` (2026-01-20)
 
 - [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
   add support for input and output rasters as dataset objects, instead
