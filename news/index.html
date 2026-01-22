@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9062</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9063</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9062" id="gdalraster-2409062-dev">gdalraster 2.4.0.9062 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409062-dev"></a></h2>
-<ul><li><p>fix <code><a href="../reference/read_ds.html">read_ds()</a></code>: the argument <code>as_wkb</code> and dataset property <code>readByteAsRaw</code> were not synchronized (<a href="https://github.com/firelab/gdalraster/issues/873" class="external-link">#873</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-21)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9063" id="gdalraster-2409063-dev">gdalraster 2.4.0.9063 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409063-dev"></a></h2>
+<ul><li><p>add <code><a href="../reference/read_to_nativeRaster.html">read_to_nativeRaster()</a></code>: reads raster data directly as a <code>nativeRaster</code> object for fast rendering. Supports datasets with 1, 3, or 4 bands of Byte data type. Grayscale (1-band) data is replicated across RGB channels. Also available as class method <code>GDALRaster$readToNativeRaster()</code>. (<a href="https://github.com/firelab/gdalraster/issues/875" class="external-link">#875</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-22)</p></li>
+<li><p>fix <code><a href="../reference/read_ds.html">read_ds()</a></code>: the argument <code>as_wkb</code> and dataset property <code>readByteAsRaw</code> were not synchronized (<a href="https://github.com/firelab/gdalraster/issues/873" class="external-link">#873</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-21)</p></li>
 <li><p>add <code>GDALVector::isReadOnly()</code> (2026-01-20)</p></li>
 <li><p><code><a href="../reference/calc.html">calc()</a></code>: add support for input and output rasters as dataset objects, instead of only as file names (<a href="https://github.com/firelab/gdalraster/issues/870" class="external-link">#870</a>) (2026-01-19)</p></li>
 <li><p>add <code><a href="../reference/is_los_visible.html">is_los_visible()</a></code>: check line of sight between pairs of point locations using <code>GDALIsLineOfSightVisible()</code> (<a href="https://github.com/firelab/gdalraster/issues/869" class="external-link">#869</a>) (2026-01-18)</p></li>
