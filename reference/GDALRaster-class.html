@@ -244,25 +244,26 @@ override the default resampling to one of <code>BILINEAR</code>, <code>CUBIC</co
 <span id="cb1-91"><a href="#cb1-91" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">read</span>(band, xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
 <span id="cb1-92"><a href="#cb1-92" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readBlock</span>(band, xblockoff, yblockoff)</span>
 <span id="cb1-93"><a href="#cb1-93" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readChunk</span>(band, chunk_def)</span>
-<span id="cb1-94"><a href="#cb1-94" tabindex="-1"></a></span>
-<span id="cb1-95"><a href="#cb1-95" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">write</span>(band, xoff, yoff, xsize, ysize, rasterData)</span>
-<span id="cb1-96"><a href="#cb1-96" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeBlock</span>(band, xblockoff, yblockoff, rasterData)</span>
-<span id="cb1-97"><a href="#cb1-97" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeChunk</span>(band, chunk_def, rasterData)</span>
-<span id="cb1-98"><a href="#cb1-98" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">fillRaster</span>(band, value, ivalue)</span>
-<span id="cb1-99"><a href="#cb1-99" tabindex="-1"></a></span>
-<span id="cb1-100"><a href="#cb1-100" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getColorTable</span>(band)</span>
-<span id="cb1-101"><a href="#cb1-101" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getPaletteInterp</span>(band)</span>
-<span id="cb1-102"><a href="#cb1-102" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setColorTable</span>(band, col_tbl, palette_interp)</span>
-<span id="cb1-103"><a href="#cb1-103" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">clearColorTable</span>(band)</span>
-<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDefaultRAT</span>(band)</span>
-<span id="cb1-106"><a href="#cb1-106" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setDefaultRAT</span>(band, df)</span>
-<span id="cb1-107"><a href="#cb1-107" tabindex="-1"></a></span>
-<span id="cb1-108"><a href="#cb1-108" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">flushCache</span>()</span>
-<span id="cb1-109"><a href="#cb1-109" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getChecksum</span>(band, xoff, yoff, xsize, ysize)</span>
-<span id="cb1-111"><a href="#cb1-111" tabindex="-1"></a></span>
-<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-94"><a href="#cb1-94" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readToNativeRaster</span>(xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
+<span id="cb1-95"><a href="#cb1-95" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">write</span>(band, xoff, yoff, xsize, ysize, rasterData)</span>
+<span id="cb1-97"><a href="#cb1-97" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeBlock</span>(band, xblockoff, yblockoff, rasterData)</span>
+<span id="cb1-98"><a href="#cb1-98" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeChunk</span>(band, chunk_def, rasterData)</span>
+<span id="cb1-99"><a href="#cb1-99" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">fillRaster</span>(band, value, ivalue)</span>
+<span id="cb1-100"><a href="#cb1-100" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getColorTable</span>(band)</span>
+<span id="cb1-102"><a href="#cb1-102" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getPaletteInterp</span>(band)</span>
+<span id="cb1-103"><a href="#cb1-103" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setColorTable</span>(band, col_tbl, palette_interp)</span>
+<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">clearColorTable</span>(band)</span>
+<span id="cb1-105"><a href="#cb1-105" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDefaultRAT</span>(band)</span>
+<span id="cb1-107"><a href="#cb1-107" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setDefaultRAT</span>(band, df)</span>
+<span id="cb1-108"><a href="#cb1-108" tabindex="-1"></a></span>
+<span id="cb1-109"><a href="#cb1-109" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">flushCache</span>()</span>
+<span id="cb1-110"><a href="#cb1-110" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getChecksum</span>(band, xoff, yoff, xsize, ysize)</span>
+<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -772,6 +773,24 @@ argument. <code>chunk_def</code> can also be given as an numeric vector of lengt
 containing the 0-based pixel offsets and pixel sizes for a chunk (xoff, yoff,
 xsize, ysize). Returns a vector of pixel values with length equal to the
 chunk <code>xsize * ysize</code>, otherwise as described above for <code>$read()</code>.</p>
+<p><code>$readToNativeRaster(xoff, yoff, xsize, ysize, out_xsize, out_ysize)</code><br>
+Reads a region of raster data from <code>band</code>. The method takes care of
+pixel decimation / replication if the output size
+(<code>out_xsize * out_ysize</code>) is different than the size of the region
+being accessed (<code>xsize * ysize</code>).
+<code>xoff</code> is the pixel (column) offset to the top left corner of the
+region of the band to be accessed (zero to start from the left side).
+<code>yoff</code> is the line (row) offset to the top left corner of the region of
+the band to be accessed (zero to start from the top).
+<em>Note that raster row/column offsets use 0-based indexing.</em>
+<code>xsize</code> is the width in pixels of the region to be accessed.
+<code>ysize</code> is the height in pixels of the region to be accessed.
+<code>out_xsize</code> is the width of the output array into which the desired
+region will be read (typically the same value as xsize).
+<code>out_ysize</code> is the height of the output array into which the desired
+region will be read (typically the same value as ysize).
+Returns an object of class <code>nativeRaster</code> with attributes 'dim', and
+'channels'  containing the values that were read in R's native RGB/A encoding.</p>
 <p><code>$write(band, xoff, yoff, xsize, ysize, rasterData)</code><br>
 Writes a region of raster data to <code>band</code>.
 <code>xoff</code> is the pixel (column) offset to the top left corner of the

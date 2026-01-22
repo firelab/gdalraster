@@ -173,6 +173,7 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
     ds$read(band, xoff, yoff, xsize, ysize, out_xsize, out_ysize)
     ds$readBlock(band, xblockoff, yblockoff)
     ds$readChunk(band, chunk_def)
+    ds$readToNativeRaster(xoff, yoff, xsize, ysize, out_xsize, out_ysize)
 
     ds$write(band, xoff, yoff, xsize, ysize, rasterData)
     ds$writeBlock(band, xblockoff, yblockoff, rasterData)
@@ -816,6 +817,24 @@ vector of length 4 containing the 0-based pixel offsets and pixel sizes
 for a chunk (xoff, yoff, xsize, ysize). Returns a vector of pixel values
 with length equal to the chunk `xsize * ysize`, otherwise as described
 above for `$read()`.
+
+`$readToNativeRaster(xoff, yoff, xsize, ysize, out_xsize, out_ysize)`  
+Reads a region of raster data from `band`. The method takes care of
+pixel decimation / replication if the output size
+(`out_xsize * out_ysize`) is different than the size of the region being
+accessed (`xsize * ysize`). `xoff` is the pixel (column) offset to the
+top left corner of the region of the band to be accessed (zero to start
+from the left side). `yoff` is the line (row) offset to the top left
+corner of the region of the band to be accessed (zero to start from the
+top). *Note that raster row/column offsets use 0-based indexing.*
+`xsize` is the width in pixels of the region to be accessed. `ysize` is
+the height in pixels of the region to be accessed. `out_xsize` is the
+width of the output array into which the desired region will be read
+(typically the same value as xsize). `out_ysize` is the height of the
+output array into which the desired region will be read (typically the
+same value as ysize). Returns an object of class `nativeRaster` with
+attributes 'dim', and 'channels' containing the values that were read in
+R's native RGB/A encoding.
 
 `$write(band, xoff, yoff, xsize, ysize, rasterData)`  
 Writes a region of raster data to `band`. `xoff` is the pixel (column)

@@ -109,6 +109,9 @@
 
   Convenience wrapper for `GDALRaster$read()`
 
+- [`read_to_nativeRaster()`](https://firelab.github.io/gdalraster/reference/read_to_nativeRaster.md)
+  : Read raster data as nativeRaster
+
 ### Raster attribute tables
 
 - [`buildRAT()`](https://firelab.github.io/gdalraster/reference/buildRAT.md)
