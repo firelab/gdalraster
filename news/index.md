@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9061 (dev)
+## gdalraster 2.4.0.9062 (dev)
+
+- fix
+  [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md):
+  the argument `as_wkb` and dataset property `readByteAsRaw` were not
+  synchronized
+  ([\#873](https://github.com/firelab/gdalraster/issues/873), thanks to
+  [@mdsumner](https://github.com/mdsumner)) (2026-01-21)
 
 - add `GDALVector::isReadOnly()` (2026-01-20)
 

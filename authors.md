@@ -9,6 +9,7 @@ contributors](https://github.com/OSGeo/gdal/graphs/contributors))
   [](https://orcid.org/0000-0001-5734-6510)
 
 - **Michael D. Sumner**. Contributor.
+  [](https://orcid.org/0000-0002-2471-7511)
 
 - **Frank Warmerdam**. Contributor, copyright holder.  
   GDAL API documentation; src/progress_r.cpp from
