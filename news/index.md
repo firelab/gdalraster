@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.4.0.9063 (dev)
+## gdalraster 2.4.0.9064 (dev)
+
+- fix test for
+  [`identifyDriver()`](https://firelab.github.io/gdalraster/reference/identifyDriver.md)
+  conditional on PostGISRaster / PostgreSQL driver presence
+  ([\#880](https://github.com/firelab/gdalraster/issues/880))
+  (2026-01-23)
 
 - add
   [`read_to_nativeRaster()`](https://firelab.github.io/gdalraster/reference/read_to_nativeRaster.md):
