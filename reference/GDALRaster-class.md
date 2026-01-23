@@ -128,6 +128,7 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
     ds$bbox()
     ds$res()
     ds$dim()
+    ds$setBbox(bbox)
 
     ds$apply_geotransform(col_row)
     ds$get_pixel_line(xy)
@@ -371,6 +372,11 @@ format string. Equivalent to `ds$getProjectionRef()`.
 `$bbox()`  
 Returns a numeric vector of length four containing the bounding box
 (xmin, ymin, xmax, ymax).
+
+`$setBbox(bbox)`  
+Sets the bounding box on this dataset. `bbox` is a numeric vector of
+length four. Returns logical `TRUE` on success or `FALSE` if the bbox
+could not be set.
 
 `$res()`  
 Returns a numeric vector of length two containing the resolution (pixel

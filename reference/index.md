@@ -153,6 +153,10 @@
   : Invert geotransform
 - [`pixel_extract()`](https://firelab.github.io/gdalraster/reference/pixel_extract.md)
   : Extract pixel values at geospatial point locations
+- [`bbox_from_dim_gt()`](https://firelab.github.io/gdalraster/reference/bbox_from_dim_gt.md)
+  : Bounding box from dimensions and geotransform
+- [`gt_from_dim_bbox()`](https://firelab.github.io/gdalraster/reference/gt_from_dim_bbox.md)
+  : Geotransform from dimensions and bounding box
 
 ### Coordinate transformation
 

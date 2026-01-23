@@ -30,6 +30,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/apply_geotransform.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/autoCreateWarpedVRT.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/bandCopyWholeRaster.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/bbox_from_dim_gt.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/bbox_from_wkt.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/bbox_intersect.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/bbox_to_wkt.html</loc></url>
@@ -74,6 +75,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/get_num_cpus.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_pixel_line.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_usable_physical_ram.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/gt_from_dim_bbox.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/has_geos.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/has_spatialite.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/http_enabled.html</loc></url>
