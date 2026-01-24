@@ -1,6 +1,6 @@
 # Changelog
 
-## gdalraster 2.4.0.9065 (dev)
+## gdalraster 2.4.0.9070 (dev)
 
 - add
   [`gt_from_dim_bbox()`](https://firelab.github.io/gdalraster/reference/gt_from_dim_bbox.md)

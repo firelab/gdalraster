@@ -8,7 +8,7 @@ contributors](https://github.com/OSGeo/gdal/graphs/contributors))
 - **[Chris Toney](https://github.com/ctoney)**. Author, maintainer.
   [](https://orcid.org/0000-0001-5734-6510)
 
-- **Michael D. Sumner**. Contributor.
+- **Michael D. Sumner**. Author.
   [](https://orcid.org/0000-0002-2471-7511)
 
 - **Frank Warmerdam**. Contributor, copyright holder.  
@@ -36,15 +36,15 @@ for details.
 Source:
 [`inst/CITATION`](https://github.com/firelab/gdalraster/blob/main/inst/CITATION)
 
-Toney C (2025). *gdalraster: R Bindings to the 'Geospatial Data
-Abstraction Library' Raster API*. USDA Forest Service, Rocky Mountain
+Toney C, Sumner MD (2026). *gdalraster: R Bindings to the Geospatial
+Data Abstraction Library (GDAL)*. USDA Forest Service, Rocky Mountain
 Research Station, Missoula, MT, USA.
 <https://firelab.github.io/gdalraster/>.
 
     @Manual{,
-      title = {gdalraster: R Bindings to the 'Geospatial Data Abstraction Library' Raster API},
-      author = {Chris Toney},
-      year = {2025},
+      title = {gdalraster: R Bindings to the Geospatial Data Abstraction Library (GDAL)},
+      author = {Chris Toney and Michael D. Sumner},
+      year = {2026},
       organization = {USDA Forest Service, Rocky Mountain Research Station},
       address = {Missoula, MT, USA},
       url = {https://firelab.github.io/gdalraster/},
