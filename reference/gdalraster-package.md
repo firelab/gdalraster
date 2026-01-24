@@ -223,9 +223,9 @@ Additional functionality includes:
 GDAL is by: Frank Warmerdam, Even Rouault and others  
 (see <https://github.com/OSGeo/gdal/graphs/contributors>)
 
-R interface/additional functionality: Chris Toney
+Package author and maintainer: Chris Toney \<jctoney at gmail.com\>
 
-Maintainer: Chris Toney \<jctoney at gmail.com\>
+Package author: Michael D. Sumner
 
 ## See also
 
