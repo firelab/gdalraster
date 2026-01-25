@@ -205,7 +205,7 @@ hi_file <- calc(expr = expr,
                 setRasterNodataValue = TRUE)
 #> calculating from 1 input raster...
 #> ================================================================================
-#> output written to /tmp/RtmpXNsW53/rastcalc22b27ccd5739.tif
+#> output written to /tmp/Rtmpv5O2bt/rastcalc22583dbb8e95.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -313,7 +313,7 @@ calc(expr = expr,
      write_mode = "update")
 #> calculating from 2 input rasters...
 #> ================================================================================
-#> output written to /tmp/RtmpXNsW53/storml_lndscp.tif
+#> output written to /tmp/Rtmpv5O2bt/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
