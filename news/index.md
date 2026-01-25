@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.4.0.9070 (dev)
+## gdalraster 2.4.0.9071 (dev)
+
+- [`g_intersects()`](https://firelab.github.io/gdalraster/reference/g_binary_pred.md):
+  performance improvements and use prepared geometry in 1:many batch
+  mode (2026-01-24)
 
 - add
   [`gt_from_dim_bbox()`](https://firelab.github.io/gdalraster/reference/gt_from_dim_bbox.md)
