@@ -25,7 +25,7 @@ Methods of the class are accessed using the $ operator.'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9072</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9073</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,8 @@ and the "b" does not need to be included in <code>access</code>.</p><table class
 
 <dt id="arg-options">options<a class="anchor" aria-label="anchor" href="#arg-options"></a></dt>
 <dd><p>Optional character vector of <code>NAME=VALUE</code> pairs specifying
-filesystem-dependent options (GDAL &gt;= 3.3, see Details).</p></dd>
+filesystem-dependent options. These are the options provided by
+<code>VSIFOpenEx2L()</code> in the GDAL API (GDAL &gt;= 3.3, see Details).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -180,7 +181,7 @@ Alternate constructor for passing <code>access</code> as a character string, and
 <code>options</code> as a character vector of "NAME=VALUE" pairs (all arguments
 required, GDAL &gt;= 3.3 required for <code>options</code> support).</p>
 <p>The <code>options</code> argument is highly file system dependent. Supported options
-as of GDAL 3.9 include:</p><ul><li><p>MIME headers such as Content-Type and Content-Encoding are supported for
+as of GDAL 3.10 include:</p><ul><li><p>MIME headers such as Content-Type and Content-Encoding are supported for
 the /vsis3/, /vsigs/, /vsiaz/, /vsiadls/ file systems.</p></li>
 <li><p>DISABLE_READDIR_ON_OPEN=YES/NO (GDAL &gt;= 3.6) for /vsicurl/ and other
 network-based file systems. By default, directory file listing is done,
@@ -189,7 +190,19 @@ unless YES is specified.</p></li>
 FILE_FLAG_WRITE_THROUGH flag to the <code>CreateFile()</code> function. In that mode,
 the data are written to the system cache but are flushed to disk without
 delay.</p></li>
-</ul></div>
+</ul><p>Options specific to /vsis3/, /vsigs/, /vsioss/ and /vsiaz/:</p><ul><li><p>CACHE=YES/NO (GDAL &gt;= 3.10) whether file metadata and content that is read
+from the network should be kept cached in memory, after file handle closing.
+Default is YES, unless the filename is set in CPL_VSIL_CURL_NON_CACHED.</p></li>
+<li><p>CHUNK_SIZE=val in MiB (GDAL &gt;= 3.10) for "w" mode. Size of a block. Default
+is 50 MiB. For /vsis3/, /vsigz/, /vsioss/, it can be up to 5000 MiB.
+For /vsiaz/, only taken into account when BLOB_TYPE=BLOCK. It can be up to
+4000 MiB.</p></li>
+</ul><p>Options specific to /vsiaz/ in "w" mode:</p><ul><li><p>BLOB_TYPE=APPEND/BLOCK (GDAL &gt;= 3.10) type of blob. Defaults to APPEND.
+Append blocks are limited to 195 GiB (however if the file size is below
+4 MiB, a block blob will be created in a single PUT operation).</p></li>
+</ul><p>See the GDAL documentation for <code>VSIFOpenEx2L()</code> for the most current set of
+available options (<a href="https://gdal.org/en/stable/api/cpl.html" class="external-link">https://gdal.org/en/stable/api/cpl.html</a>).</p>
+</div>
 
 <div class="section">
 <h3 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h3>

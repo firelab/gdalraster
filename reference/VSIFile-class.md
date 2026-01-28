@@ -38,7 +38,8 @@ operator.
 - options:
 
   Optional character vector of `NAME=VALUE` pairs specifying
-  filesystem-dependent options (GDAL \>= 3.3, see Details).
+  filesystem-dependent options. These are the options provided by
+  `VSIFOpenEx2L()` in the GDAL API (GDAL \>= 3.3, see Details).
 
 ## Value
 
@@ -115,7 +116,7 @@ Alternate constructor for passing `access` as a character string, and
 required, GDAL \>= 3.3 required for `options` support).
 
 The `options` argument is highly file system dependent. Supported
-options as of GDAL 3.9 include:
+options as of GDAL 3.10 include:
 
 - MIME headers such as Content-Type and Content-Encoding are supported
   for the /vsis3/, /vsigs/, /vsiaz/, /vsiadls/ file systems.
@@ -128,6 +129,28 @@ options as of GDAL 3.9 include:
   FILE_FLAG_WRITE_THROUGH flag to the `CreateFile()` function. In that
   mode, the data are written to the system cache but are flushed to disk
   without delay.
+
+Options specific to /vsis3/, /vsigs/, /vsioss/ and /vsiaz/:
+
+- CACHE=YES/NO (GDAL \>= 3.10) whether file metadata and content that is
+  read from the network should be kept cached in memory, after file
+  handle closing. Default is YES, unless the filename is set in
+  CPL_VSIL_CURL_NON_CACHED.
+
+- CHUNK_SIZE=val in MiB (GDAL \>= 3.10) for "w" mode. Size of a block.
+  Default is 50 MiB. For /vsis3/, /vsigz/, /vsioss/, it can be up to
+  5000 MiB. For /vsiaz/, only taken into account when BLOB_TYPE=BLOCK.
+  It can be up to 4000 MiB.
+
+Options specific to /vsiaz/ in "w" mode:
+
+- BLOB_TYPE=APPEND/BLOCK (GDAL \>= 3.10) type of blob. Defaults to
+  APPEND. Append blocks are limited to 195 GiB (however if the file size
+  is below 4 MiB, a block blob will be created in a single PUT
+  operation).
+
+See the GDAL documentation for `VSIFOpenEx2L()` for the most current set
+of available options (<https://gdal.org/en/stable/api/cpl.html>).
 
 ### Methods
 
