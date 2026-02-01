@@ -122,7 +122,7 @@ mask_file <- calc(expr = expr,
                   var.names = "EVT")
 #> calculating from 1 input raster...
 #> ================================================================================
-#> output written to /tmp/RtmpyHx0jc/rastcalc229034beb5ee.tif
+#> output written to /tmp/RtmplTzxHB/rastcalc22dec3de0d7.tif
 
 # create a version of EVT with two-pixel minimum mapping unit
 sieveFilter(src_filename = evt_file,
