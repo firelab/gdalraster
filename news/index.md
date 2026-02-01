@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.4.0.9073 (dev)
+## gdalraster 2.4.0.9075 (dev)
+
+- use `cli` for enhanced progress reporting throughout
+  ([\#889](https://github.com/firelab/gdalraster/issues/889), thanks to
+  [@pepijn-devries](https://github.com/pepijn-devries)) (2026-02-01)
 
 - class `VSIFile`: fix crash when using file open options due to
   incorrectly sized buffer, and add const correctness

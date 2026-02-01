@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9073</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9075</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9073" id="gdalraster-2409073-dev">gdalraster 2.4.0.9073 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409073-dev"></a></h2>
-<ul><li><p>class <code>VSIFile</code>: fix crash when using file open options due to incorrectly sized buffer, and add const correctness (<a href="https://github.com/firelab/gdalraster/issues/883" class="external-link">#883</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-01-27)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9075" id="gdalraster-2409075-dev">gdalraster 2.4.0.9075 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409075-dev"></a></h2>
+<ul><li><p>use <code>cli</code> for enhanced progress reporting throughout (<a href="https://github.com/firelab/gdalraster/issues/889" class="external-link">#889</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-02-01)</p></li>
+<li><p>class <code>VSIFile</code>: fix crash when using file open options due to incorrectly sized buffer, and add const correctness (<a href="https://github.com/firelab/gdalraster/issues/883" class="external-link">#883</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-01-27)</p></li>
 <li><p><code><a href="../reference/g_binary_pred.html">g_intersects()</a></code>: performance improvements and use prepared geometry in 1:many batch mode (2026-01-24)</p></li>
 <li><p>add <code><a href="../reference/gt_from_dim_bbox.html">gt_from_dim_bbox()</a></code> and <code><a href="../reference/bbox_from_dim_gt.html">bbox_from_dim_gt()</a></code>: standalone functions for converting between geotransform coefficients and bounding boxes. Also a new class method <code>GDALRaster$setBbox()</code> as a convenience wrapper for setting geotransform from a bounding box. (<a href="https://github.com/firelab/gdalraster/issues/878" class="external-link">#878</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-23)</p></li>
 <li><p>fix test for <code><a href="../reference/identifyDriver.html">identifyDriver()</a></code> conditional on PostGISRaster / PostgreSQL driver presence (<a href="https://github.com/firelab/gdalraster/issues/880" class="external-link">#880</a>) (2026-01-23)</p></li>
