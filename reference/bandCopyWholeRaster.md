@@ -82,10 +82,8 @@ rasterFromRaster(b5_file, dst_file, nbands = 7, init = 0)
 #> done
 opt <- c("COMPRESSED=YES", "SKIP_HOLES=YES")
 bandCopyWholeRaster(b5_file, 1, dst_file, 5, options = opt)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 ds <- new(GDALRaster, dst_file)
 ds$getStatistics(band = 5, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1]  7357.000 22458.000 13527.736  2238.489
 ds$close()
 ```

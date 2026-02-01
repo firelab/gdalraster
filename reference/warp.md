@@ -245,7 +245,6 @@ args <- c(args, "-of", "HFA", "-co", "COMPRESSED=YES")
 
 alb83_file <- file.path(tempdir(), "storml_elev_alb83.img")
 warp(elev_file, alb83_file, t_srs = "EPSG:5070", cl_arg = args)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 
 ds <- new(GDALRaster, alb83_file)
 ds$getDriverLongName()
@@ -255,7 +254,6 @@ ds$getProjectionRef()
 ds$res()
 #> [1] 90 90
 ds$getStatistics(band=1, approx_ok=FALSE, force=TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1] 2438.0000 3043.0000 2673.9259  133.3519
 ds$close()
 ```

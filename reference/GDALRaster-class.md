@@ -1242,7 +1242,6 @@ ds_new$open(read_only = TRUE)
 
 ## getStatistics returns min, max, mean, sd, and sets stats in the metadata
 ds_new$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1]   0.00000 100.00000  49.90667  29.05491
 ds_new$getMetadataItem(band = 1, "STATISTICS_MEAN", "")
 #> [1] "49.906672766486"

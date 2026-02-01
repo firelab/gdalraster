@@ -144,7 +144,6 @@ raster_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
 
 pixel_extract(raster_file, pts)
 #> extracting from band 1...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #>    id storml_elev
 #> 1   1        2648
 #> 2   2        2876
@@ -163,7 +162,6 @@ ds <- new(GDALRaster, raster_file)
 # ds$quiet <- TRUE
 pixel_extract(ds, pts)
 #> extracting from band 1...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #>    id storml_elev
 #> 1   1        2648
 #> 2   2        2876
@@ -179,7 +177,6 @@ pixel_extract(ds, pts)
 # interpolated values
 pixel_extract(raster_file, pts, interp = "bilinear")
 #> extracting from band 1...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #>    id storml_elev
 #> 1   1    2648.589
 #> 2   2    2884.232
@@ -195,7 +192,6 @@ pixel_extract(raster_file, pts, interp = "bilinear")
 # individual pixel values within a kernel
 pixel_extract(raster_file, pts, krnl_dim = 3)
 #> extracting from band 1...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #>    id b1_p1 b1_p2 b1_p3 b1_p4 b1_p5 b1_p6 b1_p7 b1_p8 b1_p9
 #> 1   1  2661  2654  2649  2654  2648  2646  2650  2645  2644
 #> 2   2  2909  2907  2908  2878  2876  2876  2850  2847  2846
@@ -215,7 +211,6 @@ pts_wgs84 <- transform_xy(pts[-1], srs_from = ds$getProjection(),
 # transform the input xy
 pixel_extract(ds, xy = pts_wgs84, xy_srs = "WGS84")
 #> extracting from band 1...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #>       storml_elev
 #>  [1,]        2648
 #>  [2,]        2876

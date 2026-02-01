@@ -169,7 +169,6 @@ ds$getNoDataValue(band = 1)
 
 # min, max, mean, sd of pixel values in the band
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1]  0.00000 71.00000 23.69950 23.17744
 
 # does this band have overviews? (aka "pyramids")
@@ -330,7 +329,6 @@ ds <- createCopy(format = "GTiff",
                  src_filename = lcp_file,
                  options = "COMPRESS=LZW",
                  return_obj = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 
 # band = 0 for dataset-level metadata:
 ds$getMetadata(band = 0, domain = "IMAGE_STRUCTURE")
@@ -342,7 +340,6 @@ for (band in 1:ds$getRasterCount())
 
 # band 2 of an LCP file is slope degrees
 ds$getStatistics(band = 2, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1]  0.00000 54.00000 22.93012 12.51330
 ds$close()
 

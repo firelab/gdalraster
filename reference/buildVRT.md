@@ -69,7 +69,6 @@ b6_file <- system.file("extdata/sr_b6_20200829.tif", package="gdalraster")
 band_files <- c(b6_file, b5_file, b4_file)
 vrt_file <- file.path(tempdir(), "storml_b6_b5_b4.vrt")
 buildVRT(vrt_file, band_files, cl_arg = "-separate")
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 ds <- new(GDALRaster, vrt_file)
 ds$getRasterCount()
 #> [1] 3

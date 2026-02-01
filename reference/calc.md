@@ -205,12 +205,11 @@ hi_file <- calc(expr = expr,
                 setRasterNodataValue = TRUE)
 #> calculating from 1 input raster...
 #> ================================================================================
-#> output written to /tmp/RtmplTzxHB/rastcalc22de345bc1ea.tif
+#> output written to /tmp/RtmpOUBpy9/rastcalc22be7910994c.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1] 37.000000 57.000000 44.928763  4.384622
 ds$close()
 
@@ -275,7 +274,6 @@ var.names <- c("SLP", "FBFM")
 bands <- c(2, 4)
 tbl <- combine(rasterfiles, var.names, bands)
 #> combining 2 rasters...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 nrow(tbl)
 #> [1] 449
 tbl_subset <- subset(tbl, SLP >= 40 & FBFM %in% c(101,102))
@@ -300,7 +298,6 @@ sum(tbl_subset$count)   # 85 total pixels
 # the LCP driver does not support in-place write so make a copy as GTiff
 tif_file <- file.path(tempdir(), "storml_lndscp.tif")
 createCopy("GTiff", tif_file, lcp_file)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1] TRUE
 
 expr <- "ifelse( SLP >= 40 & FBFM %in% c(101,102), 99, FBFM)"
@@ -313,13 +310,12 @@ calc(expr = expr,
      write_mode = "update")
 #> calculating from 2 input rasters...
 #> ================================================================================
-#> output written to /tmp/RtmplTzxHB/storml_lndscp.tif
+#> output written to /tmp/RtmpOUBpy9/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
 tbl <- combine(rasterfiles, var.names, bands)
 #> combining 2 rasters...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 tbl_subset <- subset(tbl, SLP >= 40 & FBFM %in% c(101,102))
 print(tbl_subset)
 #> [1] cmbid count SLP   FBFM 

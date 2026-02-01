@@ -271,7 +271,8 @@ lyr_out <- ogr_proc(mode = "Intersection",
                     out_lyr_name = "north_fork_reburned",
                     out_geom_type = "MULTIPOLYGON",
                     mode_opt = opt)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
+#>  ■■                                 2% |  ETA:  3m
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% |  ETA:  0s
 
 # the output layer has attributes of both the input and method layers
 (d <- lyr_out$fetch(-1))

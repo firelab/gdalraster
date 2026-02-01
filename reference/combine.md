@@ -119,7 +119,6 @@ rasterfiles <- c(evt_file, evc_file, evh_file)
 var.names <- c("veg_type", "veg_cov", "veg_ht")
 tbl <- combine(rasterfiles, var.names)
 #> combining 3 rasters...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 nrow(tbl)
 #> [1] 2083
 tbl <- tbl[order(-tbl$count),]
@@ -156,7 +155,6 @@ cmb_file <- file.path(tempdir(), "fbfm_cov_cmbid.tif")
 opt <- c("COMPRESS=LZW")
 tbl <- combine(rasterfiles, var.names, bands, cmb_file, options = opt)
 #> combining 2 rasters...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 head(tbl)
 #>   cmbid count fbfm tree_cov
 #> 1    26    98  122       25
@@ -168,7 +166,7 @@ head(tbl)
 ds <- new(GDALRaster, cmb_file)
 ds$info()
 #> Driver: GTiff/GeoTIFF
-#> Files: /tmp/RtmplTzxHB/fbfm_cov_cmbid.tif
+#> Files: /tmp/RtmpOUBpy9/fbfm_cov_cmbid.tif
 #> Size is 143, 107
 #> Coordinate System is:
 #> PROJCRS["NAD83 / UTM zone 12N",

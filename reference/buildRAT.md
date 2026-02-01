@@ -222,7 +222,6 @@ tbl <- buildRAT(ds,
                 na_value = -9999,
                 join_df = evt_df)
 #> scanning raster...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 
 nrow(tbl)
 #> [1] 24
@@ -295,7 +294,6 @@ ds$setDefaultRAT(band = 1, tbl)
 ds$flushCache()
 
 tbl2 <- ds$getDefaultRAT(band = 1)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 nrow(tbl2)
 #> [1] 24
 head(tbl2)

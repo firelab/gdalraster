@@ -235,7 +235,6 @@ specifying a <code>band</code> number as the first argument:</p>
 <span></span>
 <span><span class="co"># min, max, mean, sd of pixel values in the band</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span>band <span class="op">=</span> <span class="fl">1</span>, approx_ok <span class="op">=</span> <span class="cn">FALSE</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 0...10...20...30...40...50...60...70...80...90...100 - done.</span></span>
 <span><span class="co">#&gt; [1]  0.00000 71.00000 23.69950 23.17744</span></span>
 <span></span>
 <span><span class="co"># does this band have overviews? (aka "pyramids")</span></span>
@@ -382,7 +381,6 @@ LZW-compressed GeoTiff:</p>
 <span>                 src_filename <span class="op">=</span> <span class="va">lcp_file</span>,</span>
 <span>                 options <span class="op">=</span> <span class="st">"COMPRESS=LZW"</span>,</span>
 <span>                 return_obj <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 0...10...20...30...40...50...60...70...80...90...100 - done.</span></span>
 <span></span>
 <span><span class="co"># band = 0 for dataset-level metadata:</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">getMetadata</span><span class="op">(</span>band <span class="op">=</span> <span class="fl">0</span>, domain <span class="op">=</span> <span class="st">"IMAGE_STRUCTURE"</span><span class="op">)</span></span>
@@ -394,7 +392,6 @@ LZW-compressed GeoTiff:</p>
 <span></span>
 <span><span class="co"># band 2 of an LCP file is slope degrees</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span>band <span class="op">=</span> <span class="fl">2</span>, approx_ok <span class="op">=</span> <span class="cn">FALSE</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 0...10...20...30...40...50...60...70...80...90...100 - done.</span></span>
 <span><span class="co">#&gt; [1]  0.00000 54.00000 22.93012 12.51330</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>

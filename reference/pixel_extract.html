@@ -217,7 +217,6 @@ of interest.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pixel_extract</span><span class="op">(</span><span class="va">raster_file</span>, <span class="va">pts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extracting from band 1...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id storml_elev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1        2648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2        2876</span>
@@ -236,7 +235,6 @@ of interest.</p>
 <span class="r-in"><span><span class="co"># ds$quiet &lt;- TRUE</span></span></span>
 <span class="r-in"><span><span class="fu">pixel_extract</span><span class="op">(</span><span class="va">ds</span>, <span class="va">pts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extracting from band 1...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id storml_elev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1        2648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2        2876</span>
@@ -252,7 +250,6 @@ of interest.</p>
 <span class="r-in"><span><span class="co"># interpolated values</span></span></span>
 <span class="r-in"><span><span class="fu">pixel_extract</span><span class="op">(</span><span class="va">raster_file</span>, <span class="va">pts</span>, interp <span class="op">=</span> <span class="st">"bilinear"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extracting from band 1...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id storml_elev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1    2648.589</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2    2884.232</span>
@@ -268,7 +265,6 @@ of interest.</p>
 <span class="r-in"><span><span class="co"># individual pixel values within a kernel</span></span></span>
 <span class="r-in"><span><span class="fu">pixel_extract</span><span class="op">(</span><span class="va">raster_file</span>, <span class="va">pts</span>, krnl_dim <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extracting from band 1...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id b1_p1 b1_p2 b1_p3 b1_p4 b1_p5 b1_p6 b1_p7 b1_p8 b1_p9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   1  2661  2654  2649  2654  2648  2646  2650  2645  2644</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   2  2909  2907  2908  2878  2876  2876  2850  2847  2846</span>
@@ -288,7 +284,6 @@ of interest.</p>
 <span class="r-in"><span><span class="co"># transform the input xy</span></span></span>
 <span class="r-in"><span><span class="fu">pixel_extract</span><span class="op">(</span><span class="va">ds</span>, xy <span class="op">=</span> <span class="va">pts_wgs84</span>, xy_srs <span class="op">=</span> <span class="st">"WGS84"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extracting from band 1...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0...10...20...30...40...50...60...70...80...90...100 - done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       storml_elev</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]        2648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]        2876</span>

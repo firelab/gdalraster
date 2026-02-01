@@ -193,7 +193,6 @@ rasterize(src_dsn = dsn,
           dstnodata = -9999,
           init = -9999,
           co = c("TILED=YES", "COMPRESS=LZW"))
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 
 ds <- new(GDALRaster, out_file)
 pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)

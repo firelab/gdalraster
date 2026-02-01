@@ -131,7 +131,6 @@ for (row in 0:(nrows-1)) {
 
 # min, max, mean, sd
 ds_slp$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1]   0.00000 138.00000  44.76464  26.79985
 
 ds_slp$close()

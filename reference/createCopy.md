@@ -92,7 +92,6 @@ ds <- createCopy(format = "GTiff",
                  src_filename = lcp_file,
                  options = "COMPRESS=LZW",
                  return_obj = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 
 ds$getMetadata(band = 0, domain = "IMAGE_STRUCTURE")
 #> [1] "COMPRESSION=LZW"  "INTERLEAVE=PIXEL"
@@ -100,7 +99,6 @@ ds$getMetadata(band = 0, domain = "IMAGE_STRUCTURE")
 for (band in 1:ds$getRasterCount())
     ds$setNoDataValue(band, -9999)
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1] 2438.0000 3046.0000 2675.9713  133.0185
 
 ds$close()

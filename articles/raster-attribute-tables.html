@@ -187,7 +187,6 @@ RAT, for passing to <code>GDALRaster$setDefaultRAT()</code>):</p>
 <span>                na_value <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span>,</span>
 <span>                join_df <span class="op">=</span> <span class="va">evt_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; scanning raster...</span></span>
-<span><span class="co">#&gt; 0...10...20...30...40...50...60...70...80...90...100 - done.</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 24</span></span>
@@ -243,7 +242,6 @@ RAT, for passing to <code>GDALRaster$setDefaultRAT()</code>):</p>
 <span><span class="co"># it can now be read from the raster dataset</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">getDefaultRAT</span><span class="op">(</span>band<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 0...10...20...30...40...50...60...70...80...90...100 - done.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 24</span></span></code></pre></div>
 </div>

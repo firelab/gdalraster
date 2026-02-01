@@ -147,10 +147,9 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
   DONTSHOW({vsi_unlink(zip_file)})
 }
 #> adding /home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp ...
-#> 0...10...20...30...40...50...60...70...80...90...100 - done.
 #> [1] "Files in zip archive:"
 #>             Name Length                Date
-#> 1 storm_lake.lcp 252132 2026-02-01 14:08:00
+#> 1 storm_lake.lcp 252132 2026-02-01 17:38:00
 #> [1] "SOZip metadata:"
 #> $START_DATA_OFFSET
 #> [1] "44"
@@ -183,7 +182,7 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 #> [1] "YES"
 #> 
 #> Driver: LCP/FARSITE v.4 Landscape File (.lcp)
-#> Files: /vsizip//tmp/RtmplTzxHB/storml_lcp.zip/storm_lake.lcp
+#> Files: /vsizip//tmp/RtmpOUBpy9/storml_lcp.zip/storm_lake.lcp
 #> Size is 143, 107
 #> Coordinate System is:
 #> 
