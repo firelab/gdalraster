@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.4.0.9076 (dev)
+## gdalraster 2.4.0.9077 (dev)
+
+- (internal) `VSIFile::read()`: avoid a copy from temporary buffer most
+  of the time
+  ([\#888](https://github.com/firelab/gdalraster/issues/888))
+  (2026-02-01)
 
 - use package **cli** for enhanced progress reporting throughout, adding
   **cli** in `LinkingTo`
