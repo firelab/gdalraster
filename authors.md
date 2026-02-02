@@ -11,12 +11,14 @@ contributors](https://github.com/OSGeo/gdal/graphs/contributors))
 - **Michael D. Sumner**. Author.
   [](https://orcid.org/0000-0002-2471-7511)
 
+- **Pepijn de Vries**. Contributor.
+  [](https://orcid.org/0000-0002-7961-6646)
+
 - **Frank Warmerdam**. Contributor, copyright holder.  
-  GDAL API documentation; src/progress_r.cpp from
-  gdal/port/cpl_progress.cpp
+  GDAL API/documentation
 
 - **Even Rouault**. Contributor, copyright holder.  
-  GDAL API documentation
+  GDAL API/documentation
 
 - **Marius Appel**. Contributor, copyright holder.  
   configure.ac based on https://github.com/appelmar/gdalcubes

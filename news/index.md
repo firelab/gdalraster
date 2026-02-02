@@ -2,7 +2,8 @@
 
 ## gdalraster 2.4.0.9075 (dev)
 
-- use `cli` for enhanced progress reporting throughout
+- use package **cli** for enhanced progress reporting throughout, adding
+  **cli** in `LinkingTo`
   ([\#889](https://github.com/firelab/gdalraster/issues/889), thanks to
   [@pepijn-devries](https://github.com/pepijn-devries)) (2026-02-01)
 
