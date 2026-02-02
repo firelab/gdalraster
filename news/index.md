@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.4.0.9077 (dev)
+## gdalraster 2.4.0.9078 (dev)
+
+- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
+  use
+  [`cli::cli_progress_bar()`](https://cli.r-lib.org/reference/cli_progress_bar.html)
+  instead of
+  [`utils::txtProgressBar()`](https://rdrr.io/r/utils/txtProgressBar.html)
+  (2026-02-01)
 
 - (internal) `VSIFile::read()`: avoid a copy from temporary buffer most
   of the time

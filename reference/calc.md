@@ -203,9 +203,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> calculating from 1 input raster...
-#> ================================================================================
-#> output written to /tmp/Rtmp3tmoea/rastcalc22a623898060.tif
+#> output written to /tmp/RtmpBo8lpS/rastcalc22e41ab4307a.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -229,8 +227,6 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
 (ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
-#> calculating from 2 input rasters...
-#> ================================================================================
 #> output written to in-memory-raster
 #> C++ object of class GDALRaster
 #>  Driver : In Memory Raster (MEM)
@@ -308,9 +304,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> calculating from 2 input rasters...
-#> ================================================================================
-#> output written to /tmp/Rtmp3tmoea/storml_lndscp.tif
+#> output written to /tmp/RtmpBo8lpS/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9077</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9078</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9077" id="gdalraster-2409077-dev">gdalraster 2.4.0.9077 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409077-dev"></a></h2>
-<ul><li><p>(internal) <code>VSIFile::read()</code>: avoid a copy from temporary buffer most of the time (<a href="https://github.com/firelab/gdalraster/issues/888" class="external-link">#888</a>) (2026-02-01)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9078" id="gdalraster-2409078-dev">gdalraster 2.4.0.9078 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409078-dev"></a></h2>
+<ul><li><p><code><a href="../reference/calc.html">calc()</a></code>: use <code><a href="https://cli.r-lib.org/reference/cli_progress_bar.html" class="external-link">cli::cli_progress_bar()</a></code> instead of <code><a href="https://rdrr.io/r/utils/txtProgressBar.html" class="external-link">utils::txtProgressBar()</a></code> (2026-02-01)</p></li>
+<li><p>(internal) <code>VSIFile::read()</code>: avoid a copy from temporary buffer most of the time (<a href="https://github.com/firelab/gdalraster/issues/888" class="external-link">#888</a>) (2026-02-01)</p></li>
 <li><p>use package <strong>cli</strong> for enhanced progress reporting throughout, adding <strong>cli</strong> in <code>LinkingTo</code> (<a href="https://github.com/firelab/gdalraster/issues/889" class="external-link">#889</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-02-01)</p></li>
 <li><p>add package <strong>vctrs</strong> in Suggests since it is suggested in <strong>wk</strong> but <code><a href="https://paleolimbot.github.io/wk/reference/wk_plot.html" class="external-link">wk::wk_plot()</a></code> requires it, and various conditionals in examples/tests/vignettes for suggested packages (<a href="https://github.com/firelab/gdalraster/issues/886" class="external-link">#886</a>) (2026-01-28)</p></li>
 <li><p>class <code>VSIFile</code>: fix crash when using file open options due to incorrectly sized buffer, and add const correctness (<a href="https://github.com/firelab/gdalraster/issues/883" class="external-link">#883</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-01-27)</p></li>
