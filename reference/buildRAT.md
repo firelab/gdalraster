@@ -314,9 +314,12 @@ head(tbl2)
 
 ds$close()
 
-# Display
-evt_gt <- displayRAT(tbl2, title = "Storm Lake EVT Raster Attribute Table")
-class(evt_gt)  # an object of class "gt_tbl" from package gt
+## Display
+# requires suggested package "gt"
+if (requireNamespace("gt", quietly = TRUE)) {
+  evt_gt <- displayRAT(tbl2, title = "Storm Lake EVT Raster Attribute Table")
+  class(evt_gt)  # an object of class "gt_tbl" from package gt
+}
 #> [1] "gt_tbl" "list"  
 # To show the table:
 # evt_gt
