@@ -1,6 +1,6 @@
 # Changelog
 
-## gdalraster 2.4.0.9075 (dev)
+## gdalraster 2.4.0.9076 (dev)
 
 - use package **cli** for enhanced progress reporting throughout, adding
   **cli** in `LinkingTo`
