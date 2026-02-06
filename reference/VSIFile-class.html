@@ -8,7 +8,7 @@ It provides analogs of several Standard C file I/O functions, allowing
 virtualization of disk I/O so that non-file data sources can be made to
 appear as files.
 VSIFile is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
-Methods of the class are accessed using the $ operator.'><meta property="og:description" content='VSIFile provides bindings to the GDAL VSIVirtualHandle API. Encapsulates a
+Fields and methods of the class are accessed using the $ operator.'><meta property="og:description" content='VSIFile provides bindings to the GDAL VSIVirtualHandle API. Encapsulates a
 VSIVirtualHandle
 (https://gdal.org/en/stable/api/cpl_cpp.html#_CPPv416VSIVirtualHandle).
 This API abstracts binary file I/O across "regular" file systems, URLs,
@@ -17,7 +17,7 @@ It provides analogs of several Standard C file I/O functions, allowing
 virtualization of disk I/O so that non-file data sources can be made to
 appear as files.
 VSIFile is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
-Methods of the class are accessed using the $ operator.'></head><body>
+Fields and methods of the class are accessed using the $ operator.'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -81,7 +81,7 @@ It provides analogs of several Standard C file I/O functions, allowing
 virtualization of disk I/O so that non-file data sources can be made to
 appear as files.</p>
 <p><code>VSIFile</code> is a C++ class exposed directly to <span style="R">R</span> (via <code>RCPP_EXPOSED_CLASS</code>).
-Methods of the class are accessed using the <code>$</code> operator.</p>
+Fields and methods of the class are accessed using the <code>$</code> operator.</p>
     </div>
 
 
@@ -110,8 +110,8 @@ filesystem-dependent options. These are the options provided by
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>VSIFile</code> which contains a pointer to a
-<code>VSIVirtualHandle</code>, and methods that operate on the file as described in
-Details.</p>
+<code>VSIVirtualHandle</code>. Class methods are described in Details, along with a set
+of writable fields for per-object settings.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -143,22 +143,25 @@ allow sequential write only.</p>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co"># specifying access and options (both required):</span></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>vf <span class="ot">&lt;-</span> <span class="fu">new</span>(VSIFile, filename, access, options)</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">## Methods</span></span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">seek</span>(offset, origin)</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">tell</span>()</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">rewind</span>()</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">read</span>(nbytes)</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">write</span>(object)</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">eof</span>()</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">truncate</span>(new_size)</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">flush</span>()</span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">ingest</span>(max_size)</span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">close</span>()</span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">open</span>()</span>
-<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">get_filename</span>()</span>
-<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">get_access</span>()</span>
-<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">set_access</span>(access)</span></code></pre><p></p></div>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="do">## Read/write fields (per-object settings)</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>vf<span class="sc">$</span>reportVSIFErrorAsEof</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="do">## Methods</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">seek</span>(offset, origin)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">tell</span>()</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">rewind</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">read</span>(nbytes)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">write</span>(object)</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">eof</span>()</span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">truncate</span>(new_size)</span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">flush</span>()</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">ingest</span>(max_size)</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">close</span>()</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">open</span>()</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">get_filename</span>()</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">get_access</span>()</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>vf<span class="sc">$</span><span class="fu">set_access</span>(access)</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -202,6 +205,20 @@ Append blocks are limited to 195 GiB (however if the file size is below
 4 MiB, a block blob will be created in a single PUT operation).</p></li>
 </ul><p>See the GDAL documentation for <code>VSIFOpenEx2L()</code> for the most current set of
 available options (<a href="https://gdal.org/en/stable/api/cpl.html" class="external-link">https://gdal.org/en/stable/api/cpl.html</a>).</p>
+</div>
+
+<div class="section">
+<h3 id="read-write-fields-per-object-settings-">Read/write fields (per-object settings)<a class="anchor" aria-label="anchor" href="#read-write-fields-per-object-settings-"></a></h3>
+
+
+<p><code>$reportVSIFErrorAsEof</code><br>
+A logical value, <code>TRUE</code> (the default) to report a VSI error condition,
+as indicated by <code>VSIFErrorL()</code> in GDAL &gt;= 3.10, as <code>TRUE</code> in a call to the
+<code>$eof()</code> method (see below). Since GDAL 3.10, some virtual file systems
+that used to report errors through <code>VSIFEofL</code> now do so through <code>VSIFErrorL</code>.
+Code testing <code>$eof()</code> to potentially end read loops should also test
+for an error condition, which this setting enables by default.
+Ignored if GDAL &lt; 3.10.</p>
 </div>
 
 <div class="section">

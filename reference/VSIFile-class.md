@@ -10,8 +10,8 @@ virtualization of disk I/O so that non-file data sources can be made to
 appear as files.
 
 `VSIFile` is a C++ class exposed directly to R (via
-`RCPP_EXPOSED_CLASS`). Methods of the class are accessed using the `$`
-operator.
+`RCPP_EXPOSED_CLASS`). Fields and methods of the class are accessed
+using the `$` operator.
 
 ## Arguments
 
@@ -44,8 +44,8 @@ operator.
 ## Value
 
 An object of class `VSIFile` which contains a pointer to a
-`VSIVirtualHandle`, and methods that operate on the file as described in
-Details.
+`VSIVirtualHandle`. Class methods are described in Details, along with a
+set of writable fields for per-object settings.
 
 ## Note
 
@@ -78,6 +78,9 @@ would allow sequential write only.
     vf <- new(VSIFile, filename, access)
     # specifying access and options (both required):
     vf <- new(VSIFile, filename, access, options)
+
+    ## Read/write fields (per-object settings)
+    vf$reportVSIFErrorAsEof
 
     ## Methods
     vf$seek(offset, origin)
@@ -151,6 +154,17 @@ Options specific to /vsiaz/ in "w" mode:
 
 See the GDAL documentation for `VSIFOpenEx2L()` for the most current set
 of available options (<https://gdal.org/en/stable/api/cpl.html>).
+
+### Read/write fields (per-object settings)
+
+`$reportVSIFErrorAsEof`  
+A logical value, `TRUE` (the default) to report a VSI error condition,
+as indicated by `VSIFErrorL()` in GDAL \>= 3.10, as `TRUE` in a call to
+the `$eof()` method (see below). Since GDAL 3.10, some virtual file
+systems that used to report errors through `VSIFEofL` now do so through
+`VSIFErrorL`. Code testing `$eof()` to potentially end read loops should
+also test for an error condition, which this setting enables by default.
+Ignored if GDAL \< 3.10.
 
 ### Methods
 
