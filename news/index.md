@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.4.0.9078 (dev)
+## gdalraster 2.4.0.9079 (dev)
+
+- class `VSIFile`: add a writable field `reportVSIFErrorAsEof`, and
+  check the VSI error indicator in the `read()` and `eof()` methods if
+  GDAL \>= 3.10
+  ([\#901](https://github.com/firelab/gdalraster/issues/901))
+  (2026-02-06)
 
 - [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
   use
