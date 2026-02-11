@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.4.0.9080 (dev)
+## gdalraster 2.4.0.9081 (dev)
+
+- recognize new color interpretation (`GCI_xxxx`) items added to the
+  `GDALColorInterp` enumeration in GDAL 3.10
+  ([\#900](https://github.com/firelab/gdalraster/issues/900))
+  (2026-02-10)
 
 - (internal) initialize the progress counter to zero in some cases where
   it was missing for a progress bar managed directly

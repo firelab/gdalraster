@@ -641,25 +641,43 @@ set.
 Returns a string describing the color interpretation for `band`. The
 color interpretation values and their meanings are:
 
-|            |                                       |
-|------------|---------------------------------------|
-| Undefined  | Undefined                             |
-| Gray       | Grayscale                             |
-| Palette    | Paletted (see associated color table) |
-| Red        | Red band of RGBA image                |
-| Green      | Green band of RGBA image              |
-| Blue       | Blue band of RGBA image               |
-| Alpha      | Alpha (0=transparent, 255=opaque)     |
-| Hue        | Hue band of HLS image                 |
-| Saturation | Saturation band of HLS image          |
-| Lightness  | Lightness band of HLS image           |
-| Cyan       | Cyan band of CMYK image               |
-| Magenta    | Magenta band of CMYK image            |
-| Yellow     | Yellow band of CMYK image             |
-| Black      | Black band of CMYK image              |
-| YCbCr_Y    | Y Luminance                           |
-| YCbCr_Cb   | Cb Chroma                             |
-| YCbCr_Cr   | Cr Chroma                             |
+|                   |                                                          |
+|-------------------|----------------------------------------------------------|
+| Undefined         | Undefined                                                |
+| Gray              | Grayscale                                                |
+| Palette           | Paletted (see associated color table)                    |
+| Red               | Red band of RGBA image                                   |
+| Green             | Green band of RGBA image                                 |
+| Blue              | Blue band of RGBA image                                  |
+| Alpha             | Alpha (0=transparent, 255=opaque)                        |
+| Hue               | Hue band of HLS image                                    |
+| Saturation        | Saturation band of HLS image                             |
+| Lightness         | Lightness band of HLS image                              |
+| Cyan              | Cyan band of CMYK image                                  |
+| Magenta           | Magenta band of CMYK image                               |
+| Yellow            | Yellow band of CMYK image                                |
+| Black             | Black band of CMYK image                                 |
+| YCbCr_Y           | Y Luminance                                              |
+| YCbCr_Cb          | Cb Chroma                                                |
+| YCbCr_Cr          | Cr Chroma                                                |
+| **GDAL \>= 3.10** |                                                          |
+| PanBand           | Panchromatic band \[0.40 - 1.00 μm\]                     |
+| CoastalBand       | Coastal band \[0.40 - 0.45 μm\]                          |
+| RedEdgeBand       | Red-edge band \[0.69 - 0.79 μm\]                         |
+| NIRBand           | Near-InfraRed (NIR) band \[0.75 - 1.40 μm\]              |
+| SWIRBand          | Short-Wavelength InfraRed (SWIR) band \[1.40 - 3.00 μm\] |
+| MWIRBand          | Mid-Wavelength InfraRed (MWIR) band \[3.00 - 8.00 μm\]   |
+| LWIRBand          | Long-Wavelength InfraRed (LWIR) band \[8.00 - 15 μm\]    |
+| TIRBand           | Thermal InfraRed (TIR) band (MWIR or LWIR) \[3 - 15 μm\] |
+| OtherIRBand       | Other infrared band \[0.75 - 1000 μm\]                   |
+| SAR_Ka_Band       | SAR Ka band \[0.8 - 1.1 cm / 27 - 40 GHz\]               |
+| SAR_K_Band        | SAR K band \[1.1 - 1.7 cm / 18 - 27 GHz\]                |
+| SAR_Ku_Band       | SAR Ku band \[1.7 - 2.4 cm / 12 - 18 GHz\]               |
+| SAR_X_Band        | SAR X band \[2.4 - 3.8 cm / 8 - 12 GHz\]                 |
+| SAR_C_Band        | SAR C band \[3.8 - 7.5 cm / 4 - 8 GHz\]                  |
+| SAR_S_Band        | SAR S band \[7.5 - 15 cm / 2 - 4 GHz\]                   |
+| SAR_L_Band        | SAR L band \[15 - 30 cm / 1 - 2 GHz\]                    |
+| SAR_P_Band        | SAR P band \[30 - 100 cm / 0.3 - 1 GHz\]                 |
 
 `$setRasterColorInterp(band, col_interp)`  
 Sets the color interpretation for `band`. See above for the list of
