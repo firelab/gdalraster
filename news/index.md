@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.4.0.9081 (dev)
+## gdalraster 2.4.0.9082 (dev)
+
+- progressbar: cleanup a previously interrupted one if it exists before
+  creating a new one
+  ([\#906](https://github.com/firelab/gdalraster/issues/906))
+  (2025-02-13)
 
 - recognize new color interpretation (`GCI_xxxx`) items added to the
   `GDALColorInterp` enumeration in GDAL 3.10

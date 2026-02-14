@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9081</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9082</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9081" id="gdalraster-2409081-dev">gdalraster 2.4.0.9081 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409081-dev"></a></h2>
-<ul><li><p>recognize new color interpretation (<code>GCI_xxxx</code>) items added to the <code>GDALColorInterp</code> enumeration in GDAL 3.10 (<a href="https://github.com/firelab/gdalraster/issues/900" class="external-link">#900</a>) (2026-02-10)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9082" id="gdalraster-2409082-dev">gdalraster 2.4.0.9082 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409082-dev"></a></h2>
+<ul><li><p>progressbar: cleanup a previously interrupted one if it exists before creating a new one (<a href="https://github.com/firelab/gdalraster/issues/906" class="external-link">#906</a>) (2025-02-13)</p></li>
+<li><p>recognize new color interpretation (<code>GCI_xxxx</code>) items added to the <code>GDALColorInterp</code> enumeration in GDAL 3.10 (<a href="https://github.com/firelab/gdalraster/issues/900" class="external-link">#900</a>) (2026-02-10)</p></li>
 <li><p>(internal) initialize the progress counter to zero in some cases where it was missing for a progress bar managed directly (<a href="https://github.com/firelab/gdalraster/issues/903" class="external-link">#903</a>) (2026-02-06)</p></li>
 <li><p>class <code>VSIFile</code>: add a writable field <code>reportVSIFErrorAsEof</code>, and check the VSI error indicator in the <code>read()</code> and <code>eof()</code> methods if GDAL &gt;= 3.10 (<a href="https://github.com/firelab/gdalraster/issues/901" class="external-link">#901</a>) (2026-02-06)</p></li>
 <li><p><code><a href="../reference/calc.html">calc()</a></code>: use <code><a href="https://cli.r-lib.org/reference/cli_progress_bar.html" class="external-link">cli::cli_progress_bar()</a></code> instead of <code><a href="https://rdrr.io/r/utils/txtProgressBar.html" class="external-link">utils::txtProgressBar()</a></code> (2026-02-01)</p></li>
