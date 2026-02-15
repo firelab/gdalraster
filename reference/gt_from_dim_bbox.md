@@ -7,12 +7,12 @@ north-up (no rotation).
 ## Usage
 
 ``` r
-gt_from_dim_bbox(dim, bbox)
+gt_from_dim_bbox(dm, bbox)
 ```
 
 ## Arguments
 
-- dim:
+- dm:
 
   Integer vector of length two containing the raster dimensions (xsize,
   ysize) in pixels.
@@ -38,8 +38,7 @@ Numeric vector of length six containing the geotransform coefficients.
 
 ``` r
 # 1-degree global grid
-gt <- gt_from_dim_bbox(c(360, 180), c(-180, -90, 180, 90))
-gt
+(gt <- gt_from_dim_bbox(c(360, 180), c(-180, -90, 180, 90)))
 #> [1] -180    1    0   90    0   -1
 
 # verify round-trip

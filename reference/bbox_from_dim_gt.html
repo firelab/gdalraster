@@ -65,14 +65,14 @@ envelope of the four corner coordinates.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bbox_from_dim_gt</span><span class="op">(</span><span class="va">dim</span>, <span class="va">gt</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bbox_from_dim_gt</span><span class="op">(</span><span class="va">dm</span>, <span class="va">gt</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-dim">dim<a class="anchor" aria-label="anchor" href="#arg-dim"></a></dt>
+<dl><dt id="arg-dm">dm<a class="anchor" aria-label="anchor" href="#arg-dm"></a></dt>
 <dd><p>Integer vector of length two containing the raster dimensions
 (xsize, ysize) in pixels.</p></dd>
 
@@ -99,10 +99,10 @@ coefficients.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">elev_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">elev_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">getGeoTransform</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dim</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">dim</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dm</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">dim</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># should match ds$bbox()</span></span></span>
-<span class="r-in"><span><span class="fu">bbox_from_dim_gt</span><span class="op">(</span><span class="va">dim</span>, <span class="va">gt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bbox_from_dim_gt</span><span class="op">(</span><span class="va">dm</span>, <span class="va">gt</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  323476.1 5101872.0  327766.1 5105082.0</span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">bbox</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  323476.1 5101872.0  327766.1 5105082.0</span>

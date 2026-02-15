@@ -7,12 +7,12 @@ axis-aligned envelope of the four corner coordinates.
 ## Usage
 
 ``` r
-bbox_from_dim_gt(dim, gt)
+bbox_from_dim_gt(dm, gt)
 ```
 
 ## Arguments
 
-- dim:
+- dm:
 
   Integer vector of length two containing the raster dimensions (xsize,
   ysize) in pixels.
@@ -39,10 +39,10 @@ xmax, ymax) in georeferenced coordinates.
 elev_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
 ds <- new(GDALRaster, elev_file)
 gt <- ds$getGeoTransform()
-dim <- ds$dim()
+dm <- ds$dim()
 
 # should match ds$bbox()
-bbox_from_dim_gt(dim, gt)
+bbox_from_dim_gt(dm, gt)
 #> [1]  323476.1 5101872.0  327766.1 5105082.0
 ds$bbox()
 #> [1]  323476.1 5101872.0  327766.1 5105082.0
