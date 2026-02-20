@@ -64,6 +64,8 @@
   : Create a raster from an existing raster as template
 - [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md)
   : Convert raster data between different formats
+- [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md)
+  : Create a GDAL in-memory dataset from R data without copying
 
 ### Virtual raster
 
