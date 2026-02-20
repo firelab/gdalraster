@@ -103,3 +103,30 @@ re-opened once the object's `$close()` method has been called.
 ## See also
 
 [`GDALRaster-class`](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md)
+
+## Examples
+
+``` r
+v <- sample(0:255, 50, replace = TRUE)
+(ds_mem <- vector_to_MEM(v, xsize = 10, ysize = 5))
+#> failed to get projection ref
+#> C++ object of class GDALRaster
+#>  Driver : In Memory Raster (MEM)
+#>  DSN    : MEM:::DATAPOINTER=0x55dba7d093c0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200
+#>  Dim    : 10, 5, 1
+#>  CRS    : 
+#>  Res    : 1.000000, 1.000000
+#>  Bbox   : 0.000000, 0.000000, 10.000000, 5.000000
+
+all((ds_mem$read(1, 0, 0, 10, 5, 10, 5) == v))
+#> [1] TRUE
+
+ds_mem$write(1, 0, 0, 10, 5, (v * -1))
+print(v)
+#>  [1]  -10  -25  -21 -140 -112 -190 -227   -1 -179  -34 -176 -214 -189 -118  -20
+#> [16] -183 -132 -135 -243 -201  -64 -135 -224  -47  -51  -78 -224  -11  -31  -77
+#> [31] -195  -51 -124  -44  -81  -52 -188 -189  -42 -121  -75  -49 -132 -160  -63
+#> [46] -166  -58 -109    0  -90
+
+ds_mem$close()
+```
