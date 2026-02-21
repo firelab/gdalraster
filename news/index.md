@@ -1,6 +1,9 @@
 # Changelog
 
-## gdalraster 2.4.0.9091 (dev)
+## gdalraster 2.4.0.9092 (dev)
+
+- `GDALAlg::parseCommandLineArgs()`: look up argument aliases in a
+  couple of places they were hard coded, and refactor (2026-02-21)
 
 - [`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md):
   catch the `CPL_LOG_ERRORS` option and set the global error handler

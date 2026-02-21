@@ -65,8 +65,8 @@ translate(elev_file, img_file, args)
 ds <- new(GDALRaster, img_file)
 ds$info()
 #> Driver: HFA/Erdas Imagine Images (.img)
-#> Files: /tmp/Rtmpp5FP1e/storml_elev_90m.img
-#>        /tmp/Rtmpp5FP1e/storml_elev_90m.img.aux.xml
+#> Files: /tmp/RtmpXqqatF/storml_elev_90m.img
+#>        /tmp/RtmpXqqatF/storml_elev_90m.img.aux.xml
 #> Size is 48, 36
 #> Coordinate System is:
 #> PROJCRS["NAD83 / UTM zone 12N",
