@@ -28,6 +28,15 @@ set_config_option(key, value)
 
 No return value, called for side effects.
 
+## Note
+
+The configuration option `"CPL_LOG_ERRORS"` can be set to `"OFF"` to
+disable printing error massages to the console by GDAL. This only
+affects messages printed by GDAL, and does not disable errors, warnings
+or other messages emitted by gdalraster. The latter can generally be
+configured using a function argument or object-level setting in most
+cases.
+
 ## See also
 
 [`get_config_option()`](https://firelab.github.io/gdalraster/reference/get_config_option.md)
@@ -37,9 +46,9 @@ No return value, called for side effects.
 ## Examples
 
 ``` r
-set_config_option("GDAL_CACHEMAX", "10%")
-get_config_option("GDAL_CACHEMAX")
-#> [1] "10%"
-## unset:
-set_config_option("GDAL_CACHEMAX", "")
+set_config_option("CPL_LOG_ERRORS", "OFF")
+get_config_option("CPL_LOG_ERRORS")
+#> [1] "OFF"
+## unset to default:
+set_config_option("CPL_LOG_ERRORS", "")
 ```

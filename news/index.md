@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.4.0.9090 (dev)
+## gdalraster 2.4.0.9091 (dev)
+
+- [`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md):
+  catch the `CPL_LOG_ERRORS` option and set the global error handler
+  appropriately for that case (fixes
+  [\#905](https://github.com/firelab/gdalraster/issues/905))
+  (2026-02-20)
 
 - add
   [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md):

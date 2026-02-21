@@ -33,14 +33,19 @@ This function is for advanced use cases. It is intended for setting a
 handler specific to the R environment is in use by default.
 
 Setting `handler = "logging"` will use `CPLLoggingErrorHandler()`, error
-handler that logs into the file defined by the `CPL_LOG` configuration
+handler that logs into the file defined by the `"CPL_LOG"` configuration
 option. Be sure that option is set when using this error handler.
 
 This only affects error reporting from GDAL.
 
+Also note that the configuration option `"CPL_LOG_ERRORS"` can be set to
+`"OFF"` to disable globally the printing of error massages to the
+console by GDAL.
+
 ## See also
 
-[`pop_error_handler()`](https://firelab.github.io/gdalraster/reference/pop_error_handler.md)
+[`pop_error_handler()`](https://firelab.github.io/gdalraster/reference/pop_error_handler.md),
+[`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md)
 
 ## Examples
 

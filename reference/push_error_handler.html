@@ -21,7 +21,7 @@ process debug messages via CPLDefaultErrorHandler."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9090</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9091</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,13 +102,16 @@ One of <code>quiet</code>, <code>logging</code> or <code>default</code>.</p></dd
 <em>temporary</em> error handler in a limited segment of code. A global error
 handler specific to the R environment is in use by default.</p>
 <p>Setting <code>handler = "logging"</code> will use <code>CPLLoggingErrorHandler()</code>, error
-handler that logs into the file defined by the <code>CPL_LOG</code> configuration
+handler that logs into the file defined by the <code>"CPL_LOG"</code> configuration
 option. Be sure that option is set when using this error handler.</p>
 <p>This only affects error reporting from GDAL.</p>
+<p>Also note that the configuration option <code>"CPL_LOG_ERRORS"</code> can be set to
+<code>"OFF"</code> to disable globally the printing of error massages to the console
+by GDAL.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="pop_error_handler.html">pop_error_handler()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="pop_error_handler.html">pop_error_handler()</a></code>, <code><a href="set_config_option.html">set_config_option()</a></code></p></div>
     </div>
 
     <div class="section level2">

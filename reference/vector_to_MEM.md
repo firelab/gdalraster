@@ -112,7 +112,7 @@ v <- sample(0:255, 50, replace = TRUE)
 #> failed to get projection ref
 #> C++ object of class GDALRaster
 #>  Driver : In Memory Raster (MEM)
-#>  DSN    : MEM:::DATAPOINTER=0x55dba7d093c0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200
+#>  DSN    : MEM:::DATAPOINTER=0x560dc543b040,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200
 #>  Dim    : 10, 5, 1
 #>  CRS    : 
 #>  Res    : 1.000000, 1.000000
