@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.4.0.9092 (dev)
+## gdalraster 2.4.0.9093 (dev)
+
+- (internal) tests fixes: use vector MEM format instead of Memory (GDAL
+  \>= 3.11); make plotting tests check X11 capability only if unix OS
+  type but not macos (2026-02-22)
 
 - `GDALAlg::parseCommandLineArgs()`: look up argument aliases in a
   couple of places they were hard coded, and refactor (2026-02-21)
