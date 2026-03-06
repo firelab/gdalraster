@@ -1,6 +1,9 @@
 # Changelog
 
-## gdalraster 2.4.0.9093 (dev)
+## gdalraster 2.4.0.9094 (dev)
+
+- class `GDALVector`: honor the `quiet` field setting in several places
+  it was not checked before printing a console message (2026-03-05)
 
 - (internal) tests fixes: use vector MEM format instead of Memory (GDAL
   \>= 3.11); make plotting tests check X11 capability only if unix OS
@@ -177,6 +180,8 @@
 
 ## gdalraster 2.4.0
 
+CRAN release: 2025-12-18
+
 ### Repository change
 
 - the development repository moved into the `firelab` organization at
@@ -239,6 +244,8 @@
   new hardware specs, timings, and add C++ raw performance comparisons
 
 ## gdalraster 2.3.0
+
+CRAN release: 2025-11-19
 
 ### Dependencies
 
@@ -366,6 +373,8 @@
 
 ## gdalraster 2.2.1
 
+CRAN release: 2025-08-29
+
 ### Bug fix and maintenance release
 
 - updates in class `GDALAlg`, experimental bindings to the new GDAL CLI
@@ -399,6 +408,8 @@
     miscellaneous improvements in .Rd formatting
 
 ## gdalraster 2.2.0
+
+CRAN release: 2025-08-22
 
 ### Features
 
@@ -465,6 +476,8 @@
 - code linting
 
 ## gdalraster 2.1.0
+
+CRAN release: 2025-07-14
 
 ### Features / enhancements
 
@@ -583,6 +596,8 @@
   Benchmarks](https://firelab.github.io/gdalraster/articles/vector-read-benchmarks.html)
 
 ## gdalraster 2.0.0
+
+CRAN release: 2025-05-11
 
 ### Summary of main changes
 
@@ -1004,6 +1019,8 @@
 
 ## gdalraster 1.12.0
 
+CRAN release: 2025-01-19
+
 ### Features / enhancements
 
 - add
@@ -1054,6 +1071,8 @@
 
 ## gdalraster 1.11.1
 
+CRAN release: 2024-06-13
+
 - fix test in test-ogr_manage.R: the test for GeoJSON layer did not need
   to check existence using `with_update = TRUE` on a file in extdata
   ([\#410](https://github.com/firelab/gdalraster/issues/410))
@@ -1085,6 +1104,8 @@
 - code linting
 
 ## gdalraster 1.11.0
+
+CRAN release: 2024-06-03
 
 ### System requirements
 
@@ -1294,6 +1315,8 @@
 
 ## gdalraster 1.10.0
 
+CRAN release: 2024-03-26
+
 ### System requirements
 
 - GDAL built against GEOS is now required
@@ -1396,6 +1419,8 @@
 
 ## gdalraster 1.9.0
 
+CRAN release: 2024-02-25
+
 ### Behavior change
 
 - remove `OSR_DEFAULT_AXIS_MAPPING_STRATEGY=TRADITIONAL_GIS_ORDER` from
@@ -1481,6 +1506,8 @@
 
 ## gdalraster 1.8.0
 
+CRAN release: 2024-01-27
+
 ### Dependencies
 
 - libxml2 is listed in `SystemRequirements` since it is required by the
@@ -1540,6 +1567,8 @@
 
 ## gdalraster 1.7.0
 
+CRAN release: 2023-11-29
+
 ### GDAL API stand-alone functions
 
 - add
@@ -1588,6 +1617,8 @@
   functions, increased test coverage
 
 ## gdalraster 1.6.0
+
+CRAN release: 2023-10-27
 
 ### Dependencies
 
@@ -1674,6 +1705,8 @@
 
 ## gdalraster 1.5.0
 
+CRAN release: 2023-09-25
+
 ### GDALRaster-class
 
 - add methods for color tables: `getColorTable()`, `getPaletteInterp()`,
@@ -1743,6 +1776,8 @@
 
 ## gdalraster 1.4.0
 
+CRAN release: 2023-08-29
+
 - add
   [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md):
   wrapper for the `gdaldem` command-line utility to generate DEM
@@ -1770,6 +1805,8 @@
 - add test suite and code coverage report
 
 ## gdalraster 1.3.0
+
+CRAN release: 2023-06-29
 
 - `GDALRaster::read()`: data are now read as R `integer` type when
   possible for the raster data type
@@ -1816,6 +1853,8 @@
 
 ## gdalraster 1.2.0
 
+CRAN release: 2023-05-28
+
 - starting at v. 1.2.0,
   [gdalraster](https://firelab.github.io/gdalraster/) will require R \>=
   4.2.0
@@ -1839,5 +1878,7 @@
 - documentation - minor edits throughout to improve clarity
 
 ## gdalraster 1.1.1
+
+CRAN release: 2023-05-24
 
 - Initial public release.
