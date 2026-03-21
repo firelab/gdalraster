@@ -106,7 +106,7 @@ At the time of writing (GDAL 3.9 through 3.12.1), a point exactly on the
 surface of the DEM is never visible with `GDALIsLineOfSightVisible()`,
 even if viewed from a point directly above. For a detailed description,
 see <https://github.com/OSGeo/gdal/issues/12458>. A workaround for that
-case could be to set a small but negligible postive Z value (if using
+case could be to set a small but negligible positive Z value (if using
 `"RELATIVE_TO_DEM"`) for points that are intended to be on the DEM
 surface, if appropriate for the use case.
 
