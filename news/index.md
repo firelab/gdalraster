@@ -1,6 +1,19 @@
 # Changelog
 
-## gdalraster 2.4.0.9094 (dev)
+## gdalraster 2.4.0.9100 (dev)
+
+- (code linting)
+  [`addFilesInZip()`](https://firelab.github.io/gdalraster/reference/addFilesInZip.md):
+  use `unique_ptr` in the internal `addFileInZip()`, and use `vsi_*()`
+  functions for validating input files
+  ([\#924](https://github.com/firelab/gdalraster/issues/924))
+  (2026-03-22)
+
+- (code linting)
+  [`srs_info_from_db()`](https://firelab.github.io/gdalraster/reference/srs_info_from_db.md):
+  pass input by const ref
+  ([\#923](https://github.com/firelab/gdalraster/issues/923))
+  (2026-03-21)
 
 - class `GDALVector`: honor the `quiet` field setting in several places
   it was not checked before printing a console message (2026-03-05)
