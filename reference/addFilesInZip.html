@@ -187,44 +187,44 @@ files (see <code><a href="set_config_option.html">set_config_option()</a></code>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lcp_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storm_lake.lcp"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">zip_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"storml_lcp.zip"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ynp_fires_1984_2022.gpkg"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">zip_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"ynp_fires.zip"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Requires GDAL &gt;= 3.7</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="gdal_version.html">gdal_version_num</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu"><a href="gdal_compute_version.html">gdal_compute_version</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu">addFilesInZip</span><span class="op">(</span><span class="va">zip_file</span>, <span class="va">lcp_file</span>, full_paths <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>                sozip_enabled <span class="op">=</span> <span class="st">"YES"</span>, num_threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">addFilesInZip</span><span class="op">(</span><span class="va">zip_file</span>, <span class="va">f</span>, full_paths <span class="op">=</span> <span class="cn">FALSE</span>, sozip_enabled <span class="op">=</span> <span class="st">"YES"</span>,</span></span>
+<span class="r-in"><span>                num_threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Files in zip archive:"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="va">zip_file</span>, list <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Open with GDAL using Virtual File System handler '/vsizip/'</span></span></span>
-<span class="r-in"><span>  <span class="co"># see: https://gdal.org/en/stable/user/virtual_file_systems.html#vsizip-zip-archives</span></span></span>
-<span class="r-in"><span>  <span class="va">lcp_in_zip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/vsizip"</span>, <span class="va">zip_file</span>, <span class="st">"storm_lake.lcp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># https://gdal.org/en/stable/user/virtual_file_systems.html#vsizip-zip-archives</span></span></span>
+<span class="r-in"><span>  <span class="va">vsi_f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/vsizip"</span>, <span class="va">zip_file</span>, <span class="st">"ynp_fires_1984_2022.gpkg"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"SOZip metadata:"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="vsi_get_file_metadata.html">vsi_get_file_metadata</a></span><span class="op">(</span><span class="va">lcp_in_zip</span>, domain <span class="op">=</span> <span class="st">"ZIP"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="vsi_get_file_metadata.html">vsi_get_file_metadata</a></span><span class="op">(</span><span class="va">vsi_f</span>, domain <span class="op">=</span> <span class="st">"ZIP"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">lcp_in_zip</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">ds</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">lyr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">vsi_f</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">lyr</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">DONTSHOW</span><span class="op">(</span><span class="op">{</span><span class="fu"><a href="vsi_unlink.html">vsi_unlink</a></span><span class="op">(</span><span class="va">zip_file</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> adding /home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> adding /home/runner/work/_temp/Library/gdalraster/extdata/ynp_fires_1984_2022.gpkg ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Files in zip archive:"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Name Length                Date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 storm_lake.lcp 252132 2026-03-21 20:27:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       Name Length                Date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ynp_fires_1984_2022.gpkg 307200 2026-03-22 23:03:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SOZip metadata:"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $START_DATA_OFFSET</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "44"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "54"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $COMPRESSION_METHOD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "8 (DEFLATE)"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $COMPRESSED_SIZE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "78479"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "164729"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UNCOMPRESSED_SIZE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "252132"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "307200"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SOZIP_FOUND</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "YES"</span>
@@ -239,102 +239,72 @@ files (see <code><a href="set_config_option.html">set_config_option()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "32768"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SOZIP_START_DATA_OFFSET</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "78578"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "164848"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SOZIP_VALID</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "YES"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Driver: LCP/FARSITE v.4 Landscape File (.lcp)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Files: /vsizip//tmp/RtmpCDXBHv/storml_lcp.zip/storm_lake.lcp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Size is 143, 107</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Coordinate System is:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> INFO: Open of `/vsizip//tmp/RtmpdhXIMe/ynp_fires.zip/ynp_fires_1984_2022.gpkg'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       using driver `GPKG' successful.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Data axis to CRS axis mapping: 1,2,3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Origin = (323476.071970863151364,5105081.983031376264989)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pixel Size = (30.000000000000000,-30.000000000000000)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   DESCRIPTION=LCP file created by GDAL.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LATITUDE=46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LINEAR_UNIT=Meters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Corner Coordinates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Upper Left  (  323476.072, 5105081.983) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lower Left  (  323476.072, 5101871.983) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Upper Right (  327766.072, 5105081.983) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lower Right (  327766.072, 5101871.983) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Center      (  325621.072, 5103476.983) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Elevation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_MAX=3046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_NUM_CLASSES=-1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_UNIT=0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ELEVATION_UNIT_NAME=Meters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 2 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Slope</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_MAX=54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_NUM_CLASSES=53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_UNIT=0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     SLOPE_UNIT_NAME=Degrees</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 3 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Aspect</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_MAX=359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_NUM_CLASSES=-1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_UNIT=2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ASPECT_UNIT_NAME=Azimuth degrees</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 4 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Fuel models</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_MAX=183</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_NUM_CLASSES=12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_OPTION=0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_OPTION_DESC=no custom models AND no conversion file needed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     FUEL_MODEL_VALUES=0,98,99,101,102,121,122,123,142,162,165,181,183</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 5 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Canopy cover</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_MAX=75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_NUM_CLASSES=8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_UNIT=1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_COV_UNIT_NAME=Percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 6 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Canopy height</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_MAX=390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_NUM_CLASSES=8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_UNIT=3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CANOPY_HT_UNIT_NAME=Meters x 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 7 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Canopy base height</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_MAX=100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_NUM_CLASSES=22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_UNIT=3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBH_UNIT_NAME=Meters x 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Band 8 Block=143x1 Type=Int16, ColorInterp=Undefined</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Description = Canopy bulk density</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Metadata:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_MAX=34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_MIN=-9999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_NUM_CLASSES=15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_UNIT=3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     CBD_UNIT_NAME=kg/m^3 x 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Layer name: mtbs_perims</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry: Multi Polygon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Feature Count: 61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Extent: (469685.726682, -12917.756287) - (573531.719643, 96577.336358)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Layer SRS WKT:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PROJCRS["NAD83 / Montana",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["NAD83",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         DATUM["North American Datum 1983",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ELLIPSOID["GRS 1980",6378137,298.257222101,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 LENGTHUNIT["metre",1]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PRIMEM["Greenwich",0,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",4269]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     CONVERSION["SPCS83 Montana zone (meter)",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         METHOD["Lambert Conic Conformal (2SP)",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",9802]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Latitude of false origin",44.25,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8821]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Longitude of false origin",-109.5,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8822]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Latitude of 1st standard parallel",49,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8823]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Latitude of 2nd standard parallel",45,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8824]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Easting at false origin",600000,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8826]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["Northing at false origin",0,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8827]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     CS[Cartesian,2],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["easting (X)",east,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[1],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["northing (Y)",north,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[2],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     USAGE[</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         SCOPE["Engineering survey, topographic mapping."],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         AREA["United States (USA) - Montana - counties of Beaverhead; Big Horn; Blaine; Broadwater; Carbon; Carter; Cascade; Chouteau; Custer; Daniels; Dawson; Deer Lodge; Fallon; Fergus; Flathead; Gallatin; Garfield; Glacier; Golden Valley; Granite; Hill; Jefferson; Judith Basin; Lake; Lewis and Clark; Liberty; Lincoln; Madison; McCone; Meagher; Mineral; Missoula; Musselshell; Park; Petroleum; Phillips; Pondera; Powder River; Powell; Prairie; Ravalli; Richland; Roosevelt; Rosebud; Sanders; Sheridan; Silver Bow; Stillwater; Sweet Grass; Teton; Toole; Treasure; Valley; Wheatland; Wibaux; Yellowstone."],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         BBOX[44.35,-116.07,49.01,-104.04]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ID["EPSG",32100]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Data axis to CRS axis mapping: 1,2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FID Column = fid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry Column = geom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> event_id: String (254.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> incid_name: String (254.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> incid_type: String (254.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> map_id: Integer64 (0.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> burn_bnd_ac: Integer64 (0.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> burn_bnd_lat: String (10.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> burn_bnd_lon: String (10.0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ig_date: Date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ig_year: Integer (0.0)</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

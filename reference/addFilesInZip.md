@@ -124,44 +124,44 @@ where `zip_file` uses the /vsizip/ prefix.
 ## Examples
 
 ``` r
-lcp_file <- system.file("extdata/storm_lake.lcp", package="gdalraster")
-zip_file <- file.path(tempdir(), "storml_lcp.zip")
+f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
+zip_file <- file.path(tempdir(), "ynp_fires.zip")
 
 # Requires GDAL >= 3.7
 if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
-  addFilesInZip(zip_file, lcp_file, full_paths = FALSE,
-                sozip_enabled = "YES", num_threads = 1)
+  addFilesInZip(zip_file, f, full_paths = FALSE, sozip_enabled = "YES",
+                num_threads = 1)
 
   print("Files in zip archive:")
   print(unzip(zip_file, list = TRUE))
 
   # Open with GDAL using Virtual File System handler '/vsizip/'
-  # see: https://gdal.org/en/stable/user/virtual_file_systems.html#vsizip-zip-archives
-  lcp_in_zip <- file.path("/vsizip", zip_file, "storm_lake.lcp")
+  # https://gdal.org/en/stable/user/virtual_file_systems.html#vsizip-zip-archives
+  vsi_f <- file.path("/vsizip", zip_file, "ynp_fires_1984_2022.gpkg")
   print("SOZip metadata:")
-  print(vsi_get_file_metadata(lcp_in_zip, domain = "ZIP"))
+  print(vsi_get_file_metadata(vsi_f, domain = "ZIP"))
 
-  ds <- new(GDALRaster, lcp_in_zip)
-  ds$info()
-  ds$close()
+  lyr <- new(GDALVector, vsi_f)
+  lyr$info()
+  lyr$close()
   DONTSHOW({vsi_unlink(zip_file)})
 }
-#> adding /home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp ...
+#> adding /home/runner/work/_temp/Library/gdalraster/extdata/ynp_fires_1984_2022.gpkg ...
 #> [1] "Files in zip archive:"
-#>             Name Length                Date
-#> 1 storm_lake.lcp 252132 2026-03-21 20:27:00
+#>                       Name Length                Date
+#> 1 ynp_fires_1984_2022.gpkg 307200 2026-03-22 23:03:00
 #> [1] "SOZip metadata:"
 #> $START_DATA_OFFSET
-#> [1] "44"
+#> [1] "54"
 #> 
 #> $COMPRESSION_METHOD
 #> [1] "8 (DEFLATE)"
 #> 
 #> $COMPRESSED_SIZE
-#> [1] "78479"
+#> [1] "164729"
 #> 
 #> $UNCOMPRESSED_SIZE
-#> [1] "252132"
+#> [1] "307200"
 #> 
 #> $SOZIP_FOUND
 #> [1] "YES"
@@ -176,100 +176,70 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 #> [1] "32768"
 #> 
 #> $SOZIP_START_DATA_OFFSET
-#> [1] "78578"
+#> [1] "164848"
 #> 
 #> $SOZIP_VALID
 #> [1] "YES"
 #> 
-#> Driver: LCP/FARSITE v.4 Landscape File (.lcp)
-#> Files: /vsizip//tmp/RtmpCDXBHv/storml_lcp.zip/storm_lake.lcp
-#> Size is 143, 107
-#> Coordinate System is:
+#> INFO: Open of `/vsizip//tmp/RtmpdhXIMe/ynp_fires.zip/ynp_fires_1984_2022.gpkg'
+#>       using driver `GPKG' successful.
 #> 
-#> Data axis to CRS axis mapping: 1,2,3
-#> Origin = (323476.071970863151364,5105081.983031376264989)
-#> Pixel Size = (30.000000000000000,-30.000000000000000)
-#> Metadata:
-#>   DESCRIPTION=LCP file created by GDAL.
-#>   LATITUDE=46
-#>   LINEAR_UNIT=Meters
-#> Corner Coordinates:
-#> Upper Left  (  323476.072, 5105081.983) 
-#> Lower Left  (  323476.072, 5101871.983) 
-#> Upper Right (  327766.072, 5105081.983) 
-#> Lower Right (  327766.072, 5101871.983) 
-#> Center      (  325621.072, 5103476.983) 
-#> Band 1 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Elevation
-#>   Metadata:
-#>     ELEVATION_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     ELEVATION_MAX=3046
-#>     ELEVATION_MIN=-9999
-#>     ELEVATION_NUM_CLASSES=-1
-#>     ELEVATION_UNIT=0
-#>     ELEVATION_UNIT_NAME=Meters
-#> Band 2 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Slope
-#>   Metadata:
-#>     SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     SLOPE_MAX=54
-#>     SLOPE_MIN=-9999
-#>     SLOPE_NUM_CLASSES=53
-#>     SLOPE_UNIT=0
-#>     SLOPE_UNIT_NAME=Degrees
-#> Band 3 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Aspect
-#>   Metadata:
-#>     ASPECT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     ASPECT_MAX=359
-#>     ASPECT_MIN=-9999
-#>     ASPECT_NUM_CLASSES=-1
-#>     ASPECT_UNIT=2
-#>     ASPECT_UNIT_NAME=Azimuth degrees
-#> Band 4 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Fuel models
-#>   Metadata:
-#>     FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     FUEL_MODEL_MAX=183
-#>     FUEL_MODEL_MIN=-9999
-#>     FUEL_MODEL_NUM_CLASSES=12
-#>     FUEL_MODEL_OPTION=0
-#>     FUEL_MODEL_OPTION_DESC=no custom models AND no conversion file needed
-#>     FUEL_MODEL_VALUES=0,98,99,101,102,121,122,123,142,162,165,181,183
-#> Band 5 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Canopy cover
-#>   Metadata:
-#>     CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CANOPY_COV_MAX=75
-#>     CANOPY_COV_MIN=-9999
-#>     CANOPY_COV_NUM_CLASSES=8
-#>     CANOPY_COV_UNIT=1
-#>     CANOPY_COV_UNIT_NAME=Percent
-#> Band 6 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Canopy height
-#>   Metadata:
-#>     CANOPY_HT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CANOPY_HT_MAX=390
-#>     CANOPY_HT_MIN=-9999
-#>     CANOPY_HT_NUM_CLASSES=8
-#>     CANOPY_HT_UNIT=3
-#>     CANOPY_HT_UNIT_NAME=Meters x 10
-#> Band 7 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Canopy base height
-#>   Metadata:
-#>     CBH_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CBH_MAX=100
-#>     CBH_MIN=-9999
-#>     CBH_NUM_CLASSES=22
-#>     CBH_UNIT=3
-#>     CBH_UNIT_NAME=Meters x 10
-#> Band 8 Block=143x1 Type=Int16, ColorInterp=Undefined
-#>   Description = Canopy bulk density
-#>   Metadata:
-#>     CBD_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CBD_MAX=34
-#>     CBD_MIN=-9999
-#>     CBD_NUM_CLASSES=15
-#>     CBD_UNIT=3
-#>     CBD_UNIT_NAME=kg/m^3 x 100
+#> Layer name: mtbs_perims
+#> Geometry: Multi Polygon
+#> Feature Count: 61
+#> Extent: (469685.726682, -12917.756287) - (573531.719643, 96577.336358)
+#> Layer SRS WKT:
+#> PROJCRS["NAD83 / Montana",
+#>     BASEGEOGCRS["NAD83",
+#>         DATUM["North American Datum 1983",
+#>             ELLIPSOID["GRS 1980",6378137,298.257222101,
+#>                 LENGTHUNIT["metre",1]]],
+#>         PRIMEM["Greenwich",0,
+#>             ANGLEUNIT["degree",0.0174532925199433]],
+#>         ID["EPSG",4269]],
+#>     CONVERSION["SPCS83 Montana zone (meter)",
+#>         METHOD["Lambert Conic Conformal (2SP)",
+#>             ID["EPSG",9802]],
+#>         PARAMETER["Latitude of false origin",44.25,
+#>             ANGLEUNIT["degree",0.0174532925199433],
+#>             ID["EPSG",8821]],
+#>         PARAMETER["Longitude of false origin",-109.5,
+#>             ANGLEUNIT["degree",0.0174532925199433],
+#>             ID["EPSG",8822]],
+#>         PARAMETER["Latitude of 1st standard parallel",49,
+#>             ANGLEUNIT["degree",0.0174532925199433],
+#>             ID["EPSG",8823]],
+#>         PARAMETER["Latitude of 2nd standard parallel",45,
+#>             ANGLEUNIT["degree",0.0174532925199433],
+#>             ID["EPSG",8824]],
+#>         PARAMETER["Easting at false origin",600000,
+#>             LENGTHUNIT["metre",1],
+#>             ID["EPSG",8826]],
+#>         PARAMETER["Northing at false origin",0,
+#>             LENGTHUNIT["metre",1],
+#>             ID["EPSG",8827]]],
+#>     CS[Cartesian,2],
+#>         AXIS["easting (X)",east,
+#>             ORDER[1],
+#>             LENGTHUNIT["metre",1]],
+#>         AXIS["northing (Y)",north,
+#>             ORDER[2],
+#>             LENGTHUNIT["metre",1]],
+#>     USAGE[
+#>         SCOPE["Engineering survey, topographic mapping."],
+#>         AREA["United States (USA) - Montana - counties of Beaverhead; Big Horn; Blaine; Broadwater; Carbon; Carter; Cascade; Chouteau; Custer; Daniels; Dawson; Deer Lodge; Fallon; Fergus; Flathead; Gallatin; Garfield; Glacier; Golden Valley; Granite; Hill; Jefferson; Judith Basin; Lake; Lewis and Clark; Liberty; Lincoln; Madison; McCone; Meagher; Mineral; Missoula; Musselshell; Park; Petroleum; Phillips; Pondera; Powder River; Powell; Prairie; Ravalli; Richland; Roosevelt; Rosebud; Sanders; Sheridan; Silver Bow; Stillwater; Sweet Grass; Teton; Toole; Treasure; Valley; Wheatland; Wibaux; Yellowstone."],
+#>         BBOX[44.35,-116.07,49.01,-104.04]],
+#>     ID["EPSG",32100]]
+#> Data axis to CRS axis mapping: 1,2
+#> FID Column = fid
+#> Geometry Column = geom
+#> event_id: String (254.0)
+#> incid_name: String (254.0)
+#> incid_type: String (254.0)
+#> map_id: Integer64 (0.0)
+#> burn_bnd_ac: Integer64 (0.0)
+#> burn_bnd_lat: String (10.0)
+#> burn_bnd_lon: String (10.0)
+#> ig_date: Date
+#> ig_year: Integer (0.0)
 ```
