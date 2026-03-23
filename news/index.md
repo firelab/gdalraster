@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.4.0.9100 (dev)
+## gdalraster 2.4.0.9101 (dev)
+
+- use “safe” versions of GDAL path manipulation functions in the
+  internal wrappers if GDAL \>= 3.11, and add `.cpl_get_path()`,
+  `.cpl_get_dirname()` and `.cpl_launder_for_filename()` (2026-03-22)
 
 - (code linting)
   [`addFilesInZip()`](https://firelab.github.io/gdalraster/reference/addFilesInZip.md):

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9100</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9101</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9100" id="gdalraster-2409100-dev">gdalraster 2.4.0.9100 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409100-dev"></a></h2>
-<ul><li><p>(code linting) <code><a href="../reference/addFilesInZip.html">addFilesInZip()</a></code>: use <code>unique_ptr</code> in the internal <code>addFileInZip()</code>, and use <code>vsi_*()</code> functions for validating input files (<a href="https://github.com/firelab/gdalraster/issues/924" class="external-link">#924</a>) (2026-03-22)</p></li>
+<h2 class="pkg-version" data-toc-text="2.4.0.9101" id="gdalraster-2409101-dev">gdalraster 2.4.0.9101 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409101-dev"></a></h2>
+<ul><li><p>use “safe” versions of GDAL path manipulation functions in the internal wrappers if GDAL &gt;= 3.11, and add <code>.cpl_get_path()</code>, <code>.cpl_get_dirname()</code> and <code>.cpl_launder_for_filename()</code> (2026-03-22)</p></li>
+<li><p>(code linting) <code><a href="../reference/addFilesInZip.html">addFilesInZip()</a></code>: use <code>unique_ptr</code> in the internal <code>addFileInZip()</code>, and use <code>vsi_*()</code> functions for validating input files (<a href="https://github.com/firelab/gdalraster/issues/924" class="external-link">#924</a>) (2026-03-22)</p></li>
 <li><p>(code linting) <code><a href="../reference/srs_info_from_db.html">srs_info_from_db()</a></code>: pass input by const ref (<a href="https://github.com/firelab/gdalraster/issues/923" class="external-link">#923</a>) (2026-03-21)</p></li>
 <li><p>class <code>GDALVector</code>: honor the <code>quiet</code> field setting in several places it was not checked before printing a console message (2026-03-05)</p></li>
 <li><p>(internal) tests fixes: use vector MEM format instead of Memory (GDAL &gt;= 3.11); make plotting tests check X11 capability only if unix OS type but not macos (2026-02-22)</p></li>
