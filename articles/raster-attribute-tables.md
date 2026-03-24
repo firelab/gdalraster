@@ -269,4 +269,4 @@ LANDFIRE EVT in the Raster Attribute Table QGIS Plugin
 The example dataset is Existing Vegetation Type (EVT) from the LANDFIRE
 Program (LF 2020 version, <https://landfire.gov/>). Map units are based
 on [NatureServe Ecological
-Systems](https://www.natureserve.org/products/terrestrial-ecological-systems-united-states).
+Systems](https://www.natureserve.org/publications/ecological-systems-united-states).

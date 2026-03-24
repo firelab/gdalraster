@@ -102,7 +102,7 @@ coordinate space, and thus may not be appropriate for some applications.
 For example, datasets referenced against geographic coordinates at high
 latitudes may have issues.
 
-At the time of writing (GDAL 3.9 through 3.12.1), a point exactly on the
+At the time of writing (GDAL 3.9 through 3.12.2), a point exactly on the
 surface of the DEM is never visible with `GDALIsLineOfSightVisible()`,
 even if viewed from a point directly above. For a detailed description,
 see <https://github.com/OSGeo/gdal/issues/12458>. A workaround for that
@@ -112,7 +112,8 @@ surface, if appropriate for the use case.
 
 ## See also
 
-<https://www.researchgate.net/publication/2411280_Efficient_Line-of-Sight_Algorithms_for_Real_Terrain_Data>
+[Efficient Line-of-Sight Algorithms for Real Terrain
+Data](https://www.researchgate.net/publication/2411280_Efficient_Line-of-Sight_Algorithms_for_Real_Terrain_Data)
 
 ## Examples
 
