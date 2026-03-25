@@ -1,205 +1,137 @@
 # Changelog
 
-## gdalraster 2.4.0.9110 (dev)
+## gdalraster 2.5.0
 
-- (internal) code lining and small refactor of constructors in class
-  `GDALRaster`
-  ([\#928](https://github.com/firelab/gdalraster/issues/928),
-  [\#929](https://github.com/firelab/gdalraster/issues/929))
-  (2026-03-24)
+CRAN release: 2026-03-25
 
-- use “safe” versions of GDAL path manipulation functions in the
-  internal wrappers if GDAL \>= 3.11, and add `.cpl_get_path()`,
-  `.cpl_get_dirname()` and `.cpl_launder_for_filename()` (2026-03-22)
+### Dependencies
 
-- (code linting)
-  [`addFilesInZip()`](https://firelab.github.io/gdalraster/reference/addFilesInZip.md):
-  use `unique_ptr` in the internal `addFileInZip()`, and use `vsi_*()`
-  functions for validating input files
-  ([\#924](https://github.com/firelab/gdalraster/issues/924))
-  (2026-03-22)
+- package **cli** has been added to `Imports` and `LinkingTo`
+- package **vctrs** has been added to `Suggests`
 
-- (code linting)
-  [`srs_info_from_db()`](https://firelab.github.io/gdalraster/reference/srs_info_from_db.md):
-  pass input by const ref
-  ([\#923](https://github.com/firelab/gdalraster/issues/923))
-  (2026-03-21)
+### Features
 
-- class `GDALVector`: honor the `quiet` field setting in several places
-  it was not checked before printing a console message (2026-03-05)
-
-- (internal) tests fixes: use vector MEM format instead of Memory (GDAL
-  \>= 3.11); make plotting tests check X11 capability only if unix OS
-  type but not macos (2026-02-22)
-
-- `GDALAlg::parseCommandLineArgs()`: look up argument aliases in a
-  couple of places they were hard coded, and refactor (2026-02-21)
-
-- [`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md):
-  catch the `CPL_LOG_ERRORS` option and set the global error handler
-  appropriately for that case (fixes
-  [\#905](https://github.com/firelab/gdalraster/issues/905))
-  (2026-02-20)
-
-- add
-  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md):
-  create a GDAL in-memory dataset from R data without copying
-  ([\#910](https://github.com/firelab/gdalraster/issues/910))
-  (2026-02-19)
-
-- `GDALVector::open()`: remove warning if Spatialite is not available
-  when opening with a SQL statement and SQLite dialect is specified,
-  fixes [\#908](https://github.com/firelab/gdalraster/issues/908)
-  (2026-02-18)
-
-- progressbar: cleanup a previously interrupted one if it exists before
-  creating a new one
-  ([\#906](https://github.com/firelab/gdalraster/issues/906))
-  (2025-02-13)
-
-- recognize new color interpretation (`GCI_xxxx`) items added to the
-  `GDALColorInterp` enumeration in GDAL 3.10
-  ([\#900](https://github.com/firelab/gdalraster/issues/900))
-  (2026-02-10)
-
-- (internal) initialize the progress counter to zero in some cases where
-  it was missing for a progress bar managed directly
-  ([\#903](https://github.com/firelab/gdalraster/issues/903))
-  (2026-02-06)
-
-- class `VSIFile`: add a writable field `reportVSIFErrorAsEof`, and
-  check the VSI error indicator in the `read()` and `eof()` methods if
-  GDAL \>= 3.10
-  ([\#901](https://github.com/firelab/gdalraster/issues/901))
-  (2026-02-06)
-
-- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
-  use
-  [`cli::cli_progress_bar()`](https://cli.r-lib.org/reference/cli_progress_bar.html)
-  instead of
-  [`utils::txtProgressBar()`](https://rdrr.io/r/utils/txtProgressBar.html)
-  (2026-02-01)
-
-- (internal) `VSIFile::read()`: avoid a copy from temporary buffer most
-  of the time
-  ([\#888](https://github.com/firelab/gdalraster/issues/888))
-  (2026-02-01)
-
-- use package **cli** for enhanced progress reporting throughout, adding
-  **cli** in `LinkingTo`
+- use package **cli** for enhanced progress reporting throughout
   ([\#889](https://github.com/firelab/gdalraster/issues/889), thanks to
-  [@pepijn-devries](https://github.com/pepijn-devries)) (2026-02-01)
-
-- add package **vctrs** in Suggests since it is suggested in **wk** but
-  [`wk::wk_plot()`](https://paleolimbot.github.io/wk/reference/wk_plot.html)
-  requires it, and various conditionals in examples/tests/vignettes for
-  suggested packages
-  ([\#886](https://github.com/firelab/gdalraster/issues/886))
-  (2026-01-28)
-
-- class `VSIFile`: fix crash when using file open options due to
-  incorrectly sized buffer, and add const correctness
-  ([\#883](https://github.com/firelab/gdalraster/issues/883), thanks to
-  [@pepijn-devries](https://github.com/pepijn-devries)) (2026-01-27)
-
-- [`g_intersects()`](https://firelab.github.io/gdalraster/reference/g_binary_pred.md):
-  performance improvements and use prepared geometry in 1:many batch
-  mode (2026-01-24)
-
+  [@pepijn-devries](https://github.com/pepijn-devries))
 - add
   [`gt_from_dim_bbox()`](https://firelab.github.io/gdalraster/reference/gt_from_dim_bbox.md)
   and
   [`bbox_from_dim_gt()`](https://firelab.github.io/gdalraster/reference/bbox_from_dim_gt.md):
   standalone functions for converting between geotransform coefficients
-  and bounding boxes. Also a new class method `GDALRaster$setBbox()` as
-  a convenience wrapper for setting geotransform from a bounding box.
+  and bounding boxes
   ([\#878](https://github.com/firelab/gdalraster/issues/878), thanks to
-  [@mdsumner](https://github.com/mdsumner)) (2026-01-23)
-
-- fix test for
-  [`identifyDriver()`](https://firelab.github.io/gdalraster/reference/identifyDriver.md)
-  conditional on PostGISRaster / PostgreSQL driver presence
-  ([\#880](https://github.com/firelab/gdalraster/issues/880))
-  (2026-01-23)
-
+  [@mdsumner](https://github.com/mdsumner))
+- add class method `GDALRaster$setBbox()`: convenience wrapper for
+  setting the geotransform from a bounding box
+  ([\#878](https://github.com/firelab/gdalraster/issues/878), thanks to
+  [@mdsumner](https://github.com/mdsumner))
 - add
   [`read_to_nativeRaster()`](https://firelab.github.io/gdalraster/reference/read_to_nativeRaster.md):
-  reads raster data directly as a `nativeRaster` object for fast
-  rendering. Supports datasets with 1, 3, or 4 bands of Byte data type.
-  Grayscale (1-band) data is replicated across RGB channels. Also
-  available as class method `GDALRaster$readToNativeRaster()`.
+  read raster data directly as an R object of class `nativeRaster` for
+  fast rendering, also added as the class method
+  `GDALRaster$readToNativeRaster()`
   ([\#875](https://github.com/firelab/gdalraster/issues/875), thanks to
-  [@mdsumner](https://github.com/mdsumner)) (2026-01-22)
-
-- fix
-  [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md):
-  the argument `as_wkb` and dataset property `readByteAsRaw` were not
-  synchronized
-  ([\#873](https://github.com/firelab/gdalraster/issues/873), thanks to
-  [@mdsumner](https://github.com/mdsumner)) (2026-01-21)
-
-- add `GDALVector::isReadOnly()` (2026-01-20)
-
-- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
-  add support for input and output rasters as dataset objects, instead
-  of only as file names
-  ([\#870](https://github.com/firelab/gdalraster/issues/870))
-  (2026-01-19)
-
+  [@mdsumner](https://github.com/mdsumner))
 - add
   [`is_los_visible()`](https://firelab.github.io/gdalraster/reference/is_los_visible.md):
   check line of sight between pairs of point locations using
   `GDALIsLineOfSightVisible()`
   ([\#869](https://github.com/firelab/gdalraster/issues/869))
-  (2026-01-18)
-
-- (internal) use `CSLConstList` with `GDALGetMetadata()`,
-  `GDALSetMetadata()`,
-  <https://gdal.org/en/latest/user/migration_guide.html>
-  ([\#868](https://github.com/firelab/gdalraster/issues/868), thanks to
-  [@mdsumner](https://github.com/mdsumner)) (2026-01-17)
-
 - add
-  [`g_build_collection()`](https://firelab.github.io/gdalraster/reference/g_factory.md):
-  build a collection-type geometry from a set of input geometries given
-  as a list of WKB `raw` vectors or a `character` vector of WKT strings
-  ([\#867](https://github.com/firelab/gdalraster/issues/867))
-  (2026-01-16)
-
-- add
-  [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md):
-  return VSI compatible paths from URIs / URLs, wrapper of
-  `VSIURIToVSIPath()` in GDAL \>= 3.12
-  ([\#865](https://github.com/firelab/gdalraster/issues/865))
-  (2026-01-14)
-
+  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md):
+  use pixel data in an existing R vector to create a GDAL in-memory
+  raster with zero copy
+  ([\#910](https://github.com/firelab/gdalraster/issues/910))
 - add
   [`vsi_glob()`](https://firelab.github.io/gdalraster/reference/vsi_glob.md):
   get file and directory names matching a pattern that may contain
   wildcards, wrapper of `VSIGlob()` in GDAL \>= 3.11
   ([\#864](https://github.com/firelab/gdalraster/issues/864))
-  (2026-01-14)
-
+- add
+  [`vsi_uri_to_vsi_path()`](https://firelab.github.io/gdalraster/reference/vsi_uri_to_vsi_path.md):
+  return VSI compatible paths from URIs / URLs, wrapper of
+  `VSIURIToVSIPath()` in GDAL \>= 3.12
+  ([\#865](https://github.com/firelab/gdalraster/issues/865))
+- class `VSIFile`: add a writable field `reportVSIFErrorAsEof`, and
+  check the VSI error indicator in the `read()` and `eof()` methods if
+  GDAL \>= 3.10
+  ([\#901](https://github.com/firelab/gdalraster/issues/901))
 - add
   [`g_build_polygon_from_edges()`](https://firelab.github.io/gdalraster/reference/g_factory.md):
   build a polygon from a set of arcs, wrapper of
   `OGRBuildPolygonFromEdges()`
   ([\#863](https://github.com/firelab/gdalraster/issues/863))
-  (2026-01-13)
-
-- (internal) C++ code linting: use `CPLStringList` for `char **`
-  ([\#862](https://github.com/firelab/gdalraster/issues/862))
-  (2026-01-12)
-
+- add
+  [`g_build_collection()`](https://firelab.github.io/gdalraster/reference/g_factory.md):
+  build a collection-type geometry from a set of input geometries given
+  as a list of WKB `raw` vectors or a `character` vector of WKT strings
+  ([\#867](https://github.com/firelab/gdalraster/issues/867))
+- [`g_intersects()`](https://firelab.github.io/gdalraster/reference/g_binary_pred.md):
+  performance improvements and use prepared geometry in 1:many batch
+  mode
+- class `GDALVector`: add method `isReadOnly()`
 - raster attribute table: support new field types `GFT_Boolean`,
   `GFT_DateTime` and `GFT_WKBGeometry` with GDAL \>= 3.12
   ([\#860](https://github.com/firelab/gdalraster/issues/860))
-  (2025-12-27)
+- class `GDALRaster`: recognize the new color interpretation
+  (`GCI_xxxx`) items added to the `GDALColorInterp` enumeration in GDAL
+  3.10 ([\#900](https://github.com/firelab/gdalraster/issues/900))
+- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
+  add support for input and output rasters as dataset objects, instead
+  of only as file names
+  ([\#870](https://github.com/firelab/gdalraster/issues/870))
+- [`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md):
+  if the `CPL_LOG_ERRORS` option is set, then set the global error
+  handler appropriately for that case (addresses
+  [\#905](https://github.com/firelab/gdalraster/issues/905))
 
-- (internal) class `GDALAlg`: use
-  `GDALAlgorithmRegistryInstantiateAlgFromPath()` if GDAL \>= 3.12
+### Fixes
+
+- class `VSIFile`: fix crash when passing open options in the
+  constructor
+  ([\#883](https://github.com/firelab/gdalraster/issues/883), thanks to
+  [@pepijn-devries](https://github.com/pepijn-devries))
+- fix
+  [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md):
+  the argument `as_wkb` and raster dataset property `readByteAsRaw` were
+  not synchronized
+  ([\#873](https://github.com/firelab/gdalraster/issues/873), thanks to
+  [@mdsumner](https://github.com/mdsumner))
+- `GDALVector::open()`: remove warning if Spatialite is not available
+  when opening with a SQL statement and the SQLite dialect is specified
+  (fixes [\#908](https://github.com/firelab/gdalraster/issues/908))
+- class `GDALVector`: honor the `quiet` object setting in several places
+  it was not checked before printing a console message
+- test fixes: use the `MEM` vector dataset format instead of `Memory` if
+  GDAL \>= 3.11
+- fix test for
+  [`identifyDriver()`](https://firelab.github.io/gdalraster/reference/identifyDriver.md):
+  make conditional on PostGISRaster / PostgreSQL driver presence
+  ([\#880](https://github.com/firelab/gdalraster/issues/880))
+
+### Internal
+
+- use `CSLConstList` with `GDALGetMetadata()` and `GDALSetMetadata()`
+  for as per <https://gdal.org/en/latest/user/migration_guide.html>
+  ([\#868](https://github.com/firelab/gdalraster/issues/868), thanks to
+  [@mdsumner](https://github.com/mdsumner))
+- use “safe” versions of the GDAL path manipulation functions in the
+  internal wrappers if GDAL \>= 3.11, and add `.cpl_get_path()`,
+  `.cpl_get_dirname()` and `.cpl_launder_for_filename()`
+- `VSIFile::read()`: avoid a copy from temporary buffer most of the time
+  ([\#888](https://github.com/firelab/gdalraster/issues/888))
+- class `GDALAlg`: use `GDALAlgorithmRegistryInstantiateAlgFromPath()`
+  if GDAL \>= 3.12
   ([\#859](https://github.com/firelab/gdalraster/issues/859))
-  (2025-12-26)
+- `GDALAlg::parseCommandLineArgs()`: look up argument aliases in a
+  couple of places they were hard coded, and refactor
+- code linting
+
+### Authors
+
+- add Michael D. Sumner as author (`"aut"`, previously `"ctb"`)
+- add Pepijn de Vries as contributor (`"ctb"`)
 
 ## gdalraster 2.4.0
 

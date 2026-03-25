@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0.9110</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,43 +53,66 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0.9110" id="gdalraster-2409110-dev">gdalraster 2.4.0.9110 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2409110-dev"></a></h2>
-<ul><li><p>(internal) code lining and small refactor of constructors in class <code>GDALRaster</code> (<a href="https://github.com/firelab/gdalraster/issues/928" class="external-link">#928</a>, <a href="https://github.com/firelab/gdalraster/issues/929" class="external-link">#929</a>) (2026-03-24)</p></li>
-<li><p>use “safe” versions of GDAL path manipulation functions in the internal wrappers if GDAL &gt;= 3.11, and add <code>.cpl_get_path()</code>, <code>.cpl_get_dirname()</code> and <code>.cpl_launder_for_filename()</code> (2026-03-22)</p></li>
-<li><p>(code linting) <code><a href="../reference/addFilesInZip.html">addFilesInZip()</a></code>: use <code>unique_ptr</code> in the internal <code>addFileInZip()</code>, and use <code>vsi_*()</code> functions for validating input files (<a href="https://github.com/firelab/gdalraster/issues/924" class="external-link">#924</a>) (2026-03-22)</p></li>
-<li><p>(code linting) <code><a href="../reference/srs_info_from_db.html">srs_info_from_db()</a></code>: pass input by const ref (<a href="https://github.com/firelab/gdalraster/issues/923" class="external-link">#923</a>) (2026-03-21)</p></li>
-<li><p>class <code>GDALVector</code>: honor the <code>quiet</code> field setting in several places it was not checked before printing a console message (2026-03-05)</p></li>
-<li><p>(internal) tests fixes: use vector MEM format instead of Memory (GDAL &gt;= 3.11); make plotting tests check X11 capability only if unix OS type but not macos (2026-02-22)</p></li>
-<li><p><code>GDALAlg::parseCommandLineArgs()</code>: look up argument aliases in a couple of places they were hard coded, and refactor (2026-02-21)</p></li>
-<li><p><code><a href="../reference/set_config_option.html">set_config_option()</a></code>: catch the <code>CPL_LOG_ERRORS</code> option and set the global error handler appropriately for that case (fixes <a href="https://github.com/firelab/gdalraster/issues/905" class="external-link">#905</a>) (2026-02-20)</p></li>
-<li><p>add <code><a href="../reference/vector_to_MEM.html">vector_to_MEM()</a></code>: create a GDAL in-memory dataset from R data without copying (<a href="https://github.com/firelab/gdalraster/issues/910" class="external-link">#910</a>) (2026-02-19)</p></li>
-<li><p><code>GDALVector::open()</code>: remove warning if Spatialite is not available when opening with a SQL statement and SQLite dialect is specified, fixes <a href="https://github.com/firelab/gdalraster/issues/908" class="external-link">#908</a> (2026-02-18)</p></li>
-<li><p>progressbar: cleanup a previously interrupted one if it exists before creating a new one (<a href="https://github.com/firelab/gdalraster/issues/906" class="external-link">#906</a>) (2025-02-13)</p></li>
-<li><p>recognize new color interpretation (<code>GCI_xxxx</code>) items added to the <code>GDALColorInterp</code> enumeration in GDAL 3.10 (<a href="https://github.com/firelab/gdalraster/issues/900" class="external-link">#900</a>) (2026-02-10)</p></li>
-<li><p>(internal) initialize the progress counter to zero in some cases where it was missing for a progress bar managed directly (<a href="https://github.com/firelab/gdalraster/issues/903" class="external-link">#903</a>) (2026-02-06)</p></li>
-<li><p>class <code>VSIFile</code>: add a writable field <code>reportVSIFErrorAsEof</code>, and check the VSI error indicator in the <code>read()</code> and <code>eof()</code> methods if GDAL &gt;= 3.10 (<a href="https://github.com/firelab/gdalraster/issues/901" class="external-link">#901</a>) (2026-02-06)</p></li>
-<li><p><code><a href="../reference/calc.html">calc()</a></code>: use <code><a href="https://cli.r-lib.org/reference/cli_progress_bar.html" class="external-link">cli::cli_progress_bar()</a></code> instead of <code><a href="https://rdrr.io/r/utils/txtProgressBar.html" class="external-link">utils::txtProgressBar()</a></code> (2026-02-01)</p></li>
-<li><p>(internal) <code>VSIFile::read()</code>: avoid a copy from temporary buffer most of the time (<a href="https://github.com/firelab/gdalraster/issues/888" class="external-link">#888</a>) (2026-02-01)</p></li>
-<li><p>use package <strong>cli</strong> for enhanced progress reporting throughout, adding <strong>cli</strong> in <code>LinkingTo</code> (<a href="https://github.com/firelab/gdalraster/issues/889" class="external-link">#889</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-02-01)</p></li>
-<li><p>add package <strong>vctrs</strong> in Suggests since it is suggested in <strong>wk</strong> but <code><a href="https://paleolimbot.github.io/wk/reference/wk_plot.html" class="external-link">wk::wk_plot()</a></code> requires it, and various conditionals in examples/tests/vignettes for suggested packages (<a href="https://github.com/firelab/gdalraster/issues/886" class="external-link">#886</a>) (2026-01-28)</p></li>
-<li><p>class <code>VSIFile</code>: fix crash when using file open options due to incorrectly sized buffer, and add const correctness (<a href="https://github.com/firelab/gdalraster/issues/883" class="external-link">#883</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>) (2026-01-27)</p></li>
-<li><p><code><a href="../reference/g_binary_pred.html">g_intersects()</a></code>: performance improvements and use prepared geometry in 1:many batch mode (2026-01-24)</p></li>
-<li><p>add <code><a href="../reference/gt_from_dim_bbox.html">gt_from_dim_bbox()</a></code> and <code><a href="../reference/bbox_from_dim_gt.html">bbox_from_dim_gt()</a></code>: standalone functions for converting between geotransform coefficients and bounding boxes. Also a new class method <code>GDALRaster$setBbox()</code> as a convenience wrapper for setting geotransform from a bounding box. (<a href="https://github.com/firelab/gdalraster/issues/878" class="external-link">#878</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-23)</p></li>
-<li><p>fix test for <code><a href="../reference/identifyDriver.html">identifyDriver()</a></code> conditional on PostGISRaster / PostgreSQL driver presence (<a href="https://github.com/firelab/gdalraster/issues/880" class="external-link">#880</a>) (2026-01-23)</p></li>
-<li><p>add <code><a href="../reference/read_to_nativeRaster.html">read_to_nativeRaster()</a></code>: reads raster data directly as a <code>nativeRaster</code> object for fast rendering. Supports datasets with 1, 3, or 4 bands of Byte data type. Grayscale (1-band) data is replicated across RGB channels. Also available as class method <code>GDALRaster$readToNativeRaster()</code>. (<a href="https://github.com/firelab/gdalraster/issues/875" class="external-link">#875</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-22)</p></li>
-<li><p>fix <code><a href="../reference/read_ds.html">read_ds()</a></code>: the argument <code>as_wkb</code> and dataset property <code>readByteAsRaw</code> were not synchronized (<a href="https://github.com/firelab/gdalraster/issues/873" class="external-link">#873</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-21)</p></li>
-<li><p>add <code>GDALVector::isReadOnly()</code> (2026-01-20)</p></li>
-<li><p><code><a href="../reference/calc.html">calc()</a></code>: add support for input and output rasters as dataset objects, instead of only as file names (<a href="https://github.com/firelab/gdalraster/issues/870" class="external-link">#870</a>) (2026-01-19)</p></li>
-<li><p>add <code><a href="../reference/is_los_visible.html">is_los_visible()</a></code>: check line of sight between pairs of point locations using <code>GDALIsLineOfSightVisible()</code> (<a href="https://github.com/firelab/gdalraster/issues/869" class="external-link">#869</a>) (2026-01-18)</p></li>
-<li><p>(internal) use <code>CSLConstList</code> with <code>GDALGetMetadata()</code>, <code>GDALSetMetadata()</code>, <a href="https://gdal.org/en/latest/user/migration_guide.html" class="external-link uri">https://gdal.org/en/latest/user/migration_guide.html</a> (<a href="https://github.com/firelab/gdalraster/issues/868" class="external-link">#868</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>) (2026-01-17)</p></li>
-<li><p>add <code><a href="../reference/g_factory.html">g_build_collection()</a></code>: build a collection-type geometry from a set of input geometries given as a list of WKB <code>raw</code> vectors or a <code>character</code> vector of WKT strings (<a href="https://github.com/firelab/gdalraster/issues/867" class="external-link">#867</a>) (2026-01-16)</p></li>
-<li><p>add <code><a href="../reference/vsi_uri_to_vsi_path.html">vsi_uri_to_vsi_path()</a></code>: return VSI compatible paths from URIs / URLs, wrapper of <code>VSIURIToVSIPath()</code> in GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/865" class="external-link">#865</a>) (2026-01-14)</p></li>
-<li><p>add <code><a href="../reference/vsi_glob.html">vsi_glob()</a></code>: get file and directory names matching a pattern that may contain wildcards, wrapper of <code>VSIGlob()</code> in GDAL &gt;= 3.11 (<a href="https://github.com/firelab/gdalraster/issues/864" class="external-link">#864</a>) (2026-01-14)</p></li>
-<li><p>add <code><a href="../reference/g_factory.html">g_build_polygon_from_edges()</a></code>: build a polygon from a set of arcs, wrapper of <code>OGRBuildPolygonFromEdges()</code> (<a href="https://github.com/firelab/gdalraster/issues/863" class="external-link">#863</a>) (2026-01-13)</p></li>
-<li><p>(internal) C++ code linting: use <code>CPLStringList</code> for <code>char **</code> (<a href="https://github.com/firelab/gdalraster/issues/862" class="external-link">#862</a>) (2026-01-12)</p></li>
-<li><p>raster attribute table: support new field types <code>GFT_Boolean</code>, <code>GFT_DateTime</code> and <code>GFT_WKBGeometry</code> with GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/860" class="external-link">#860</a>) (2025-12-27)</p></li>
-<li><p>(internal) class <code>GDALAlg</code>: use <code>GDALAlgorithmRegistryInstantiateAlgFromPath()</code> if GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/859" class="external-link">#859</a>) (2025-12-26)</p></li>
+<h2 class="pkg-version" data-toc-text="2.5.0" id="gdalraster-250">gdalraster 2.5.0<a class="anchor" aria-label="anchor" href="#gdalraster-250"></a></h2><p class="text-muted">CRAN release: 2026-03-25</p>
+<div class="section level3">
+<h3 id="dependencies-2-5-0">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-2-5-0"></a></h3>
+<ul><li>package <strong>cli</strong> has been added to <code>Imports</code> and <code>LinkingTo</code>
+</li>
+<li>package <strong>vctrs</strong> has been added to <code>Suggests</code>
+</li>
 </ul></div>
+<div class="section level3">
+<h3 id="features-2-5-0">Features<a class="anchor" aria-label="anchor" href="#features-2-5-0"></a></h3>
+<ul><li>use package <strong>cli</strong> for enhanced progress reporting throughout (<a href="https://github.com/firelab/gdalraster/issues/889" class="external-link">#889</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>)</li>
+<li>add <code><a href="../reference/gt_from_dim_bbox.html">gt_from_dim_bbox()</a></code> and <code><a href="../reference/bbox_from_dim_gt.html">bbox_from_dim_gt()</a></code>: standalone functions for converting between geotransform coefficients and bounding boxes (<a href="https://github.com/firelab/gdalraster/issues/878" class="external-link">#878</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
+<li>add class method <code>GDALRaster$setBbox()</code>: convenience wrapper for setting the geotransform from a bounding box (<a href="https://github.com/firelab/gdalraster/issues/878" class="external-link">#878</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
+<li>add <code><a href="../reference/read_to_nativeRaster.html">read_to_nativeRaster()</a></code>: read raster data directly as an R object of class <code>nativeRaster</code> for fast rendering, also added as the class method <code>GDALRaster$readToNativeRaster()</code> (<a href="https://github.com/firelab/gdalraster/issues/875" class="external-link">#875</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
+<li>add <code><a href="../reference/is_los_visible.html">is_los_visible()</a></code>: check line of sight between pairs of point locations using <code>GDALIsLineOfSightVisible()</code> (<a href="https://github.com/firelab/gdalraster/issues/869" class="external-link">#869</a>)</li>
+<li>add <code><a href="../reference/vector_to_MEM.html">vector_to_MEM()</a></code>: use pixel data in an existing R vector to create a GDAL in-memory raster with zero copy (<a href="https://github.com/firelab/gdalraster/issues/910" class="external-link">#910</a>)</li>
+<li>add <code><a href="../reference/vsi_glob.html">vsi_glob()</a></code>: get file and directory names matching a pattern that may contain wildcards, wrapper of <code>VSIGlob()</code> in GDAL &gt;= 3.11 (<a href="https://github.com/firelab/gdalraster/issues/864" class="external-link">#864</a>)</li>
+<li>add <code><a href="../reference/vsi_uri_to_vsi_path.html">vsi_uri_to_vsi_path()</a></code>: return VSI compatible paths from URIs / URLs, wrapper of <code>VSIURIToVSIPath()</code> in GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/865" class="external-link">#865</a>)</li>
+<li>class <code>VSIFile</code>: add a writable field <code>reportVSIFErrorAsEof</code>, and check the VSI error indicator in the <code>read()</code> and <code>eof()</code> methods if GDAL &gt;= 3.10 (<a href="https://github.com/firelab/gdalraster/issues/901" class="external-link">#901</a>)</li>
+<li>add <code><a href="../reference/g_factory.html">g_build_polygon_from_edges()</a></code>: build a polygon from a set of arcs, wrapper of <code>OGRBuildPolygonFromEdges()</code> (<a href="https://github.com/firelab/gdalraster/issues/863" class="external-link">#863</a>)</li>
+<li>add <code><a href="../reference/g_factory.html">g_build_collection()</a></code>: build a collection-type geometry from a set of input geometries given as a list of WKB <code>raw</code> vectors or a <code>character</code> vector of WKT strings (<a href="https://github.com/firelab/gdalraster/issues/867" class="external-link">#867</a>)</li>
+<li>
+<code><a href="../reference/g_binary_pred.html">g_intersects()</a></code>: performance improvements and use prepared geometry in 1:many batch mode</li>
+<li>class <code>GDALVector</code>: add method <code>isReadOnly()</code>
+</li>
+<li>raster attribute table: support new field types <code>GFT_Boolean</code>, <code>GFT_DateTime</code> and <code>GFT_WKBGeometry</code> with GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/860" class="external-link">#860</a>)</li>
+<li>class <code>GDALRaster</code>: recognize the new color interpretation (<code>GCI_xxxx</code>) items added to the <code>GDALColorInterp</code> enumeration in GDAL 3.10 (<a href="https://github.com/firelab/gdalraster/issues/900" class="external-link">#900</a>)</li>
+<li>
+<code><a href="../reference/calc.html">calc()</a></code>: add support for input and output rasters as dataset objects, instead of only as file names (<a href="https://github.com/firelab/gdalraster/issues/870" class="external-link">#870</a>)</li>
+<li>
+<code><a href="../reference/set_config_option.html">set_config_option()</a></code>: if the <code>CPL_LOG_ERRORS</code> option is set, then set the global error handler appropriately for that case (addresses <a href="https://github.com/firelab/gdalraster/issues/905" class="external-link">#905</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="fixes-2-5-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-2-5-0"></a></h3>
+<ul><li>class <code>VSIFile</code>: fix crash when passing open options in the constructor (<a href="https://github.com/firelab/gdalraster/issues/883" class="external-link">#883</a>, thanks to <a href="https://github.com/pepijn-devries" class="external-link">@pepijn-devries</a>)</li>
+<li>fix <code><a href="../reference/read_ds.html">read_ds()</a></code>: the argument <code>as_wkb</code> and raster dataset property <code>readByteAsRaw</code> were not synchronized (<a href="https://github.com/firelab/gdalraster/issues/873" class="external-link">#873</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
+<li>
+<code>GDALVector::open()</code>: remove warning if Spatialite is not available when opening with a SQL statement and the SQLite dialect is specified (fixes <a href="https://github.com/firelab/gdalraster/issues/908" class="external-link">#908</a>)</li>
+<li>class <code>GDALVector</code>: honor the <code>quiet</code> object setting in several places it was not checked before printing a console message</li>
+<li>test fixes: use the <code>MEM</code> vector dataset format instead of <code>Memory</code> if GDAL &gt;= 3.11</li>
+<li>fix test for <code><a href="../reference/identifyDriver.html">identifyDriver()</a></code>: make conditional on PostGISRaster / PostgreSQL driver presence (<a href="https://github.com/firelab/gdalraster/issues/880" class="external-link">#880</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-2-5-0">Internal<a class="anchor" aria-label="anchor" href="#internal-2-5-0"></a></h3>
+<ul><li>use <code>CSLConstList</code> with <code>GDALGetMetadata()</code> and <code>GDALSetMetadata()</code> for as per <a href="https://gdal.org/en/latest/user/migration_guide.html" class="external-link uri">https://gdal.org/en/latest/user/migration_guide.html</a> (<a href="https://github.com/firelab/gdalraster/issues/868" class="external-link">#868</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
+<li>use “safe” versions of the GDAL path manipulation functions in the internal wrappers if GDAL &gt;= 3.11, and add <code>.cpl_get_path()</code>, <code>.cpl_get_dirname()</code> and <code>.cpl_launder_for_filename()</code>
+</li>
+<li>
+<code>VSIFile::read()</code>: avoid a copy from temporary buffer most of the time (<a href="https://github.com/firelab/gdalraster/issues/888" class="external-link">#888</a>)</li>
+<li>class <code>GDALAlg</code>: use <code>GDALAlgorithmRegistryInstantiateAlgFromPath()</code> if GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/859" class="external-link">#859</a>)</li>
+<li>
+<code>GDALAlg::parseCommandLineArgs()</code>: look up argument aliases in a couple of places they were hard coded, and refactor</li>
+<li>code linting</li>
+</ul></div>
+<div class="section level3">
+<h3 id="authors-2-5-0">Authors<a class="anchor" aria-label="anchor" href="#authors-2-5-0"></a></h3>
+<ul><li>add Michael D. Sumner as author (<code>"aut"</code>, previously <code>"ctb"</code>)</li>
+<li>add Pepijn de Vries as contributor (<code>"ctb"</code>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.4.0" id="gdalraster-240">gdalraster 2.4.0<a class="anchor" aria-label="anchor" href="#gdalraster-240"></a></h2><p class="text-muted">CRAN release: 2025-12-18</p>
 <div class="section level3">
