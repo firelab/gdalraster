@@ -103,7 +103,7 @@ A geometry as WKB raw vector or WKT string, or a list/character vector
 of geometries as WKB/WKT with length equal to `length(geom)`. `NULL` is
 returned with a warning if WKB input cannot be converted into an OGR
 geometry object, or if an error occurs in the call to the underlying OGR
-API.
+API (see Note).
 
 ## Details
 
@@ -163,6 +163,14 @@ Wrapper of `OGR_G_SetMeasured()` in the GDAL API.
 `g_swap_xy()` swaps x and y coordinates of the input geometry. Wrapper
 of `OGR_G_SwapXY()` in the GDAL API.
 
+## Note
+
+`MakeValid()` in GDAL \>= 3.13: Certain geometries cannot be read using
+GEOS, e.g., if Polygon rings are not closed or do not contain enough
+vertices. If a geometry cannot be read by GEOS, `NULL` will be returned.
+Starting with GDAL 3.13, GDAL will attempt to modify these geometries
+such that they can be read and repaired by GEOS.
+
 ## See also
 
 [`g_is_valid()`](https://firelab.github.io/gdalraster/reference/g_query.md),
@@ -201,9 +209,10 @@ wkt <- "POLYGON ((0 0,10 10,0 10,10 0,0 0))"
 g_make_valid(wkt, as_wkb = FALSE)
 #> [1] "MULTIPOLYGON (((10 0,0 0,5 5,10 0)),((10 10,5 5,0 10,10 10)))"
 
-# invalid - error
+# invalid, note that GDAL >= 3.13 will modify to valid in this case
 wkt <- "LINESTRING (0 0)"
-g_make_valid(wkt)  # NULL
+# NULL if GDAL < 3.13, or "POINT (0 0)" with GDAL >= 3.13:
+g_make_valid(wkt)
 #> GDAL FAILURE 1: IllegalArgumentException: point array must contain 0 or >1 elements
 #> 
 #> Warning: OGR MakeValid() gave NULL geometry
