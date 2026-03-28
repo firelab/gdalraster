@@ -111,12 +111,12 @@ These functions use the GEOS library via GDAL headers.
 
 `g_make_valid()` attempts to make an invalid geometry valid without
 losing vertices. Already-valid geometries are cloned without further
-intervention. Wrapper of `OGR_G_MakeValid()`/`OGR_G_MakeValidEx()` in
-the GDAL API. Requires the GEOS \>= 3.8 library, check it for the
-definition of the geometry operation. If GDAL is built without GEOS \>=
-3.8, this function will return a clone of the input geometry if it is
-valid, or `NULL` (`as_wkb = TRUE`) / `NA` (`as_wkb = FALSE`) if it is
-invalid.
+intervention. Wrapper of `OGR_G_MakeValidEx()` in the GDAL API. Requires
+GEOS \>= 3.8 library. If GDAL is built without GEOS \>= 3.8, this
+function will return a clone of the input geometry if it is valid, or
+`NULL` (`as_wkb = TRUE`) / `NA` (`as_wkb = FALSE`) if it is invalid. For
+detailed explanations of geometry validity checking and repair, see
+<https://gdal.org/en/latest/user/geometry_validity.html>.
 
 - `"LINEWORK"` is the default method, which combines all rings into a
   set of noded lines and then extracts valid polygons from that linework
@@ -167,7 +167,11 @@ of `OGR_G_SwapXY()` in the GDAL API.
 
 [`g_is_valid()`](https://firelab.github.io/gdalraster/reference/g_query.md),
 [`g_is_3D()`](https://firelab.github.io/gdalraster/reference/g_query.md),
-[`g_is_measured()`](https://firelab.github.io/gdalraster/reference/g_query.md)
+[`g_is_measured()`](https://firelab.github.io/gdalraster/reference/g_query.md)  
+  
+
+GDAL documentation on geometry validity and repair:
+<https://gdal.org/en/latest/user/geometry_validity.html>
 
 ## Examples
 

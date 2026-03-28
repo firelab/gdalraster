@@ -51,7 +51,7 @@ perform various manipulations for utility purposes."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Geometry utility functions operating on WKB or WKT</h1>
-      <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/v.2.5.0/R/geom.R" class="external-link"><code>R/geom.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/R/geom.R" class="external-link"><code>R/geom.R</code></a></small>
       <div class="d-none name"><code>g_util.Rd</code></div>
     </div>
 
@@ -167,11 +167,12 @@ or if an error occurs in the call to the underlying OGR API.</p>
     <p>These functions use the GEOS library via GDAL headers.</p>
 <p><code>g_make_valid()</code> attempts to make an invalid geometry valid without losing
 vertices. Already-valid geometries are cloned without further intervention.
-Wrapper of <code>OGR_G_MakeValid()</code>/<code>OGR_G_MakeValidEx()</code> in the GDAL API.
-Requires the GEOS &gt;= 3.8 library, check it for the definition of the
-geometry operation. If GDAL is built without GEOS &gt;= 3.8, this function
-will return a clone of the input geometry if it is valid, or <code>NULL</code>
-(<code>as_wkb = TRUE</code>) / <code>NA</code> (<code>as_wkb = FALSE</code>) if it is invalid.</p><ul><li><p><code>"LINEWORK"</code> is the default method, which combines all rings into a set
+Wrapper of <code>OGR_G_MakeValidEx()</code> in the GDAL API.
+Requires GEOS &gt;= 3.8 library. If GDAL is built without GEOS &gt;= 3.8, this
+function will return a clone of the input geometry if it is valid, or <code>NULL</code>
+(<code>as_wkb = TRUE</code>) / <code>NA</code> (<code>as_wkb = FALSE</code>) if it is invalid. For detailed
+explanations of geometry validity checking and repair, see
+<a href="https://gdal.org/en/latest/user/geometry_validity.html" class="external-link">https://gdal.org/en/latest/user/geometry_validity.html</a>.</p><ul><li><p><code>"LINEWORK"</code> is the default method, which combines all rings into a set
 of noded lines and then extracts valid polygons from that linework
 (requires GEOS &gt;= 3.10 and GDAL &gt;= 3.4). The <code>"STRUCTURE"</code> method first
 makes all rings valid, then merges shells and subtracts holes from shells to
@@ -203,7 +204,9 @@ Wrapper of <code>OGR_G_SwapXY()</code> in the GDAL API.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="g_query.html">g_is_valid()</a></code>, <code><a href="g_query.html">g_is_3D()</a></code>, <code><a href="g_query.html">g_is_measured()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="g_query.html">g_is_valid()</a></code>, <code><a href="g_query.html">g_is_3D()</a></code>, <code><a href="g_query.html">g_is_measured()</a></code><br><br></p>
+<p>GDAL documentation on geometry validity and repair:
+<a href="https://gdal.org/en/latest/user/geometry_validity.html" class="external-link">https://gdal.org/en/latest/user/geometry_validity.html</a></p></div>
     </div>
 
     <div class="section level2">
