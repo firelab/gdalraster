@@ -1,5 +1,17 @@
 # Changelog
 
+## gdalraster 2.5.0.9000 (dev)
+
+- update (primarily documentation) for the `"UInt8"` pixel data type in
+  GDAL \>= 3.13
+  ([\#933](https://github.com/firelab/gdalraster/issues/933))
+  (2026-03-28)
+
+- doc: add links to the new GDAL documentation on [geometry validity and
+  repair](https://gdal.org/en/latest/user/geometry_validity.html)
+  ([\#932](https://github.com/firelab/gdalraster/issues/932))
+  (2026-03-28)
+
 ## gdalraster 2.5.0
 
 CRAN release: 2026-03-25
