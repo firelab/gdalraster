@@ -260,13 +260,14 @@ The default is transparent (<code>"#00000000"</code>, the return value of
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>By default, contrast enhancement by stretch to min/max is applied when
 the input data are single-band grayscale with any raster data type, or
-three-band RGB with raster data type larger than Byte. The minimum/maximum
-of the input data are used by default (i.e., no outlier removal). No stretch
-is applied by default when the input is an RGB byte raster. These defaults
-can be overridden by specifying either the <code>minmax_def</code> argument
-(user-defined min/max per band), or the <code>minmax_pct_cut</code> argument (ignore
-outlier pixels based on a percentile range per band). These settings (and
-the <code>normalize</code> argument) are ignored if a color table is used.</p>
+three-band RGB with raster data type larger than Byte (=UInt8 in
+GDAL &gt;= 3.13). The minimum/maximum of the input data are used by default
+(i.e., no outlier removal). No stretch is applied by default when the input
+is an RGB byte raster. These defaults can be overridden by specifying either
+the <code>minmax_def</code> argument (user-defined min/max per band), or the
+<code>minmax_pct_cut</code> argument (ignore outlier pixels based on a percentile range
+per band). These settings (and the <code>normalize</code> argument) are ignored if a
+color table is used.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

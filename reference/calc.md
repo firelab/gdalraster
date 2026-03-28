@@ -70,8 +70,8 @@ calc(
 
 - dtName:
 
-  Character name of output data type (e.g., Byte, Int16, UInt16, Int32,
-  UInt32, Float32).
+  Character name of output data type (e.g., Byte, UInt8 (GDAL \>= 3.13),
+  Int16, UInt16, Int32, UInt32, Float32).
 
 - out_band:
 
@@ -203,7 +203,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> output written to /tmp/RtmpT2YJYu/rastcalc23a6672077d9.tif
+#> output written to /tmp/RtmpMeJsJ8/rastcalc22a65bea7454.tif
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -304,7 +304,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> output written to /tmp/RtmpT2YJYu/storml_lndscp.tif
+#> output written to /tmp/RtmpMeJsJ8/storml_lndscp.tif
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

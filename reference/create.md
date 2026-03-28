@@ -42,7 +42,8 @@ create(
 - dataType:
 
   Character string containing the data type name. (e.g., common data
-  types include Byte, Int16, UInt16, Int32, Float32).
+  types include Byte (or UInt8 in GDAL \>=3.13), Int16, UInt16, Int32,
+  Float32).
 
 - options:
 

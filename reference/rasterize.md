@@ -114,9 +114,9 @@ rasterize(
 
 - dtName:
 
-  Character name of output raster data type, e.g., `Byte`, `Int16`,
-  `UInt16`, `Int32`, `UInt32`, `Float32`, `Float64`. Defaults to
-  `Float64`.
+  Character name of output raster data type, e.g., `Byte`, `UInt8` (GDAL
+  \>= 3.13), `Int16`, `UInt16`, `Int32`, `UInt32`, `Float32`, `Float64`.
+  Defaults to `Float64`.
 
 - dstnodata:
 

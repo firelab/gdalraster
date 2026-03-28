@@ -32,8 +32,8 @@ dt_find_for_value(value, is_complex = FALSE)
 - dt:
 
   Character string containing a GDAL data type name (e.g., `"Byte"`,
-  `"Int16"`, `"UInt16"`, `"Int32"`, `"UInt32"`, `"Float32"`,
-  `"Float64"`, etc.)
+  `"UInt8"` (GDAL \>= 3.13), `"Int16"`, `"UInt16"`, `"Int32"`,
+  `"UInt32"`, `"Float32"`, `"Float64"`, etc.)
 
 - as_bytes:
 
@@ -76,7 +76,8 @@ CInt16, CInt32, CFloat32 or CFloat64), i.e., if it consists of a real
 and imaginary component.
 
 `dt_is_integer()` returns `TRUE` if the passed type is integer (one of
-Byte, Int16, UInt16, Int32, UInt32, CInt16, CInt32).
+Byte, UInt8 (GDAL \>= 3.13), Int16, UInt16, Int32, UInt32, CInt16,
+CInt32).
 
 `dt_is_floating()` returns `TRUE` if the passed type is floating (one of
 Float32, Float16, Float64, CFloat16, CFloat32, CFloat64).

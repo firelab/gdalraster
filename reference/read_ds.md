@@ -75,11 +75,11 @@ read_ds(
 
 - as_raw:
 
-  Logical. If `TRUE` and the underlying data type is Byte, return output
-  as R `raw` vector type. This maps to the setting `$readByteAsRaw` on
-  the `GDALRaster` object, which will be temporarily updated in this
-  function. To control this behavior in a persistent way on a dataset
-  see `$readByteAsRaw` in
+  Logical. If `TRUE` and the underlying data type is Byte (or UInt8 in
+  GDAL \>= 3.13), return output as R `raw` vector type. This maps to the
+  setting `$readByteAsRaw` on the `GDALRaster` object, which will be
+  temporarily updated in this function. To control this behavior in a
+  persistent way on a dataset object see `$readByteAsRaw` in
   [`GDALRaster-class`](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md).
 
 ## Value
@@ -96,8 +96,8 @@ read for the band.
 
 `NA` will be returned in place of the nodata value if the raster dataset
 has a nodata value defined for the band. Data are read as R `integer`
-type when possible for the raster data type (Byte, Int8, Int16, UInt16,
-Int32), otherwise as type `double` (UInt32, Float32, Float64).
+type when possible for the raster data type (Byte/UInt8, Int8, Int16,
+UInt16, Int32), otherwise as type `double` (UInt32, Float32, Float64).
 
 The output object has attribute `gis`, a list containing:
 

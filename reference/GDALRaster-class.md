@@ -242,12 +242,13 @@ computation of statistics and histograms.
 A logical value, `FALSE` by default. This field can be set to `TRUE`
 which will affect the data type returned by the `$read()` method and the
 [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md)
-convenience function. When the underlying band data type is Byte and
-`readByteAsRaw` is `TRUE` the output type will be raw rather than
+convenience function. When the underlying band data type is Byte/UInt8
+and `readByteAsRaw` is `TRUE` the output type will be raw rather than
 integer. See also the `as_raw` argument to
 [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md)
 to control this in a non-persistent setting. If the underlying band data
-type is not Byte this setting has no effect.
+type is not Byte/UInt8 setting has no effect. (Note Byte = UInt8 in GDAL
+\>= 3.13.)
 
 ### Methods
 
@@ -323,11 +324,12 @@ Adds a band to a dataset if the underlying format supports this action.
 Most formats do not, but `"MEM"` and `"VRT"` are notable exceptions that
 support adding bands. The added band will always be the last band.
 `dataType` is a character string containing the data type name (e.g.,
-`"Byte"`, `"Int16"`, `"UInt16"`, `"Int32"`, `"Float32"`, etc). The
-`options` argument is a character vector of NAME=VALUE option strings.
-Supported options are format specific. Note that the `options` argument
-is required but may be given as `NULL`. Returns logical `TRUE` on
-success or `FALSE` if a band could not be added.
+`"Byte"`, `"UInt8"` (GDAL \>= 3.13), `"Int16"`, `"UInt16"`, `"Int32"`,
+`"Float32"`, etc). The `options` argument is a character vector of
+NAME=VALUE option strings. Supported options are format specific. Note
+that the `options` argument is required but may be given as `NULL`.
+Returns logical `TRUE` on success or `FALSE` if a band could not be
+added.
 
 `$getGeoTransform()`  
 Returns the affine transformation coefficients for transforming between

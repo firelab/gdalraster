@@ -316,11 +316,11 @@ statistics and histograms.</p>
 <p><code>$readByteAsRaw</code><br>
 A logical value, <code>FALSE</code> by default. This field can be set to <code>TRUE</code> which
 will affect the data type returned by the <code>$read()</code> method and the
-<code><a href="read_ds.html">read_ds()</a></code> convenience function. When the underlying band data type is Byte
-and <code>readByteAsRaw</code> is <code>TRUE</code> the output type will be raw rather than
-integer. See also the <code>as_raw</code> argument to <code><a href="read_ds.html">read_ds()</a></code> to control this in a
-non-persistent setting. If the underlying band data type is not Byte this
-setting has no effect.</p>
+<code><a href="read_ds.html">read_ds()</a></code> convenience function. When the underlying band data type is
+Byte/UInt8 and <code>readByteAsRaw</code> is <code>TRUE</code> the output type will be raw rather
+than integer. See also the <code>as_raw</code> argument to <code><a href="read_ds.html">read_ds()</a></code> to control this
+in a non-persistent setting. If the underlying band data type is not
+Byte/UInt8 setting has no effect. (Note Byte = UInt8 in GDAL &gt;= 3.13.)</p>
 </div>
 
 <div class="section">
@@ -385,7 +385,8 @@ Adds a band to a dataset if the underlying format supports this action.
 Most formats do not, but <code>"MEM"</code> and <code>"VRT"</code> are notable exceptions
 that support adding bands. The added band will always be the last band.
 <code>dataType</code> is a character string containing the data type name
-(e.g., <code>"Byte"</code>, <code>"Int16"</code>, <code>"UInt16"</code>, <code>"Int32"</code>, <code>"Float32"</code>, etc).
+(e.g., <code>"Byte"</code>, <code>"UInt8"</code> (GDAL &gt;= 3.13), <code>"Int16"</code>, <code>"UInt16"</code>, <code>"Int32"</code>,
+<code>"Float32"</code>, etc).
 The <code>options</code> argument is a character vector of NAME=VALUE option strings.
 Supported options are format specific. Note that the <code>options</code> argument is
 required but may be given as <code>NULL</code>. Returns logical <code>TRUE</code> on success

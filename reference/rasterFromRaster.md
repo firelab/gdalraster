@@ -42,8 +42,9 @@ rasterFromRaster(
 
 - dtName:
 
-  Output raster data type name. Commonly used types include `"Byte"`,
-  `"Int16"`, `"UInt16"`, `"Int32"` and `"Float32"`.
+  Output raster data type name. Commonly used types include `"Byte"` (or
+  `"UInt8"` in GDAL \>= 3.13), `"Int16"`, `"UInt16"`, `"Int32"` and
+  `"Float32"`.
 
 - options:
 

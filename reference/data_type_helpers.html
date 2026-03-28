@@ -93,8 +93,8 @@ requirements.</p>
 
 <dl><dt id="arg-dt">dt<a class="anchor" aria-label="anchor" href="#arg-dt"></a></dt>
 <dd><p>Character string containing a GDAL data type name (e.g.,
-<code>"Byte"</code>, <code>"Int16"</code>, <code>"UInt16"</code>, <code>"Int32"</code>, <code>"UInt32"</code>, <code>"Float32"</code>,
-<code>"Float64"</code>, etc.)</p></dd>
+<code>"Byte"</code>, <code>"UInt8"</code> (GDAL &gt;= 3.13), <code>"Int16"</code>, <code>"UInt16"</code>, <code>"Int32"</code>,
+<code>"UInt32"</code>, <code>"Float32"</code>, <code>"Float64"</code>, etc.)</p></dd>
 
 
 <dt id="arg-as-bytes">as_bytes<a class="anchor" aria-label="anchor" href="#arg-as-bytes"></a></dt>
@@ -137,7 +137,7 @@ bits (returns zero if <code>dt</code> is not recognized).</p>
 CInt16, CInt32, CFloat32 or CFloat64), i.e., if it consists of a real and
 imaginary component.</p>
 <p><code>dt_is_integer()</code> returns <code>TRUE</code> if the passed type is integer (one of
-Byte, Int16, UInt16, Int32, UInt32, CInt16, CInt32).</p>
+Byte, UInt8 (GDAL &gt;= 3.13), Int16, UInt16, Int32, UInt32, CInt16, CInt32).</p>
 <p><code>dt_is_floating()</code> returns <code>TRUE</code> if the passed type is floating (one of
 Float32, Float16, Float64, CFloat16, CFloat32, CFloat64).</p>
 <p><code>dt_is_signed()</code> returns <code>TRUE</code> if the passed type is signed.</p>

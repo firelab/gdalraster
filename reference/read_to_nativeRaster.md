@@ -24,7 +24,7 @@ read_to_nativeRaster(
 - ds:
 
   An object of class `GDALRaster` in open state, with 1, 3, or 4 bands
-  of Byte data type.
+  of Byte/UInt8 data type.
 
 - xoff:
 
@@ -62,10 +62,10 @@ An object of class `nativeRaster`.
 
 ## Details
 
-The dataset must have 1, 3, or 4 bands of Byte data type. For 1-band
-(grayscale) data, the value is replicated across RGB channels. For
-3-band data, bands are interpreted as RGB. For 4-band data, bands are
-interpreted as RGBA.
+The dataset must have 1, 3, or 4 bands of Byte/UInt8 data type. For
+1-band (grayscale) data, the value is replicated across RGB channels.
+For 3-band data, bands are interpreted as RGB. For 4-band data, bands
+are interpreted as RGBA.
 
 ## Note
 
