@@ -272,7 +272,8 @@ lyr_out <- ogr_proc(mode = "Intersection",
                     out_geom_type = "MULTIPOLYGON",
                     mode_opt = opt)
 #>  ■■                                 2% |  ETA:  3m
-#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■    98% |  ETA:  0s
+#> ✔ Done (3.6s)
+#> 
 
 # the output layer has attributes of both the input and method layers
 (d <- lyr_out$fetch(-1))
