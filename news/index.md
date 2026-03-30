@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9001 (dev)
+## gdalraster 2.5.0.9002 (dev)
+
+- progress_r.cpp: configure the default progress bar to show elapsed
+  time upon completion
+  ([\#935](https://github.com/firelab/gdalraster/issues/935))
+  (2026-03-29)
 
 - [`g_make_valid()`](https://firelab.github.io/gdalraster/reference/g_util.md):
   condition tests for changes to `MakeValid()` in GDAL 3.13 and update
