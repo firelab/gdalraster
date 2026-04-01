@@ -3,7 +3,8 @@
 ## gdalraster 2.5.0.9003 (dev)
 
 - configure the default progress bar to show elapsed time upon
-  completion ([\#935](https://github.com/firelab/gdalraster/issues/935),
+  completion (adding **glue** in `Suggests` for **cli**,
+  [\#935](https://github.com/firelab/gdalraster/issues/935),
   [\#936](https://github.com/firelab/gdalraster/issues/936))
   (2026-03-30)
 
