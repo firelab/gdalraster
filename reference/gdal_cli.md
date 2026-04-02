@@ -14,7 +14,13 @@ gdal_commands(contains = NULL, recurse = TRUE, cout = TRUE)
 
 gdal_usage(cmd = NULL)
 
-gdal_run(cmd, args, setVectorArgsFromObject = TRUE)
+gdal_run(
+  cmd,
+  args,
+  close = FALSE,
+  quiet = FALSE,
+  setVectorArgsFromObject = TRUE
+)
 
 gdal_alg(cmd = NULL, args = NULL, parse = TRUE)
 
@@ -49,6 +55,20 @@ gdal_global_reg_names()
 
   Either a character vector or a named list containing input arguments
   of the algorithm (see section `Algorithm Argument Syntax` below).
+
+- close:
+
+  Logical value, `FALSE` by default. Set to `TRUE` to finalize the
+  algorithm immediately after it is run, which completes any pending
+  actions such as closing output datasets. This is useful if you do not
+  need to access the output as objects, e.g., when only generating file
+  output for later use. See `GDALAlg$close()`.
+
+- quiet:
+
+  Logical value, `FALSE` by default. Set to `TRUE` to suppress progress
+  reporting along with various messages and warnings. Sets the value of
+  `GDALAlg$quiet`.
 
 - setVectorArgsFromObject:
 
@@ -255,8 +275,13 @@ gdal_usage("raster convert")
 
 f_tif <- system.file("extdata/storml_elev.tif", package="gdalraster")
 f_gpkg <- file.path(tempdir(), "storml_elev.gpkg")
-
 args <- c("--overwrite", f_tif, f_gpkg)
+
+# finalize the algorithm immediately after it is run if only generating
+# file output for later use:
+# gdal_run("raster convert", args, close = TRUE)
+
+# or, assign to a variable and access algorithm output as a dataset object
 (alg <- gdal_run("raster convert", args))
 
 (ds <- alg$output())

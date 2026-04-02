@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9011 (dev)
+## gdalraster 2.5.0.9012 (dev)
+
+- [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
+  add arguments `close` and `quiet`
+  ([\#941](https://github.com/firelab/gdalraster/issues/941))
+  (2026-04-02)
 
 - **cli**-format the global error handler and class `GDALRaster`
   messages ([\#940](https://github.com/firelab/gdalraster/issues/940))
