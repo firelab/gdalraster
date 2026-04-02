@@ -74,9 +74,9 @@ src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package="gdalraster")
 # Convert GeoPackage to Shapefile
 ynp_shp <- file.path(tempdir(), "ynp_fires.shp")
 ogr2ogr(src, ynp_shp, src_layers = "mtbs_perims")
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ac' to 'burn_bnd_a'
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lat' to 'burn_bnd_l'
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lon' to 'burn_bnd_1'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ac' to 'burn_bnd_a'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lat' to 'burn_bnd_l'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lon' to 'burn_bnd_1'
 
 # Reproject to WGS84
 ynp_gpkg <- file.path(tempdir(), "ynp_fires.gpkg")

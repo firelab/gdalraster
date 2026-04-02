@@ -204,13 +204,13 @@ combined, e.g. <code>"[1]['field_name']"</code>.</p>
 <span class="r-in"><span><span class="co"># mdim_info(f)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">mdim_as_classic</span><span class="op">(</span><span class="va">f</span>, <span class="st">"Band1"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C++ object of class GDALRaster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Driver :</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  DSN    : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Dim    : 20, 20, 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Res    : 60.000000, 60.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bbox   : 440720.000000, 3750120.000000, 441920.000000, 3751320.000000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: (driverless dataset)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: ""</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 20, 20, 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD27 / UTM zone 11N (EPSG:26711)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 60.000000, 60.000000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 440720.000000, 3750120.000000, 441920.000000, 3751320.000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, interpolate <span class="op">=</span> <span class="cn">FALSE</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, main <span class="op">=</span> <span class="st">"Band1"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="mdim_as_classic-1.png" alt="" width="700" height="433"></span>

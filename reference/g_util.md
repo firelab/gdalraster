@@ -213,8 +213,7 @@ g_make_valid(wkt, as_wkb = FALSE)
 wkt <- "LINESTRING (0 0)"
 # NULL if GDAL < 3.13, or "POINT (0 0)" with GDAL >= 3.13:
 g_make_valid(wkt)
-#> GDAL FAILURE 1: IllegalArgumentException: point array must contain 0 or >1 elements
-#> 
+#> ✖ GDAL FAILURE 1: IllegalArgumentException: point array must contain 0 or >1 elements
 #> Warning: OGR MakeValid() gave NULL geometry
 #> NULL
 

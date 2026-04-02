@@ -117,13 +117,13 @@ and its associated raster band objects. Methods of the class are
 accessed in R using the <code>$</code> operator:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds</span></span>
-<span><span class="co">#&gt; C++ object of class GDALRaster</span></span>
-<span><span class="co">#&gt;  Driver : GeoTIFF (GTiff)</span></span>
-<span><span class="co">#&gt;  DSN    : /home/runner/work/_temp/Library/gdalraster/extdata/storml_tcc.tif</span></span>
-<span><span class="co">#&gt;  Dim    : 143, 107, 1</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 / UTM zone 12N (EPSG:26912)</span></span>
-<span><span class="co">#&gt;  Res    : 30.000000, 30.000000</span></span>
-<span><span class="co">#&gt;  Bbox   : 323476.100000, 5101872.000000, 327766.100000, 5105082.000000</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Driver</span>: GeoTIFF (GTiff)</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">DSN</span>: "/home/runner/work/_temp/Library/gdalraster/extdata/storml_tcc.tif"</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Dimensions</span>: 143, 107, 1</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">CRS</span>: NAD83 / UTM zone 12N (EPSG:26912)</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Pixel resolution</span>: 30.000000, 30.000000</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Bbox</span>: 323476.100000, 5101872.000000, 327766.100000, 5105082.000000</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Reference class 'Rcpp_GDALRaster' [package "gdalraster"] with 3 fields</span></span>
 <span><span class="co">#&gt;  $ infoOptions  : chr(0) </span></span>
@@ -236,7 +236,7 @@ specifying a <code>band</code> number as the first argument:</p>
 <span><span class="co"># min, max, mean, sd of pixel values in the band</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">getStatistics</span><span class="op">(</span>band <span class="op">=</span> <span class="fl">1</span>, approx_ok <span class="op">=</span> <span class="cn">FALSE</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% |  ETA:  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (25ms)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (16ms)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [1]  0.00000 71.00000 23.69950 23.17744</span></span>
 <span></span>

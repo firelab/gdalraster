@@ -109,14 +109,15 @@ re-opened once the object's `$close()` method has been called.
 ``` r
 v <- sample(0:255, 50, replace = TRUE)
 (ds_mem <- vector_to_MEM(v, xsize = 10, ysize = 5))
-#> failed to get projection ref
-#> C++ object of class GDALRaster
-#>  Driver : In Memory Raster (MEM)
-#>  DSN    : MEM:::DATAPOINTER=0x55da7bb116a0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200
-#>  Dim    : 10, 5, 1
-#>  CRS    : 
-#>  Res    : 1.000000, 1.000000
-#>  Bbox   : 0.000000, 0.000000, 10.000000, 5.000000
+#> ✖ failed to get projection ref
+#> C++ object of class <GDALRaster>
+#>   • Driver: In Memory Raster (MEM)
+#>   • DSN:
+#>   "MEM:::DATAPOINTER=0x55d94c6a17f0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"
+#>   • Dimensions: 10, 5, 1
+#>   • CRS:
+#>   • Pixel resolution: 1.000000, 1.000000
+#>   • Bbox: 0.000000, 0.000000, 10.000000, 5.000000
 
 all((ds_mem$read(1, 0, 0, 10, 5, 10, 5) == v))
 #> [1] TRUE

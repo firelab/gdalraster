@@ -556,7 +556,7 @@ ogr_layer_field_names(dsn, layer = "layer2")
 # add a field using SQL instead
 ogr_execute_sql(dsn, sql = "ALTER TABLE layer2 ADD field4 float")
 #> info: open dataset successful on DSN:
-#>   '/tmp/RtmpwYRYZh/test1.gpkg'
+#>   '/tmp/RtmpchXybp/test1.gpkg'
 
 # rename a field
 if (ogr_layer_test_cap(dsn, "layer1")$AlterFieldDefn) {
@@ -572,7 +572,7 @@ ogr_layer_field_names(dsn, layer = "layer2")
 # GDAL >= 3.7
 if (gdal_version_num() >= gdal_compute_version(3, 7, 0))
   ogrinfo(dsn, "layer2")
-#> INFO: Open of `/tmp/RtmpwYRYZh/test1.gpkg'
+#> INFO: Open of `/tmp/RtmpchXybp/test1.gpkg'
 #>       using driver `GPKG' successful.
 #> 
 #> Layer name: layer2
@@ -609,9 +609,9 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0))
 src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package="gdalraster")
 perims_shp <- file.path(tempdir(), "mtbs_perims.shp")
 ogr2ogr(src_dsn = src, dst_dsn = perims_shp, src_layers = "mtbs_perims")
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ac' to 'burn_bnd_a'
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lat' to 'burn_bnd_l'
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lon' to 'burn_bnd_1'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ac' to 'burn_bnd_a'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lat' to 'burn_bnd_l'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_lon' to 'burn_bnd_1'
 ogr_ds_format(dsn = perims_shp)
 #> [1] "ESRI Shapefile"
 ogr_ds_layer_names(dsn = perims_shp)
@@ -623,15 +623,15 @@ ogr_layer_field_names(dsn = perims_shp, layer = "mtbs_perims")
 alt_tbl <- "ALTER TABLE mtbs_perims ADD burn_bnd_ha float"
 ogr_execute_sql(dsn = perims_shp, sql = alt_tbl)
 #> info: open dataset successful on DSN:
-#>   '/tmp/RtmpwYRYZh/mtbs_perims.shp'
-#> GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ha' to 'burn_bnd_h'
+#>   '/tmp/RtmpchXybp/mtbs_perims.shp'
+#> ! GDAL WARNING 6: Normalized/laundered field name: 'burn_bnd_ha' to 'burn_bnd_h'
 
 upd <- "UPDATE mtbs_perims SET burn_bnd_ha = (burn_bnd_ac / 2.471)"
 ogr_execute_sql(dsn = perims_shp, sql = upd, dialect = "SQLite")
 #> info: open dataset successful on DSN:
-#>   '/tmp/RtmpwYRYZh/mtbs_perims.shp'
-#> GDAL FAILURE 1: In ExecuteSQL(): sqlite3_prepare_v2(UPDATE mtbs_perims SET burn_bnd_ha = (burn_bnd_ac / 2.471)):
-#>   no such column: burn_bnd_ac
+#>   '/tmp/RtmpchXybp/mtbs_perims.shp'
+#> ✖ GDAL FAILURE 1: In ExecuteSQL(): sqlite3_prepare_v2(UPDATE mtbs_perims SET burn_bnd_ha = (burn_bnd_ac / 2.471)):
+#> no such column: burn_bnd_ac
 ogr_layer_field_names(dsn = perims_shp, layer = "mtbs_perims")
 #>  [1] "event_id"   "incid_name" "incid_type" "map_id"     "burn_bnd_a"
 #>  [6] "burn_bnd_l" "burn_bnd_1" "ig_date"    "ig_year"    "burn_bnd_h"

@@ -92,9 +92,6 @@ ds <- createCopy(format = "GTiff",
                  src_filename = lcp_file,
                  options = "COMPRESS=LZW",
                  return_obj = TRUE)
-#>  ■                                  0% |  ETA:  2s
-#> ✔ Done (18ms)
-#> 
 
 ds$getMetadata(band = 0, domain = "IMAGE_STRUCTURE")
 #> [1] "COMPRESSION=LZW"  "INTERLEAVE=PIXEL"

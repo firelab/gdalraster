@@ -1494,11 +1494,12 @@ d$geom <- pts_geom
 
 # write the batch (no transaction)
 system.time(res <- lyr$batchCreateFeature(d))
-#>  ■                                  0% |  ETA:  2m
-#> ✔ Done (2s)
+#>  ■                                  0% |  ETA:  3m
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   99% |  ETA:  0s
+#> ✔ Done (2.1s)
 #> 
 #>    user  system elapsed 
-#>   1.975   0.007   1.983
+#>   2.096   0.006   2.103
 
 (all(res))
 #> [1] TRUE
@@ -1528,11 +1529,8 @@ system.time({
   else
     lyr$rollbackTransaction()
 })
-#>  ■                                  0% |  ETA:  1m
-#> ✔ Done (348ms)
-#> 
 #>    user  system elapsed 
-#>   1.052   0.007   1.059
+#>   1.024   0.006   1.030
 
 (all(res2))
 #> [1] TRUE
@@ -1545,22 +1543,22 @@ d_out <- lyr$fetch(-1)
 head(d_out)
 #> OGR feature set
 #>   FID               pt_desc         create_time                           geom
-#> 1   1 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
-#> 2   2 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
-#> 3   3 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
-#> 4   4 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
-#> 5   5 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
-#> 6   6 random points batch 1 2026-04-02 05:40:48 WKB POINT: raw 01 01 00 00 ...
+#> 1   1 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
+#> 2   2 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
+#> 3   3 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
+#> 4   4 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
+#> 5   5 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
+#> 6   6 random points batch 1 2026-04-02 17:06:12 WKB POINT: raw 01 01 00 00 ...
 
 tail(d_out)
 #> OGR feature set
 #>           FID               pt_desc         create_time
-#> 199995 199995 random points batch 2 2026-04-02 05:40:51
-#> 199996 199996 random points batch 2 2026-04-02 05:40:51
-#> 199997 199997 random points batch 2 2026-04-02 05:40:51
-#> 199998 199998 random points batch 2 2026-04-02 05:40:51
-#> 199999 199999 random points batch 2 2026-04-02 05:40:51
-#> 200000 200000 random points batch 2 2026-04-02 05:40:51
+#> 199995 199995 random points batch 2 2026-04-02 17:06:15
+#> 199996 199996 random points batch 2 2026-04-02 17:06:15
+#> 199997 199997 random points batch 2 2026-04-02 17:06:15
+#> 199998 199998 random points batch 2 2026-04-02 17:06:15
+#> 199999 199999 random points batch 2 2026-04-02 17:06:15
+#> 200000 200000 random points batch 2 2026-04-02 17:06:15
 #>                                  geom
 #> 199995 WKB POINT: raw 01 01 00 00 ...
 #> 199996 WKB POINT: raw 01 01 00 00 ...

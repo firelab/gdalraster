@@ -42,13 +42,13 @@ using the `$` operator:
 
 ``` r
 ds
-#> C++ object of class GDALRaster
-#>  Driver : GeoTIFF (GTiff)
-#>  DSN    : /home/runner/work/_temp/Library/gdalraster/extdata/storml_tcc.tif
-#>  Dim    : 143, 107, 1
-#>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)
-#>  Res    : 30.000000, 30.000000
-#>  Bbox   : 323476.100000, 5101872.000000, 327766.100000, 5105082.000000
+#> C++ object of class <GDALRaster>
+#> • Driver: GeoTIFF (GTiff)
+#> • DSN: "/home/runner/work/_temp/Library/gdalraster/extdata/storml_tcc.tif"
+#> • Dimensions: 143, 107, 1
+#> • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#> • Pixel resolution: 30.000000, 30.000000
+#> • Bbox: 323476.100000, 5101872.000000, 327766.100000, 5105082.000000
 str(ds)
 #> Reference class 'Rcpp_GDALRaster' [package "gdalraster"] with 3 fields
 #>  $ infoOptions  : chr(0) 
@@ -170,7 +170,7 @@ ds$getNoDataValue(band = 1)
 # min, max, mean, sd of pixel values in the band
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
 #>  ■■■■■■■■■■■■■■■■                  50% |  ETA:  0s
-#> ✔ Done (25ms)
+#> ✔ Done (16ms)
 #> 
 #> [1]  0.00000 71.00000 23.69950 23.17744
 

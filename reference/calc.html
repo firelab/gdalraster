@@ -269,7 +269,7 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span>                dtName <span class="op">=</span> <span class="st">"Int16"</span>,</span></span>
 <span class="r-in"><span>                nodata_value <span class="op">=</span> <span class="op">-</span><span class="fl">32767</span>,</span></span>
 <span class="r-in"><span>                setRasterNodataValue <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> output written to: <span style="color: #0000BB;">"/tmp/RtmpwYRYZh/rastcalc22ee53eb41a9.tif"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> output written to: <span style="color: #0000BB;">"/tmp/RtmpchXybp/rastcalc22ee7b82c440.tif"</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">hi_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># min, max, mean, sd</span></span></span>
@@ -294,13 +294,13 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span>              dtName <span class="op">=</span> <span class="st">"Float32"</span>, setRasterNodataValue <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>              return_obj <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> output written to: <span style="color: #0000BB;">"in-memory-raster"</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C++ object of class GDALRaster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Driver : In Memory Raster (MEM)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  DSN    : in-memory-raster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Dim    : 149, 112, 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Res    : 30.000000, 30.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bbox   : 323400.853100, 5101815.783500, 327870.853100, 5105175.783500</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: In Memory Raster (MEM)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "in-memory-raster"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 149, 112, 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / UTM zone 12N (EPSG:26912)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 30.000000, 30.000000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 323400.853100, 5101815.783500, 327870.853100, 5105175.783500</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ndvi</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>            col_map_fn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#7b3294"</span>, <span class="st">"#c2a5cf"</span>, <span class="st">"#a6dba0"</span>, <span class="st">"#008837"</span><span class="op">)</span>,</span></span>
@@ -370,7 +370,7 @@ read from the return value of <code>expr</code>.</p>
 <span class="r-in"><span>     dstfile <span class="op">=</span> <span class="va">tif_file</span>,</span></span>
 <span class="r-in"><span>     out_band <span class="op">=</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>     write_mode <span class="op">=</span> <span class="st">"update"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> output written to: <span style="color: #0000BB;">"/tmp/RtmpwYRYZh/storml_lndscp.tif"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> output written to: <span style="color: #0000BB;">"/tmp/RtmpchXybp/storml_lndscp.tif"</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># verify the ouput</span></span></span>
 <span class="r-in"><span><span class="va">rasterfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">tif_file</span>, <span class="va">tif_file</span><span class="op">)</span></span></span>

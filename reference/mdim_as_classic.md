@@ -164,13 +164,13 @@ f <- system.file("extdata/byte.nc", package="gdalraster")
 # mdim_info(f)
 
 (ds <- mdim_as_classic(f, "Band1", 1, 0))
-#> C++ object of class GDALRaster
-#>  Driver :
-#>  DSN    : 
-#>  Dim    : 20, 20, 1
-#>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)
-#>  Res    : 60.000000, 60.000000
-#>  Bbox   : 440720.000000, 3750120.000000, 441920.000000, 3751320.000000
+#> C++ object of class <GDALRaster>
+#>   • Driver: (driverless dataset)
+#>   • DSN: ""
+#>   • Dimensions: 20, 20, 1
+#>   • CRS: NAD27 / UTM zone 11N (EPSG:26711)
+#>   • Pixel resolution: 60.000000, 60.000000
+#>   • Bbox: 440720.000000, 3750120.000000, 441920.000000, 3751320.000000
 
 plot_raster(ds, interpolate = FALSE, legend = TRUE, main = "Band1")
 

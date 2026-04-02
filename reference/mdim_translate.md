@@ -224,8 +224,8 @@ if (isTRUE(gdal_get_driver_md("netCDF")$NETCDF_HAS_NC4 == "YES")) {
 
 f_dst <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst, creation_options = opt)
-#>  ■■■■■■■■                          24% |  ETA: 25s
-#> ✔ Done (8.1s)
+#>  ■■■■■■■■                          24% |  ETA: 26s
+#> ✔ Done (8.4s)
 #> 
 info <- mdim_info(f_dst, cout = FALSE) |> yyjsonr::read_json_str()
 # str(info)
@@ -241,13 +241,13 @@ info$arrays$Band1$structural_info
 #> 
 
 (ds <- mdim_as_classic(f_dst, "Band1", 1, 0))
-#> C++ object of class GDALRaster
-#>  Driver :
-#>  DSN    : 
-#>  Dim    : 20, 20, 1
-#>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)
-#>  Res    : 60.000000, 60.000000
-#>  Bbox   : 440720.000000, 3750120.000000, 441920.000000, 3751320.000000
+#> C++ object of class <GDALRaster>
+#>   • Driver: (driverless dataset)
+#>   • DSN: ""
+#>   • Dimensions: 20, 20, 1
+#>   • CRS: NAD27 / UTM zone 11N (EPSG:26711)
+#>   • Pixel resolution: 60.000000, 60.000000
+#>   • Bbox: 440720.000000, 3750120.000000, 441920.000000, 3751320.000000
 
 plot_raster(ds, interpolate = FALSE, legend = TRUE, main = "Band1")
 
@@ -257,14 +257,17 @@ ds$close()
 ## slice along the Y axis with array view
 f_dst2 <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst2, array_specs = "name=Band1,view=[10:20,...]")
+#>  ■■■■■■■■                          24% |  ETA:  0s
+#> ✔ Done (56ms)
+#> 
 (ds <- mdim_as_classic(f_dst2, "Band1", 1, 0))
-#> C++ object of class GDALRaster
-#>  Driver :
-#>  DSN    : 
-#>  Dim    : 20, 10, 1
-#>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)
-#>  Res    : 60.000000, 60.000000
-#>  Bbox   : 440720.000000, 3750720.000000, 441920.000000, 3751320.000000
+#> C++ object of class <GDALRaster>
+#>   • Driver: (driverless dataset)
+#>   • DSN: ""
+#>   • Dimensions: 20, 10, 1
+#>   • CRS: NAD27 / UTM zone 11N (EPSG:26711)
+#>   • Pixel resolution: 60.000000, 60.000000
+#>   • Bbox: 440720.000000, 3750720.000000, 441920.000000, 3751320.000000
 
 plot_raster(ds, interpolate = FALSE, legend = TRUE,
             main = "Band1[10:20,...]")
@@ -277,13 +280,13 @@ f_dst3 <- tempfile(fileext = ".nc")
 subsets <- c("x(441000,441800)", "y(3750400,3751000)")
 mdim_translate(f_src, f_dst3, subset_specs = subsets)
 (ds <- mdim_as_classic(f_dst3, "Band1", 1, 0))
-#> C++ object of class GDALRaster
-#>  Driver :
-#>  DSN    : 
-#>  Dim    : 13, 10, 1
-#>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)
-#>  Res    : 60.000000, 60.000000
-#>  Bbox   : 441020.000000, 3750420.000000, 441800.000000, 3751020.000000
+#> C++ object of class <GDALRaster>
+#>   • Driver: (driverless dataset)
+#>   • DSN: ""
+#>   • Dimensions: 13, 10, 1
+#>   • CRS: NAD27 / UTM zone 11N (EPSG:26711)
+#>   • Pixel resolution: 60.000000, 60.000000
+#>   • Bbox: 441020.000000, 3750420.000000, 441800.000000, 3751020.000000
 
 plot_raster(ds, interpolate = FALSE, legend = TRUE,
             main = "Band1 trimmed")
@@ -295,13 +298,13 @@ ds$close()
 f_dst4 <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst4, scaleaxes_specs = "x(2),y(2)")
 (ds <- mdim_as_classic(f_dst4, "Band1", 1, 0))
-#> C++ object of class GDALRaster
-#>  Driver :
-#>  DSN    : 
-#>  Dim    : 10, 10, 1
-#>  CRS    : NAD27 / UTM zone 11N (EPSG:26711)
-#>  Res    : 120.000000, 120.000000
-#>  Bbox   : 440690.000000, 3750090.000000, 441890.000000, 3751290.000000
+#> C++ object of class <GDALRaster>
+#>   • Driver: (driverless dataset)
+#>   • DSN: ""
+#>   • Dimensions: 10, 10, 1
+#>   • CRS: NAD27 / UTM zone 11N (EPSG:26711)
+#>   • Pixel resolution: 120.000000, 120.000000
+#>   • Bbox: 440690.000000, 3750090.000000, 441890.000000, 3751290.000000
 
 plot_raster(ds, interpolate = FALSE, legend = TRUE,
             main = "Band1 subsampled")

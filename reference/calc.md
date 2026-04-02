@@ -203,7 +203,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpwYRYZh/rastcalc22ee53eb41a9.tif"
+#> ℹ output written to: "/tmp/RtmpchXybp/rastcalc22ee7b82c440.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -228,13 +228,13 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
 #> ℹ output written to: "in-memory-raster"
-#> C++ object of class GDALRaster
-#>  Driver : In Memory Raster (MEM)
-#>  DSN    : in-memory-raster
-#>  Dim    : 149, 112, 1
-#>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)
-#>  Res    : 30.000000, 30.000000
-#>  Bbox   : 323400.853100, 5101815.783500, 327870.853100, 5105175.783500
+#> C++ object of class <GDALRaster>
+#>   • Driver: In Memory Raster (MEM)
+#>   • DSN: "in-memory-raster"
+#>   • Dimensions: 149, 112, 1
+#>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#>   • Pixel resolution: 30.000000, 30.000000
+#>   • Bbox: 323400.853100, 5101815.783500, 327870.853100, 5105175.783500
 
 plot_raster(ndvi, legend = TRUE,
             col_map_fn = c("#7b3294", "#c2a5cf", "#a6dba0", "#008837"),
@@ -304,7 +304,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpwYRYZh/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/RtmpchXybp/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

@@ -87,8 +87,8 @@ g1 <- "POLYGON ((0 0, 10 10, 10 0, 0 0))"
 g2 <- "POLYGON ((0 0, 10 10, 10 0))"
 g3 <- "POLYGON ((0 0, 10 10, 10 0, 0 1))"
 g_is_valid(c(g1, g2, g3))
-#> GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
-#> GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
+#> ! GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
+#> ! GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
 #> [1]  TRUE FALSE FALSE
 
 g_is_3D(g1)

@@ -936,13 +936,13 @@ The dataset can be re-opened on the existing <code>filename</code> with
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">lcp_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storm_lake.lcp"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">lcp_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C++ object of class GDALRaster</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Driver : FARSITE v.4 Landscape File (.lcp) (LCP)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  DSN    : /home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Dim    : 143, 107, 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  CRS    : NAD83 / UTM zone 12N (EPSG:26912)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Res    : 30.000000, 30.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bbox   : 323476.071971, 5101871.983031, 327766.071971, 5105081.983031</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">Driver</span>: FARSITE v.4 Landscape File (.lcp) (LCP)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">DSN</span>: "/home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">Dimensions</span>: 143, 107, 8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">CRS</span>: NAD83 / UTM zone 12N (EPSG:26912)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">Pixel resolution</span>: 30.000000, 30.000000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> • <span style="font-style: italic;">Bbox</span>: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## print information about the dataset to the console</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -1160,7 +1160,7 @@ The dataset can be re-opened on the existing <code>filename</code> with
 <span class="r-in"><span>                 dtName <span class="op">=</span> <span class="st">"Byte"</span>,</span></span>
 <span class="r-in"><span>                 init <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> initializing destination raster...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> done <span style="color: #B2B2B2;">[8ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> done <span style="color: #B2B2B2;">[9ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds_new</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">new_file</span>, read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
