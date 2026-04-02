@@ -278,6 +278,9 @@ will be the projection of the destination dataset.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">alb83_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"storml_elev_alb83.img"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">warp</span><span class="op">(</span><span class="va">elev_file</span>, <span class="va">alb83_file</span>, t_srs <span class="op">=</span> <span class="st">"EPSG:5070"</span>, cl_arg <span class="op">=</span> <span class="va">args</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■■                              </span>   2% |  ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Done (11ms)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">alb83_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">getDriverLongName</span><span class="op">(</span><span class="op">)</span></span></span>

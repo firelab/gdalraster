@@ -221,7 +221,10 @@ tbl <- buildRAT(ds,
                 table_type = "thematic",
                 na_value = -9999,
                 join_df = evt_df)
-#> scanning raster...
+#> ℹ scanning raster...
+#>  ■                                  1% |  ETA:  0s
+#> ✔ Done (11ms)
+#> 
 
 nrow(tbl)
 #> [1] 24

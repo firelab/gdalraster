@@ -444,6 +444,8 @@
   : Push a new GDAL CPLError handler
 - [`pop_error_handler()`](https://firelab.github.io/gdalraster/reference/pop_error_handler.md)
   : Pop error handler off stack
+- [`progress_bar_clear()`](https://firelab.github.io/gdalraster/reference/progress_bar_clear.md)
+  : Clear progress bar
 - [`dump_open_datasets()`](https://firelab.github.io/gdalraster/reference/dump_open_datasets.md)
   : Report open datasets
 

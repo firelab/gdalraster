@@ -17,7 +17,8 @@ rasterFromRaster(
   dtName = NULL,
   options = NULL,
   init = NULL,
-  dstnodata = init
+  dstnodata = init,
+  quiet = FALSE
 )
 ```
 
@@ -60,6 +61,10 @@ rasterFromRaster(
 
   Numeric nodata value for the output raster.
 
+- quiet:
+
+  Logical value, `TRUE` to suppress informational messages.
+
 ## Value
 
 Returns the destination filename invisibly.
@@ -95,8 +100,9 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Int16",
                  options = opt,
                  init = -32767)
-#> initializing destination raster...
-#> done
+#> ℹ initializing destination raster...
+#> ✔ done [7ms]
+#> 
 ds_slp <- new(GDALRaster, slpp_file, read_only = FALSE)
 
 # slpp_file is initialized to -32767 and nodata value set

@@ -71,7 +71,10 @@ f <- system.file("extdata/storml_elev_orig.tif", package="gdalraster")
 
 ## get count of nodata
 tbl <- buildRAT(f)
-#> scanning raster...
+#> ℹ scanning raster...
+#>  ■                                  1% |  ETA:  0s
+#> ✔ Done (9ms)
+#> 
 head(tbl)
 #>   VALUE COUNT
 #> 1  2438     9
@@ -97,7 +100,7 @@ file.copy(f,  mod_file)
 fillNodata(mod_file, band = 1)
 
 mod_tbl = buildRAT(mod_file)
-#> scanning raster...
+#> ℹ scanning raster...
 head(mod_tbl)
 #>   VALUE COUNT
 #> 1  2438     9
