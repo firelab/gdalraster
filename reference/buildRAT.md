@@ -294,9 +294,6 @@ ds$setDefaultRAT(band = 1, tbl)
 ds$flushCache()
 
 tbl2 <- ds$getDefaultRAT(band = 1)
-#>  ■■■■■                             14% |  ETA:  0s
-#> ✔ Done (10ms)
-#> 
 nrow(tbl2)
 #> [1] 24
 head(tbl2)

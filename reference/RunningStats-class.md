@@ -101,10 +101,9 @@ No return value, called for side effects.
 
 ``` r
 set.seed(42)
-rs <- new(RunningStats, na_rm = TRUE)
-rs
+(rs <- new(RunningStats, na_rm = TRUE))
 #> C++ object of class <RunningStats>
-#>   • Number of values: 0.000000
+#>   • Number of values: 0
 
 chunk <- runif(1000)
 rs$update(chunk)

@@ -113,7 +113,7 @@ v <- sample(0:255, 50, replace = TRUE)
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory Raster (MEM)
 #>   • DSN:
-#>   "MEM:::DATAPOINTER=0x5586a08f9ee0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"
+#>   "MEM:::DATAPOINTER=0x55a8774c7f30,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"
 #>   • Dimensions: 10, 5, 1
 #>   • CRS:
 #>   • Pixel resolution: 1.000000, 1.000000
