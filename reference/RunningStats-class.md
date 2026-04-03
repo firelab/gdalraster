@@ -103,8 +103,8 @@ No return value, called for side effects.
 set.seed(42)
 rs <- new(RunningStats, na_rm = TRUE)
 rs
-#> C++ object of class RunningStats
-#>  Number of values: 0
+#> C++ object of class <RunningStats>
+#>   • Number of values: 0.000000
 
 chunk <- runif(1000)
 rs$update(chunk)

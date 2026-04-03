@@ -685,8 +685,7 @@ sql <- "UPDATE points_of_interest SET is_geothermal =
             ELSE FALSE
           END"
 ogr_execute_sql(mem_gpkg, sql)
-#> info: open dataset successful on DSN:
-#>   '/vsimem/tmp/ynp_features.gpkg'
+#> ℹ open dataset successful on DSN: "/vsimem/tmp/ynp_features.gpkg"
 
 ogr_layer_field_names(mem_gpkg, "points_of_interest")
 #> [1] "poi_name"      "poi_type"      "editdate"      "is_geothermal"
@@ -707,14 +706,13 @@ sql <- "SELECT poi_name, geom
           FROM points_of_interest
             WHERE is_geothermal = TRUE"
 (lyr <- ogr_execute_sql(mem_gpkg, sql))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /vsimem/tmp/ynp_features.gpkg
-#>  Layer  : SELECT poi_name, geom
-#>           FROM points_of_interest
-#>             WHERE is_geothermal = TRUE
-#>  CRS    : NAD83 (EPSG:4269)
-#>  Geom   : POINT
+#> C++ object of class <GDALVector>
+#> • Driver: GeoPackage (GPKG)
+#> • DSN: "/vsimem/tmp/ynp_features.gpkg"
+#> • Layer: SELECT poi_name, geom FROM points_of_interest WHERE is_geothermal =
+#> TRUE
+#> • CRS: NAD83 (EPSG:4269)
+#> • Geometry: POINT
 
 lyr$getFeatureCount()
 #> [1] 187
@@ -787,12 +785,13 @@ ynp_dsn <- file.path("/vsizip", f, "ynp_features.gpkg")
 
 # the park boundary layer containing a single feature
 (bnd <- new(GDALVector, ynp_dsn, "ynp_bnd"))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg
-#>  Layer  : ynp_bnd
-#>  CRS    : NAD83 (EPSG:4269)
-#>  Geom   : POLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN:
+#>   "/vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg"
+#>   • Layer: ynp_bnd
+#>   • CRS: NAD83 (EPSG:4269)
+#>   • Geometry: POLYGON
 
 bnd$getFeatureCount()
 #> [1] 1
@@ -936,12 +935,13 @@ class attribute providing S3 methods for
 # SQL layer for public roads
 sql <- "SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'"
 (roads <- new(GDALVector, ynp_dsn, sql))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg
-#>  Layer  : SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'
-#>  CRS    : NAD83 (EPSG:4269)
-#>  Geom   : LINESTRING
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN:
+#>   "/vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg"
+#>   • Layer: SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'
+#>   • CRS: NAD83 (EPSG:4269)
+#>   • Geometry: LINESTRING
 
 roads$getFeatureCount()
 #> [1] 1475
@@ -1146,12 +1146,12 @@ mtbs_dsn <- "/vsimem/tmp/ynp_fires_1984_2022.gpkg"
 ogr2ogr(f, mtbs_dsn)
 
 (fires <- new(GDALVector, mtbs_dsn, "mtbs_perims"))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /vsimem/tmp/ynp_fires_1984_2022.gpkg
-#>  Layer  : mtbs_perims
-#>  CRS    : NAD83 / Montana (EPSG:32100)
-#>  Geom   : MULTIPOLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/vsimem/tmp/ynp_fires_1984_2022.gpkg"
+#>   • Layer: mtbs_perims
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Geometry: MULTIPOLYGON
 
 srs_mtsp <- fires$getSpatialRef()  # Montana state plane metric definition
 
@@ -1159,12 +1159,12 @@ srs_mtsp <- fires$getSpatialRef()  # Montana state plane metric definition
 # returning a GDALVector object on the output layer by default
 (bnd <- ogr_reproject(src_dsn = ynp_dsn, src_layer = "ynp_bnd",
                       out_dsn = mtbs_dsn, out_srs = srs_mtsp))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /vsimem/tmp/ynp_fires_1984_2022.gpkg
-#>  Layer  : ynp_bnd
-#>  CRS    : NAD83 / Montana (EPSG:32100)
-#>  Geom   : POLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/vsimem/tmp/ynp_fires_1984_2022.gpkg"
+#>   • Layer: ynp_bnd
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Geometry: POLYGON
 
 (bnd_feat <- bnd$getNextFeature())
 #> OGR feature
@@ -1289,10 +1289,10 @@ fid <- poi$getLastWriteFID()
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-04-02
+#> [1] 2026-04-03
 #> 
 #> $editdate
-#> [1] 2026-04-02
+#> [1] 2026-04-03
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1379,7 +1379,7 @@ poi$syncToDisk()
 #> [1] 2016-02-03
 #> 
 #> $editdate
-#> [1] 2026-04-02
+#> [1] 2026-04-03
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1414,10 +1414,10 @@ poi$getFeature(fid)
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-04-02
+#> [1] 2026-04-03
 #> 
 #> $editdate
-#> [1] 2026-04-02
+#> [1] 2026-04-03
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1494,12 +1494,12 @@ d$geom <- pts_geom
 
 # write the batch (no transaction)
 system.time(res <- lyr$batchCreateFeature(d))
-#>  ■                                  0% |  ETA:  3m
-#>  ■■■■■■■■■■■■■■■■■■■■■■■■          76% |  ETA:  1s
-#> ✔ Done (2.2s)
+#>  ■                                  0% |  ETA:  2m
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■          77% |  ETA:  1s
+#> ✔ Done (2.3s)
 #> 
 #>    user  system elapsed 
-#>   2.222   0.009   2.231
+#>   2.340   0.009   2.350
 
 (all(res))
 #> [1] TRUE
@@ -1530,7 +1530,7 @@ system.time({
     lyr$rollbackTransaction()
 })
 #>    user  system elapsed 
-#>   1.067   0.005   1.072
+#>   1.029   0.007   1.036
 
 (all(res2))
 #> [1] TRUE
@@ -1543,22 +1543,22 @@ d_out <- lyr$fetch(-1)
 head(d_out)
 #> OGR feature set
 #>   FID               pt_desc         create_time                           geom
-#> 1   1 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
-#> 2   2 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
-#> 3   3 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
-#> 4   4 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
-#> 5   5 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
-#> 6   6 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...
+#> 1   1 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
+#> 2   2 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
+#> 3   3 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
+#> 4   4 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
+#> 5   5 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
+#> 6   6 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...
 
 tail(d_out)
 #> OGR feature set
 #>           FID               pt_desc         create_time
-#> 199995 199995 random points batch 2 2026-04-02 21:01:36
-#> 199996 199996 random points batch 2 2026-04-02 21:01:36
-#> 199997 199997 random points batch 2 2026-04-02 21:01:36
-#> 199998 199998 random points batch 2 2026-04-02 21:01:36
-#> 199999 199999 random points batch 2 2026-04-02 21:01:36
-#> 200000 200000 random points batch 2 2026-04-02 21:01:36
+#> 199995 199995 random points batch 2 2026-04-03 03:23:47
+#> 199996 199996 random points batch 2 2026-04-03 03:23:47
+#> 199997 199997 random points batch 2 2026-04-03 03:23:47
+#> 199998 199998 random points batch 2 2026-04-03 03:23:47
+#> 199999 199999 random points batch 2 2026-04-03 03:23:47
+#> 200000 200000 random points batch 2 2026-04-03 03:23:47
 #>                                  geom
 #> 199995 WKB POINT: raw 01 01 00 00 ...
 #> 199996 WKB POINT: raw 01 01 00 00 ...

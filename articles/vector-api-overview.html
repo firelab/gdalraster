@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9013</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -745,8 +745,7 @@ geothermal features.</p>
 <span><span class="st">            ELSE FALSE</span></span>
 <span><span class="st">          END"</span></span>
 <span><span class="fu"><a href="../reference/ogr_manage.html">ogr_execute_sql</a></span><span class="op">(</span><span class="va">mem_gpkg</span>, <span class="va">sql</span><span class="op">)</span></span>
-<span><span class="co">#&gt; info: open dataset successful on DSN:</span></span>
-<span><span class="co">#&gt;   '/vsimem/tmp/ynp_features.gpkg'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> open dataset successful on DSN: "/vsimem/tmp/ynp_features.gpkg"</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/ogr_manage.html">ogr_layer_field_names</a></span><span class="op">(</span><span class="va">mem_gpkg</span>, <span class="st">"points_of_interest"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "poi_name"      "poi_type"      "editdate"      "is_geothermal"</span></span>
@@ -763,14 +762,13 @@ for data retrieval. For now, note that the function
 <span><span class="st">          FROM points_of_interest</span></span>
 <span><span class="st">            WHERE is_geothermal = TRUE"</span></span>
 <span><span class="op">(</span><span class="va">lyr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ogr_manage.html">ogr_execute_sql</a></span><span class="op">(</span><span class="va">mem_gpkg</span>, <span class="va">sql</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; C++ object of class GDALVector</span></span>
-<span><span class="co">#&gt;  Driver : GeoPackage (GPKG)</span></span>
-<span><span class="co">#&gt;  DSN    : /vsimem/tmp/ynp_features.gpkg</span></span>
-<span><span class="co">#&gt;  Layer  : SELECT poi_name, geom</span></span>
-<span><span class="co">#&gt;           FROM points_of_interest</span></span>
-<span><span class="co">#&gt;             WHERE is_geothermal = TRUE</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 (EPSG:4269)</span></span>
-<span><span class="co">#&gt;  Geom   : POINT</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">DSN</span>: "/vsimem/tmp/ynp_features.gpkg"</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Layer</span>: SELECT poi_name, geom FROM points_of_interest WHERE is_geothermal =</span></span>
+<span><span class="co">#&gt; TRUE</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span></span>
+<span><span class="co">#&gt; • <span style="font-style: italic;">Geometry</span>: POINT</span></span>
 <span></span>
 <span><span class="va">lyr</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 187</span></span>
@@ -829,12 +827,13 @@ boundary layer and retrieve information about it.</p>
 <span></span>
 <span><span class="co"># the park boundary layer containing a single feature</span></span>
 <span><span class="op">(</span><span class="va">bnd</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">ynp_dsn</span>, <span class="st">"ynp_bnd"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; C++ object of class GDALVector</span></span>
-<span><span class="co">#&gt;  Driver : GeoPackage (GPKG)</span></span>
-<span><span class="co">#&gt;  DSN    : /vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg</span></span>
-<span><span class="co">#&gt;  Layer  : ynp_bnd</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 (EPSG:4269)</span></span>
-<span><span class="co">#&gt;  Geom   : POLYGON</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">DSN</span>:</span></span>
+<span><span class="co">#&gt;   "/vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg"</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Geometry</span>: POLYGON</span></span>
 <span></span>
 <span><span class="va">bnd</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
@@ -972,12 +971,13 @@ returned by <code>$fetch()</code> carries the
 <code class="sourceCode R"><span><span class="co"># SQL layer for public roads</span></span>
 <span><span class="va">sql</span> <span class="op">&lt;-</span> <span class="st">"SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'"</span></span>
 <span><span class="op">(</span><span class="va">roads</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">ynp_dsn</span>, <span class="va">sql</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; C++ object of class GDALVector</span></span>
-<span><span class="co">#&gt;  Driver : GeoPackage (GPKG)</span></span>
-<span><span class="co">#&gt;  DSN    : /vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg</span></span>
-<span><span class="co">#&gt;  Layer  : SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 (EPSG:4269)</span></span>
-<span><span class="co">#&gt;  Geom   : LINESTRING</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">DSN</span>:</span></span>
+<span><span class="co">#&gt;   "/vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg"</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Layer</span>: SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Geometry</span>: LINESTRING</span></span>
 <span></span>
 <span><span class="va">roads</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1475</span></span>
@@ -1168,12 +1168,12 @@ the coordinate system of the MTBS layer.</p>
 <span><span class="fu"><a href="../reference/ogr2ogr.html">ogr2ogr</a></span><span class="op">(</span><span class="va">f</span>, <span class="va">mtbs_dsn</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">(</span><span class="va">fires</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">mtbs_dsn</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; C++ object of class GDALVector</span></span>
-<span><span class="co">#&gt;  Driver : GeoPackage (GPKG)</span></span>
-<span><span class="co">#&gt;  DSN    : /vsimem/tmp/ynp_fires_1984_2022.gpkg</span></span>
-<span><span class="co">#&gt;  Layer  : mtbs_perims</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 / Montana (EPSG:32100)</span></span>
-<span><span class="co">#&gt;  Geom   : MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">DSN</span>: "/vsimem/tmp/ynp_fires_1984_2022.gpkg"</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Layer</span>: mtbs_perims</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Geometry</span>: MULTIPOLYGON</span></span>
 <span></span>
 <span><span class="va">srs_mtsp</span> <span class="op">&lt;-</span> <span class="va">fires</span><span class="op">$</span><span class="fu">getSpatialRef</span><span class="op">(</span><span class="op">)</span>  <span class="co"># Montana state plane metric definition</span></span>
 <span></span>
@@ -1181,12 +1181,12 @@ the coordinate system of the MTBS layer.</p>
 <span><span class="co"># returning a GDALVector object on the output layer by default</span></span>
 <span><span class="op">(</span><span class="va">bnd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ogr_reproject.html">ogr_reproject</a></span><span class="op">(</span>src_dsn <span class="op">=</span> <span class="va">ynp_dsn</span>, src_layer <span class="op">=</span> <span class="st">"ynp_bnd"</span>,</span>
 <span>                      out_dsn <span class="op">=</span> <span class="va">mtbs_dsn</span>, out_srs <span class="op">=</span> <span class="va">srs_mtsp</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; C++ object of class GDALVector</span></span>
-<span><span class="co">#&gt;  Driver : GeoPackage (GPKG)</span></span>
-<span><span class="co">#&gt;  DSN    : /vsimem/tmp/ynp_fires_1984_2022.gpkg</span></span>
-<span><span class="co">#&gt;  Layer  : ynp_bnd</span></span>
-<span><span class="co">#&gt;  CRS    : NAD83 / Montana (EPSG:32100)</span></span>
-<span><span class="co">#&gt;  Geom   : POLYGON</span></span>
+<span><span class="co">#&gt; C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">DSN</span>: "/vsimem/tmp/ynp_fires_1984_2022.gpkg"</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span></span>
+<span><span class="co">#&gt;   • <span style="font-style: italic;">Geometry</span>: POLYGON</span></span>
 <span></span>
 <span><span class="op">(</span><span class="va">bnd_feat</span> <span class="op">&lt;-</span> <span class="va">bnd</span><span class="op">$</span><span class="fu">getNextFeature</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; OGR feature</span></span>
@@ -1300,10 +1300,10 @@ interest.</p>
 <span><span class="co">#&gt; [1] Information</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $createdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-02</span></span>
+<span><span class="co">#&gt; [1] 2026-04-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-02</span></span>
+<span><span class="co">#&gt; [1] 2026-04-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span>
@@ -1384,7 +1384,7 @@ corresponding JSON member.</li>
 <span><span class="co">#&gt; [1] 2016-02-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-02</span></span>
+<span><span class="co">#&gt; [1] 2026-04-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span></code></pre></div>
@@ -1417,10 +1417,10 @@ class attribute.</p>
 <span><span class="co">#&gt; [1] Information</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $createdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-02</span></span>
+<span><span class="co">#&gt; [1] 2026-04-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-02</span></span>
+<span><span class="co">#&gt; [1] 2026-04-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span>
@@ -1491,12 +1491,12 @@ grouping in a transaction, measuring time elapsed.</p>
 <span></span>
 <span><span class="co"># write the batch (no transaction)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">batchCreateFeature</span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  <span style="color: #00BB00;">■                               </span>   0% |  ETA:  3m</span></span>
-<span><span class="co">#&gt;  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■        </span>  76% |  ETA:  1s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (2.2s)</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BB00;">■                               </span>   0% |  ETA:  2m</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■        </span>  77% |  ETA:  1s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (2.3s)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   2.222   0.009   2.231</span></span>
+<span><span class="co">#&gt;   2.340   0.009   2.350</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -1524,7 +1524,7 @@ and the layer is checked for the expected output.</p>
 <span>    <span class="va">lyr</span><span class="op">$</span><span class="fu">rollbackTransaction</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.067   0.005   1.072</span></span>
+<span><span class="co">#&gt;   1.029   0.007   1.036</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">res2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -1537,22 +1537,22 @@ and the layer is checked for the expected output.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d_out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; OGR feature set</span></span>
 <span><span class="co">#&gt;   FID               pt_desc         create_time                           geom</span></span>
-<span><span class="co">#&gt; 1   1 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 2   2 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 3   3 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 4   4 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 5   5 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 6   6 random points batch 1 2026-04-02 21:01:33 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 1   1 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 2   2 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 3   3 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 4   4 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 5   5 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 6   6 random points batch 1 2026-04-03 03:23:44 WKB POINT: raw 01 01 00 00 ...</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">d_out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; OGR feature set</span></span>
 <span><span class="co">#&gt;           FID               pt_desc         create_time</span></span>
-<span><span class="co">#&gt; 199995 199995 random points batch 2 2026-04-02 21:01:36</span></span>
-<span><span class="co">#&gt; 199996 199996 random points batch 2 2026-04-02 21:01:36</span></span>
-<span><span class="co">#&gt; 199997 199997 random points batch 2 2026-04-02 21:01:36</span></span>
-<span><span class="co">#&gt; 199998 199998 random points batch 2 2026-04-02 21:01:36</span></span>
-<span><span class="co">#&gt; 199999 199999 random points batch 2 2026-04-02 21:01:36</span></span>
-<span><span class="co">#&gt; 200000 200000 random points batch 2 2026-04-02 21:01:36</span></span>
+<span><span class="co">#&gt; 199995 199995 random points batch 2 2026-04-03 03:23:47</span></span>
+<span><span class="co">#&gt; 199996 199996 random points batch 2 2026-04-03 03:23:47</span></span>
+<span><span class="co">#&gt; 199997 199997 random points batch 2 2026-04-03 03:23:47</span></span>
+<span><span class="co">#&gt; 199998 199998 random points batch 2 2026-04-03 03:23:47</span></span>
+<span><span class="co">#&gt; 199999 199999 random points batch 2 2026-04-03 03:23:47</span></span>
+<span><span class="co">#&gt; 200000 200000 random points batch 2 2026-04-03 03:23:47</span></span>
 <span><span class="co">#&gt;                                  geom</span></span>
 <span><span class="co">#&gt; 199995 WKB POINT: raw 01 01 00 00 ...</span></span>
 <span><span class="co">#&gt; 199996 WKB POINT: raw 01 01 00 00 ...</span></span>

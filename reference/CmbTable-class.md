@@ -113,8 +113,8 @@ print(m)
 
 cmb <- new(CmbTable, 3, rownames(m))
 cmb
-#> C++ object of class CmbTable
-#>  Columns: cmbid count layer1 layer2 layer3
+#> C++ object of class <CmbTable>
+#> • Columns: cmbid count layer1 layer2 layer3
 
 cmb$updateFromMatrix(m, 1)
 #> [1] 1 1 2 3 2 4

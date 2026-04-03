@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.5.0.9012 (dev)
+## gdalraster 2.5.0.9013 (dev)
+
+- complete formatting console messages with **cli**
+  ([\#942](https://github.com/firelab/gdalraster/issues/942))
+  (2026-04-02)
 
 - [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
   add arguments `close` and `quiet`

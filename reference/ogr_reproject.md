@@ -186,12 +186,13 @@ raster reprojection
 # MTBS fire perimeters
 f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 (mtbs <- new(GDALVector, f, "mtbs_perims"))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /home/runner/work/_temp/Library/gdalraster/extdata/ynp_fires_1984_2022.gpkg
-#>  Layer  : mtbs_perims
-#>  CRS    : NAD83 / Montana (EPSG:32100)
-#>  Geom   : MULTIPOLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN:
+#>   "/home/runner/work/_temp/Library/gdalraster/extdata/ynp_fires_1984_2022.gpkg"
+#>   • Layer: mtbs_perims
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Geometry: MULTIPOLYGON
 
 mtbs$getSpatialRef() |> srs_is_projected()  # TRUE
 #> [1] TRUE
@@ -202,12 +203,12 @@ unzip(f, files = "ynp_features.gpkg", exdir = tempdir())
 ynp_dsn <- file.path(tempdir(), "ynp_features.gpkg")
 
 (bnd <- new(GDALVector, ynp_dsn, "ynp_bnd"))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /tmp/RtmpnaAKLR/ynp_features.gpkg
-#>  Layer  : ynp_bnd
-#>  CRS    : NAD83 (EPSG:4269)
-#>  Geom   : POLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/tmp/Rtmp59D09T/ynp_features.gpkg"
+#>   • Layer: ynp_bnd
+#>   • CRS: NAD83 (EPSG:4269)
+#>   • Geometry: POLYGON
 
 bnd$getSpatialRef() |> srs_is_projected()  # FALSE
 #> [1] FALSE
@@ -215,12 +216,12 @@ bnd$getSpatialRef() |> srs_is_projected()  # FALSE
 # project the boundary to match the MTBS layer
 out_dsn <- tempfile(fileext = ".gpkg")
 (bnd_mtsp <- ogr_reproject(ynp_dsn, "ynp_bnd", out_dsn, mtbs$getSpatialRef()))
-#> C++ object of class GDALVector
-#>  Driver : GeoPackage (GPKG)
-#>  DSN    : /tmp/RtmpnaAKLR/file22e55618523b.gpkg
-#>  Layer  : ynp_bnd
-#>  CRS    : NAD83 / Montana (EPSG:32100)
-#>  Geom   : POLYGON
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/tmp/Rtmp59D09T/file255b5f8ff3e8.gpkg"
+#>   • Layer: ynp_bnd
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Geometry: POLYGON
 
 bnd_mtsp$getFeatureCount()
 #> [1] 1

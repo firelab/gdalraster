@@ -299,9 +299,10 @@ is_lcp <- function(bytes) {
 
 vf <- new(VSIFile, lcp_file)
 vf
-#> C++ object of class VSIFile
-#>  Filename : /home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp
-#>  Access   : r
+#> C++ object of class <VSIFile>
+#>   • Filename:
+#>   "/home/runner/work/_temp/Library/gdalraster/extdata/storm_lake.lcp"
+#>   • Access: r
 
 vf$read(12) |> is_lcp()
 #> [1] TRUE
