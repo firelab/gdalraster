@@ -19,7 +19,7 @@ nodata, color tables and all pixel data types (see Details)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,13 +162,12 @@ re-opened once the object's <code>$close()</code> method has been called.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="fl">50</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">ds_mem</span> <span class="op">&lt;-</span> <span class="fu">vector_to_MEM</span><span class="op">(</span><span class="va">v</span>, xsize <span class="op">=</span> <span class="fl">10</span>, ysize <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> failed to get projection ref</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: In Memory Raster (MEM)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   "MEM:::DATAPOINTER=0x55a8774c7f30,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   "MEM:::DATAPOINTER=0x56147d107850,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 10, 5, 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: not set</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 1.000000, 1.000000</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 0.000000, 0.000000, 10.000000, 5.000000</span>
 <span class="r-in"><span></span></span>
