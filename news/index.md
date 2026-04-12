@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9014 (dev)
+## gdalraster 2.5.0.9015 (dev)
+
+- class `GDALVector`: lint/cleanup class constructors, also addressing
+  [Rcpp 1471
+  comment](https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579)
+  (2026-04-12)
 
 - suppress warning messages in the `show()` method for `GDALRaster` and
   `GDALVector` (e.g., if no spatial reference is defined) (2026-04-03)
