@@ -830,7 +830,7 @@ A raster pipline to create a color shaded relief file, based on Example
 pipeline](https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline).
 
 ``` r
-# requires GDAL >= 3.12 for nested pipelines and "raster blend"
+# requires GDAL >= 3.12.1 for nested pipelines and "raster blend"
 library(gdalraster)
 #> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
 
@@ -904,6 +904,67 @@ deleteDataset(f_elev)
 deleteDataset(f_out)
 #> [1] TRUE
 ```
+
+#### Nested input pipelines in raster calc
+
+Compute slope-masked aspect for the Storm Lake AOI, and plot as
+“northness” (see
+[`?gdalraster::northness`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md)).
+Based on Example 6 for
+[`gdal raster calc`](https://gdal.org/programs/gdal_raster_calc.html).
+
+``` r
+# requires GDAL >= 3.12.1 for nested pipelines
+library(gdalraster)
+#> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
+
+f_elev <- system.file("extdata/storml_elev.tif", package="gdalraster")
+
+# gdal_usage("raster calc")
+
+# using nested pipelines (GDAL >= 3.12.1) for calc inputs SLOPE and ASPECT
+# output to an in-memory raster
+args <- c(
+    "--input", paste("SLOPE=[ read", f_elev, "! slope ]"),
+    "--input", paste("ASPECT=[ read", f_elev, "! aspect ]"),
+    "--output", "masked-aspect",
+    "--output-format", "MEM",
+    "--calc", "(SLOPE >= 2) ? ASPECT : -9999",
+    "--nodata", -9999)
+
+alg <- gdal_run("raster calc", args)
+#> ✔ Done (13ms)
+
+(ds <- alg$output())
+#> C++ object of class <GDALRaster>
+#> • Driver: In Memory raster, vector and multidimensional raster (MEM)
+#> • DSN: "masked-aspect"
+#> • Dimensions: 143, 107, 1
+#> • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#> • Pixel resolution: 30.000000, 30.000000
+#> • Bbox: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031
+
+alg$release()
+
+# diverging palette for northness
+# adapted from "heatmap3" in ltc-color-palettes
+# https://github.com/loukesio/ltc-color-palettes
+pal <- c("#d7191c", "#fdae61", "#ffffbf", "#abd9e9")
+
+# transform the pixel values with `gdalraster::northness()`
+plot_raster(ds, legend = TRUE, col_map_fn = pal, pixel_fn = northness,
+            na_col = "#2c7bb6", main = "Storm Lake AOI northness")
+```
+
+\<img src=“img/storml_northness.png” class=“r-plt” alt=“A plot
+of”northness” for the Storm Lake area of interest. The pixel values
+range from -1 (due south) to 1 (due north), with a diverging heatmap
+color gradient ranging from warm reddish colors on south aspects to cool
+light blue on north aspects. Flat areas are masked out from the aspect
+layer and have a darker blue color since these are mostly water.”
+width=“80%” /\>
+
+    ds$close()
 
 ## See also
 

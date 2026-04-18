@@ -46,6 +46,7 @@ related stand-alone functions:
 
 - algorithms/utilities:
   [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md),
+  [`dem_derivatives`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md),
   [`fillNodata()`](https://firelab.github.io/gdalraster/reference/fillNodata.md),
   [`footprint()`](https://firelab.github.io/gdalraster/reference/footprint.md),
   [`is_los_visible()`](https://firelab.github.io/gdalraster/reference/is_los_visible.md),

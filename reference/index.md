@@ -84,6 +84,9 @@
   : Raster overlay for unique combinations
 - [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md)
   : GDAL DEM processing
+- [`northness()`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md)
+  [`eastness()`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md)
+  : Convenience functions for simple DEM derivatives
 - [`fillNodata()`](https://firelab.github.io/gdalraster/reference/fillNodata.md)
   : Fill selected pixels by interpolation from surrounding areas
 - [`footprint()`](https://firelab.github.io/gdalraster/reference/footprint.md)

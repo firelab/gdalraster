@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -572,7 +572,7 @@ required output filename can be given as empty string
 <span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds_hillshade</span>, main <span class="op">=</span> <span class="st">"Storm Lake AOI shaded relief"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/storml_hillshade.png" class="r-plt" alt="A plot of the hillshade raster, a shaded relief map, for the Storm Lake area of interest." width="75%"></p>
+<p><img src="img/storml_hillshade.png" class="r-plt" alt="A plot of the hillshade raster, a shaded relief map, for the Storm Lake area of interest." width="80%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># clean up</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
@@ -879,7 +879,7 @@ object.</p>
 <span><span class="va">ramp</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/colour_ramp.html" class="external-link">colour_ramp</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">ramp</span>, na_col <span class="op">=</span> <span class="st">"#d9d9d9"</span>,</span>
 <span>            main <span class="op">=</span> <span class="st">"YNP Fires 1984-2022 - Most Recent Burn Year"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/ynp_fire_year.png" class="r-plt" alt="A plot of fire perimeters in Yellowstone National Park during 1984 through 2022. A color ramp is used to indicate the burn year as depicted in a legend on the right-hand side of the plot. The most recent burn year is shown in cases where fire perimeters overlap." width="75%"></p>
+<p><img src="img/ynp_fire_year.png" class="r-plt" alt="A plot of fire perimeters in Yellowstone National Park during 1984 through 2022. A color ramp is used to indicate the burn year as depicted in a legend on the right-hand side of the plot. The most recent burn year is shown in cases where fire perimeters overlap." width="80%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
@@ -897,7 +897,7 @@ object.</p>
 Example 3 for <a href="https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline" class="external-link">GDAL
 nested pipeline</a>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># requires GDAL &gt;= 3.12 for nested pipelines and "raster blend"</span></span>
+<code class="sourceCode R"><span><span class="co"># requires GDAL &gt;= 3.12.1 for nested pipelines and "raster blend"</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://firelab.github.io/gdalraster/">gdalraster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1</span></span>
 <span></span>
@@ -956,7 +956,7 @@ nested pipeline</a>.</p>
 <span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, main <span class="op">=</span> <span class="st">"Storm Lake AOI colorized shaded relief"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="img/storml_col_shaded_relief.png" class="r-plt" alt="A plot of the colorized shaded relief map for the Storm Lake area of interest. Lower elevation areas are green, transitioning to yellow then light brown, pinkish and almost white at the highest elevations." width="75%"></p>
+<p><img src="img/storml_col_shaded_relief.png" class="r-plt" alt="A plot of the colorized shaded relief map for the Storm Lake area of interest. Lower elevation areas are green, transitioning to yellow then light brown, pinkish and almost white at the highest elevations." width="80%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># cleanup</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
@@ -964,6 +964,62 @@ nested pipeline</a>.</p>
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="fu"><a href="../reference/deleteDataset.html">deleteDataset</a></span><span class="op">(</span><span class="va">f_out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="nested-input-pipelines-in-raster-calc">Nested input pipelines in raster calc<a class="anchor" aria-label="anchor" href="#nested-input-pipelines-in-raster-calc"></a>
+</h4>
+<p>Compute slope-masked aspect for the Storm Lake AOI, and plot as
+“northness” (see <code><a href="../reference/dem_derivatives.html">?gdalraster::northness</a></code>). Based on Example
+6 for <a href="https://gdal.org/programs/gdal_raster_calc.html" class="external-link"><code>gdal raster calc</code></a>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># requires GDAL &gt;= 3.12.1 for nested pipelines</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://firelab.github.io/gdalraster/">gdalraster</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1</span></span>
+<span></span>
+<span><span class="va">f_elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># gdal_usage("raster calc")</span></span>
+<span></span>
+<span><span class="co"># using nested pipelines (GDAL &gt;= 3.12.1) for calc inputs SLOPE and ASPECT</span></span>
+<span><span class="co"># output to an in-memory raster</span></span>
+<span><span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"--input"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"SLOPE=[ read"</span>, <span class="va">f_elev</span>, <span class="st">"! slope ]"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"--input"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"ASPECT=[ read"</span>, <span class="va">f_elev</span>, <span class="st">"! aspect ]"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"--output"</span>, <span class="st">"masked-aspect"</span>,</span>
+<span>    <span class="st">"--output-format"</span>, <span class="st">"MEM"</span>,</span>
+<span>    <span class="st">"--calc"</span>, <span class="st">"(SLOPE &gt;= 2) ? ASPECT : -9999"</span>,</span>
+<span>    <span class="st">"--nodata"</span>, <span class="op">-</span><span class="fl">9999</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gdal_cli.html">gdal_run</a></span><span class="op">(</span><span class="st">"raster calc"</span>, <span class="va">args</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ✔ Done (13ms)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va">alg</span><span class="op">$</span><span class="fu">output</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; C++ object of class &lt;GDALRaster&gt;</span></span>
+<span><span class="co">#&gt; • Driver: In Memory raster, vector and multidimensional raster (MEM)</span></span>
+<span><span class="co">#&gt; • DSN: "masked-aspect"</span></span>
+<span><span class="co">#&gt; • Dimensions: 143, 107, 1</span></span>
+<span><span class="co">#&gt; • CRS: NAD83 / UTM zone 12N (EPSG:26912)</span></span>
+<span><span class="co">#&gt; • Pixel resolution: 30.000000, 30.000000</span></span>
+<span><span class="co">#&gt; • Bbox: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031</span></span>
+<span></span>
+<span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># diverging palette for northness</span></span>
+<span><span class="co"># adapted from "heatmap3" in ltc-color-palettes</span></span>
+<span><span class="co"># https://github.com/loukesio/ltc-color-palettes</span></span>
+<span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#d7191c"</span>, <span class="st">"#fdae61"</span>, <span class="st">"#ffffbf"</span>, <span class="st">"#abd9e9"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># transform the pixel values with `gdalraster::northness()`</span></span>
+<span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">pal</span>, pixel_fn <span class="op">=</span> <span class="va">northness</span>,</span>
+<span>            na_col <span class="op">=</span> <span class="st">"#2c7bb6"</span>, main <span class="op">=</span> <span class="st">"Storm Lake AOI northness"</span><span class="op">)</span></span></code></pre></div>
+<p>&lt;img src=“img/storml_northness.png” class=“r-plt” alt=“A plot
+of”northness” for the Storm Lake area of interest. The pixel values
+range from -1 (due south) to 1 (due north), with a diverging heatmap
+color gradient ranging from warm reddish colors on south aspects to cool
+light blue on north aspects. Flat areas are masked out from the aspect
+layer and have a darker blue color since these are mostly water.”
+width=“80%” /&gt;</p>
+<pre><code><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 </div>
