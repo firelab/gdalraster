@@ -189,6 +189,9 @@ ds$close()
 # table of the unique pixel values and their counts
 tbl <- buildRAT(evt_file)
 #> ℹ scanning raster...
+#>  ■                                  1% |  ETA:  0s
+#> ✔ Done (10ms)
+#> 
 print(tbl)
 #>    VALUE COUNT
 #> 1   7011    28

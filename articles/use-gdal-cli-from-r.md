@@ -55,40 +55,44 @@ top-level commands without their subcommands.
 
 ``` r
 library(gdalraster)
-#> GDAL 3.11.3 (released 2025-07-12), GEOS 3.12.2, PROJ 9.4.1
+#> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
 
 ## top-level commands
 gdal_commands(recurse = FALSE)
-#> convert:
-#> Convert a dataset (shortcut for 'gdal raster convert' or 'gdal vector convert').
-#> https://gdal.org/programs/gdal_convert.html
+#> → "convert"
+#> ℹ Convert a dataset (shortcut for 'gdal raster convert' or 'gdal vector convert').
+#> ℹ <https://gdal.org/programs/gdal_convert.html>
 #> 
-#> driver:
-#> Command for driver specific operations.
+#> → "dataset"
+#> ℹ Commands to manage datasets.
+#> ℹ <https://gdal.org/programs/gdal_dataset.html>
 #> 
-#> info:
-#> Return information on a dataset (shortcut for 'gdal raster info' or 'gdal vector info').
-#> https://gdal.org/programs/gdal_info.html
+#> → "driver"
+#> ℹ Command for driver specific operations.
 #> 
-#> mdim:
-#> Multidimensional commands.
-#> https://gdal.org/programs/gdal_mdim.html
+#> → "info"
+#> ℹ Return information on a dataset (shortcut for 'gdal raster info' or 'gdal vector info').
+#> ℹ <https://gdal.org/programs/gdal_info.html>
 #> 
-#> pipeline:
-#> Execute a pipeline (shortcut for 'gdal raster pipeline' or 'gdal vector pipeline').
-#> https://gdal.org/programs/gdal_pipeline.html
+#> → "mdim"
+#> ℹ Multidimensional commands.
+#> ℹ <https://gdal.org/programs/gdal_mdim.html>
 #> 
-#> raster:
-#> Raster commands.
-#> https://gdal.org/programs/gdal_raster.html
+#> → "pipeline"
+#> ℹ Process a dataset applying several steps.
+#> ℹ <https://gdal.org/programs/gdal_pipeline.html>
 #> 
-#> vector:
-#> Vector commands.
-#> https://gdal.org/programs/gdal_vector.html
+#> → "raster"
+#> ℹ Raster commands.
+#> ℹ <https://gdal.org/programs/gdal_raster.html>
 #> 
-#> vsi:
-#> GDAL Virtual System Interface (VSI) commands.
-#> https://gdal.org/programs/gdal_vsi.html
+#> → "vector"
+#> ℹ Vector commands.
+#> ℹ <https://gdal.org/programs/gdal_vector.html>
+#> 
+#> → "vsi"
+#> ℹ GDAL Virtual System Interface (VSI) commands.
+#> ℹ <https://gdal.org/programs/gdal_vsi.html>
 ```
 
 A character string can also be given to filter for commands containing
@@ -97,157 +101,201 @@ specific text.
 ``` r
 ## list commands relevant to raster data
 gdal_commands("raster")
-#> raster:
-#> Raster commands.
-#> https://gdal.org/programs/gdal_raster.html
+#> → "raster"
+#> ℹ Raster commands.
+#> ℹ <https://gdal.org/programs/gdal_raster.html>
 #> 
-#> raster aspect:
-#> Generate an aspect map
-#> https://gdal.org/programs/gdal_raster_aspect.html
+#> → "raster as-features"
+#> ℹ Create features from pixels of a raster dataset
+#> ℹ <https://gdal.org/programs/gdal_raster_as_features.html>
 #> 
-#> raster calc:
-#> Perform raster algebra
-#> https://gdal.org/programs/gdal_raster_calc.html
+#> → "raster aspect"
+#> ℹ Generate an aspect map
+#> ℹ <https://gdal.org/programs/gdal_raster_aspect.html>
 #> 
-#> raster clean-collar:
-#> Clean the collar of a raster dataset, removing noise.
-#> https://gdal.org/programs/gdal_raster_clean_collar.html
+#> → "raster blend"
+#> ℹ Blend/compose two raster datasets
+#> ℹ <https://gdal.org/programs/gdal_raster_blend.html>
 #> 
-#> raster clip:
-#> Clip a raster dataset.
-#> https://gdal.org/programs/gdal_raster_clip.html
+#> → "raster calc"
+#> ℹ Perform raster algebra
+#> ℹ <https://gdal.org/programs/gdal_raster_calc.html>
 #> 
-#> raster color-map:
-#> Generate a RGB or RGBA dataset from a single band, using a color map
-#> https://gdal.org/programs/gdal_raster_color_map.html
+#> → "raster clean-collar"
+#> ℹ Clean the collar of a raster dataset, removing noise.
+#> ℹ <https://gdal.org/programs/gdal_raster_clean_collar.html>
 #> 
-#> raster contour:
-#> Creates a vector contour from a raster elevation model (DEM).
-#> https://gdal.org/programs/gdal_raster_contour.html
+#> → "raster clip"
+#> ℹ Clip a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_clip.html>
 #> 
-#> raster convert:
-#> Convert a raster dataset.
-#> https://gdal.org/programs/gdal_raster_convert.html
+#> → "raster color-map"
+#> ℹ Generate a RGB or RGBA dataset from a single band, using a color map
+#> ℹ <https://gdal.org/programs/gdal_raster_color_map.html>
 #> 
-#> raster create:
-#> Create a new raster dataset.
-#> https://gdal.org/programs/gdal_raster_create.html
+#> → "raster compare"
+#> ℹ Compare two raster datasets.
+#> ℹ <https://gdal.org/programs/gdal_raster_compare.html>
 #> 
-#> raster edit:
-#> Edit a raster dataset.
-#> https://gdal.org/programs/gdal_raster_edit.html
+#> → "raster contour"
+#> ℹ Creates a vector contour from a raster elevation model (DEM).
+#> ℹ <https://gdal.org/programs/gdal_raster_contour.html>
 #> 
-#> raster fill-nodata:
-#> Fill nodata raster regions by interpolation from edges.
-#> https://gdal.org/programs/gdal_raster_fill_nodata.html
+#> → "raster convert"
+#> ℹ Convert a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_convert.html>
 #> 
-#> raster footprint:
-#> Compute the footprint of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_footprint.html
+#> → "raster create"
+#> ℹ Create a new raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_create.html>
 #> 
-#> raster hillshade:
-#> Generate a shaded relief map
-#> https://gdal.org/programs/gdal_raster_hillshade.html
+#> → "raster edit"
+#> ℹ Edit a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_edit.html>
 #> 
-#> raster index:
-#> Create a vector index of raster datasets.
-#> https://gdal.org/programs/gdal_raster_index.html
+#> → "raster fill-nodata"
+#> ℹ Fill nodata raster regions by interpolation from edges.
+#> ℹ <https://gdal.org/programs/gdal_raster_fill_nodata.html>
 #> 
-#> raster info:
-#> Return information on a raster dataset.
-#> https://gdal.org/programs/gdal_raster_info.html
+#> → "raster footprint"
+#> ℹ Compute the footprint of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_footprint.html>
 #> 
-#> raster mosaic:
-#> Build a mosaic, either virtual (VRT) or materialized.
-#> https://gdal.org/programs/gdal_raster_mosaic.html
+#> → "raster hillshade"
+#> ℹ Generate a shaded relief map
+#> ℹ <https://gdal.org/programs/gdal_raster_hillshade.html>
 #> 
-#> raster overview:
-#> Manage overviews of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_overview.html
+#> → "raster index"
+#> ℹ Create a vector index of raster datasets.
+#> ℹ <https://gdal.org/programs/gdal_raster_index.html>
 #> 
-#> raster overview add:
-#> Adding overviews.
-#> https://gdal.org/programs/gdal_raster_overview_add.html
+#> → "raster info"
+#> ℹ Return information on a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_info.html>
 #> 
-#> raster overview delete:
-#> Deleting overviews.
-#> https://gdal.org/programs/gdal_raster_overview_delete.html
+#> → "raster mosaic"
+#> ℹ Build a mosaic, either virtual (VRT) or materialized.
+#> ℹ <https://gdal.org/programs/gdal_raster_mosaic.html>
 #> 
-#> raster pipeline:
-#> Process a raster dataset.
-#> https://gdal.org/programs/gdal_raster_pipeline.html
+#> → "raster neighbors"
+#> ℹ Compute the value of each pixel from its neighbors (focal statistics)
+#> ℹ <https://gdal.org/programs/gdal_raster_neighbors.html>
 #> 
-#> raster pixel-info:
-#> Return information on a pixel of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_pixel_info.html
+#> → "raster nodata-to-alpha"
+#> ℹ Replace nodata value(s) with an alpha band.
+#> ℹ <https://gdal.org/programs/gdal_raster_nodata_to_alpha.html>
 #> 
-#> raster polygonize:
-#> Create a polygon feature dataset from a raster band.
-#> https://gdal.org/programs/gdal_raster_polygonize.html
+#> → "raster overview"
+#> ℹ Manage overviews of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_overview.html>
 #> 
-#> raster reclassify:
-#> Reclassify values in a raster dataset
-#> https://gdal.org/programs/gdal_raster_reclassify.html
+#> → "raster overview add"
+#> ℹ Adding overviews.
+#> ℹ <https://gdal.org/programs/gdal_raster_overview_add.html>
 #> 
-#> raster reproject:
-#> Reproject a raster dataset.
-#> https://gdal.org/programs/gdal_raster_reproject.html
+#> → "raster overview delete"
+#> ℹ Deleting overviews.
+#> ℹ <https://gdal.org/programs/gdal_raster_overview_delete.html>
 #> 
-#> raster resize:
-#> Resize a raster dataset without changing the georeferenced extents.
-#> https://gdal.org/programs/gdal_raster_resize.html
+#> → "raster overview refresh"
+#> ℹ Refresh overviews.
+#> ℹ <https://gdal.org/programs/gdal_raster_overview_refresh.html>
 #> 
-#> raster roughness:
-#> Generate a roughness map
-#> https://gdal.org/programs/gdal_raster_roughness.html
+#> → "raster pansharpen"
+#> ℹ Perform a pansharpen operation.
+#> ℹ <https://gdal.org/programs/gdal_raster_pansharpen.html>
 #> 
-#> raster scale:
-#> Scale the values of the bands of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_scale.html
+#> → "raster pipeline"
+#> ℹ Process a raster dataset applying several steps.
+#> ℹ <https://gdal.org/programs/gdal_raster_pipeline.html>
 #> 
-#> raster select:
-#> Select a subset of bands from a raster dataset.
-#> https://gdal.org/programs/gdal_raster_select.html
+#> → "raster pixel-info"
+#> ℹ Return information on a pixel of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_pixel_info.html>
 #> 
-#> raster set-type:
-#> Modify the data type of bands of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_set_type.html
+#> → "raster polygonize"
+#> ℹ Create a polygon feature dataset from a raster band.
+#> ℹ <https://gdal.org/programs/gdal_raster_polygonize.html>
 #> 
-#> raster sieve:
-#> Remove small polygons from a raster dataset.
-#> https://gdal.org/programs/gdal_raster_sieve.html
+#> → "raster proximity"
+#> ℹ Produces a raster proximity map.
+#> ℹ <https://gdal.org/programs/gdal_raster_proximity.html>
 #> 
-#> raster slope:
-#> Generate a slope map
-#> https://gdal.org/programs/gdal_raster_slope.html
+#> → "raster reclassify"
+#> ℹ Reclassify values in a raster dataset
+#> ℹ <https://gdal.org/programs/gdal_raster_reclassify.html>
 #> 
-#> raster stack:
-#> Combine together input bands into a multi-band output, either virtual (VRT) or materialized.
-#> https://gdal.org/programs/gdal_raster_stack.html
+#> → "raster reproject"
+#> ℹ Reproject a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_reproject.html>
 #> 
-#> raster tile:
-#> Generate tiles in separate files from a raster dataset.
-#> https://gdal.org/programs/gdal_raster_tile.html
+#> → "raster resize"
+#> ℹ Resize a raster dataset without changing the georeferenced extents.
+#> ℹ <https://gdal.org/programs/gdal_raster_resize.html>
 #> 
-#> raster tpi:
-#> Generate a Topographic Position Index (TPI) map
-#> https://gdal.org/programs/gdal_raster_tpi.html
+#> → "raster rgb-to-palette"
+#> ℹ Convert a RGB image into a pseudo-color / paletted image.
+#> ℹ <https://gdal.org/programs/gdal_raster_rgb_to_palette.html>
 #> 
-#> raster tri:
-#> Generate a Terrain Ruggedness Index (TRI) map
-#> https://gdal.org/programs/gdal_raster_tri.html
+#> → "raster roughness"
+#> ℹ Generate a roughness map
+#> ℹ <https://gdal.org/programs/gdal_raster_roughness.html>
 #> 
-#> raster unscale:
-#> Convert scaled values of a raster dataset into unscaled values.
-#> https://gdal.org/programs/gdal_raster_unscale.html
+#> → "raster scale"
+#> ℹ Scale the values of the bands of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_scale.html>
 #> 
-#> raster viewshed:
-#> Compute the viewshed of a raster dataset.
-#> https://gdal.org/programs/gdal_raster_viewshed.html
+#> → "raster select"
+#> ℹ Select a subset of bands from a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_select.html>
 #> 
-#> vector rasterize:
-#> Burns vector geometries into a raster.
-#> https://gdal.org/programs/gdal_vector_rasterize.html
+#> → "raster set-type"
+#> ℹ Modify the data type of bands of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_set_type.html>
+#> 
+#> → "raster sieve"
+#> ℹ Remove small polygons from a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_sieve.html>
+#> 
+#> → "raster slope"
+#> ℹ Generate a slope map
+#> ℹ <https://gdal.org/programs/gdal_raster_slope.html>
+#> 
+#> → "raster stack"
+#> ℹ Combine together input bands into a multi-band output, either virtual (VRT) or materialized.
+#> ℹ <https://gdal.org/programs/gdal_raster_stack.html>
+#> 
+#> → "raster tile"
+#> ℹ Generate tiles in separate files from a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_tile.html>
+#> 
+#> → "raster tpi"
+#> ℹ Generate a Topographic Position Index (TPI) map
+#> ℹ <https://gdal.org/programs/gdal_raster_tpi.html>
+#> 
+#> → "raster tri"
+#> ℹ Generate a Terrain Ruggedness Index (TRI) map
+#> ℹ <https://gdal.org/programs/gdal_raster_tri.html>
+#> 
+#> → "raster unscale"
+#> ℹ Convert scaled values of a raster dataset into unscaled values.
+#> ℹ <https://gdal.org/programs/gdal_raster_unscale.html>
+#> 
+#> → "raster update"
+#> ℹ Update the destination raster with the content of the input one.
+#> ℹ <https://gdal.org/programs/gdal_raster_update.html>
+#> 
+#> → "raster viewshed"
+#> ℹ Compute the viewshed of a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_viewshed.html>
+#> 
+#> → "raster zonal-stats"
+#> ℹ Calculate raster zonal statistics
+#> ℹ <https://gdal.org/programs/gdal_raster_zonal_stats.html>
+#> 
+#> → "vector rasterize"
+#> ℹ Burns vector geometries into a raster.
+#> ℹ <https://gdal.org/programs/gdal_vector_rasterize.html>
 ```
 
 The function
@@ -463,21 +511,38 @@ unlink(f_gpkg)
 
 ``` r
 gdal_usage("vector")
+#> 
 #> Usage: vector <SUBCOMMAND> [OPTIONS]
 #> where <SUBCOMMAND> is one of:
-#>   - clip      : Clip a vector dataset.
-#>   - concat    : Concatenate vector datasets.
-#>   - convert   : Convert a vector dataset.
-#>   - edit      : Edit metadata of a vector dataset.
-#>   - filter    : Filter a vector dataset.
-#>   - geom      : Geometry operations on a vector dataset.
-#>   - grid      : Create a regular grid from scattered points.
-#>   - info      : Return information on a vector dataset.
-#>   - pipeline  : Process a vector dataset.
-#>   - rasterize : Burns vector geometries into a raster.
-#>   - reproject : Reproject a vector dataset.
-#>   - select    : Select a subset of fields from a vector dataset.
-#>   - sql       : Apply SQL statement(s) to a dataset.
+#>   - buffer              : Compute a buffer around geometries of a vector dataset.
+#>   - check-coverage      : Check a polygon coverage for validity
+#>   - check-geometry      : Check a dataset for invalid geometries
+#>   - clean-coverage      : Alter polygon boundaries to make shared edges identical, removing gaps and overlaps
+#>   - clip                : Clip a vector dataset.
+#>   - concat              : Concatenate vector datasets.
+#>   - convert             : Convert a vector dataset.
+#>   - edit                : Edit metadata of a vector dataset.
+#>   - explode-collections : Explode geometries of type collection of a vector dataset.
+#>   - filter              : Filter a vector dataset.
+#>   - geom                : Geometry operations on a vector dataset.
+#>   - grid                : Create a regular grid from scattered points.
+#>   - index               : Create a vector index of vector datasets.
+#>   - info                : Return information on a vector dataset.
+#>   - layer-algebra       : Perform algebraic operation between 2 layers.
+#>   - make-point          : Create point geometries from attribute fields
+#>   - make-valid          : Fix validity of geometries of a vector dataset.
+#>   - partition           : Partition a vector dataset into multiple files.
+#>   - pipeline            : Process a vector dataset applying several steps.
+#>   - rasterize           : Burns vector geometries into a raster.
+#>   - reproject           : Reproject a vector dataset.
+#>   - segmentize          : Segmentize geometries of a vector dataset.
+#>   - select              : Select a subset of fields from a vector dataset.
+#>   - set-field-type      : Modify the type of a field of a vector dataset.
+#>   - set-geom-type       : Modify the geometry type of a vector dataset.
+#>   - simplify            : Simplify geometries of a vector dataset.
+#>   - simplify-coverage   : Simplify shared boundaries of a polygonal vector dataset.
+#>   - sql                 : Apply SQL statement(s) to a dataset.
+#>   - swap-xy             : Swap X and Y coordinates of geometries of a vector dataset.
 #> 
 #> Options:
 #>   --drivers
@@ -485,8 +550,7 @@ gdal_usage("vector")
 #>   --output-string <OUTPUT-STRING>
 #>     Output string, in which the result is placed
 #> 
-#> 
-#> For more details: https://gdal.org/programs/gdal_vector.html
+#> For more details: <https://gdal.org/programs/gdal_vector.html>
 ```
 
 #### vector clip
@@ -753,6 +817,90 @@ overlap.](img/ynp_fire_year.png)
 ``` r
 lyr$close()
 ds$close()
+deleteDataset(f_out)
+#> [1] TRUE
+```
+
+### Pipeline examples
+
+#### Colorized shaded relief
+
+A raster pipline to create a color shaded relief file, based on Example
+3 for [GDAL nested
+pipeline](https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline).
+
+``` r
+# requires GDAL >= 3.12 for nested pipelines and "raster blend"
+library(gdalraster)
+#> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
+
+# gdal_usage("raster pipeline")
+# gdal_usage("raster color-map")
+# gdal_usage("raster hillshade")
+# gdal_usage("raster blend")
+
+# make a working copy the Storm Lake DEM since GDAL will compute stats on it
+# (which creates a .aux.xml sidecar file in the read-only case)
+f <- system.file("extdata/storml_elev.tif", package="gdalraster")
+f_elev <- tempfile(fileext = ".tif")
+file.copy(f, f_elev)
+#> [1] TRUE
+
+# this is a color map file for passing to "raster color-map"
+# see https://gdal.org/programs/gdal_raster_color_map.html
+f_pal <- system.file("extdata/storml_elev_pal.txt", package="gdalraster")
+# writeLines(readLines(f_pal))
+
+# output will be an RGB shaded relief file
+f_out <- file.path(tempdir(), "storml_col_relief.tif")
+
+# arguments for "raster pipeline", using a nested input pipeline for "blend"
+args <- paste(
+    "read --input", f_elev,
+    "! color-map --color-map", f_pal,
+    "! blend --overlay [ read --input", f_elev, "! hillshade -z 1.5 ] --operator=hsv-value",
+    "! write --output", f_out, "--overwrite")
+
+(alg <- gdal_run("raster pipeline", args))
+#> ✔ Done (12ms)
+#> 
+#> C++ object of class <GDALAlg>
+#> • Command: "raster pipeline"
+#> • Description: Process a raster dataset applying several steps.
+#> • Help URL: <https://gdal.org/programs/gdal_raster_pipeline.html>
+
+# note that the "pipeline" algorithm has two outputs: the `output` dataset, and
+# `output_string` (which is empty in this case)
+alg$outputs()
+#> $output
+#> C++ object of class <GDALRaster>
+#>   • Driver: GeoTIFF (GTiff)
+#>   • DSN: "/tmp/Rtmpd9pug9/storml_col_relief.tif"
+#>   • Dimensions: 143, 107, 3
+#>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#>   • Pixel resolution: 30.000000, 30.000000
+#>   • Bbox: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031
+#> 
+#> $output_string
+#> [1] ""
+
+ds <- alg$outputs()$output
+
+alg$release()
+
+plot_raster(ds, main = "Storm Lake AOI colorized shaded relief")
+```
+
+![A plot of the colorized shaded relief map for the Storm Lake area of
+interest. Lower elevation areas are green, transitioning to yellow then
+light brown, pinkish and almost white at the highest
+elevations.](img/storml_col_shaded_relief.png)
+
+``` r
+# cleanup
+ds$close()
+deleteDataset(f_elev)
+#> [1] TRUE
 deleteDataset(f_out)
 #> [1] TRUE
 ```
