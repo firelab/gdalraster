@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.5.0.9015 (dev)
+## gdalraster 2.5.0.9016 (dev)
+
+- `GDALAlg::setArg()`: more robust handling of algorithm arguments with
+  object input
+  ([\#949](https://github.com/firelab/gdalraster/issues/949), also
+  adding a new pipeline example in
+  [use-gdal-cli-from-r](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html))
+  (2026-04-17)
 
 - class `GDALVector`: lint/cleanup class constructors, also addressing
   [Rcpp 1471

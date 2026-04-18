@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9015</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9016</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.5.0.9015" id="gdalraster-2509015-dev">gdalraster 2.5.0.9015 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509015-dev"></a></h2>
-<ul><li><p>class <code>GDALVector</code>: lint/cleanup class constructors, also addressing <a href="https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579" class="external-link">Rcpp 1471 comment</a> (2026-04-12)</p></li>
+<h2 class="pkg-version" data-toc-text="2.5.0.9016" id="gdalraster-2509016-dev">gdalraster 2.5.0.9016 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509016-dev"></a></h2>
+<ul><li><p><code>GDALAlg::setArg()</code>: more robust handling of algorithm arguments with object input (<a href="https://github.com/firelab/gdalraster/issues/949" class="external-link">#949</a>, also adding a new pipeline example in <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html">use-gdal-cli-from-r</a>) (2026-04-17)</p></li>
+<li><p>class <code>GDALVector</code>: lint/cleanup class constructors, also addressing <a href="https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579" class="external-link">Rcpp 1471 comment</a> (2026-04-12)</p></li>
 <li><p>suppress warning messages in the <code>show()</code> method for <code>GDALRaster</code> and <code>GDALVector</code> (e.g., if no spatial reference is defined) (2026-04-03)</p></li>
 <li><p>complete formatting console messages with <strong>cli</strong> (<a href="https://github.com/firelab/gdalraster/issues/942" class="external-link">#942</a>) (2026-04-02)</p></li>
 <li><p><code><a href="../reference/gdal_cli.html">gdal_run()</a></code>: add arguments <code>close</code> and <code>quiet</code> (<a href="https://github.com/firelab/gdalraster/issues/941" class="external-link">#941</a>) (2026-04-02)</p></li>
