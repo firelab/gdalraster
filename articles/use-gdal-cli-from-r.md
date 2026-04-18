@@ -922,7 +922,7 @@ f_elev <- system.file("extdata/storml_elev.tif", package="gdalraster")
 
 # gdal_usage("raster calc")
 
-# using nested pipelines (GDAL >= 3.12.1) for calc inputs SLOPE and ASPECT
+# nested pipelines for calc inputs SLOPE and ASPECT
 # output to an in-memory raster
 args <- c(
     "--input", paste("SLOPE=[ read", f_elev, "! slope ]"),
@@ -956,13 +956,12 @@ plot_raster(ds, legend = TRUE, col_map_fn = pal, pixel_fn = northness,
             na_col = "#2c7bb6", main = "Storm Lake AOI northness")
 ```
 
-\<img src=“img/storml_northness.png” class=“r-plt” alt=“A plot
-of”northness” for the Storm Lake area of interest. The pixel values
-range from -1 (due south) to 1 (due north), with a diverging heatmap
-color gradient ranging from warm reddish colors on south aspects to cool
-light blue on north aspects. Flat areas are masked out from the aspect
-layer and have a darker blue color since these are mostly water.”
-width=“80%” /\>
+![A plot of northness for the Storm Lake area of interest. The pixel
+values range from -1 (due south) to 1 (due north), with a diverging
+heatmap color gradient ranging from warm reddish colors on south aspects
+to cool light blue on north aspects. Flat areas are masked out from the
+aspect layer and have a darker blue color since these are mostly
+water.](img/storml_northness.png)
 
 ``` r
 ds$close()

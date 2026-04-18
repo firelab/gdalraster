@@ -980,7 +980,7 @@ nested pipeline</a>.</p>
 <span></span>
 <span><span class="co"># gdal_usage("raster calc")</span></span>
 <span></span>
-<span><span class="co"># using nested pipelines (GDAL &gt;= 3.12.1) for calc inputs SLOPE and ASPECT</span></span>
+<span><span class="co"># nested pipelines for calc inputs SLOPE and ASPECT</span></span>
 <span><span class="co"># output to an in-memory raster</span></span>
 <span><span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"--input"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"SLOPE=[ read"</span>, <span class="va">f_elev</span>, <span class="st">"! slope ]"</span><span class="op">)</span>,</span>
@@ -1012,13 +1012,7 @@ nested pipeline</a>.</p>
 <span><span class="co"># transform the pixel values with `gdalraster::northness()`</span></span>
 <span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">pal</span>, pixel_fn <span class="op">=</span> <span class="va">northness</span>,</span>
 <span>            na_col <span class="op">=</span> <span class="st">"#2c7bb6"</span>, main <span class="op">=</span> <span class="st">"Storm Lake AOI northness"</span><span class="op">)</span></span></code></pre></div>
-<p>&lt;img src=“img/storml_northness.png” class=“r-plt” alt=“A plot
-of”northness” for the Storm Lake area of interest. The pixel values
-range from -1 (due south) to 1 (due north), with a diverging heatmap
-color gradient ranging from warm reddish colors on south aspects to cool
-light blue on north aspects. Flat areas are masked out from the aspect
-layer and have a darker blue color since these are mostly water.”
-width=“80%” /&gt;</p>
+<p><img src="img/storml_northness.png" class="r-plt" alt="A plot of northness for the Storm Lake area of interest. The pixel values range from -1 (due south) to 1 (due north), with a diverging heatmap color gradient ranging from warm reddish colors on south aspects to cool light blue on north aspects. Flat areas are masked out from the aspect layer and have a darker blue color since these are mostly water." width="80%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
