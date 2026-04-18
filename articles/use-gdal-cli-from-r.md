@@ -964,7 +964,9 @@ light blue on north aspects. Flat areas are masked out from the aspect
 layer and have a darker blue color since these are mostly water.”
 width=“80%” /\>
 
-    ds$close()
+``` r
+ds$close()
+```
 
 ## See also
 

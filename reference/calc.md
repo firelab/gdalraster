@@ -203,14 +203,11 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpiNNxHj/rastcalc20d514ddf99a.tif"
+#> ℹ output written to: "/tmp/Rtmp3JDjsS/rastcalc20bfd406725.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#>  ■■■■■■■■■                         25% |  ETA:  0s
-#> ✔ Done (10ms)
-#> 
 #> [1] 37.000000 57.000000 44.928763  4.384622
 ds$close()
 
@@ -307,7 +304,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpiNNxHj/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/Rtmp3JDjsS/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
