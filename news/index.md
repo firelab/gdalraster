@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.5.0.9021 (dev)
+## gdalraster 2.5.0.9022 (dev)
+
+- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
+  use a unique temp name when the output dataset is MEM and a specific
+  name is not given
+  ([\#954](https://github.com/firelab/gdalraster/issues/954))
+  (2026-04-18)
 
 - [`gdal_usage()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
   replace `[may be repeated]` with packed values, repeated arg allowed

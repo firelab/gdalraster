@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.5.0.9021" id="gdalraster-2509021-dev">gdalraster 2.5.0.9021 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509021-dev"></a></h2>
-<ul><li><p><code><a href="../reference/gdal_cli.html">gdal_usage()</a></code>: replace <code>[may be repeated]</code> with packed values, repeated arg allowed or not (<a href="https://github.com/firelab/gdalraster/issues/953" class="external-link">#953</a>) (2026-04-18)</p></li>
+<h2 class="pkg-version" data-toc-text="2.5.0.9022" id="gdalraster-2509022-dev">gdalraster 2.5.0.9022 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509022-dev"></a></h2>
+<ul><li><p><code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>) (2026-04-18)</p></li>
+<li><p><code><a href="../reference/gdal_cli.html">gdal_usage()</a></code>: replace <code>[may be repeated]</code> with packed values, repeated arg allowed or not (<a href="https://github.com/firelab/gdalraster/issues/953" class="external-link">#953</a>) (2026-04-18)</p></li>
 <li><p>add <code><a href="../reference/dem_derivatives.html">northness()</a></code> and <code><a href="../reference/dem_derivatives.html">eastness()</a></code>: convenience functions for transforming aspect degrees, and use in a new <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples">CLI pipeline example</a> for <code>gdal raster calc</code> (2026-04-18)</p></li>
 <li><p><code>GDALAlg::setArg()</code>: more robust handling of algorithm arguments with object input (<a href="https://github.com/firelab/gdalraster/issues/949" class="external-link">#949</a>, also adding a new pipeline example in <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html">use-gdal-cli-from-r</a>) (2026-04-17)</p></li>
 <li><p>class <code>GDALVector</code>: lint/cleanup class constructors, also addressing <a href="https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579" class="external-link">Rcpp 1471 comment</a> (2026-04-12)</p></li>
