@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9020 (dev)
+## gdalraster 2.5.0.9021 (dev)
+
+- [`gdal_usage()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
+  replace `[may be repeated]` with packed values, repeated arg allowed
+  or not ([\#953](https://github.com/firelab/gdalraster/issues/953))
+  (2026-04-18)
 
 - add
   [`northness()`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md)
