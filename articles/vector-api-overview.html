@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -425,7 +425,7 @@ the <code>"integer64"</code> class attribute</li>
 <code>logical</code> value</li>
 <li>
 <strong>OFTInteger64List</strong>: vector of
-<code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> (list column)</li>
+<code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> (list column)</li>
 <li>
 <strong>OFTReal</strong>: <code>numeric</code> value</li>
 <li>
@@ -459,7 +459,7 @@ be set to one of <code>"WKB_ISO"</code>, <code>"WKT"</code>,
 beneficial for performance and memory usage when access only to feature
 attributes is required.</p>
 <p>For more information on 64-bit integer support using the
-<strong>bit64</strong> package, see <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">?bit64::integer64</a></code> or
+<strong>bit64</strong> package, see <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">?bit64::integer64</a></code> or
 the web version at <a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link uri">https://bit64.r-lib.org/reference/bit64-package.html</a>.</p>
 </div>
 <div class="section level2">
@@ -1300,10 +1300,10 @@ interest.</p>
 <span><span class="co">#&gt; [1] Information</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $createdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-19</span></span>
+<span><span class="co">#&gt; [1] 2026-04-24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-19</span></span>
+<span><span class="co">#&gt; [1] 2026-04-24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span>
@@ -1384,7 +1384,7 @@ corresponding JSON member.</li>
 <span><span class="co">#&gt; [1] 2016-02-03</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-19</span></span>
+<span><span class="co">#&gt; [1] 2026-04-24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span></code></pre></div>
@@ -1395,7 +1395,7 @@ corresponding JSON member.</li>
 <p>The <code>$deleteFeature()</code> method of a <code>GDALVector</code>
 object deletes the feature with the indicated feature ID if supported by
 the format driver. The value of <code>fid</code> must be a single
-numeric value, optionally carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code>
+numeric value, optionally carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code>
 class attribute.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># delete the "YNP centroid" feature that was created above</span></span>
@@ -1417,10 +1417,10 @@ class attribute.</p>
 <span><span class="co">#&gt; [1] Information</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $createdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-19</span></span>
+<span><span class="co">#&gt; [1] 2026-04-24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $editdate</span></span>
-<span><span class="co">#&gt; [1] 2026-04-19</span></span>
+<span><span class="co">#&gt; [1] 2026-04-24</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $geom</span></span>
 <span><span class="co">#&gt; [1] WKB POINT: raw 01 01 00 00 ...</span></span>
@@ -1492,11 +1492,10 @@ grouping in a transaction, measuring time elapsed.</p>
 <span><span class="co"># write the batch (no transaction)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">batchCreateFeature</span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  <span style="color: #00BB00;">■                               </span>   0% |  ETA:  2m</span></span>
-<span><span class="co">#&gt;  <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■     </span>  88% |  ETA:  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (2.2s)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (2s)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   2.153   0.005   2.159</span></span>
+<span><span class="co">#&gt;   1.963   0.009   1.971</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -1523,8 +1522,11 @@ and the layer is checked for the expected output.</p>
 <span>  <span class="kw">else</span></span>
 <span>    <span class="va">lyr</span><span class="op">$</span><span class="fu">rollbackTransaction</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  <span style="color: #00BB00;">■                               </span>   0% |  ETA:  1m</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Done (339ms)</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   1.026   0.006   1.032</span></span>
+<span><span class="co">#&gt;   1.041   0.006   1.048</span></span>
 <span></span>
 <span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">res2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
@@ -1537,22 +1539,22 @@ and the layer is checked for the expected output.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">d_out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; OGR feature set</span></span>
 <span><span class="co">#&gt;   FID               pt_desc         create_time                           geom</span></span>
-<span><span class="co">#&gt; 1   1 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 2   2 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 3   3 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 4   4 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 5   5 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
-<span><span class="co">#&gt; 6   6 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 1   1 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 2   2 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 3   3 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 4   4 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 5   5 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
+<span><span class="co">#&gt; 6   6 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">d_out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; OGR feature set</span></span>
 <span><span class="co">#&gt;           FID               pt_desc         create_time</span></span>
-<span><span class="co">#&gt; 199995 199995 random points batch 2 2026-04-19 03:51:44</span></span>
-<span><span class="co">#&gt; 199996 199996 random points batch 2 2026-04-19 03:51:44</span></span>
-<span><span class="co">#&gt; 199997 199997 random points batch 2 2026-04-19 03:51:44</span></span>
-<span><span class="co">#&gt; 199998 199998 random points batch 2 2026-04-19 03:51:44</span></span>
-<span><span class="co">#&gt; 199999 199999 random points batch 2 2026-04-19 03:51:44</span></span>
-<span><span class="co">#&gt; 200000 200000 random points batch 2 2026-04-19 03:51:44</span></span>
+<span><span class="co">#&gt; 199995 199995 random points batch 2 2026-04-24 04:23:14</span></span>
+<span><span class="co">#&gt; 199996 199996 random points batch 2 2026-04-24 04:23:14</span></span>
+<span><span class="co">#&gt; 199997 199997 random points batch 2 2026-04-24 04:23:14</span></span>
+<span><span class="co">#&gt; 199998 199998 random points batch 2 2026-04-24 04:23:14</span></span>
+<span><span class="co">#&gt; 199999 199999 random points batch 2 2026-04-24 04:23:14</span></span>
+<span><span class="co">#&gt; 200000 200000 random points batch 2 2026-04-24 04:23:14</span></span>
 <span><span class="co">#&gt;                                  geom</span></span>
 <span><span class="co">#&gt; 199995 WKB POINT: raw 01 01 00 00 ...</span></span>
 <span><span class="co">#&gt; 199996 WKB POINT: raw 01 01 00 00 ...</span></span>

@@ -15,7 +15,7 @@ See https://gdal.org/en/stable/user/virtual_file_systems.html.'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,11 +104,11 @@ queried.</p></dd>
 object exists, otherwise <code>FALSE</code>. If <code>info = "type"</code>, returns a character
 string with one of <code>"file"</code> (regular file), <code>"dir"</code> (directory),
 <code>"symlink"</code> (symbolic link), or empty string (<code>""</code>). If <code>info = "size"</code>,
-returns the file size in bytes (as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> type), or <code>-1</code> if an
+returns the file size in bytes (as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type), or <code>-1</code> if an
 error occurs.
 <code>vsi_stat_exists()</code> returns a logical vector. <code>vsi_stat_type()</code> returns a
 character vector. <code>vsi_stat_size()</code> returns a numeric vector carrying the
-<code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
+<code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -118,7 +118,7 @@ Common Portability Library. Analog of the POSIX <code>stat()</code> function.</p
 <p><code>vsi_stat_exists()</code>, <code>vsi_stat_type()</code> and <code>vsi_stat_size()</code> are
 specializations operating on a vector of potentially multiple file system
 object names, returning, respectfully, a logical vector, a character vector,
-and a numeric vector carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
+and a numeric vector carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

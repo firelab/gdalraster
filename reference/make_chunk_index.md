@@ -50,7 +50,7 @@ make_chunk_index(
 - max_pixels:
 
   Numeric value (a whole number), optionally carrying the
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   class attribute. Specifies the maximum number of pixels per chunk. Can
   be set to zero to define chunks as the blocks.
 

@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.5.0.9022 (dev)
+## gdalraster 2.5.0.9023 (dev)
+
+- add `.rasterize_polygon()` for internal use
+  ([\#955](https://github.com/firelab/gdalraster/issues/955))
+  (2026-04-23)
 
 - [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
   use a unique temp name when the output dataset is MEM and a specific
@@ -1210,7 +1214,7 @@ CRAN release: 2024-06-03
   with `info = "size"`, and
   [`vsi_get_disk_free_space()`](https://firelab.github.io/gdalraster/reference/vsi_get_disk_free_space.md)
   now return
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   type
 
 ### GDALRaster-class

@@ -351,7 +351,7 @@ be contained in a data frame list column as indicated:
   attribute
 - **OFTInteger64 subtype OFSTBoolean**: `logical` value
 - **OFTInteger64List**: vector of
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   (list column)
 - **OFTReal**: `numeric` value
 - **OFTRealList**: vector of `numeric` (list column)
@@ -374,7 +374,7 @@ required.
 
 For more information on 64-bit integer support using the **bit64**
 package, see
-[`?bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`?bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 or the web version at
 <https://bit64.r-lib.org/reference/bit64-package.html>.
 
@@ -1289,10 +1289,10 @@ fid <- poi$getLastWriteFID()
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-04-19
+#> [1] 2026-04-24
 #> 
 #> $editdate
-#> [1] 2026-04-19
+#> [1] 2026-04-24
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1379,7 +1379,7 @@ poi$syncToDisk()
 #> [1] 2016-02-03
 #> 
 #> $editdate
-#> [1] 2026-04-19
+#> [1] 2026-04-24
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1391,7 +1391,7 @@ The `$deleteFeature()` method of a `GDALVector` object deletes the
 feature with the indicated feature ID if supported by the format driver.
 The value of `fid` must be a single numeric value, optionally carrying
 the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute.
 
 ``` r
@@ -1414,10 +1414,10 @@ poi$getFeature(fid)
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-04-19
+#> [1] 2026-04-24
 #> 
 #> $editdate
-#> [1] 2026-04-19
+#> [1] 2026-04-24
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1495,11 +1495,10 @@ d$geom <- pts_geom
 # write the batch (no transaction)
 system.time(res <- lyr$batchCreateFeature(d))
 #>  ■                                  0% |  ETA:  2m
-#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■       88% |  ETA:  0s
-#> ✔ Done (2.2s)
+#> ✔ Done (2s)
 #> 
 #>    user  system elapsed 
-#>   2.153   0.005   2.159
+#>   1.963   0.009   1.971
 
 (all(res))
 #> [1] TRUE
@@ -1529,8 +1528,11 @@ system.time({
   else
     lyr$rollbackTransaction()
 })
+#>  ■                                  0% |  ETA:  1m
+#> ✔ Done (339ms)
+#> 
 #>    user  system elapsed 
-#>   1.026   0.006   1.032
+#>   1.041   0.006   1.048
 
 (all(res2))
 #> [1] TRUE
@@ -1543,22 +1545,22 @@ d_out <- lyr$fetch(-1)
 head(d_out)
 #> OGR feature set
 #>   FID               pt_desc         create_time                           geom
-#> 1   1 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
-#> 2   2 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
-#> 3   3 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
-#> 4   4 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
-#> 5   5 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
-#> 6   6 random points batch 1 2026-04-19 03:51:41 WKB POINT: raw 01 01 00 00 ...
+#> 1   1 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
+#> 2   2 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
+#> 3   3 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
+#> 4   4 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
+#> 5   5 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
+#> 6   6 random points batch 1 2026-04-24 04:23:11 WKB POINT: raw 01 01 00 00 ...
 
 tail(d_out)
 #> OGR feature set
 #>           FID               pt_desc         create_time
-#> 199995 199995 random points batch 2 2026-04-19 03:51:44
-#> 199996 199996 random points batch 2 2026-04-19 03:51:44
-#> 199997 199997 random points batch 2 2026-04-19 03:51:44
-#> 199998 199998 random points batch 2 2026-04-19 03:51:44
-#> 199999 199999 random points batch 2 2026-04-19 03:51:44
-#> 200000 200000 random points batch 2 2026-04-19 03:51:44
+#> 199995 199995 random points batch 2 2026-04-24 04:23:14
+#> 199996 199996 random points batch 2 2026-04-24 04:23:14
+#> 199997 199997 random points batch 2 2026-04-24 04:23:14
+#> 199998 199998 random points batch 2 2026-04-24 04:23:14
+#> 199999 199999 random points batch 2 2026-04-24 04:23:14
+#> 200000 200000 random points batch 2 2026-04-24 04:23:14
 #>                                  geom
 #> 199995 WKB POINT: raw 01 01 00 00 ...
 #> 199996 WKB POINT: raw 01 01 00 00 ...

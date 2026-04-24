@@ -40,11 +40,11 @@ system object exists, otherwise `FALSE`. If `info = "type"`, returns a
 character string with one of `"file"` (regular file), `"dir"`
 (directory), `"symlink"` (symbolic link), or empty string (`""`). If
 `info = "size"`, returns the file size in bytes (as
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 type), or `-1` if an error occurs. `vsi_stat_exists()` returns a logical
 vector. `vsi_stat_type()` returns a character vector. `vsi_stat_size()`
 returns a numeric vector carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute.
 
 ## Details
@@ -57,7 +57,7 @@ Common Portability Library. Analog of the POSIX `stat()` function.
 specializations operating on a vector of potentially multiple file
 system object names, returning, respectfully, a logical vector, a
 character vector, and a numeric vector carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute.
 
 ## Note

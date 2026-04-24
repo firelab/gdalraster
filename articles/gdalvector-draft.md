@@ -139,10 +139,10 @@ for OGR NULL values):
 - `OFTInteger`: `integer` (subtype `OFSTBoolean` as `logical`)
 - `OFTIntegerList`: vector of `integer` (list column in data frames)
 - `OFTInteger64`:
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   (subtype `OFSTBoolean` as `logical`)
 - `OFTInteger64List`: vector of
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   (list column in data frames)
 - `OFTReal`: `numeric`
 - `OFTRealList`: vector of `numeric` (list column in data frames)

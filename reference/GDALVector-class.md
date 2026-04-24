@@ -521,7 +521,7 @@ side effect.
 `$getFeature(fid)`  
 Returns a feature by its identifier. The value of `fid` must be a
 numeric value, optionally carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute. Success or failure of this operation is unaffected by
 any spatial or attribute filters that may be in effect. The `RandomRead`
 element in the list returned by `$testCapability()` can be checked to
@@ -577,7 +577,7 @@ OGR field types are returned as the following R types (type-specific
 - **OFTInteger64 subtype OFSTBoolean**: `logical` value
 
 - **OFTInteger64List**: vector of
-  [`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
   (list column)
 
 - **OFTReal**: `numeric` value
@@ -677,7 +677,7 @@ a data frame). The passed feature is written to the layer as a new
 feature, rather than overwriting an existing one. If the feature has a
 `FID` element with other than `NA` (i.e., a numeric value, optionally
 carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute and assumed to be a whole number), then the format
 driver may use that as the feature id of the new feature, but not
 necessarily. The FID of the last feature written to the layer may be
@@ -728,14 +728,14 @@ a feature in some formats. This is the case if a FID has not been
 assigned yet, and generally does not indicate an error (e.g., formats
 that do not store a persistent FID and assign FIDs upon a sequential
 read operation). The returned FID is a numeric value carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute.
 
 `$deleteFeature(fid)`  
 Deletes a feature from the layer. The feature with the indicated feature
 ID is deleted from the layer if supported by the format driver. The
 value of `fid` must be a numeric value, optionally carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute (should be a whole number, will be truncated). The
 `DeleteFeature` element in the list returned by `$testCapability()` can
 be checked to establish if this layer has delete feature capability.
@@ -845,7 +845,7 @@ file.copy(f, dsn)
 (lyr <- new(GDALVector, dsn, "mtbs_perims"))
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/RtmpjCJcuA/ynp_fires_1984_2022.gpkg"
+#>   • DSN: "/tmp/RtmpuzzwMy/ynp_fires_1984_2022.gpkg"
 #>   • Layer: mtbs_perims
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Geometry: MULTIPOLYGON
@@ -884,7 +884,7 @@ lyr$getDriverShortName()
 lyr$getDriverLongName()
 #> [1] "GeoPackage"
 lyr$getFileList()
-#> [1] "/tmp/RtmpjCJcuA/ynp_fires_1984_2022.gpkg"
+#> [1] "/tmp/RtmpuzzwMy/ynp_fires_1984_2022.gpkg"
 
 ## layer info
 lyr$getName()
@@ -1273,12 +1273,12 @@ nrow(feat_set)
 #> [1] 0
 str(feat_set)  # 0-row data frame with columns fully typed
 #> Classes ‘OGRFeatureSet’ and 'data.frame':    0 obs. of  11 variables:
-#>  $ FID         :integer64  
+#>  $ FID         :integer64(0) 
 #>  $ event_id    : chr 
 #>  $ incid_name  : chr 
 #>  $ incid_type  : chr 
-#>  $ map_id      :integer64  
-#>  $ burn_bnd_ac :integer64  
+#>  $ map_id      :integer64(0) 
+#>  $ burn_bnd_ac :integer64(0) 
 #>  $ burn_bnd_lat: chr 
 #>  $ burn_bnd_lon: chr 
 #>  $ ig_date     : 'Date' num 
@@ -1381,14 +1381,14 @@ lyr$getFeatureCount()
 feat_set <- lyr$fetch(-1)  # -1 to fetch all features from the beginning
 str(feat_set)
 #> Classes ‘OGRFeatureSet’ and 'data.frame':    2 obs. of  10 variables:
-#>  $ FID        :integer64 1 2 
+#>  $ FID        :integer64  1 2 
 #>  $ unique_int : int  1001 1002
 #>  $ bool_data  : logi  TRUE FALSE
-#>  $ large_ints :integer64 90071992547409910 90071992547409920 
+#>  $ large_ints :integer64  90071992547409910 90071992547409920 
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17" "2026-04-19 03:50:17"
+#>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50" "2026-04-24 04:21:50"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...
@@ -1414,7 +1414,7 @@ str(feat)
 #>  $ doubles    : num 2.35
 #>  $ strings    : chr "A test string 2"
 #>  $ dates      : Date, format: "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17"
+#>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50"
 #>  $ blobs      :List of 1
 #>   ..$ : raw  41 20 62 69 ...
 #>  $ geom       :List of 1
@@ -1447,14 +1447,14 @@ lyr$returnGeomAs <- "WKT"
 feat_set <- lyr$fetch(-1)
 str(feat_set)
 #> Classes ‘OGRFeatureSet’ and 'data.frame':    2 obs. of  10 variables:
-#>  $ FID        :integer64 1 2 
+#>  $ FID        :integer64  1 2 
 #>  $ unique_int : int  1001 1002
 #>  $ bool_data  : logi  TRUE TRUE
-#>  $ large_ints :integer64 90071992547409910 90071992547409920 
+#>  $ large_ints :integer64  90071992547409910 90071992547409920 
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2 - edited"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17" "2026-04-19 03:50:18"
+#>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50" "2026-04-24 04:21:51"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...

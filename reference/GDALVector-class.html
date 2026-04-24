@@ -51,7 +51,7 @@ Naming the arguments is optional but may be preferred for readability."></head><
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -567,7 +567,7 @@ the <code>FastSetNextByIndex</code> element in the list returned by the
 <code>$testCapability()</code> method. No return value, called for side effect.</p>
 <p><code>$getFeature(fid)</code><br>
 Returns a feature by its identifier. The value of <code>fid</code> must be a numeric
-value, optionally carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.
+value, optionally carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.
 Success or failure of this operation is unaffected by any spatial or
 attribute filters that may be in effect.
 The <code>RandomRead</code> element in the list returned by <code>$testCapability()</code> can
@@ -608,7 +608,7 @@ for OGR NULL values):</p><ul><li><p><strong>OFTInteger</strong>: <code>integer</
 <li><p><strong>OFTInteger64</strong>: <code>numeric</code> value carrying the <code>"integer64"</code> class
 attribute</p></li>
 <li><p><strong>OFTInteger64 subtype OFSTBoolean</strong>: <code>logical</code> value</p></li>
-<li><p><strong>OFTInteger64List</strong>: vector of <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> (list column)</p></li>
+<li><p><strong>OFTInteger64List</strong>: vector of <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> (list column)</p></li>
 <li><p><strong>OFTReal</strong>: <code>numeric</code> value</p></li>
 <li><p><strong>OFTRealList</strong>: vector of <code>numeric</code> (list column)</p></li>
 <li><p><strong>OFTString</strong>: <code>character</code> string</p></li>
@@ -682,7 +682,7 @@ Creates and writes a new feature within the layer. The <code>feature</code> argu
 a named list of fields and their values (might be one row of a data frame).
 The passed feature is written to the layer as a new feature, rather than
 overwriting an existing one. If the feature has a <code>FID</code> element with other
-than <code>NA</code> (i.e., a numeric value, optionally carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code>
+than <code>NA</code> (i.e., a numeric value, optionally carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code>
 class attribute and assumed to be a whole number), then the format
 driver may use that as the feature id of the new feature, but not
 necessarily. The FID of the last feature written to the layer may be
@@ -731,11 +731,11 @@ Note that OGRNullFID (<code>-1</code>) may be returned after writing a feature i
 formats. This is the case if a FID has not been assigned yet, and generally
 does not indicate an error (e.g., formats that do not store a persistent FID
 and assign FIDs upon a sequential read operation). The returned FID is a
-numeric value carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
+numeric value carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute.</p>
 <p><code>$deleteFeature(fid)</code><br>
 Deletes a feature from the layer. The feature with the indicated feature ID
 is deleted from the layer if supported by the format driver. The value of
-<code>fid</code> must be a numeric value, optionally carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code>
+<code>fid</code> must be a numeric value, optionally carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code>
 class attribute (should be a whole number, will be truncated).
 The <code>DeleteFeature</code> element in the list returned by <code>$testCapability()</code>
 can be checked to establish if this layer has delete feature capability.
@@ -827,7 +827,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="op">(</span><span class="va">lyr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">dsn</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpjCJcuA/ynp_fires_1984_2022.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpuzzwMy/ynp_fires_1984_2022.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: mtbs_perims</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: MULTIPOLYGON</span>
@@ -866,7 +866,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getDriverLongName</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GeoPackage"</span>
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getFileList</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpjCJcuA/ynp_fires_1984_2022.gpkg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpuzzwMy/ynp_fires_1984_2022.gpkg"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## layer info</span></span></span>
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getName</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -1255,12 +1255,12 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">feat_set</span><span class="op">)</span>  <span class="co"># 0-row data frame with columns fully typed</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘OGRFeatureSet’ and 'data.frame':	0 obs. of  11 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID         :integer64  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID         :integer64(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ event_id    : chr </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ incid_name  : chr </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ incid_type  : chr </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ map_id      :integer64  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ burn_bnd_ac :integer64  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ map_id      :integer64(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ burn_bnd_ac :integer64(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ burn_bnd_lat: chr </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ burn_bnd_lon: chr </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ ig_date     : 'Date' num </span>
@@ -1318,7 +1318,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">bool_data</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="co"># pass a string to as.integer64() since the value is too large to be</span></span></span>
 <span class="r-in"><span><span class="co"># represented exactly as an R numeric value (i.e., double)</span></span></span>
-<span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">large_ints</span> <span class="op">&lt;-</span> <span class="fu">bit64</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bit64/man/as.integer64.character.html" class="external-link">as.integer64</a></span><span class="op">(</span><span class="st">"90071992547409910"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">large_ints</span> <span class="op">&lt;-</span> <span class="fu">bit64</span><span class="fu">::</span><span class="fu"><a href="https://bit64.r-lib.org/reference/as.integer64.character.html" class="external-link">as.integer64</a></span><span class="op">(</span><span class="st">"90071992547409910"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">doubles</span> <span class="op">&lt;-</span> <span class="fl">1.234</span></span></span>
 <span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">strings</span> <span class="op">&lt;-</span> <span class="st">"A test string"</span></span></span>
 <span class="r-in"><span><span class="va">feat1</span><span class="op">$</span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2025-01-01"</span><span class="op">)</span></span></span>
@@ -1342,7 +1342,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">feat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">unique_int</span> <span class="op">&lt;-</span> <span class="fl">1002</span></span></span>
 <span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">bool_data</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">large_ints</span> <span class="op">&lt;-</span> <span class="fu">bit64</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bit64/man/as.integer64.character.html" class="external-link">as.integer64</a></span><span class="op">(</span><span class="st">"90071992547409920"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">large_ints</span> <span class="op">&lt;-</span> <span class="fu">bit64</span><span class="fu">::</span><span class="fu"><a href="https://bit64.r-lib.org/reference/as.integer64.character.html" class="external-link">as.integer64</a></span><span class="op">(</span><span class="st">"90071992547409920"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">doubles</span> <span class="op">&lt;-</span> <span class="fl">2.345</span></span></span>
 <span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">strings</span> <span class="op">&lt;-</span> <span class="st">"A test string 2"</span></span></span>
 <span class="r-in"><span><span class="va">feat2</span><span class="op">$</span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-01-02"</span><span class="op">)</span></span></span>
@@ -1363,14 +1363,14 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">feat_set</span> <span class="op">&lt;-</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">fetch</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span>  <span class="co"># -1 to fetch all features from the beginning</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">feat_set</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘OGRFeatureSet’ and 'data.frame':	2 obs. of  10 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID        :integer64 1 2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID        :integer64  1 2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ unique_int : int  1001 1002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ bool_data  : logi  TRUE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ large_ints :integer64 90071992547409910 90071992547409920 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ large_ints :integer64  90071992547409910 90071992547409920 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num  1.23 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr  "A test string" "A test string 2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2025-01-01" "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17" "2026-04-19 03:50:17"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50" "2026-04-24 04:21:50"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
@@ -1396,7 +1396,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr "A test string 2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geom       :List of 1</span>
@@ -1429,14 +1429,14 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">feat_set</span> <span class="op">&lt;-</span> <span class="va">lyr</span><span class="op">$</span><span class="fu">fetch</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">feat_set</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Classes ‘OGRFeatureSet’ and 'data.frame':	2 obs. of  10 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID        :integer64 1 2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FID        :integer64  1 2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ unique_int : int  1001 1002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ bool_data  : logi  TRUE TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ large_ints :integer64 90071992547409910 90071992547409920 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ large_ints :integer64  90071992547409910 90071992547409920 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num  1.23 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr  "A test string" "A test string 2 - edited"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2025-01-01" "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-19 03:50:17" "2026-04-19 03:50:18"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-04-24 04:21:50" "2026-04-24 04:21:51"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>

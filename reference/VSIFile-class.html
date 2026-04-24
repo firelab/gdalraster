@@ -25,7 +25,7 @@ Fields and methods of the class are accessed using the $ operator.'></head><body
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,7 +116,7 @@ of writable fields for per-object settings.</p>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>File offsets are given as <span style="R">R</span> <code>numeric</code> (i.e., <code>double</code> type), optionally
-carrying the <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute. They are returned as
+carrying the <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> class attribute. They are returned as
 <code>numeric</code> with the <code>integer64</code> class attribute attached. The <code>integer64</code>
 type is signed, so the maximum file offset supported by this interface
 is <code>9223372036854775807</code> (the value of <code>bit64::lim.integer64()[2]</code>).</p>
@@ -228,7 +228,7 @@ Ignored if GDAL &lt; 3.10.</p>
 <p><code>$seek(offset, origin)</code><br>
 Seek to a requested <code>offset</code> in the file.
 <code>offset</code> is given as a positive numeric scalar, optionally as
-<code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> type.
+<code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type.
 <code>origin</code> is given as a character string, one of <code>SEEK_SET</code>, <code>SEEK_CUR</code> or
 <code>SEEK_END</code>. Package global constants are defined for convenience, so these
 can be passed unquoted. Note that <code>offset</code> is an unsigned type, so <code>SEEK_CUR</code>
@@ -258,7 +258,7 @@ during the previous read operation. The end-of-file flag is cleared by a
 successful call to <code>$seek()</code>.</p>
 <p><code>$truncate(new_size)</code><br>
 Truncate/expand the file to the specified <code>new_size</code>, given as a positive
-numeric scalar, optionally as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> type.
+numeric scalar, optionally as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type.
 Returns <code>0</code> on success.</p>
 <p><code>$flush()</code><br>
 Flush pending writes to disk. For files in write or update mode and on
@@ -272,7 +272,7 @@ Returns <code>0</code> on success or <code>-1</code> on error.</p>
 Ingest a file into memory. Read the whole content of the file into a <code>raw</code>
 vector.
 <code>max_size</code> is the maximum size of file allowed, given as a numeric scalar,
-optionally as <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> type. If no limit, set to a negative value.
+optionally as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type. If no limit, set to a negative value.
 Returns a <code>raw</code> vector, or <code>NULL</code> if the operation fails.</p>
 <p><code>$close()</code><br>
 Closes the file. The file should always be closed when I/O has been

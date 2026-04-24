@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9022</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.5.0.9022" id="gdalraster-2509022-dev">gdalraster 2.5.0.9022 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509022-dev"></a></h2>
-<ul><li><p><code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>) (2026-04-18)</p></li>
+<h2 class="pkg-version" data-toc-text="2.5.0.9023" id="gdalraster-2509023-dev">gdalraster 2.5.0.9023 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509023-dev"></a></h2>
+<ul><li><p>add <code>.rasterize_polygon()</code> for internal use (<a href="https://github.com/firelab/gdalraster/issues/955" class="external-link">#955</a>) (2026-04-23)</p></li>
+<li><p><code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>) (2026-04-18)</p></li>
 <li><p><code><a href="../reference/gdal_cli.html">gdal_usage()</a></code>: replace <code>[may be repeated]</code> with packed values, repeated arg allowed or not (<a href="https://github.com/firelab/gdalraster/issues/953" class="external-link">#953</a>) (2026-04-18)</p></li>
 <li><p>add <code><a href="../reference/dem_derivatives.html">northness()</a></code> and <code><a href="../reference/dem_derivatives.html">eastness()</a></code>: convenience functions for transforming aspect degrees, and use in a new <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples">CLI pipeline example</a> for <code>gdal raster calc</code> (2026-04-18)</p></li>
 <li><p><code>GDALAlg::setArg()</code>: more robust handling of algorithm arguments with object input (<a href="https://github.com/firelab/gdalraster/issues/949" class="external-link">#949</a>, also adding a new pipeline example in <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html">use-gdal-cli-from-r</a>) (2026-04-17)</p></li>
@@ -614,7 +615,7 @@
 <code><a href="../reference/vsi_mkdir.html">vsi_mkdir()</a></code>: add argument <code>recursive</code>, <code>TRUE</code> to create the directory and its ancestors</li>
 <li>several VSI functions returned <code>0</code> or <code>-1</code> invisibly indicating success/failure, consistent with GDAL return values. Those return values are now visible to be consistent with return values from <code>VSIFile</code> class methods.</li>
 <li>
-<code><a href="../reference/vsi_stat.html">vsi_stat()</a></code> with <code>info = "size"</code>, and <code><a href="../reference/vsi_get_disk_free_space.html">vsi_get_disk_free_space()</a></code> now return <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code> type</li>
+<code><a href="../reference/vsi_stat.html">vsi_stat()</a></code> with <code>info = "size"</code>, and <code><a href="../reference/vsi_get_disk_free_space.html">vsi_get_disk_free_space()</a></code> now return <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type</li>
 </ul></div>
 <div class="section level3">
 <h3 id="gdalraster-class-1-11-0">GDALRaster-class<a class="anchor" aria-label="anchor" href="#gdalraster-class-1-11-0"></a></h3>

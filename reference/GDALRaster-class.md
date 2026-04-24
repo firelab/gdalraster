@@ -436,7 +436,7 @@ output of this method can be used with the
 `$readChunk()`/`$writeChunk()` methods to iterate I/O operations
 conveniently on user-defined chunk sizes. The chunks will contain at
 most `max_pixels` given as a numeric value optionally carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute (numeric values will be coerced to 64-bit integer
 internally by truncation). A value of `max_pixels = 0` (or any value
 less than raster block xsize \* block ysize, see `$getBlockSize()`
@@ -1240,7 +1240,7 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Byte",
                  init = -9999)
 #> ℹ initializing destination raster...
-#> ✔ done [9ms]
+#> ✔ done [8ms]
 #> 
 
 ds_new <- new(GDALRaster, new_file, read_only = FALSE)

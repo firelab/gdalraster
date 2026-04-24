@@ -51,7 +51,7 @@ set of writable fields for per-object settings.
 
 File offsets are given as R `numeric` (i.e., `double` type), optionally
 carrying the
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 class attribute. They are returned as `numeric` with the `integer64`
 class attribute attached. The `integer64` type is signed, so the maximum
 file offset supported by this interface is `9223372036854775807` (the
@@ -171,7 +171,7 @@ Ignored if GDAL \< 3.10.
 `$seek(offset, origin)`  
 Seek to a requested `offset` in the file. `offset` is given as a
 positive numeric scalar, optionally as
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 type. `origin` is given as a character string, one of `SEEK_SET`,
 `SEEK_CUR` or `SEEK_END`. Package global constants are defined for
 convenience, so these can be passed unquoted. Note that `offset` is an
@@ -214,7 +214,7 @@ cleared by a successful call to `$seek()`.
 `$truncate(new_size)`  
 Truncate/expand the file to the specified `new_size`, given as a
 positive numeric scalar, optionally as
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 type. Returns `0` on success.
 
 `$flush()`  
@@ -229,7 +229,7 @@ option). Returns `0` on success or `-1` on error.
 Ingest a file into memory. Read the whole content of the file into a
 `raw` vector. `max_size` is the maximum size of file allowed, given as a
 numeric scalar, optionally as
-[`bit64::integer64`](https://rdrr.io/pkg/bit64/man/bit64-package.html)
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
 type. If no limit, set to a negative value. Returns a `raw` vector, or
 `NULL` if the operation fails.
 
