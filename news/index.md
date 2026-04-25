@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.5.0.9023 (dev)
+## gdalraster 2.5.0.9024 (dev)
+
+- add
+  [`g_invalid_reason()`](https://firelab.github.io/gdalraster/reference/g_query.md):
+  interface to `OGR_G_GetInvalidityReason()` in GDAL \>=3.13
+  ([\#957](https://github.com/firelab/gdalraster/issues/957))
+  (2026-04-25)
 
 - add `.rasterize_polygon()` for internal use
   ([\#955](https://github.com/firelab/gdalraster/issues/955))
