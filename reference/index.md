@@ -288,6 +288,7 @@
   : Geometry WKB/WKT conversion
 - [`g_is_empty()`](https://firelab.github.io/gdalraster/reference/g_query.md)
   [`g_is_valid()`](https://firelab.github.io/gdalraster/reference/g_query.md)
+  [`g_invalid_reason()`](https://firelab.github.io/gdalraster/reference/g_query.md)
   [`g_is_3D()`](https://firelab.github.io/gdalraster/reference/g_query.md)
   [`g_is_measured()`](https://firelab.github.io/gdalraster/reference/g_query.md)
   [`g_is_ring()`](https://firelab.github.io/gdalraster/reference/g_query.md)

@@ -11,6 +11,8 @@ g_is_empty(geom, quiet = FALSE)
 
 g_is_valid(geom, quiet = FALSE)
 
+g_invalid_reason(geom, quiet = FALSE)
+
 g_is_3D(geom, quiet = FALSE)
 
 g_is_measured(geom, quiet = FALSE)
@@ -44,6 +46,10 @@ non-empty geometries.
 
 `g_is_valid()` tests whether a geometry is valid. Returns a logical
 vector analogous to the above for `g_is_empty()`.
+
+`g_invalid_reason()` tests if a geometry is valid and, if not, returns
+the invalidity reason as a character string. `NA` is returned for valid
+geometries. Requires GDAL \>= 3.13.
 
 `g_is_3D()` checks whether a geometry has Z coordinates. Returns a
 logical vector analogous to the above for `g_is_empty()`.
@@ -90,6 +96,13 @@ g_is_valid(c(g1, g2, g3))
 #> ! GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
 #> ! GDAL WARNING 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring
 #> [1]  TRUE FALSE FALSE
+
+# g_invalid_reason() requires GDAL >= 3.13
+if (gdal_version_num() >= gdal_compute_version(3, 13, 0)) {
+  g_invalid_reason("LINESTRING(0 0)") |> print()
+
+  g_invalid_reason("LINESTRING(0 0, 1 1)") |> print()
+}
 
 g_is_3D(g1)
 #> [1] FALSE
