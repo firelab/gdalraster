@@ -2,10 +2,11 @@
 
 ## gdalraster 2.5.0.9100 (dev)
 
-- **breaking change**: rename
+- rename
   [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
   as
   [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
+  but keep an alias for now
   ([\#957](https://github.com/firelab/gdalraster/issues/957))
   (2026-04-25)
 
