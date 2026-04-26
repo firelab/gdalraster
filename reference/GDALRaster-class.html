@@ -23,7 +23,7 @@ optional but may be preferred for readability."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9100</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9101</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -236,35 +236,38 @@ override the default resampling to one of <code>BILINEAR</code>, <code>CUBIC</co
 <span id="cb1-83"><a href="#cb1-83" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getHistogram</span>(band, min, max, num_buckets, incl_out_of_range, approx_ok)</span>
 <span id="cb1-84"><a href="#cb1-84" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDefaultHistogram</span>(band, force)</span>
 <span id="cb1-85"><a href="#cb1-85" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadata</span>(band, domain)</span>
-<span id="cb1-87"><a href="#cb1-87" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setMetadata</span>(band, metadata, domain)</span>
-<span id="cb1-88"><a href="#cb1-88" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadataItem</span>(band, mdi_name, domain)</span>
-<span id="cb1-89"><a href="#cb1-89" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setMetadataItem</span>(band, mdi_name, mdi_value, domain)</span>
-<span id="cb1-90"><a href="#cb1-90" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadataDomainList</span>(band)</span>
-<span id="cb1-91"><a href="#cb1-91" tabindex="-1"></a></span>
-<span id="cb1-92"><a href="#cb1-92" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">read</span>(band, xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
-<span id="cb1-93"><a href="#cb1-93" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readBlock</span>(band, xblockoff, yblockoff)</span>
-<span id="cb1-94"><a href="#cb1-94" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readChunk</span>(band, chunk_def)</span>
-<span id="cb1-95"><a href="#cb1-95" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readToNativeRaster</span>(xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
-<span id="cb1-96"><a href="#cb1-96" tabindex="-1"></a></span>
-<span id="cb1-97"><a href="#cb1-97" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">write</span>(band, xoff, yoff, xsize, ysize, rasterData)</span>
-<span id="cb1-98"><a href="#cb1-98" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeBlock</span>(band, xblockoff, yblockoff, rasterData)</span>
-<span id="cb1-99"><a href="#cb1-99" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeChunk</span>(band, chunk_def, rasterData)</span>
-<span id="cb1-100"><a href="#cb1-100" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">fillRaster</span>(band, value, ivalue)</span>
-<span id="cb1-101"><a href="#cb1-101" tabindex="-1"></a></span>
-<span id="cb1-102"><a href="#cb1-102" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getColorTable</span>(band)</span>
-<span id="cb1-103"><a href="#cb1-103" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getPaletteInterp</span>(band)</span>
-<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setColorTable</span>(band, col_tbl, palette_interp)</span>
-<span id="cb1-105"><a href="#cb1-105" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">clearColorTable</span>(band)</span>
-<span id="cb1-106"><a href="#cb1-106" tabindex="-1"></a></span>
-<span id="cb1-107"><a href="#cb1-107" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDefaultRAT</span>(band)</span>
-<span id="cb1-108"><a href="#cb1-108" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setDefaultRAT</span>(band, df)</span>
+<span id="cb1-86"><a href="#cb1-86" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getInterBandCovMatrix</span>(bands, approx_ok, force, write_in_metadata,</span>
+<span id="cb1-87"><a href="#cb1-87" tabindex="-1"></a>                         df_correction)</span>
+<span id="cb1-88"><a href="#cb1-88" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadata</span>(band, domain)</span>
+<span id="cb1-90"><a href="#cb1-90" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setMetadata</span>(band, metadata, domain)</span>
+<span id="cb1-91"><a href="#cb1-91" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadataItem</span>(band, mdi_name, domain)</span>
+<span id="cb1-92"><a href="#cb1-92" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setMetadataItem</span>(band, mdi_name, mdi_value, domain)</span>
+<span id="cb1-93"><a href="#cb1-93" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getMetadataDomainList</span>(band)</span>
+<span id="cb1-94"><a href="#cb1-94" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">read</span>(band, xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
+<span id="cb1-96"><a href="#cb1-96" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readBlock</span>(band, xblockoff, yblockoff)</span>
+<span id="cb1-97"><a href="#cb1-97" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readChunk</span>(band, chunk_def)</span>
+<span id="cb1-98"><a href="#cb1-98" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">readToNativeRaster</span>(xoff, yoff, xsize, ysize, out_xsize, out_ysize)</span>
+<span id="cb1-99"><a href="#cb1-99" tabindex="-1"></a></span>
+<span id="cb1-100"><a href="#cb1-100" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">write</span>(band, xoff, yoff, xsize, ysize, rasterData)</span>
+<span id="cb1-101"><a href="#cb1-101" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeBlock</span>(band, xblockoff, yblockoff, rasterData)</span>
+<span id="cb1-102"><a href="#cb1-102" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">writeChunk</span>(band, chunk_def, rasterData)</span>
+<span id="cb1-103"><a href="#cb1-103" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">fillRaster</span>(band, value, ivalue)</span>
+<span id="cb1-104"><a href="#cb1-104" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getColorTable</span>(band)</span>
+<span id="cb1-106"><a href="#cb1-106" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getPaletteInterp</span>(band)</span>
+<span id="cb1-107"><a href="#cb1-107" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setColorTable</span>(band, col_tbl, palette_interp)</span>
+<span id="cb1-108"><a href="#cb1-108" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">clearColorTable</span>(band)</span>
 <span id="cb1-109"><a href="#cb1-109" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">flushCache</span>()</span>
-<span id="cb1-111"><a href="#cb1-111" tabindex="-1"></a></span>
-<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getChecksum</span>(band, xoff, yoff, xsize, ysize)</span>
-<span id="cb1-113"><a href="#cb1-113" tabindex="-1"></a></span>
-<span id="cb1-114"><a href="#cb1-114" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-110"><a href="#cb1-110" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDefaultRAT</span>(band)</span>
+<span id="cb1-111"><a href="#cb1-111" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">setDefaultRAT</span>(band, df)</span>
+<span id="cb1-112"><a href="#cb1-112" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">flushCache</span>()</span>
+<span id="cb1-114"><a href="#cb1-114" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getChecksum</span>(band, xoff, yoff, xsize, ysize)</span>
+<span id="cb1-116"><a href="#cb1-116" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -700,6 +703,31 @@ histogram vector.
 Returns a list of length four containing named elements <code>min</code> (lower
 bound), <code>max</code> (upper bound), <code>num_buckets</code> (number of buckets), and
 <code>histogram</code> (a numeric vector of length <code>num_buckets</code>).</p>
+<p><code>$getInterBandCovMatrix(bands, approx_ok, force, write_in_metadata,
+                             df_correction)</code><br>
+Fetch or compute the covariance matrix between bands of this dataset. The
+covariance indicates the level to which two bands vary together. Requires
+GDAL &gt;= 3.13. See <code>GDALDatasetGetInterBandCovarianceMatrix()</code> in:
+<a href="https://gdal.org/en/latest/api/raster_c_api.html" class="external-link">https://gdal.org/en/latest/api/raster_c_api.html</a>. Returns a square
+matrix with dimension equal to the number of bands. <code>bands</code> may be given as
+<code>0</code> meaning all bands, or may be an integer vector of specific band numbers.
+<code>approx_ok</code> specifies whether it is acceptable to use a subsample of values
+(<code>TRUE</code>), or all pixel values should be used (<code>FALSE</code>).</p>
+<p><code>force</code>:</p><ul><li><p><code>TRUE</code>: The raster will be scanned to compute covariances.
+(Note: <code>ComputeInterBandCovarianceMatrix()</code> in the GDAL API is called
+automatically here. This is a change in the behavior of
+<code>GetInterBandCovarianceMatrix()</code> in the API, to a definitive <code>force</code>.)</p></li>
+<li><p><code>FALSE</code>: Results will only be returned if it can be done quickly (i.e.,
+without scanning the raster, by using pre-existing
+<code>STATISTICS_COVARIANCES</code> metadata items). <code>NA</code> will be returned if
+inter-band covariances cannot be obtained quickly.</p></li>
+</ul><p><code>write_in_metadata</code> specifies whether <code>STATISTICS_COVARIANCES</code> band metadata
+items should be written if covariances are computed new. <code>df_correction</code>
+specifies a correction term to subtract in the final averaging phase of the
+covariance computation, often will be <code>1</code>. A value of <code>df_correction = 1</code>
+will return an unbiased estimate if the pixels in bands are considered to be
+a sample of the whole population. Otherwise a value of <code>df_correction = 0</code>
+can be used if they are considered to be the whole population.</p>
 <p><code>$getMetadata(band, domain)</code><br>
 Returns a character vector of all metadata <code>NAME=VALUE</code> pairs that exist in
 the specified <code>domain</code>, or empty string (<code>""</code>) if there are no
@@ -1160,7 +1188,7 @@ The dataset can be re-opened on the existing <code>filename</code> with
 <span class="r-in"><span>                 dtName <span class="op">=</span> <span class="st">"Byte"</span>,</span></span>
 <span class="r-in"><span>                 init <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> initializing destination raster...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> done <span style="color: #B2B2B2;">[8ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> done <span style="color: #B2B2B2;">[9ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds_new</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALRaster</span>, <span class="va">new_file</span>, read_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>

@@ -165,6 +165,9 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
     ds$getHistogram(band, min, max, num_buckets, incl_out_of_range, approx_ok)
     ds$getDefaultHistogram(band, force)
 
+    ds$getInterBandCovMatrix(bands, approx_ok, force, write_in_metadata,
+                             df_correction)
+
     ds$getMetadata(band, domain)
     ds$setMetadata(band, metadata, domain)
     ds$getMetadataItem(band, mdi_name, domain)
@@ -765,6 +768,38 @@ named elements `min` (lower bound), `max` (upper bound), `num_buckets`
 (number of buckets), and `histogram` (a numeric vector of length
 `num_buckets`).
 
+`$getInterBandCovMatrix(bands, approx_ok, force, write_in_metadata, df_correction)`  
+Fetch or compute the covariance matrix between bands of this dataset.
+The covariance indicates the level to which two bands vary together.
+Requires GDAL \>= 3.13. See `GDALDatasetGetInterBandCovarianceMatrix()`
+in: <https://gdal.org/en/latest/api/raster_c_api.html>. Returns a square
+matrix with dimension equal to the number of bands. `bands` may be given
+as `0` meaning all bands, or may be an integer vector of specific band
+numbers. `approx_ok` specifies whether it is acceptable to use a
+subsample of values (`TRUE`), or all pixel values should be used
+(`FALSE`).
+
+`force`:
+
+- `TRUE`: The raster will be scanned to compute covariances. (Note:
+  `ComputeInterBandCovarianceMatrix()` in the GDAL API is called
+  automatically here. This is a change in the behavior of
+  `GetInterBandCovarianceMatrix()` in the API, to a definitive `force`.)
+
+- `FALSE`: Results will only be returned if it can be done quickly
+  (i.e., without scanning the raster, by using pre-existing
+  `STATISTICS_COVARIANCES` metadata items). `NA` will be returned if
+  inter-band covariances cannot be obtained quickly.
+
+`write_in_metadata` specifies whether `STATISTICS_COVARIANCES` band
+metadata items should be written if covariances are computed new.
+`df_correction` specifies a correction term to subtract in the final
+averaging phase of the covariance computation, often will be `1`. A
+value of `df_correction = 1` will return an unbiased estimate if the
+pixels in bands are considered to be a sample of the whole population.
+Otherwise a value of `df_correction = 0` can be used if they are
+considered to be the whole population.
+
 `$getMetadata(band, domain)`  
 Returns a character vector of all metadata `NAME=VALUE` pairs that exist
 in the specified `domain`, or empty string (`""`) if there are no
@@ -1240,7 +1275,7 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Byte",
                  init = -9999)
 #> ℹ initializing destination raster...
-#> ✔ done [8ms]
+#> ✔ done [9ms]
 #> 
 
 ds_new <- new(GDALRaster, new_file, read_only = FALSE)
