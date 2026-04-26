@@ -22,6 +22,16 @@ gdal_run(
   setVectorArgsFromObject = TRUE
 )
 
+gdal_run_piped(
+  input,
+  cmd,
+  output = NULL,
+  output_format = NULL,
+  other_args = NULL,
+  output_index = 1,
+  outputLayerNameForOpen = NULL
+)
+
 gdal_alg(cmd = NULL, args = NULL, parse = TRUE)
 
 gdal_global_reg_names()
@@ -78,6 +88,48 @@ gdal_global_reg_names()
   automatically setting algorithm arguments from `GDALVector` input (see
   Note).
 
+- input:
+
+  Value passed as input to the GDAL algorithm specified in `cmd` (i.e.,
+  the `"input"`, `"dataset"` or `"source"` argument for the command).
+  Typically this is a dataset name (e.g., file or database connection
+  string), or an object of class `GDALRaster` or `GDALVector`.
+
+- output:
+
+  Value passed for the `"output"` (or `"destination"`) argument of
+  `cmd`. Typically this is a filename for commands that generate a
+  raster or vector dataset or other file output. May be `NULL` or empty
+  string (`""`) if `output_format` is `"MEM"` (in-memory dataset).
+
+- output_format:
+
+  Optional character string specifying the output format, e.g., a format
+  driver short name when output is a raster or vector dataset. Will be
+  passed to the algorithm's optional `"output-format"` argument.
+
+- other_args:
+
+  Either a character vector or a named list containing other input
+  arguments of the algorithm (i.e., other than those already specified
+  via `input`, `output` and `output_format` above, see also the section
+  `Algorithm Argument Syntax` below).
+
+- output_index:
+
+  Optional numeric value or character string giving the list index or
+  output argument name for an algorithm with more than one output.
+  Defaults to `1`.
+
+- outputLayerNameForOpen:
+
+  Optional character string specifying a layer name to open when
+  obtaining algorithm output as an object of class `GDALVector` (see the
+  class method
+  [GDALAlg\$output()](https://firelab.github.io/gdalraster/reference/GDALAlg-class.md)).
+  Defaults to empty string (`""`) in which case the first layer by index
+  is opened. Ignored if output is not a vector dataset.
+
 - parse:
 
   Logical value, `TRUE` to attempt parsing `args` if they are given in
@@ -113,6 +165,22 @@ conveniently in most cases, by calling `$output()` (singular) to return
 the the single output value when there is only one. After assigning the
 output, or otherwise completing work with the `GDALAlg` object, its
 `$release()` method can be called to close datasets and free resources.
+
+`gdal_run_piped()` is a variation of `gdal_run()`. It is suitable for
+use with the R native pipe operator (`|>`), but may be useful
+stand-alone when it is desirable to obtain the output of the algorithm
+directly, and access to the `GDALAlg` object itself is not needed. The
+first argument to this function is passed to the `"input"` (or
+`"dataset"` or `"source"`) argument of the algorithm (i.e., as input to
+the GDAL command specified in `cmd`). The function returns (invisibly)
+the output of the CLI algorithm if it has one. If the algorithm has
+multiple outputs, the first by index is returned by default but this can
+be controlled by the `output_index` argument (numeric index or character
+name of the desired output). Logical `TRUE` is returned invisibly if the
+algorithm has no output and no error was reported by the `run()` method
+of the algorithm object. Logical `FALSE` is returned invisibly but a
+message printed if an error occurs. The algorithm object used internally
+is always finalized before return.
 
 `gdal_alg()` instantiates and returns an object of class
 [`GDALAlg`](https://firelab.github.io/gdalraster/reference/GDALAlg-class.md)
@@ -293,6 +361,16 @@ plot_raster(ds, legend = TRUE)
 ds$close()
 unlink(f_gpkg)
 
+## use the R native pipe operator
+
+# make a of plot of 'terrain ruggedness index' (TRI) for Storm Lake AOI
+system.file("extdata/storml_elev.tif", package="gdalraster") |>
+  gdal_run_piped("raster tri", "", "MEM") |>
+  plot_raster(legend = TRUE,
+              minmax_pct_cut = c(0, 99),
+              col_map_fn = rev(ltc::ltc("heatmap3")),
+              main = "Storm Lake AOI: terrain ruggedness index")
+
 ## get help for vector commands
 gdal_usage("vector")
 
@@ -351,7 +429,7 @@ plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
 ds$close()
 deleteDataset(f_out)
 
-## pipeline syntax
+## GDAL CLI pipeline syntax
 # "raster pipeline" example 2 from:
 # https://gdal.org/en/latest/programs/gdal_raster_pipeline.html
 # serialize the command to reproject a GTiff file into GDALG format, and

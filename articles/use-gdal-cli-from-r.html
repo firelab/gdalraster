@@ -113,10 +113,10 @@ that enable access to GDAL CLI algorithms and the
 <div class="section level2">
 <h2 id="development-status">Development status<a class="anchor" aria-label="anchor" href="#development-status"></a>
 </h2>
-<p>The GDAL project states that the new CLI framework</p>
+<p>The GDAL project states that the new CLI framework is</p>
 <blockquote>
-<p>“is provisionally provided as an alternative interface to GDAL and
-OGR command line utilities. The project reserves the right to modify,
+<p>“provisionally provided as an alternative interface to GDAL and OGR
+command line utilities. The project reserves the right to modify,
 rename, reorganize, and change the behavior until it is officially
 frozen via PSC vote in a future major GDAL release. The utility needs
 time to mature, benefit from incremental feedback, and explore
@@ -443,9 +443,9 @@ object.</p>
 <div class="section level4">
 <h4 id="raster-convert">raster convert<a class="anchor" aria-label="anchor" href="#raster-convert"></a>
 </h4>
-<p>In this example, the input and output datasets are given as
-positional arguments which do not have to be named. They could instead
-be given as named arguments if preferred for clarity.</p>
+<p>The input and output datasets are given as positional arguments which
+do not have to be named. They could instead be given as named arguments
+if preferred for clarity.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## convert storml_elev.tif to GeoPackage raster</span></span>
 <span><span class="va">f_tif</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span></span>
@@ -876,8 +876,7 @@ object.</p>
 <span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/pal_viridis.html" class="external-link">viridis_pal</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.8</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span>
-<span><span class="va">ramp</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/colour_ramp.html" class="external-link">colour_ramp</a></span><span class="op">(</span><span class="va">pal</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">ramp</span>, na_col <span class="op">=</span> <span class="st">"#d9d9d9"</span>,</span>
+<span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">pal</span>, na_col <span class="op">=</span> <span class="st">"#d9d9d9"</span>,</span>
 <span>            main <span class="op">=</span> <span class="st">"YNP Fires 1984-2022 - Most Recent Burn Year"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="img/ynp_fire_year.png" class="r-plt" alt="A plot of fire perimeters in Yellowstone National Park during 1984 through 2022. A color ramp is used to indicate the burn year as depicted in a legend on the right-hand side of the plot. The most recent burn year is shown in cases where fire perimeters overlap." width="80%"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -893,7 +892,7 @@ object.</p>
 <div class="section level4">
 <h4 id="colorized-shaded-relief">Colorized shaded relief<a class="anchor" aria-label="anchor" href="#colorized-shaded-relief"></a>
 </h4>
-<p>A raster pipline to create a color shaded relief file, based on
+<p>A raster pipeline to create a color shaded relief file, based on
 Example 3 for <a href="https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline" class="external-link">GDAL
 nested pipeline</a>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -960,9 +959,29 @@ nested pipeline</a>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># cleanup</span></span>
 <span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/deleteDataset.html">deleteDataset</a></span><span class="op">(</span><span class="va">f_elev</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="fu"><a href="../reference/deleteDataset.html">deleteDataset</a></span><span class="op">(</span><span class="va">f_out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>Alternatively, native R pipe operations can also be used. GDAL
+in-memory datasets (MEM) are an option for intermediate steps as done in
+the following example which generates the color shaded relief map with
+<code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code>. Whether in-memory or file-backed datasets
+are used, they are generally passed as objects in API usage of GDAL CLI.
+Object passing avoids the overhead of dataset opening and potentially
+provides cached data.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">f_elev</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gdal_cli.html">gdal_run_piped</a></span><span class="op">(</span><span class="st">"raster color-map"</span>, <span class="st">""</span>, <span class="st">"MEM"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color_map <span class="op">=</span> <span class="va">f_pal</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gdal_cli.html">gdal_run_piped</a></span><span class="op">(</span><span class="st">"raster blend"</span>, <span class="st">""</span>, <span class="st">"MEM"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    operator <span class="op">=</span> <span class="st">"hsv-value"</span>,</span>
+<span>    overlay <span class="op">=</span> <span class="fu"><a href="../reference/gdal_cli.html">gdal_run_piped</a></span><span class="op">(</span><span class="va">f_elev</span>, <span class="st">"raster hillshade"</span>, <span class="st">""</span>, <span class="st">"MEM"</span>,</span>
+<span>                             <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>zfactor <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Storm Lake AOI colorized shaded relief"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="img/storml_col_shaded_relief.png" class="r-plt" alt="Identical to the previous graphical output: a plot of the colorized shaded relief map for the Storm Lake area of interest. Lower elevation areas are green, transitioning to yellow then light brown, pinkish and almost white at the highest elevations." width="80%"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## clean up the temp file</span></span>
+<span><span class="fu"><a href="../reference/deleteDataset.html">deleteDataset</a></span><span class="op">(</span><span class="va">f_elev</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -971,7 +990,7 @@ nested pipeline</a>.</p>
 <p>Compute slope-masked aspect for the Storm Lake AOI, and plot as
 “northness” (see <code><a href="../reference/dem_derivatives.html">?gdalraster::northness</a></code>). Based on Example
 6 for <a href="https://gdal.org/programs/gdal_raster_calc.html" class="external-link"><code>gdal raster calc</code></a>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># requires GDAL &gt;= 3.12.1 for nested pipelines</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://firelab.github.io/gdalraster/">gdalraster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1</span></span>
@@ -1004,17 +1023,35 @@ nested pipeline</a>.</p>
 <span></span>
 <span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># diverging palette for northness</span></span>
-<span><span class="co"># adapted from "heatmap3" in ltc-color-palettes</span></span>
-<span><span class="co"># https://github.com/loukesio/ltc-color-palettes</span></span>
-<span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#d7191c"</span>, <span class="st">"#fdae61"</span>, <span class="st">"#ffffbf"</span>, <span class="st">"#abd9e9"</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># transform the pixel values with `gdalraster::northness()`</span></span>
-<span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="va">pal</span>, pixel_fn <span class="op">=</span> <span class="va">northness</span>,</span>
-<span>            na_col <span class="op">=</span> <span class="st">"#2c7bb6"</span>, main <span class="op">=</span> <span class="st">"Storm Lake AOI northness"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds</span>, legend <span class="op">=</span> <span class="cn">TRUE</span>, col_map_fn <span class="op">=</span> <span class="fu">ltc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ltc/man/ltc.html" class="external-link">ltc</a></span><span class="op">(</span><span class="st">"heatmap3"</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>            pixel_fn <span class="op">=</span> <span class="va">northness</span>, na_col <span class="op">=</span> <span class="fu">ltc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ltc/man/ltc.html" class="external-link">ltc</a></span><span class="op">(</span><span class="st">"heatmap3"</span><span class="op">)</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span>,</span>
+<span>            main <span class="op">=</span> <span class="st">"Storm Lake AOI northness"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="img/storml_northness.png" class="r-plt" alt="A plot of northness for the Storm Lake area of interest. The pixel values range from -1 (due south) to 1 (due north), with a diverging heatmap color gradient ranging from warm reddish colors on south aspects to cool light blue on north aspects. Flat areas are masked out from the aspect layer and have a darker blue color since these are mostly water." width="80%"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="visualize-dem-derivatives">Visualize DEM derivatives<a class="anchor" aria-label="anchor" href="#visualize-dem-derivatives"></a>
+</h4>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># terrain ruggedness index (TRI)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gdal_cli.html">gdal_run_piped</a></span><span class="op">(</span><span class="st">"raster tri"</span>, <span class="st">""</span>, <span class="st">"MEM"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span>legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              minmax_pct_cut <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">99</span><span class="op">)</span>,</span>
+<span>              col_map_fn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">ltc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ltc/man/ltc.html" class="external-link">ltc</a></span><span class="op">(</span><span class="st">"heatmap3"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              main <span class="op">=</span> <span class="st">"Storm Lake AOI: terrain ruggedness index"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="img/storml_tri.png" class="r-plt" alt="A plot of terrain ruggedness index (TRI) for the Storm Lake area of interest. The pixel values range from 0 to 75, with a diverging heatmap color gradient ranging from blue to yellow, orange and then red. These correspond to blue for flat terrain with low ruggedness, to red for the most rugged terrain." width="80%"></p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># topographic position index (TPI)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gdal_cli.html">gdal_run_piped</a></span><span class="op">(</span><span class="st">"raster tpi"</span>, <span class="st">""</span>, <span class="st">"MEM"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/plot_raster.html">plot_raster</a></span><span class="op">(</span>legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              minmax_pct_cut <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">98</span><span class="op">)</span>,</span>
+<span>              col_map_fn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">ltc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ltc/man/ltc.html" class="external-link">ltc</a></span><span class="op">(</span><span class="st">"heatmap3"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>              main <span class="op">=</span> <span class="st">"Storm Lake AOI: topgraphic position index"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="img/storml_tpi.png" class="r-plt" alt="A plot of topographic position index (TPI) for the Storm Lake area of interest. The pixel values range from -4.4 to 6.0, with a diverging heatmap color gradient ranging from blue to yellow, orange and then red. Negative values indicate concave positions (e.g., ravines) while positive values indicate convexity (e.g., ridge tops)." width="80%"></p>
 </div>
 </div>
 </div>

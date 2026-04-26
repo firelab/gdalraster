@@ -64,15 +64,15 @@ ds$buildOverviews("BILINEAR", levels = c(2, 4, 8), bands = c(1))
 #> ✔ Done (10ms)
 #> 
 ds$getFileList()
-#> [1] "/tmp/RtmpeI0Nbm/b5_tmp.tif"     "/tmp/RtmpeI0Nbm/b5_tmp.tif.ovr"
+#> [1] "/tmp/RtmpyHMJ0F/b5_tmp.tif"     "/tmp/RtmpyHMJ0F/b5_tmp.tif.ovr"
 ds$close()
 b5_tmp2 <- file.path(tempdir(), "b5_tmp_renamed.tif")
 renameDataset(b5_tmp2, b5_tmp)
 #> [1] TRUE
 ds <- new(GDALRaster, b5_tmp2)
 ds$getFileList()
-#> [1] "/tmp/RtmpeI0Nbm/b5_tmp_renamed.tif"    
-#> [2] "/tmp/RtmpeI0Nbm/b5_tmp_renamed.tif.ovr"
+#> [1] "/tmp/RtmpyHMJ0F/b5_tmp_renamed.tif"    
+#> [2] "/tmp/RtmpyHMJ0F/b5_tmp_renamed.tif.ovr"
 ds$close()
 
 deleteDataset(b5_tmp2)

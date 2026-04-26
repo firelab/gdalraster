@@ -243,7 +243,8 @@ algorithm arguments that accept dataset object input. A list of
 `GDALRaster` or `GDALVector` objects may be given for algorithm
 arguments of type `DATASET_LIST` that accept object input. Generally, an
 input dataset can also be specified by name as a character string (DSN),
-or character vector of DSNs for a `DATASET_LIST`.
+or character vector of DSNs for a `DATASET_LIST`. Returns a logical
+value, `TRUE` indicating success or `FALSE` if an error occurs.
 
 `$parseCommandLineArgs()`  
 Sets the value of arguments previously specified in the class

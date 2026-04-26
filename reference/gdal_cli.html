@@ -80,6 +80,16 @@ interface (CLI) algorithms.</p>
 <span>  setVectorArgsFromObject <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">gdal_run_piped</span><span class="op">(</span></span>
+<span>  <span class="va">input</span>,</span>
+<span>  <span class="va">cmd</span>,</span>
+<span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  other_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  output_index <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  outputLayerNameForOpen <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">gdal_alg</span><span class="op">(</span>cmd <span class="op">=</span> <span class="cn">NULL</span>, args <span class="op">=</span> <span class="cn">NULL</span>, parse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_global_reg_names</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -138,6 +148,47 @@ disable automatically setting algorithm arguments from <code>GDALVector</code> i
 (see Note).</p></dd>
 
 
+<dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
+<dd><p>Value passed as input to the GDAL algorithm specified in <code>cmd</code>
+(i.e., the <code>"input"</code>, <code>"dataset"</code> or <code>"source"</code> argument for the command).
+Typically this is a dataset name (e.g., file or database connection string),
+or an object of class <code>GDALRaster</code> or <code>GDALVector</code>.</p></dd>
+
+
+<dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
+<dd><p>Value passed for the <code>"output"</code> (or <code>"destination"</code>) argument
+of <code>cmd</code>. Typically this is a filename for commands that generate a raster
+or vector dataset or other file output. May be <code>NULL</code> or empty string (<code>""</code>)
+if <code>output_format</code> is <code>"MEM"</code> (in-memory dataset).</p></dd>
+
+
+<dt id="arg-output-format">output_format<a class="anchor" aria-label="anchor" href="#arg-output-format"></a></dt>
+<dd><p>Optional character string specifying the output format,
+e.g., a format driver short name when output is a raster or vector dataset.
+Will be passed to the algorithm's optional <code>"output-format"</code> argument.</p></dd>
+
+
+<dt id="arg-other-args">other_args<a class="anchor" aria-label="anchor" href="#arg-other-args"></a></dt>
+<dd><p>Either a character vector or a named list containing other
+input arguments of the algorithm (i.e., other than those already specified
+via <code>input</code>, <code>output</code> and <code>output_format</code> above, see also the section
+<code>Algorithm Argument Syntax</code> below).</p></dd>
+
+
+<dt id="arg-output-index">output_index<a class="anchor" aria-label="anchor" href="#arg-output-index"></a></dt>
+<dd><p>Optional numeric value or character string giving the
+list index or output argument name for an algorithm with more than one
+output. Defaults to <code>1</code>.</p></dd>
+
+
+<dt id="arg-outputlayernameforopen">outputLayerNameForOpen<a class="anchor" aria-label="anchor" href="#arg-outputlayernameforopen"></a></dt>
+<dd><p>Optional character string specifying a layer
+name to open when obtaining algorithm output as an object of class
+<code>GDALVector</code> (see the class method <a href="GDALAlg-class.html">GDALAlg$output()</a>). Defaults to
+empty string (<code>""</code>) in which case the first layer by index is opened.
+Ignored if output is not a vector dataset.</p></dd>
+
+
 <dt id="arg-parse">parse<a class="anchor" aria-label="anchor" href="#arg-parse"></a></dt>
 <dd><p>Logical value, <code>TRUE</code> to attempt parsing <code>args</code> if they are
 given in <code>gdal_alg()</code> (the default). Set to <code>FALSE</code> to instantiate the
@@ -167,6 +218,20 @@ object, or, more conveniently in most cases, by calling <code>$output()</code>
 After assigning the output, or otherwise completing work with the <code>GDALAlg</code>
 object, its <code>$release()</code> method can be called to close datasets and
 free resources.</p>
+<p><code>gdal_run_piped()</code> is a variation of <code>gdal_run()</code>. It is suitable for use
+with the R native pipe operator (<code>|&gt;</code>), but may be useful stand-alone when
+it is desirable to obtain the output of the algorithm directly, and access
+to the <code>GDALAlg</code> object itself is not needed. The first argument to this
+function is passed to the <code>"input"</code> (or <code>"dataset"</code> or <code>"source"</code>) argument
+of the algorithm (i.e., as input to the GDAL command specified in <code>cmd</code>). The
+function returns (invisibly) the output of the CLI algorithm if it has one.
+If the algorithm has multiple outputs, the first by index is returned by
+default but this can be controlled by the <code>output_index</code> argument (numeric
+index or character name of the desired output). Logical <code>TRUE</code> is returned
+invisibly if the algorithm has no output and no error was reported by the
+<code>run()</code> method of the algorithm object. Logical <code>FALSE</code> is returned invisibly
+but a message printed if an error occurs. The algorithm object used
+internally is always finalized before return.</p>
 <p><code>gdal_alg()</code> instantiates and returns an object of class <code><a href="GDALAlg-class.html">GDALAlg</a></code>
 without running it. Passing argument values to the requested CLI algorithm is
 optional. This function may be useful (with or without argument values) for
@@ -312,6 +377,16 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">f_gpkg</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## use the R native pipe operator</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># make a of plot of 'terrain ruggedness index' (TRI) for Storm Lake AOI</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/storml_elev.tif"</span>, package<span class="op">=</span><span class="st">"gdalraster"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">gdal_run_piped</span><span class="op">(</span><span class="st">"raster tri"</span>, <span class="st">""</span>, <span class="st">"MEM"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="plot_raster.html">plot_raster</a></span><span class="op">(</span>legend <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>              minmax_pct_cut <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">99</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              col_map_fn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu">ltc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ltc/man/ltc.html" class="external-link">ltc</a></span><span class="op">(</span><span class="st">"heatmap3"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              main <span class="op">=</span> <span class="st">"Storm Lake AOI: terrain ruggedness index"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## get help for vector commands</span></span></span>
 <span class="r-in"><span><span class="fu">gdal_usage</span><span class="op">(</span><span class="st">"vector"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -370,7 +445,7 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="deleteDataset.html">deleteDataset</a></span><span class="op">(</span><span class="va">f_out</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## pipeline syntax</span></span></span>
+<span class="r-in"><span><span class="co">## GDAL CLI pipeline syntax</span></span></span>
 <span class="r-in"><span><span class="co"># "raster pipeline" example 2 from:</span></span></span>
 <span class="r-in"><span><span class="co"># https://gdal.org/en/latest/programs/gdal_raster_pipeline.html</span></span></span>
 <span class="r-in"><span><span class="co"># serialize the command to reproject a GTiff file into GDALG format, and</span></span></span>

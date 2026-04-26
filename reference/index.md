@@ -46,6 +46,7 @@
 - [`gdal_commands()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   [`gdal_usage()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
+  [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   [`gdal_alg()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   [`gdal_global_reg_names()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   : Functions for using GDAL CLI algorithms

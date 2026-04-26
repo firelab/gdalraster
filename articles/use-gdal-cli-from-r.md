@@ -24,9 +24,9 @@ to GDAL CLI algorithms and the `GDALAlgorithm` API from R.
 
 ## Development status
 
-The GDAL project states that the new CLI framework
+The GDAL project states that the new CLI framework is
 
-> “is provisionally provided as an alternative interface to GDAL and OGR
+> “provisionally provided as an alternative interface to GDAL and OGR
 > command line utilities. The project reserves the right to modify,
 > rename, reorganize, and change the behavior until it is officially
 > frozen via PSC vote in a future major GDAL release. The utility needs
@@ -364,9 +364,9 @@ methods of the `GDALAlg` object.
 
 #### raster convert
 
-In this example, the input and output datasets are given as positional
-arguments which do not have to be named. They could instead be given as
-named arguments if preferred for clarity.
+The input and output datasets are given as positional arguments which do
+not have to be named. They could instead be given as named arguments if
+preferred for clarity.
 
 ``` r
 ## convert storml_elev.tif to GeoPackage raster
@@ -803,8 +803,7 @@ alg <- gdal_run("vector rasterize", args)
 alg$release()
 
 pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)
-ramp <- scales::colour_ramp(pal)
-plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
+plot_raster(ds, legend = TRUE, col_map_fn = pal, na_col = "#d9d9d9",
             main = "YNP Fires 1984-2022 - Most Recent Burn Year")
 ```
 
@@ -825,7 +824,7 @@ deleteDataset(f_out)
 
 #### Colorized shaded relief
 
-A raster pipline to create a color shaded relief file, based on Example
+A raster pipeline to create a color shaded relief file, based on Example
 3 for [GDAL nested
 pipeline](https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline).
 
@@ -899,9 +898,39 @@ elevations.](img/storml_col_shaded_relief.png)
 ``` r
 # cleanup
 ds$close()
-deleteDataset(f_elev)
-#> [1] TRUE
 deleteDataset(f_out)
+#> [1] TRUE
+```
+
+Alternatively, native R pipe operations can also be used. GDAL in-memory
+datasets (MEM) are an option for intermediate steps as done in the
+following example which generates the color shaded relief map with
+[`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md).
+Whether in-memory or file-backed datasets are used, they are generally
+passed as objects in API usage of GDAL CLI. Object passing avoids the
+overhead of dataset opening and potentially provides cached data.
+
+``` r
+f_elev |>
+  gdal_run_piped("raster color-map", "", "MEM", list(color_map = f_pal)) |>
+  gdal_run_piped("raster blend", "", "MEM", list(
+    operator = "hsv-value",
+    overlay = gdal_run_piped(f_elev, "raster hillshade", "", "MEM",
+                             list(zfactor = 1.5))
+    )
+  ) |>
+  plot_raster(main = "Storm Lake AOI colorized shaded relief")
+```
+
+![Identical to the previous graphical output: a plot of the colorized
+shaded relief map for the Storm Lake area of interest. Lower elevation
+areas are green, transitioning to yellow then light brown, pinkish and
+almost white at the highest
+elevations.](img/storml_col_shaded_relief.png)
+
+``` r
+## clean up the temp file
+deleteDataset(f_elev)
 #> [1] TRUE
 ```
 
@@ -946,14 +975,10 @@ alg <- gdal_run("raster calc", args)
 
 alg$release()
 
-# diverging palette for northness
-# adapted from "heatmap3" in ltc-color-palettes
-# https://github.com/loukesio/ltc-color-palettes
-pal <- c("#d7191c", "#fdae61", "#ffffbf", "#abd9e9")
-
 # transform the pixel values with `gdalraster::northness()`
-plot_raster(ds, legend = TRUE, col_map_fn = pal, pixel_fn = northness,
-            na_col = "#2c7bb6", main = "Storm Lake AOI northness")
+plot_raster(ds, legend = TRUE, col_map_fn = ltc::ltc("heatmap3", 4),
+            pixel_fn = northness, na_col = ltc::ltc("heatmap3")[5],
+            main = "Storm Lake AOI northness")
 ```
 
 ![A plot of northness for the Storm Lake area of interest. The pixel
@@ -966,6 +991,41 @@ water.](img/storml_northness.png)
 ``` r
 ds$close()
 ```
+
+#### Visualize DEM derivatives
+
+``` r
+# terrain ruggedness index (TRI)
+system.file("extdata/storml_elev.tif", package="gdalraster") |>
+  gdal_run_piped("raster tri", "", "MEM") |>
+  plot_raster(legend = TRUE,
+              minmax_pct_cut = c(0, 99),
+              col_map_fn = rev(ltc::ltc("heatmap3")),
+              main = "Storm Lake AOI: terrain ruggedness index")
+```
+
+![A plot of terrain ruggedness index (TRI) for the Storm Lake area of
+interest. The pixel values range from 0 to 75, with a diverging heatmap
+color gradient ranging from blue to yellow, orange and then red. These
+correspond to blue for flat terrain with low ruggedness, to red for the
+most rugged terrain.](img/storml_tri.png)
+
+``` r
+# topographic position index (TPI)
+system.file("extdata/storml_elev.tif", package = "gdalraster") |>
+  gdal_run_piped("raster tpi", "", "MEM") |>
+  plot_raster(legend = TRUE,
+              minmax_pct_cut = c(1, 98),
+              col_map_fn = rev(ltc::ltc("heatmap3")),
+              main = "Storm Lake AOI: topgraphic position index")
+```
+
+![A plot of topographic position index (TPI) for the Storm Lake area of
+interest. The pixel values range from -4.4 to 6.0, with a diverging
+heatmap color gradient ranging from blue to yellow, orange and then red.
+Negative values indicate concave positions (e.g., ravines) while
+positive values indicate convexity (e.g., ridge
+tops).](img/storml_tpi.png)
 
 ## See also
 
