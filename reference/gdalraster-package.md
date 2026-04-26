@@ -34,7 +34,6 @@ related stand-alone functions:
   [`create()`](https://firelab.github.io/gdalraster/reference/create.md),
   [`createCopy()`](https://firelab.github.io/gdalraster/reference/createCopy.md),
   [`rasterFromRaster()`](https://firelab.github.io/gdalraster/reference/rasterFromRaster.md),
-  [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md),
   [`getCreationOptions()`](https://firelab.github.io/gdalraster/reference/getCreationOptions.md),
   [`validateCreationOptions()`](https://firelab.github.io/gdalraster/reference/validateCreationOptions.md),
   [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
@@ -54,6 +53,7 @@ related stand-alone functions:
   [`polygonize()`](https://firelab.github.io/gdalraster/reference/polygonize.md),
   [`rasterize()`](https://firelab.github.io/gdalraster/reference/rasterize.md),
   [`sieveFilter()`](https://firelab.github.io/gdalraster/reference/sieveFilter.md),
+  [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md),
   [`warp()`](https://firelab.github.io/gdalraster/reference/warp.md),
   [`GDALRaster$getChecksum()`](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md)
 
