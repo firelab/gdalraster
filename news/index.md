@@ -1,6 +1,14 @@
 # Changelog
 
-## gdalraster 2.5.0.9024 (dev)
+## gdalraster 2.5.0.9025 (dev)
+
+- add
+  [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
+  (GDAL CLI): a variation of
+  [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
+  suitable for use with the R native pipe operator
+  ([\#956](https://github.com/firelab/gdalraster/issues/956))
+  (2026-04-25)
 
 - add
   [`g_invalid_reason()`](https://firelab.github.io/gdalraster/reference/g_query.md):
