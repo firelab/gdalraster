@@ -63,8 +63,6 @@
   : Validate the list of creation options that are handled by a driver
 - [`rasterFromRaster()`](https://firelab.github.io/gdalraster/reference/rasterFromRaster.md)
   : Create a raster from an existing raster as template
-- [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md)
-  : Convert raster data between different formats
 - [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
   [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
   : Create a GDAL in-memory dataset from R data without copying
@@ -103,6 +101,8 @@
   : Burn vector geometries into a raster
 - [`sieveFilter()`](https://firelab.github.io/gdalraster/reference/sieveFilter.md)
   : Remove small raster polygons
+- [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md)
+  : Convert raster data between different formats
 - [`warp()`](https://firelab.github.io/gdalraster/reference/warp.md) :
   Raster reprojection and mosaicing
 
