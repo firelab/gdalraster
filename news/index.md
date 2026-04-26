@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.5.0.9025 (dev)
+## gdalraster 2.5.0.9100 (dev)
+
+- **breaking change**: rename
+  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
+  as
+  [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
+  ([\#957](https://github.com/firelab/gdalraster/issues/957))
+  (2026-04-25)
 
 - add
   [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
@@ -133,7 +140,7 @@ CRAN release: 2026-03-25
   `GDALIsLineOfSightVisible()`
   ([\#869](https://github.com/firelab/gdalraster/issues/869))
 - add
-  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md):
+  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md):
   use pixel data in an existing R vector to create a GDAL in-memory
   raster with zero copy
   ([\#910](https://github.com/firelab/gdalraster/issues/910))

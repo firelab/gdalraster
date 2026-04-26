@@ -37,7 +37,7 @@ related stand-alone functions:
   [`translate()`](https://firelab.github.io/gdalraster/reference/translate.md),
   [`getCreationOptions()`](https://firelab.github.io/gdalraster/reference/getCreationOptions.md),
   [`validateCreationOptions()`](https://firelab.github.io/gdalraster/reference/validateCreationOptions.md),
-  [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/vector_to_MEM.md)
+  [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
 
 - virtual raster:
   [`autoCreateWarpedVRT()`](https://firelab.github.io/gdalraster/reference/autoCreateWarpedVRT.md),

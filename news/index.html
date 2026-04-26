@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9025</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9100</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.5.0.9025" id="gdalraster-2509025-dev">gdalraster 2.5.0.9025 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509025-dev"></a></h2>
-<ul><li><p>add <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code> (GDAL CLI): a variation of <code><a href="../reference/gdal_cli.html">gdal_run()</a></code> suitable for use with the R native pipe operator (<a href="https://github.com/firelab/gdalraster/issues/956" class="external-link">#956</a>) (2026-04-25)</p></li>
+<h2 class="pkg-version" data-toc-text="2.5.0.9100" id="gdalraster-2509100-dev">gdalraster 2.5.0.9100 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509100-dev"></a></h2>
+<ul><li><p><strong>breaking change</strong>: rename <code><a href="../reference/rvector_to_MEM.html">vector_to_MEM()</a></code> as <code><a href="../reference/rvector_to_MEM.html">rvector_to_MEM()</a></code> (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>) (2026-04-25)</p></li>
+<li><p>add <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code> (GDAL CLI): a variation of <code><a href="../reference/gdal_cli.html">gdal_run()</a></code> suitable for use with the R native pipe operator (<a href="https://github.com/firelab/gdalraster/issues/956" class="external-link">#956</a>) (2026-04-25)</p></li>
 <li><p>add <code><a href="../reference/g_query.html">g_invalid_reason()</a></code>: interface to <code>OGR_G_GetInvalidityReason()</code> in GDAL &gt;=3.13 (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>) (2026-04-25)</p></li>
 <li><p>add <code>.rasterize_polygon()</code> for internal use (<a href="https://github.com/firelab/gdalraster/issues/955" class="external-link">#955</a>) (2026-04-23)</p></li>
 <li><p><code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>) (2026-04-18)</p></li>
@@ -88,7 +89,7 @@
 <li>add class method <code>GDALRaster$setBbox()</code>: convenience wrapper for setting the geotransform from a bounding box (<a href="https://github.com/firelab/gdalraster/issues/878" class="external-link">#878</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
 <li>add <code><a href="../reference/read_to_nativeRaster.html">read_to_nativeRaster()</a></code>: read raster data directly as an R object of class <code>nativeRaster</code> for fast rendering, also added as the class method <code>GDALRaster$readToNativeRaster()</code> (<a href="https://github.com/firelab/gdalraster/issues/875" class="external-link">#875</a>, thanks to <a href="https://github.com/mdsumner" class="external-link">@mdsumner</a>)</li>
 <li>add <code><a href="../reference/is_los_visible.html">is_los_visible()</a></code>: check line of sight between pairs of point locations using <code>GDALIsLineOfSightVisible()</code> (<a href="https://github.com/firelab/gdalraster/issues/869" class="external-link">#869</a>)</li>
-<li>add <code><a href="../reference/vector_to_MEM.html">vector_to_MEM()</a></code>: use pixel data in an existing R vector to create a GDAL in-memory raster with zero copy (<a href="https://github.com/firelab/gdalraster/issues/910" class="external-link">#910</a>)</li>
+<li>add <code><a href="../reference/rvector_to_MEM.html">vector_to_MEM()</a></code>: use pixel data in an existing R vector to create a GDAL in-memory raster with zero copy (<a href="https://github.com/firelab/gdalraster/issues/910" class="external-link">#910</a>)</li>
 <li>add <code><a href="../reference/vsi_glob.html">vsi_glob()</a></code>: get file and directory names matching a pattern that may contain wildcards, wrapper of <code>VSIGlob()</code> in GDAL &gt;= 3.11 (<a href="https://github.com/firelab/gdalraster/issues/864" class="external-link">#864</a>)</li>
 <li>add <code><a href="../reference/vsi_uri_to_vsi_path.html">vsi_uri_to_vsi_path()</a></code>: return VSI compatible paths from URIs / URLs, wrapper of <code>VSIURIToVSIPath()</code> in GDAL &gt;= 3.12 (<a href="https://github.com/firelab/gdalraster/issues/865" class="external-link">#865</a>)</li>
 <li>class <code>VSIFile</code>: add a writable field <code>reportVSIFErrorAsEof</code>, and check the VSI error indicator in the <code>read()</code> and <code>eof()</code> methods if GDAL &gt;= 3.10 (<a href="https://github.com/firelab/gdalraster/issues/901" class="external-link">#901</a>)</li>
