@@ -385,15 +385,18 @@ described below that operate on individual bands, the <code>band</code>
 argument is the integer band number (1-based).</p>
 <p><code>$addBand(dataType, options)</code><br>
 Adds a band to a dataset if the underlying format supports this action.
-Most formats do not, but <code>"MEM"</code> and <code>"VRT"</code> are notable exceptions
-that support adding bands. The added band will always be the last band.
+Most formats do not, but MEM and VRT are notable exceptions that support
+adding bands. The added band will always be the last band.
 <code>dataType</code> is a character string containing the data type name
 (e.g., <code>"Byte"</code>, <code>"UInt8"</code> (GDAL &gt;= 3.13), <code>"Int16"</code>, <code>"UInt16"</code>, <code>"Int32"</code>,
 <code>"Float32"</code>, etc).
-The <code>options</code> argument is a character vector of NAME=VALUE option strings.
-Supported options are format specific. Note that the <code>options</code> argument is
-required but may be given as <code>NULL</code>. Returns logical <code>TRUE</code> on success
-or <code>FALSE</code> if a band could not be added.</p>
+The <code>options</code> argument is a character vector of format specific <code>NAME=VALUE</code>
+strings (may be <code>NULL</code>). For a MEM dataset, <code>options</code> can also be a vector
+of <code>"numeric"</code>, <code>"integer"</code>, <code>"raw"</code> or <code>"complex"</code> values to be exposed as
+a MEM band. In that case, the vector must have length equal to the raster
+<code>xsize * ysize</code>, with values in left to right, top to bottom pixel order.
+See also <code><a href="rvector_to_MEM.html">rvector_to_MEM()</a></code>. Returns logical <code>TRUE</code> on success or
+<code>FALSE</code> if a band could not be added.</p>
 <p><code>$getGeoTransform()</code><br>
 Returns the affine transformation coefficients for transforming between
 pixel/line raster space (column/row) and projection coordinate space

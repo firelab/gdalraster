@@ -162,7 +162,9 @@ in a future version. Please use <code>rvector_to_MEM()</code> instead.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>The <code>$close()</code> method should be called when the <code>GDALRaster</code> object is no
+    <p>MEM datasets also support <code>addBand()</code> from existing R data without copying
+(see Examples).</p>
+<p>The <code>$close()</code> method should be called when the <code>GDALRaster</code> object is no
 longer needed so that resources can be freed. MEM datasets cannot be
 re-opened once the object's <code>$close()</code> method has been called.</p>
 <p><code>vector_to_MEM()</code> is a deprecated name for the function, currently set as
@@ -176,27 +178,62 @@ in a future version</em>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="fl">50</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">ds_mem</span> <span class="op">&lt;-</span> <span class="fu">rvector_to_MEM</span><span class="op">(</span><span class="va">v</span>, xsize <span class="op">=</span> <span class="fl">10</span>, ysize <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="fl">20</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">ds_mem</span> <span class="op">&lt;-</span> <span class="fu">rvector_to_MEM</span><span class="op">(</span><span class="va">v</span>, xsize <span class="op">=</span> <span class="fl">5</span>, ysize <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: In Memory Raster (MEM)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   "MEM:::DATAPOINTER=0x55fa99ae3fe0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 10, 5, 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: &lt;data pointer&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 5, 4, 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: not set</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 1.000000, 1.000000</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 0.000000, 0.000000, 10.000000, 5.000000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 0.000000, 0.000000, 5.000000, 4.000000</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="op">(</span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">==</span> <span class="va">v</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="op">(</span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">==</span> <span class="va">v</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">write</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">5</span>, <span class="op">(</span><span class="va">v</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">write</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="op">(</span><span class="va">v</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  -46  -43 -196 -142 -124 -149 -196  -63 -111 -176  -53 -254 -202  -79 -141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16] -148 -179  -64  -47 -151 -123 -245  -58  -31 -140 -211  -59 -125 -125  -75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] -156  -60 -132 -232 -177 -233 -179 -205  -47 -199 -201 -161 -249 -127  -42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [46] -157  -21 -250  -10  -25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] -148 -179  -64  -47 -151</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># MEM also supports no-copy addBand() from R data</span></span></span>
+<span class="r-in"><span><span class="va">xsize</span> <span class="op">&lt;-</span> <span class="fl">400</span></span></span>
+<span class="r-in"><span><span class="va">ysize</span> <span class="op">&lt;-</span> <span class="fl">300</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="va">xsize</span> <span class="op">*</span> <span class="va">ysize</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/raw.html" class="external-link">as.raw</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span> <span class="op">&lt;-</span> <span class="fu">rvector_to_MEM</span><span class="op">(</span><span class="va">r</span>, <span class="va">xsize</span>, <span class="va">ysize</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">setRasterColorInterp</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"Red"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="va">xsize</span> <span class="op">*</span> <span class="va">ysize</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/raw.html" class="external-link">as.raw</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">addBand</span><span class="op">(</span><span class="st">"Byte"</span>, <span class="va">g</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">setRasterColorInterp</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"Green"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">255</span>, <span class="va">xsize</span> <span class="op">*</span> <span class="va">ysize</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/raw.html" class="external-link">as.raw</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">addBand</span><span class="op">(</span><span class="st">"Byte"</span>, <span class="va">b</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">setRasterColorInterp</span><span class="op">(</span><span class="fl">3</span>, <span class="st">"Blue"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Driver: MEM/In Memory Raster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Files: none associated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Size is 400, 300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Origin = (0.000000000000000,0.000000000000000)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pixel Size = (1.000000000000000,1.000000000000000)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Corner Coordinates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Upper Left  (   0.0000000,   0.0000000) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lower Left  (       0.000,     300.000) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Upper Right (     400.000,       0.000) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lower Right (     400.000,     300.000) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Center      (     200.000,     150.000) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=400x1 Type=Byte, ColorInterp=Red</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Band 2 Block=400x1 Type=Byte, ColorInterp=Green</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Band 3 Block=400x1 Type=Byte, ColorInterp=Blue</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot_raster.html">plot_raster</a></span><span class="op">(</span><span class="va">ds_mem</span>, main <span class="op">=</span> <span class="st">"random RGB"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> failed to get projection ref</span>
+<span class="r-plt img"><img src="rvector_to_MEM-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">ds_mem</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>

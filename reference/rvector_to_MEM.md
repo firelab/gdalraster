@@ -110,6 +110,9 @@ removed in a future version. Please use `rvector_to_MEM()` instead.
 
 ## Note
 
+MEM datasets also support `addBand()` from existing R data without
+copying (see Examples).
+
 The `$close()` method should be called when the `GDALRaster` object is
 no longer needed so that resources can be freed. MEM datasets cannot be
 re-opened once the object's `$close()` method has been called.
@@ -125,26 +128,61 @@ removed in a future version*.
 ## Examples
 
 ``` r
-v <- sample(0:255, 50, replace = TRUE)
-(ds_mem <- rvector_to_MEM(v, xsize = 10, ysize = 5))
+v <- sample(0:255, 20, replace = TRUE)
+(ds_mem <- rvector_to_MEM(v, xsize = 5, ysize = 4))
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory Raster (MEM)
-#>   • DSN:
-#>   "MEM:::DATAPOINTER=0x55fa99ae3fe0,PIXELS=10,LINES=5,BANDS=1,DATATYPE=Int32,GEOTRANSFORM=0/1/0/0/0/1,BANDOFFSET=200"
-#>   • Dimensions: 10, 5, 1
+#>   • DSN: <data pointer>
+#>   • Dimensions: 5, 4, 1
 #>   • CRS: not set
 #>   • Pixel resolution: 1.000000, 1.000000
-#>   • Bbox: 0.000000, 0.000000, 10.000000, 5.000000
+#>   • Bbox: 0.000000, 0.000000, 5.000000, 4.000000
 
-all((ds_mem$read(1, 0, 0, 10, 5, 10, 5) == v))
+all((ds_mem$read(1, 0, 0, 5, 4, 5, 4) == v))
 #> [1] TRUE
 
-ds_mem$write(1, 0, 0, 10, 5, (v * -1))
+ds_mem$write(1, 0, 0, 5, 4, (v * -1))
 print(v)
 #>  [1]  -46  -43 -196 -142 -124 -149 -196  -63 -111 -176  -53 -254 -202  -79 -141
-#> [16] -148 -179  -64  -47 -151 -123 -245  -58  -31 -140 -211  -59 -125 -125  -75
-#> [31] -156  -60 -132 -232 -177 -233 -179 -205  -47 -199 -201 -161 -249 -127  -42
-#> [46] -157  -21 -250  -10  -25
+#> [16] -148 -179  -64  -47 -151
+
+ds_mem$close()
+
+# MEM also supports no-copy addBand() from R data
+xsize <- 400
+ysize <- 300
+r <- sample(0:255, xsize * ysize, replace = TRUE) |> as.raw()
+ds_mem <- rvector_to_MEM(r, xsize, ysize)
+ds_mem$setRasterColorInterp(1, "Red")
+
+g <- sample(0:255, xsize * ysize, replace = TRUE) |> as.raw()
+ds_mem$addBand("Byte", g)
+#> [1] TRUE
+ds_mem$setRasterColorInterp(2, "Green")
+
+b <- sample(0:255, xsize * ysize, replace = TRUE) |> as.raw()
+ds_mem$addBand("Byte", b)
+#> [1] TRUE
+ds_mem$setRasterColorInterp(3, "Blue")
+
+ds_mem$info()
+#> Driver: MEM/In Memory Raster
+#> Files: none associated
+#> Size is 400, 300
+#> Origin = (0.000000000000000,0.000000000000000)
+#> Pixel Size = (1.000000000000000,1.000000000000000)
+#> Corner Coordinates:
+#> Upper Left  (   0.0000000,   0.0000000) 
+#> Lower Left  (       0.000,     300.000) 
+#> Upper Right (     400.000,       0.000) 
+#> Lower Right (     400.000,     300.000) 
+#> Center      (     200.000,     150.000) 
+#> Band 1 Block=400x1 Type=Byte, ColorInterp=Red
+#> Band 2 Block=400x1 Type=Byte, ColorInterp=Green
+#> Band 3 Block=400x1 Type=Byte, ColorInterp=Blue
+
+plot_raster(ds_mem, main = "random RGB")
+#> ✖ failed to get projection ref
 
 ds_mem$close()
 ```
