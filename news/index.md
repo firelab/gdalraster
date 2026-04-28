@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9101 (dev)
+## gdalraster 2.5.0.9102 (dev)
+
+- `GDALRaster$addBand()`: accept an R vector to add a MEM band from data
+  pointer without copying
+  ([\#960](https://github.com/firelab/gdalraster/issues/960))
+  (2026-04-27)
 
 - add `GDALRaster$getInterBandCovMatrix()`: class method to fetch or
   compute the covariance matrix between bands of a dataset using

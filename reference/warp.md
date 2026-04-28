@@ -247,7 +247,7 @@ args <- c(args, "-of", "HFA", "-co", "COMPRESSED=YES")
 alb83_file <- file.path(tempdir(), "storml_elev_alb83.img")
 warp(elev_file, alb83_file, t_srs = "EPSG:5070", cl_arg = args)
 #>  ■■                                 2% |  ETA:  0s
-#> ✔ Done (10ms)
+#> ✔ Done (11ms)
 #> 
 
 ds <- new(GDALRaster, alb83_file)
