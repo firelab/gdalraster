@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.5.0.9102 (dev)
+## gdalraster 2.5.0.9103 (dev)
+
+- redirect `/vsistdout/` to the compliant output stream to allow using
+  GDAL standard output streaming in the R terminal
+  ([\#963](https://github.com/firelab/gdalraster/issues/963))
+  (2026-04-29)
 
 - `GDALRaster$addBand()`: accept an R vector to add a MEM band from data
   pointer without copying
