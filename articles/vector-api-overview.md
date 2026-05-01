@@ -406,6 +406,7 @@ input and output (STDIN, STDOUT), files stored on network (publicly
 accessible, or in private buckets of commercial cloud services), etc.
 
 ``` r
+
 library(gdalraster)
 
 # get path to the Yellowstone National Park sample dataset
@@ -442,6 +443,7 @@ information. Otherwise, SOZip is fully backward compatible and works as
 a regular .zip file.
 
 ``` r
+
 if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
   cat("SOZip metadata for ynp_features.gpkg:\n")
   vsi_get_file_metadata(zf_gpkg, domain = "ZIP") |> print()
@@ -485,6 +487,7 @@ returns information about the format and content of a data source that
 may contain raster and/or vector data.
 
 ``` r
+
 inspectDataset(zf_gpkg)
 #> $format
 #> [1] "GPKG"
@@ -518,6 +521,7 @@ inspectDataset(zf_gpkg)
 OGR functions can also be used to inspect a vector data source.
 
 ``` r
+
 # test for existence of a vector data source with at least read access
 ogr_ds_exists(zf_gpkg)
 #> [1] TRUE
@@ -537,6 +541,7 @@ containing any of the arguments supported by the
 command-line utility included with GDAL.
 
 ``` r
+
 # list the layers in a data source
 ogrinfo(zf_gpkg)
 #> INFO: Open of `/vsizip//home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip/ynp_features.gpkg'
@@ -604,6 +609,7 @@ not be needed in all cases but might be used in code that is required to
 handle input datasets in a general way.
 
 ``` r
+
 # copy ynp_features.gpkg from the zip file to an in-memory file
 mem_gpkg <- "/vsimem/tmp/ynp_features.gpkg"
 ogr2ogr(zf_gpkg, mem_gpkg)
@@ -667,6 +673,7 @@ As a simple example for illustration, we populate a new field to flag
 geothermal features.
 
 ``` r
+
 # create a new field
 if (ogr_layer_test_cap(mem_gpkg, "points_of_interest")$CreateField) {
   ogr_field_create(mem_gpkg, "points_of_interest",
@@ -701,6 +708,7 @@ returns an object of class `GDALVector` for SQL statements that return a
 result set.
 
 ``` r
+
 # read and display the geothermal features
 sql <- "SELECT poi_name, geom
           FROM points_of_interest
@@ -752,6 +760,7 @@ opened with
 We also delete the temporary in-memory file.
 
 ``` r
+
 lyr$close()
 
 # delete a data source
@@ -780,6 +789,7 @@ Here we instantiate a `GDALVector` object for the park boundary layer
 and retrieve information about it.
 
 ``` r
+
 f <- system.file("extdata/ynp_features.zip", package = "gdalraster")
 ynp_dsn <- file.path("/vsizip", f, "ynp_features.gpkg")
 
@@ -867,6 +877,7 @@ object returned for an individual feature carries the `"OGRFeature"`
 class attribute.
 
 ``` r
+
 bnd_feat <- bnd$getNextFeature()
 str(bnd_feat)
 #> List of 6
@@ -932,6 +943,7 @@ class attribute providing S3 methods for
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html).
 
 ``` r
+
 # SQL layer for public roads
 sql <- "SELECT rdname, opentopubl, geom FROM roads WHERE opentopubl = 'Yes'"
 (roads <- new(GDALVector, ynp_dsn, sql))
@@ -979,6 +991,7 @@ Roads'.](vector-api-overview_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
 
+
 roads$close()
 ```
 
@@ -991,6 +1004,7 @@ actually scan the entire layer once to count features. The
 `$testCapability()` method can be checked if this might be a concern.
 
 ``` r
+
 poi <- new(GDALVector, ynp_dsn, "points_of_interest")
 
 poi$getFeatureCount()
@@ -1036,6 +1050,7 @@ a `nanoarrow_array` (one batch at a time), or the
 `nanoarrow_array_stream` itself (pulling all batches in the stream).
 
 ``` r
+
 # Expose an ArrowArrayStream (requires GDAL >= 3.6)
 
 # re-open the roads layer with the required argument for type of access
@@ -1138,6 +1153,7 @@ function is used to project layers in geographic coordinates from
 ynp_features.gpkg to match the coordinate system of the MTBS layer.
 
 ``` r
+
 # MTBS fire perimeters in Yellowstone National Park 1984-2022
 f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 
@@ -1234,6 +1250,7 @@ untitled.](vector-api-overview_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 
+
 fires$close()
 poi$close()
 ```
@@ -1249,6 +1266,7 @@ overwriting an existing one.
 Here we add the centroid of the YNP boundary as a point of interest.
 
 ``` r
+
 # create a feature object for the YNP centroid as a point of interest
 (bnd_centroid_xy <- g_centroid(bnd_feat$geom))
 #>         x         y 
@@ -1326,6 +1344,7 @@ feature to rewrite. Note that if any fields are omitted in the passed
   corresponding JSON member.
 
 ``` r
+
 # rewrite a feature in the "point_of_interest" layer updating the feature name
 # verify the layer has random write capability
 poi$testCapability()$RandomWrite
@@ -1395,6 +1414,7 @@ the
 class attribute.
 
 ``` r
+
 # delete the "YNP centroid" feature that was created above
 # verify the layer has delete feature capability
 poi$testCapability()$DeleteFeature
@@ -1463,6 +1483,7 @@ treated as an attribute of a feature, so it is not specified in the
 layer definition.
 
 ``` r
+
 # create a layer definition for random_points
 # the spatial ref was obtained above as: srs_mtsp <- fires$getSpatialRef()
 defn <- ogr_def_layer("POINT", srs = srs_mtsp)
@@ -1481,6 +1502,7 @@ Next we create the first batch of features and write them without
 grouping in a transaction, measuring time elapsed.
 
 ``` r
+
 batch_size <- as.integer(1e5)
 
 # create a batch of features
@@ -1495,11 +1517,11 @@ d$geom <- pts_geom
 # write the batch (no transaction)
 system.time(res <- lyr$batchCreateFeature(d))
 #>  ■                                  0% |  ETA:  2m
-#>  ■■■■■■■■■■■■■■■■■■■■■■■■■■■       85% |  ETA:  0s
+#>  ■■■■■■■■■■■■■■■■■■■■■■■■          75% |  ETA:  1s
 #> ✔ Done (2.3s)
 #> 
 #>    user  system elapsed 
-#>   2.306   0.004   2.310
+#>   2.336   0.007   2.342
 
 (all(res))
 #> [1] TRUE
@@ -1512,6 +1534,7 @@ A second batch of features is grouped in a transaction for writing, and
 the layer is checked for the expected output.
 
 ``` r
+
 rndX <- sample((bb[1] + 1):(bb[3] - 1), batch_size, replace = TRUE)
 rndY <- sample((bb[2] + 1):(bb[4] - 1), batch_size, replace = TRUE)
 pts <- cbind(rndX, rndY)
@@ -1530,7 +1553,7 @@ system.time({
     lyr$rollbackTransaction()
 })
 #>    user  system elapsed 
-#>   1.012   0.003   1.014
+#>   1.022   0.007   1.030
 
 (all(res2))
 #> [1] TRUE
@@ -1543,22 +1566,22 @@ d_out <- lyr$fetch(-1)
 head(d_out)
 #> OGR feature set
 #>   FID               pt_desc         create_time                           geom
-#> 1   1 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
-#> 2   2 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
-#> 3   3 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
-#> 4   4 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
-#> 5   5 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
-#> 6   6 random points batch 1 2026-05-01 04:22:52 WKB POINT: raw 01 01 00 00 ...
+#> 1   1 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
+#> 2   2 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
+#> 3   3 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
+#> 4   4 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
+#> 5   5 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
+#> 6   6 random points batch 1 2026-05-01 15:04:18 WKB POINT: raw 01 01 00 00 ...
 
 tail(d_out)
 #> OGR feature set
 #>           FID               pt_desc         create_time
-#> 199995 199995 random points batch 2 2026-05-01 04:22:55
-#> 199996 199996 random points batch 2 2026-05-01 04:22:55
-#> 199997 199997 random points batch 2 2026-05-01 04:22:55
-#> 199998 199998 random points batch 2 2026-05-01 04:22:55
-#> 199999 199999 random points batch 2 2026-05-01 04:22:55
-#> 200000 200000 random points batch 2 2026-05-01 04:22:55
+#> 199995 199995 random points batch 2 2026-05-01 15:04:21
+#> 199996 199996 random points batch 2 2026-05-01 15:04:21
+#> 199997 199997 random points batch 2 2026-05-01 15:04:21
+#> 199998 199998 random points batch 2 2026-05-01 15:04:21
+#> 199999 199999 random points batch 2 2026-05-01 15:04:21
+#> 200000 200000 random points batch 2 2026-05-01 15:04:21
 #>                                  geom
 #> 199995 WKB POINT: raw 01 01 00 00 ...
 #> 199996 WKB POINT: raw 01 01 00 00 ...
@@ -1606,6 +1629,7 @@ distribution systems to define a download box (e.g.,
 coordinates in Web Mercator projection (EPSG 3857).
 
 ``` r
+
 # write the Maple Fire AOI bounding box as GeoJSON in EPSG 3857
 json_file <- file.path(tempdir(), "maple_fire_aoi.geojson")
 
@@ -1668,6 +1692,7 @@ features in the output layer have attributes from both the input and
 method layers.
 
 ``` r
+
 # layer filtered to fires after 1988
 lyr1 <- new(GDALVector, mtbs_dsn, "mtbs_perims")
 lyr1$setAttributeFilter("ig_year > 1988")
@@ -1740,6 +1765,7 @@ showing re-burned areas in
 red'.](vector-api-overview_files/figure-html/unnamed-chunk-24-1.png)
 
 ``` r
+
 
 # clean up
 lyr1$close()

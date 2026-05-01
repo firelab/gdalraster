@@ -242,6 +242,7 @@ GDAL_RASTERIO_RESAMPLING configuration option can be defined to override
 the default resampling (NEAREST) to one of BILINEAR, CUBIC, CUBICSPLINE,
 LANCZOS, AVERAGE or MODE, for example:
 
+
     set_config_option("GDAL_RASTERIO_RESAMPLING", "BILINEAR")
 
 ## See also

@@ -106,17 +106,18 @@ experimental columnar interface introduced in GDAL 3.6”.
 
 ## Timings
 
-| Bench program                       | Time (s) | Data frame class | Geom list column  |
-|:------------------------------------|---------:|:-----------------|:------------------|
-| bench_ogr.cpp (C++ raw perf)        |     2.63 | none             | n/a               |
-| bench_gdalraster_fetch.R            |    11.20 | OGRFeatureSet    | WKB `raw` vectors |
-| bench_gdalraster_fetch_conv_to_sf.R |    25.01 | sf               | classed sfc       |
-| bench_sf_read_sf.R                  |    77.24 | sf               | classed sfc       |
-| bench_ogr_batch.cpp (C++ raw perf)  |     0.45 | none             | n/a               |
-| bench_gdalraster_arrow_stream.R     |     2.87 | base data.frame  | WKB `raw` vectors |
-| bench_sf_read_sf_use_stream.R       |    11.17 | sf               | classed sfc       |
+| Bench program | Time (s) | Data frame class | Geom list column |
+|:---|---:|:---|:---|
+| bench_ogr.cpp (C++ raw perf) | 2.63 | none | n/a |
+| bench_gdalraster_fetch.R | 11.20 | OGRFeatureSet | WKB `raw` vectors |
+| bench_gdalraster_fetch_conv_to_sf.R | 25.01 | sf | classed sfc |
+| bench_sf_read_sf.R | 77.24 | sf | classed sfc |
+| bench_ogr_batch.cpp (C++ raw perf) | 0.45 | none | n/a |
+| bench_gdalraster_arrow_stream.R | 2.87 | base data.frame | WKB `raw` vectors |
+| bench_sf_read_sf_use_stream.R | 11.17 | sf | classed sfc |
 
 Read nz-building-outlines.gpkg (1.5 GB) and populate a data frame.
+{.table}
 
 ## Code
 
@@ -187,6 +188,7 @@ sys   0m0.172s
 ### bench_gdalraster_fetch.R
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.10.3 (released 2025-04-01), GEOS 3.12.2, PROJ 9.4.1
 
@@ -248,6 +250,7 @@ lyr$close()
 ### bench_gdalraster_fetch_conv_to_sf.R
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.10.3 (released 2025-04-01), GEOS 3.12.2, PROJ 9.4.1
 
@@ -316,6 +319,7 @@ lyr$close()
 ### bench_sf_read_sf.R
 
 ``` r
+
 library(sf)
 #> Linking to GEOS 3.12.2, GDAL 3.10.3, PROJ 9.4.1; sf_use_s2() is TRUE
 
@@ -400,6 +404,7 @@ sys   0m0.562s
 ### bench_gdalraster_arrow_stream.R
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.10.3 (released 2025-04-01), GEOS 3.12.2, PROJ 9.4.1
 
@@ -473,6 +478,7 @@ lyr$close()
 ### bench_sf_read_sf_use_stream.R
 
 ``` r
+
 library(sf)
 #> Linking to GEOS 3.12.2, GDAL 3.10.3, PROJ 9.4.1; sf_use_s2() is TRUE
 

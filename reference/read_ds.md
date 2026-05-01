@@ -101,6 +101,7 @@ UInt16, Int32), otherwise as type `double` (UInt32, Float32, Float64).
 
 The output object has attribute `gis`, a list containing:
 
+
       $type = "raster"
       $bbox = c(xmin, ymin, xmax, ymax)
       $dim = c(xsize, ysize, nbands)

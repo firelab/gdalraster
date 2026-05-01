@@ -4,6 +4,7 @@ These values are used in
 [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md)
 as the default processing options:
 
+
         list(
              "hillshade" =    c("-z", "1", "-s", "1", "-az", "315",
                                 "-alt", "45", "-alg", "Horn",

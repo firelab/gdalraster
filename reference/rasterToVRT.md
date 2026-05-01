@@ -90,6 +90,7 @@ rasterToVRT(
   can also be given as a vector with length size x size. For example, a
   3x3 average filter is given by:
 
+
       krnl <- c(0.11111, 0.11111, 0.11111,
                 0.11111, 0.11111, 0.11111,
                 0.11111, 0.11111, 0.11111)
@@ -107,6 +108,7 @@ rasterToVRT(
   Must be one of `"min"`, `"max"`, `"stddev"`, `"median"` or `"mode"`.
   *Requires GDAL \>= 3.12*. E.g., to compute the median value in a 3x3
   neighborhood around each pixel:
+
 
       krnl <- c(1, 1, 1,
                 1, 1, 1,

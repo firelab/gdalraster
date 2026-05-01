@@ -19,6 +19,7 @@ Note that specific usage is context dependent. Passing `value = ""`
 [`set_config_option()`](https://firelab.github.io/gdalraster/reference/set_config_option.md):
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
 
@@ -42,6 +43,7 @@ override the default `NEAR` to one of `BILINEAR`, `CUBIC`,
 `CUBICSPLINE`, `LANCZOS`, `AVERAGE`, `MODE`, `RMS`, or `GAUSS`:
 
 ``` r
+
 # bilinear interpolation (2x2 neighborhood of pixels)
 set_config_option("GDAL_RASTERIO_RESAMPLING", "BILINEAR")
 ```
@@ -52,6 +54,7 @@ By default, temporary files are written into the current working
 directory. This can be changed with:
 
 ``` r
+
 set_config_option("CPL_TMPDIR", "<dirname>")  # tmpdir to use
 ```
 
@@ -82,6 +85,7 @@ program. See also [GDAL Block
 Cache](https://firelab.github.io/gdalraster/articles/gdal-block-cache.html).
 
 ``` r
+
 # set to a specific size in MB
 set_config_option("GDAL_CACHEMAX", "800")
 
@@ -101,6 +105,7 @@ of file handles that can be opened by a process is generally limited to
 `450`](https://gdal.org/en/stable/drivers/raster/vrt.html#performance-considerations):
 
 ``` r
+
 # default is 100
 set_config_option("GDAL_MAX_DATASET_POOL_SIZE", "450")
 ```
@@ -116,6 +121,7 @@ options for
 PostgreSQL](https://gdal.org/en/stable/drivers/vector/pg.html#configuration-options).
 
 ``` r
+
 # use COPY for inserting to PostGIS
 set_config_option("PG_USE_COPY", "YES")
 ```
@@ -135,6 +141,7 @@ driver documentation at:
 <https://gdal.org/en/stable/drivers/vector/sqlite.html#configuration-options>.
 
 ``` r
+
 # SQLite: GPKG (.gpkg) and Spatialite (.sqlite)
 # enable extra buffering/caching by the GDAL/OGR I/O layer
 set_config_option("SQLITE_USE_OGR_VFS", "YES")
@@ -176,6 +183,7 @@ to write polygons to a vector layer in GeoPackage (.gpkg) or Spatialite
 (.sqlite) formats (see `SQLITE_USE_OGR_VFS` above).
 
 ``` r
+
 # configure SQLite to store the rollback journal in RAM
 set_config_option("OGR_SQLITE_JOURNAL", "MEMORY")
 ```
@@ -192,6 +200,7 @@ certain virtual file systems. The temporary file will be located in
 `CPL_TMPDIR` (see above).
 
 ``` r
+
 # YES|NO to use a temp file
 set_config_option("CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE", "YES")
 ```
@@ -215,6 +224,7 @@ As of GDAL 3.0, the default format for exporting a spatial reference
 definition to Well Known Text is WKT 1. This can be overridden with:
 
 ``` r
+
 # SFSQL/WKT1_SIMPLE/WKT1/WKT1_GDAL/WKT1_ESRI/WKT2_2015/WKT2_2018/WKT2/DEFAULT
 set_config_option("OSR_WKT_FORMAT", "WKT2")
 ```
@@ -236,6 +246,7 @@ Multithreaded computation in
 be enabled with:
 
 ``` r
+
 # note this also affects several other parts of GDAL
 set_config_option("GDAL_NUM_THREADS", "4")  # number of threads or ALL_CPUS
 ```
@@ -289,6 +300,7 @@ Starting with GDAL 3.6, this option also enables multi-threaded decoding
 when read requests intersect several tiles/strips:
 
 ``` r
+
 # specify the number of worker threads or ALL_CPUS
 # note this also affects several other parts of GDAL
 set_config_option("GDAL_NUM_THREADS", "ALL_CPUS")
@@ -301,6 +313,7 @@ Raster overviews (a.k.a. pyramids) can be built with the
 to compress the overviews when building:
 
 ``` r
+
 # applies to external overviews (.ovr), and internal overviews if GDAL >= 3.6
 # LZW is a good default but several other compression algorithms are available
 set_config_option("COMPRESS_OVERVIEW", "LZW")
@@ -316,6 +329,7 @@ in libtiff \> 4.3.0). `PREDICTOR=3` is only supported for 16, 32 and 64
 bit floating-point data.
 
 ``` r
+
 # horizontal differencing
 set_config_option("PREDICTOR_OVERVIEW", "2")
 ```
@@ -331,6 +345,7 @@ GDAL doc:
 Maximum delay for connection to be established before being aborted.
 
 ``` r
+
 # max delay for connection establishment in seconds
 set_config_option("GDAL_HTTP_CONNECTTIMEOUT", "<seconds>")
 ```
@@ -340,6 +355,7 @@ set_config_option("GDAL_HTTP_CONNECTTIMEOUT", "<seconds>")
 Maximum delay for the whole request to complete before being aborted.
 
 ``` r
+
 # max delay for whole request completion in seconds
 set_config_option("GDAL_HTTP_TIMEOUT", "<seconds>")
 ```
@@ -358,6 +374,7 @@ recommended to increase `CPL_VSIL_CURL_CACHE_SIZE` as well to 128 times
 the value of `CPL_VSIL_CURL_CHUNK_SIZE`.
 
 ``` r
+
 # chunk size in bytes
 set_config_option("CPL_VSIL_CURL_CHUNK_SIZE", "<bytes>")
 ```
@@ -371,6 +388,7 @@ been closed and reopen, during the life-time of the process or until
 is called. The size of this global LRU cache can be modified with:
 
 ``` r
+
 # size in bytes defaults to 16 MB
 set_config_option("CPL_VSIL_CURL_CACHE_SIZE", "<bytes>")
 ```
@@ -387,6 +405,7 @@ Request signing can be disabled for public buckets that do not require
 an AWS account:
 
 ``` r
+
 # public bucket no AWS account required
 set_config_option("AWS_NO_SIGN_REQUEST", "YES")
 ```
@@ -398,6 +417,7 @@ set_config_option("AWS_NO_SIGN_REQUEST", "YES")
 If authentication is required, configure credentials with:
 
 ``` r
+
 set_config_option("AWS_ACCESS_KEY_ID", "<value>")  # key ID
 set_config_option("AWS_SECRET_ACCESS_KEY", "<value>")  # secret access key
 # used for validation if using temporary credentials:
@@ -412,6 +432,7 @@ Sets the AWS region to which requests should be sent. Defaults to
 `us-east-1`.
 
 ``` r
+
 # specify region
 set_config_option("AWS_REGION", "us-west-2")
 ```
@@ -437,6 +458,7 @@ i.e. a filename potentially containing subdirectories.
 Controls whether requests are signed.
 
 ``` r
+
 # public access
 set_config_option("AZURE_NO_SIGN_REQUEST", "YES")
 ```
@@ -448,6 +470,7 @@ administrative interface, containing both the account name and a secret
 key.
 
 ``` r
+
 set_config_option("AZURE_STORAGE_CONNECTION_STRING", "<my_connection_string>")
 ```
 
@@ -477,6 +500,7 @@ or
 `https://planetarycomputer.microsoft.com/api/sas/v1/token/{storage_account}/{container}`
 
 ``` r
+
 # e.g., Planetary Computer access to STAC items as geoparquet datasets
 # https://planetarycomputer.microsoft.com/docs/quickstarts/stac-geoparquet/
 set_config_option("AZURE_STORAGE_ACCOUNT", "pcstacitems")
@@ -522,6 +546,7 @@ enabled. If `AUTO`, SOZip will be enabled for uncompressed files larger
 than `CPL_SOZIP_MIN_FILE_SIZE`.
 
 ``` r
+
 # SOZip optimization defaults to AUTO
 set_config_option("CPL_SOZIP_ENABLED", "YES")
 ```
@@ -534,6 +559,7 @@ be used respectively to specify a value in kilobytes, megabytes or
 gigabytes.
 
 ``` r
+
 # SOZip minimum file size
 set_config_option("CPL_SOZIP_MIN_FILE_SIZE", "100K")
 ```

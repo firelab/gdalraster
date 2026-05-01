@@ -93,6 +93,7 @@ low-level I/O, or prefer a direct GDAL API. Comprehensive
 Install the released version from CRAN with:
 
 ``` r
+
 install.packages("gdalraster")
 ```
 
@@ -124,6 +125,7 @@ development version of **gdalraster**. New packages are built usually
 within ~1 hour of the most recent commit in branch `main`.
 
 ``` r
+
 # Install the development version from r-universe
 install.packages("gdalraster", repos = c("https://firelab.r-universe.dev", "https://cran.r-project.org"))
 ```
@@ -160,6 +162,7 @@ geospatial libraries on other Linux distributions.
 With the dependent libraries available on the system, install from CRAN:
 
 ``` r
+
 install.packages("gdalraster")
 ```
 
@@ -167,6 +170,7 @@ Or install the development version from GitHub using package
 [remotes](https://remotes.r-lib.org/):
 
 ``` r
+
 remotes::install_github("firelab/gdalraster")
 ```
 
@@ -184,6 +188,7 @@ of RTools 4.5 contains GDAL 3.12.1, GEOS 3.14.1 and PROJ 9.7.1.
 With RTools installed:
 
 ``` r
+
 # Install the development version from GitHub
 remotes::install_github("firelab/gdalraster")
 ```
@@ -199,6 +204,7 @@ brew install gdal
 then
 
 ``` r
+
 # Install the development version from GitHub
 remotes::install_github("firelab/gdalraster")
 ```

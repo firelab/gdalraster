@@ -148,6 +148,7 @@ filename or dataset object in `rasterfiles` and specify corresponding
 band numbers in `bands`, along with optional variable names in
 `var.names`, e.g.,
 
+
     rasterfiles = c("multiband.tif", "multiband.tif")
     bands = c(4, 5)
     var.names = c("B4", "B5")
@@ -203,7 +204,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpsqdMIj/rastcalc20a07b98be65.tif"
+#> ℹ output written to: "/tmp/RtmpGQkA4P/rastcalc21894526d2c4.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -227,10 +228,10 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
 (ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
-#> ℹ output written to: "calc20a04ad858b3"
+#> ℹ output written to: "calce2189d5ffb0d"
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory Raster (MEM)
-#>   • DSN: "calc20a04ad858b3"
+#>   • DSN: "calce2189d5ffb0d"
 #>   • Dimensions: 149, 112, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -304,7 +305,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpsqdMIj/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/RtmpGQkA4P/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

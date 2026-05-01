@@ -56,6 +56,7 @@ that define usage as a GDAL RAT, for passing to
 `GDALRaster$setDefaultRAT()`):
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
 
@@ -101,7 +102,7 @@ tbl <- buildRAT(ds,
                 join_df = evt_df)
 #> ℹ scanning raster...
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (16ms)
+#> ✔ Done (13ms)
 #> 
 
 nrow(tbl)
@@ -169,6 +170,7 @@ An attribute table with RGB columns can be passed to
 as a color table (columns `VALUE`, `R`, `G`, `B`):
 
 ``` r
+
 bb <- ds$bbox()
 #| fig.alt: >
 #|   A plot of LANDFIRE Existing Vegetation Type (EVT) for an area of interest
@@ -190,42 +192,44 @@ generates a nicely formatted table for display. Colors are shown if the
 RAT contains RGB columns:
 
 ``` r
+
 displayRAT(tbl, title = "Raster Attribute Table for Storm Lake EVT")
 ```
 
-| Raster Attribute Table for Storm Lake EVT |       |       |                                                                   |        |                    |     |     |     |
-|-------------------------------------------|-------|-------|-------------------------------------------------------------------|--------|--------------------|-----|-----|-----|
-| Color                                     | VALUE | COUNT | EVT_NAME                                                          | EVT_LF | EVT_PHYS           | R   | G   | B   |
-| \#FFFFFF                                  | -9999 | 876   | Fill-NoData                                                       | NA     | NA                 | 255 | 255 | 255 |
-| \#C0FF8A                                  | 7011  | 28    | Rocky Mountain Aspen Forest and Woodland                          | Tree   | Hardwood           | 192 | 255 | 138 |
-| \#BFFFE9                                  | 7046  | 4564  | Northern Rocky Mountain Subalpine Woodland and Parkland           | Tree   | Conifer            | 191 | 255 | 233 |
-| \#A3F0DB                                  | 7050  | 570   | Rocky Mountain Lodgepole Pine Forest                              | Tree   | Conifer            | 163 | 240 | 219 |
-| \#ECFCCC                                  | 7055  | 889   | Rocky Mountain Subalpine Dry-Mesic Spruce-Fir Forest and Woodland | Tree   | Conifer            | 236 | 252 | 204 |
-| \#ECFCCC                                  | 7056  | 304   | Rocky Mountain Subalpine Mesic-Wet Spruce-Fir Forest and Woodland | Tree   | Conifer            | 236 | 252 | 204 |
-| \#3FFF2E                                  | 7057  | 11    | Rocky Mountain Subalpine-Montane Limber-Bristlecone Pine Woodland | Tree   | Conifer            | 63  | 255 | 46  |
-| \#AB916A                                  | 7070  | 267   | Rocky Mountain Alpine Dwarf-Shrubland                             | Shrub  | Shrubland          | 171 | 145 | 106 |
-| \#75573D                                  | 7106  | 3     | Northern Rocky Mountain Montane-Foothill Deciduous Shrubland      | Shrub  | Shrubland          | 117 | 87  | 61  |
-| \#E69729                                  | 7125  | 1     | Inter-Mountain Basins Big Sagebrush Steppe                        | Shrub  | Shrubland          | 230 | 151 | 41  |
-| \#DB8C25                                  | 7126  | 1082  | Inter-Mountain Basins Montane Sagebrush Steppe                    | Shrub  | Shrubland          | 219 | 140 | 37  |
-| \#FFB861                                  | 7140  | 679   | Northern Rocky Mountain Subalpine-Upper Montane Grassland         | Herb   | Grassland          | 255 | 184 | 97  |
-| \#AB916A                                  | 7143  | 199   | Rocky Mountain Alpine Fell-Field                                  | Herb   | Grassland          | 171 | 145 | 106 |
-| \#AB916A                                  | 7144  | 765   | Rocky Mountain Alpine Turf                                        | Herb   | Grassland          | 171 | 145 | 106 |
-| \#FFA352                                  | 7145  | 681   | Rocky Mountain Subalpine-Montane Mesic Meadow                     | Herb   | Grassland          | 255 | 163 | 82  |
-| \#003300                                  | 7166  | 32    | Middle Rocky Mountain Montane Douglas-fir Forest and Woodland     | Tree   | Conifer            | 0   | 51  | 0   |
-| \#806145                                  | 7169  | 60    | Northern Rocky Mountain Subalpine Deciduous Shrubland             | Shrub  | Shrubland          | 128 | 97  | 69  |
-| \#0000FF                                  | 7292  | 397   | Open Water                                                        | Water  | Open Water         | 0   | 0   | 255 |
-| \#AA66CD                                  | 7901  | 2     | Western Cool Temperate Urban Evergreen Forest                     | Tree   | Developed          | 170 | 102 | 205 |
-| \#646464                                  | 9016  | 2486  | Rocky Mountain Alpine Bedrock and Scree                           | Sparse | Sparsely Vegetated | 100 | 100 | 100 |
-| \#B86018                                  | 9017  | 13    | Rocky Mountain Alpine-Montane Wet Meadow                          | Herb   | Riparian           | 184 | 96  | 24  |
-| \#646464                                  | 9018  | 1280  | Rocky Mountain Cliff Canyon and Massive Bedrock                   | Sparse | Sparsely Vegetated | 100 | 100 | 100 |
-| \#B86018                                  | 9021  | 14    | Rocky Mountain Subalpine-Montane Riparian Shrubland               | Shrub  | Riparian           | 184 | 96  | 24  |
-| \#B86018                                  | 9022  | 98    | Rocky Mountain Subalpine-Montane Riparian Woodland                | Tree   | Riparian           | 184 | 96  | 24  |
+| Raster Attribute Table for Storm Lake EVT |  |  |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|----|----|
+| Color | VALUE | COUNT | EVT_NAME | EVT_LF | EVT_PHYS | R | G | B |
+| \#FFFFFF | -9999 | 876 | Fill-NoData | NA | NA | 255 | 255 | 255 |
+| \#C0FF8A | 7011 | 28 | Rocky Mountain Aspen Forest and Woodland | Tree | Hardwood | 192 | 255 | 138 |
+| \#BFFFE9 | 7046 | 4564 | Northern Rocky Mountain Subalpine Woodland and Parkland | Tree | Conifer | 191 | 255 | 233 |
+| \#A3F0DB | 7050 | 570 | Rocky Mountain Lodgepole Pine Forest | Tree | Conifer | 163 | 240 | 219 |
+| \#ECFCCC | 7055 | 889 | Rocky Mountain Subalpine Dry-Mesic Spruce-Fir Forest and Woodland | Tree | Conifer | 236 | 252 | 204 |
+| \#ECFCCC | 7056 | 304 | Rocky Mountain Subalpine Mesic-Wet Spruce-Fir Forest and Woodland | Tree | Conifer | 236 | 252 | 204 |
+| \#3FFF2E | 7057 | 11 | Rocky Mountain Subalpine-Montane Limber-Bristlecone Pine Woodland | Tree | Conifer | 63 | 255 | 46 |
+| \#AB916A | 7070 | 267 | Rocky Mountain Alpine Dwarf-Shrubland | Shrub | Shrubland | 171 | 145 | 106 |
+| \#75573D | 7106 | 3 | Northern Rocky Mountain Montane-Foothill Deciduous Shrubland | Shrub | Shrubland | 117 | 87 | 61 |
+| \#E69729 | 7125 | 1 | Inter-Mountain Basins Big Sagebrush Steppe | Shrub | Shrubland | 230 | 151 | 41 |
+| \#DB8C25 | 7126 | 1082 | Inter-Mountain Basins Montane Sagebrush Steppe | Shrub | Shrubland | 219 | 140 | 37 |
+| \#FFB861 | 7140 | 679 | Northern Rocky Mountain Subalpine-Upper Montane Grassland | Herb | Grassland | 255 | 184 | 97 |
+| \#AB916A | 7143 | 199 | Rocky Mountain Alpine Fell-Field | Herb | Grassland | 171 | 145 | 106 |
+| \#AB916A | 7144 | 765 | Rocky Mountain Alpine Turf | Herb | Grassland | 171 | 145 | 106 |
+| \#FFA352 | 7145 | 681 | Rocky Mountain Subalpine-Montane Mesic Meadow | Herb | Grassland | 255 | 163 | 82 |
+| \#003300 | 7166 | 32 | Middle Rocky Mountain Montane Douglas-fir Forest and Woodland | Tree | Conifer | 0 | 51 | 0 |
+| \#806145 | 7169 | 60 | Northern Rocky Mountain Subalpine Deciduous Shrubland | Shrub | Shrubland | 128 | 97 | 69 |
+| \#0000FF | 7292 | 397 | Open Water | Water | Open Water | 0 | 0 | 255 |
+| \#AA66CD | 7901 | 2 | Western Cool Temperate Urban Evergreen Forest | Tree | Developed | 170 | 102 | 205 |
+| \#646464 | 9016 | 2486 | Rocky Mountain Alpine Bedrock and Scree | Sparse | Sparsely Vegetated | 100 | 100 | 100 |
+| \#B86018 | 9017 | 13 | Rocky Mountain Alpine-Montane Wet Meadow | Herb | Riparian | 184 | 96 | 24 |
+| \#646464 | 9018 | 1280 | Rocky Mountain Cliff Canyon and Massive Bedrock | Sparse | Sparsely Vegetated | 100 | 100 | 100 |
+| \#B86018 | 9021 | 14 | Rocky Mountain Subalpine-Montane Riparian Shrubland | Shrub | Riparian | 184 | 96 | 24 |
+| \#B86018 | 9022 | 98 | Rocky Mountain Subalpine-Montane Riparian Woodland | Tree | Riparian | 184 | 96 | 24 |
 
 [`displayRAT()`](https://firelab.github.io/gdalraster/reference/displayRAT.md)
 returns an object of class `"gt_tbl"`. The table object can be modified
 using functions of the **gt** package.
 
 ``` r
+
 ds$close()
 ```
 

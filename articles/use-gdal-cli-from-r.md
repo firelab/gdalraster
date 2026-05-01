@@ -54,6 +54,7 @@ optional argument `recurse` can be set to `FALSE` to list only the
 top-level commands without their subcommands.
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
 
@@ -99,6 +100,7 @@ A character string can also be given to filter for commands containing
 specific text.
 
 ``` r
+
 ## list commands relevant to raster data
 gdal_commands("raster")
 #> → "raster"
@@ -303,6 +305,7 @@ The function
 prints a help message to the console for a specific command.
 
 ``` r
+
 gdal_usage("raster convert")
 #> Usage: raster convert [OPTIONS] <INPUT> <OUTPUT>
 #> 
@@ -369,6 +372,7 @@ not have to be named. They could instead be given as named arguments if
 preferred for clarity.
 
 ``` r
+
 ## convert storml_elev.tif to GeoPackage raster
 f_tif <- system.file("extdata/storml_elev.tif", package = "gdalraster")
 f_gpkg <- file.path(tempdir(), "storml_elev.gpkg")
@@ -415,6 +419,7 @@ the `"raster hillshade"` algorithm is specified as an in-memory dataset
 string (`""`).
 
 ``` r
+
 gdal_usage("raster hillshade")
 #> Usage: raster hillshade [OPTIONS] <INPUT> <OUTPUT>
 #> 
@@ -500,6 +505,7 @@ plot_raster(ds_hillshade, main = "Storm Lake AOI shaded relief")
 Lake area of interest.](img/storml_hillshade.png)
 
 ``` r
+
 # clean up
 ds$close()
 ds_hillshade$close()
@@ -510,6 +516,7 @@ unlink(f_gpkg)
 ### Vector examples
 
 ``` r
+
 gdal_usage("vector")
 #> 
 #> Usage: vector <SUBCOMMAND> [OPTIONS]
@@ -558,6 +565,7 @@ gdal_usage("vector")
 Clip a vector layer by a bounding box.
 
 ``` r
+
 gdal_usage("vector clip")
 #> Usage: vector clip [OPTIONS] <INPUT> <OUTPUT>
 #> 
@@ -670,6 +678,7 @@ unlink(dsn_out)
 Rasterize a vector layer given as a `GDALVector` object.
 
 ``` r
+
 gdal_usage("vector rasterize")
 #> Usage: vector rasterize [OPTIONS] <INPUT> <OUTPUT>
 #> 
@@ -814,6 +823,7 @@ year is shown in cases where fire perimeters
 overlap.](img/ynp_fire_year.png)
 
 ``` r
+
 lyr$close()
 ds$close()
 deleteDataset(f_out)
@@ -829,6 +839,7 @@ A raster pipeline to create a color shaded relief file, based on Example
 pipeline](https://gdal.org/en/latest/programs/gdal_pipeline.html#nested-pipeline).
 
 ``` r
+
 # requires GDAL >= 3.12.1 for nested pipelines and "raster blend"
 library(gdalraster)
 #> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
@@ -896,6 +907,7 @@ light brown, pinkish and almost white at the highest
 elevations.](img/storml_col_shaded_relief.png)
 
 ``` r
+
 # cleanup
 ds$close()
 deleteDataset(f_out)
@@ -911,6 +923,7 @@ passed as objects in API usage of GDAL CLI. Object passing avoids the
 overhead of dataset opening and potentially provides cached data.
 
 ``` r
+
 f_elev |>
   gdal_run_piped("raster color-map", "", "MEM", list(color_map = f_pal)) |>
   gdal_run_piped("raster blend", "", "MEM", list(
@@ -929,6 +942,7 @@ almost white at the highest
 elevations.](img/storml_col_shaded_relief.png)
 
 ``` r
+
 ## clean up the temp file
 deleteDataset(f_elev)
 #> [1] TRUE
@@ -943,6 +957,7 @@ Based on Example 6 for
 [`gdal raster calc`](https://gdal.org/programs/gdal_raster_calc.html).
 
 ``` r
+
 # requires GDAL >= 3.12.1 for nested pipelines
 library(gdalraster)
 #> GDAL 3.12.1 (released 2025-12-12), GEOS 3.12.2, PROJ 9.4.1
@@ -989,12 +1004,14 @@ aspect layer and have a darker blue color since these are mostly
 water.](img/storml_northness.png)
 
 ``` r
+
 ds$close()
 ```
 
 #### Visualize DEM derivatives
 
 ``` r
+
 # terrain ruggedness index (TRI)
 system.file("extdata/storml_elev.tif", package="gdalraster") |>
   gdal_run_piped("raster tri", "", "MEM") |>
@@ -1011,6 +1028,7 @@ correspond to blue for flat terrain with low ruggedness, to red for the
 most rugged terrain.](img/storml_tri.png)
 
 ``` r
+
 # topographic position index (TPI)
 system.file("extdata/storml_elev.tif", package = "gdalraster") |>
   gdal_run_piped("raster tpi", "", "MEM") |>

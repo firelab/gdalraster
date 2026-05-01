@@ -3,6 +3,7 @@
 These values are currently used in `gdalraster` when a nodata value is
 needed but has not been specified:
 
+
         list("Byte" = 255, "UInt8" = 255, "Int8" = -128,
              "UInt16" = 65535, "Int16" = -32767,
              "UInt32" = 4294967293, "Int32" = -2147483647,

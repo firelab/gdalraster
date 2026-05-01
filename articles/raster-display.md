@@ -6,6 +6,7 @@ open dataset, or use pixel values that have already been read into a
 vector.
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
 
@@ -15,6 +16,7 @@ base_url <- "/vsicurl/https://raw.githubusercontent.com/firelab/gdalraster/main/
 ## Single-band grayscale or color ramp
 
 ``` r
+
 f <- paste0(base_url, "lf_elev_220_mt_hood_utm.tif")
 ds <- new(GDALRaster, f)
 
@@ -28,6 +30,7 @@ gray (minimum 553 m) and the highest values almost white (maximum 3421
 m).](raster-display_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
+
 pal <- c("#00A60E", "#63C600", "#E6E600", "#E9BD3B", "#ECB176", "#EFC2B3",
          "#F2F2F2")
 
@@ -42,12 +45,14 @@ values almost white (maximum 3421
 m).](raster-display_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 ds$close()
 ```
 
 ## RGB
 
 ``` r
+
 f <- paste0(base_url, "landsat_c2ard_sr_mt_hood_jul2022_utm.tif")
 ds <- new(GDALRaster, f)
 
@@ -68,6 +73,7 @@ composite of Landsat bands 7, 5 and 4
 ## Color table
 
 ``` r
+
 f <- paste0(base_url, "lf_fbfm40_220_mt_hood_utm.tif")
 ds <- new(GDALRaster, f)
 dm <- ds$dim()
@@ -98,12 +104,14 @@ Mt. Hood, Oregon,
 USA.](raster-display_files/figure-html/unnamed-chunk-5-1.png)
 
 ``` r
+
 ds$close()
 ```
 
 ## Axis labels
 
 ``` r
+
 f <- paste0(base_url, "bl_mrbl_ng_jul2004_rgb_720x360.tif")
 ds <- new(GDALRaster, f)
 ds$getProjectionRef() |> srs_is_projected()

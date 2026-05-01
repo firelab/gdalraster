@@ -37,6 +37,7 @@ GDAL 3.11.3.
 Open the elevation dataset and get parameters:
 
 ``` r
+
 library(gdalraster)
 
 f <- "LC20_Elev_220.tif" 
@@ -64,6 +65,7 @@ is incomplete). This test reflects performance implications of GDAL
 read-ahead caching:
 
 ``` r
+
 ## Test 1
 ## original tiled raster, reading by row (across block boundaries)
 
@@ -87,6 +89,7 @@ number of bands, data type, projection, and geotransform are all copied
 from the source raster:
 
 ``` r
+
 f2 <- "LC20_Elev_220_striped.tif"
 opt <- c("COMPRESS=LZW", "TILED=NO", "BLOCKYSIZE=1", "BIGTIFF=YES")
 createCopy(format = "GTiff", dst_filename = f2, src_filename = f, options = opt)
@@ -109,6 +112,7 @@ The resulting file is larger at 10.6 GB vs. 6.8 GB, since compression is
 less efficient for strips vs. tiles.
 
 ``` r
+
 ## Test 2
 ## striped tif, reading on block boundaries (rows)
 ## cache retrieval not involved
@@ -130,6 +134,7 @@ row/column offsets and x/y sizes for each tile, including the incomplete
 tiles along the right and bottom edges.
 
 ``` r
+
 blocks <- ds$get_block_indexing(band = 1)
 nrow(blocks)
 #> [1] 970268
@@ -177,6 +182,7 @@ test reads all pixels by tile from the original LANDFIRE elevation file
 (`LC20_Elev_220.tif`):
 
 ``` r
+
 ## Test 3
 ## original tiled raster, reading on block boundaries (i.e., internal tiles)
 ## cache retrieval not involved
@@ -200,6 +206,7 @@ to compute the row/column offsets and pixels sizes for multi-block
 chunks containing \<= `max_pixels`:
 
 ``` r
+
 block_size <- ds$getBlockSize(band = 1)  # block xsize, ysize
 (max_pixels <- block_size[1] * block_size[2] * 32)
 #> [1] 524288
@@ -280,6 +287,7 @@ The code below uses the function
 to demonstrate the behavior:
 
 ``` r
+
 ## run in a new R session
 library(gdalraster)
 
@@ -326,6 +334,7 @@ The cache size limit can be set with the `GDAL_CACHEMAX` configuration
 option, e.g.,
 
 ``` r
+
 ## set to a specific size in MB
 gdalraster::set_config_option("GDAL_CACHEMAX", "1000")
 
@@ -364,6 +373,7 @@ time. This can be checked by repeating Test 1 above with the cache
 disabled:
 
 ``` r
+
 ## original tiled raster, reading by row (across block boundaries)
 ## cache disabled for testing
 ## run in a new R session

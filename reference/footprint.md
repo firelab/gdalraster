@@ -75,6 +75,6 @@ if (gdal_version_num() >= gdal_compute_version(3, 8, 0)) {
   DONTSHOW({deleteDataset(out_file)})
 }
 #>  ■                                  0% |  ETA:  0s
-#> ✔ Done (10ms)
+#> ✔ Done (11ms)
 #> 
 ```

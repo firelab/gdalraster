@@ -22,6 +22,7 @@ loaded. A raster dataset is opened by creating a new instance of
 `read_only = FALSE` to open with update access):
 
 ``` r
+
 library(gdalraster)
 #> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
 
@@ -41,6 +42,7 @@ associated raster band objects. Methods of the class are accessed in R
 using the `$` operator:
 
 ``` r
+
 ds
 #> C++ object of class <GDALRaster>
 #> • Driver: GeoTIFF (GTiff)
@@ -89,6 +91,7 @@ Tutorial](https://gdal.org/en/stable/tutorials/geotransforms_tut.html))
 takes the following form *with 1-based indexing in R*:
 
 ``` r
+
 gt <- ds$getGeoTransform()
 gt[1]  # x-coordinate of upper-left corner of the upper-left pixel
 #> [1] 323476.1
@@ -108,6 +111,7 @@ In the general case, this is an affine transform. Class `GDALRaster`
 includes convenience methods for the case of a north-up raster:
 
 ``` r
+
 ds$bbox()  # xmin, ymin, xmax, ymax
 #> [1]  323476.1 5101872.0  327766.1 5105082.0
 ds$res()   # pixel width, pixel height as positive values
@@ -118,6 +122,7 @@ The following code retrieves some additional information about the
 dataset:
 
 ``` r
+
 # GDAL format driver
 ds$getDriverShortName()
 #> [1] "GTiff"
@@ -155,6 +160,7 @@ to access raster band objects of the dataset (numbered 1 through
 argument:
 
 ``` r
+
 # block size
 ds$getBlockSize(band = 1)
 #> [1] 143  57
@@ -206,6 +212,7 @@ returned in place of the nodata value if the raster dataset has a nodata
 value defined for the band:
 
 ``` r
+
 # read the first row of pixel values
 ncols <- ds$getRasterXSize()
 rowdata <- ds$read(band = 1,
@@ -255,6 +262,7 @@ uses base R `graphics` to display raster data read from an open dataset
 overview, or read from multiple bands for RGB data):
 
 ``` r
+
 plot_raster(ds, legend = TRUE, main = "Storm Lake Tree Canopy Cover (%)")
 ```
 
@@ -273,6 +281,7 @@ mode in a popular format like GTiff will likely result in being unable
 to open it afterwards.
 
 ``` r
+
 # close the dataset for proper cleanup
 ds$close()
 ```
@@ -325,6 +334,7 @@ without support for compression or nodata values) to LZW-compressed
 GeoTiff:
 
 ``` r
+
 lcp_file <- system.file("extdata/storm_lake.lcp", package="gdalraster")
 tif_file <- file.path(tempdir(), "storml_lndscp.tif")
 ds <- createCopy(format = "GTiff",
@@ -374,6 +384,7 @@ By default, this function lists all available creation options for a
 format. Output can also be filtered to specific options:
 
 ``` r
+
 getCreationOptions("GTiff", "COMPRESS")
 #> $COMPRESS
 #> $COMPRESS$type
@@ -415,6 +426,7 @@ but the raster size, number of bands and band type must be provided
 explicitly:
 
 ``` r
+
 new_file <- file.path(tempdir(), "newdata.tif")
 ds <- create(format = "GTiff",
              dst_filename = new_file,
@@ -431,6 +443,7 @@ according to usage, but a simple case with a projection, geotransform
 and raster data is covered here:
 
 ``` r
+
 # EPSG:26912 - NAD83 / UTM zone 12N
 ds$setProjection(epsg_to_wkt(26912))
 #> [1] TRUE

@@ -337,6 +337,7 @@ RCPP_EXPOSED_CLASS(GDALVector)
 ## Example: usage for class GDALVector
 
 ``` r
+
 ## usage for GDALVector class
 
 library(gdalraster)
@@ -756,6 +757,7 @@ plot(wk_obj)
 
 ``` r
 
+
 lyr$clearSpatialFilter()
 lyr$getFeatureCount()
 #> [1] 61
@@ -770,6 +772,7 @@ vsi_unlink(dsn)
 ## Example: layer geoprocessing
 
 ``` r
+
 ## layer intersection example
 
 library(gdalraster)
@@ -843,6 +846,7 @@ deleteDataset(tmp_dsn)
 ## Example: WorldCover Sentinel-2 composites
 
 ``` r
+
 ## WorldCover Sentinel-2 annual composites
 ## see: https://blog.vito.be/remotesensing/worldcover-annual-composites
 ## tile index lookup on remote filesystem and obtain raster data
@@ -986,6 +990,7 @@ plot_raster(r,
 ![](img/worldcov2021_N44W110_S2RGBNIR_ex.png)
 
 ``` r
+
 
 ds$close()
 lyr_ynp$close()
