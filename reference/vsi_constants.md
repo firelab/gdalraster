@@ -12,11 +12,3 @@ SEEK_CUR
 
 SEEK_END
 ```
-
-## Format
-
-An object of class `character` of length 1.
-
-An object of class `character` of length 1.
-
-An object of class `character` of length 1.

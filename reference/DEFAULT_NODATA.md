@@ -14,7 +14,3 @@ needed but has not been specified:
 ``` r
 DEFAULT_NODATA
 ```
-
-## Format
-
-An object of class `list` of length 9.

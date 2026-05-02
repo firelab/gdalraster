@@ -22,10 +22,6 @@ as the default processing options:
 DEFAULT_DEM_PROC
 ```
 
-## Format
-
-An object of class `list` of length 7.
-
 ## See also
 
 [`dem_proc()`](https://firelab.github.io/gdalraster/reference/dem_proc.md)
