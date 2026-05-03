@@ -55,6 +55,15 @@ g_delaunay_triangulation(
   quiet = FALSE
 )
 
+g_segmentize(
+  geom,
+  max_length,
+  as_wkb = TRUE,
+  as_iso = FALSE,
+  byte_order = "LSB",
+  quiet = FALSE
+)
+
 g_simplify(
   geom,
   tolerance,
@@ -143,6 +152,10 @@ g_unary_union(
   containing triangular POLYGONs (the default). Ignored if
   `constrained = TRUE`
 
+- max_length:
+
+  Numeric maximum distance between 2 points after segmentization.
+
 - preserve_topology:
 
   Logical value, `TRUE` to simplify geometries while preserving topology
@@ -193,6 +206,11 @@ that contains all the points in the input geometry. Requires GDAL \>=
   the vertices of the given polygon(s). For non-polygonal inputs,
   silently returns an empty geometry collection. Requires GDAL \>= 3.12
   and GEOS \>= 3.10.
+
+`g_segmentize()` modifies a geometry such that it has no segment longer
+then the given `max_length`. Interpolated points will have Z and M
+values (if needed) set to `0`. Distance computation is performed in 2D
+only.
 
 `g_simplify()` computes a simplified geometry. By default, it simplifies
 the input geometries while preserving topology (see Note). Wrapper of
@@ -287,6 +305,10 @@ if (geos_version()$major > 3 || geos_version()$minor >= 4) {
   g_delaunay_triangulation(g, as_wkb = FALSE)
 }
 #> [1] "GEOMETRYCOLLECTION (POLYGON ((0 1,0 0,1 0,0 1)),POLYGON ((0 1,1 0,1 1,0 1)))"
+
+g <- "LINESTRING(0 0,0 10)"
+g_segmentize(g, 1) |> g_wk2wk()
+#> [1] "LINESTRING (0 0,0 1,0 2,0 3,0 4,0 5,0 6,0 7,0 8,0 9,0 10)"
 
 g <- "LINESTRING(0 0,1 1,10 0)"
 g_simplify(g, tolerance = 5, as_wkb = FALSE)
