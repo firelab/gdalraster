@@ -173,6 +173,7 @@ implemented in several stand-alone functions:
 - GDAL configuration:
   [`gdal_version`](https://firelab.github.io/gdalraster/reference/gdal_version.md),
   [`gdal_compute_version()`](https://firelab.github.io/gdalraster/reference/gdal_compute_version.md),
+  [`lib_versions()`](https://firelab.github.io/gdalraster/reference/lib_versions.md),
   [`gdal_formats()`](https://firelab.github.io/gdalraster/reference/gdal_formats.md),
   [`gdal_get_driver_md()`](https://firelab.github.io/gdalraster/reference/gdal_get_driver_md.md),
   [`get_cache_used()`](https://firelab.github.io/gdalraster/reference/get_cache_used.md),

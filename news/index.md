@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.5.0.9103 (dev)
+## gdalraster 2.5.0.9104 (dev)
+
+- add
+  [`lib_versions()`](https://firelab.github.io/gdalraster/reference/lib_versions.md):
+  return a named list of library version information for GDAL and its
+  major dependencies in a consistent format, as alternative to the
+  separate version info functions (2026-05-02)
 
 - redirect `/vsistdout/` to the compliant output stream to allow using
   GDAL standard output streaming in the R terminal
