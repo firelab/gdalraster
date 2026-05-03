@@ -136,7 +136,7 @@ elements:
   sub-algorithms
 
 - `subalgorithm_names`: character vector of sub-algorithm names (may be
-  empty)parseCommandLineArgsparseCommanparseCommandLineArgsparseCommandLineArgsdLineArgs
+  empty)
 
 - `arg_names`: character vector of available argument names
 
