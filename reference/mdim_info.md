@@ -3,10 +3,7 @@
 `mdim_info()` is an interface to the `gdalmdiminfo` command-line utility
 (see <https://gdal.org/en/stable/programs/gdalmdiminfo.html>). This
 function lists various information about a GDAL supported
-multidimensional raster dataset as JSON output. It follows the JSON
-schema
-[gdalmdiminfo_output.schema.json](https://github.com/OSGeo/gdal/blob/release/3.11/apps/data/gdalmdiminfo_output.schema.json).
-Requires GDAL \>= 3.2.
+multidimensional raster dataset as JSON output. Requires GDAL \>= 3.2.
 
 ## Usage
 
