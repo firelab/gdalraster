@@ -363,13 +363,15 @@ unlink(f_gpkg)
 
 ## use the R native pipe operator
 
-# make a of plot of 'terrain ruggedness index' (TRI) for Storm Lake AOI
-system.file("extdata/storml_elev.tif", package="gdalraster") |>
-  gdal_run_piped("raster tri", "", "MEM") |>
-  plot_raster(legend = TRUE,
-              minmax_pct_cut = c(0, 99),
-              col_map_fn = rev(ltc::ltc("heatmap3")),
-              main = "Storm Lake AOI: terrain ruggedness index")
+if (requireNamespace("ltc")) {
+  # make a of plot of 'terrain ruggedness index' (TRI) for Storm Lake AOI
+  system.file("extdata/storml_elev.tif", package="gdalraster") |>
+    gdal_run_piped("raster tri", "", "MEM") |>
+    plot_raster(legend = TRUE,
+                minmax_pct_cut = c(0, 99),
+                col_map_fn = rev(ltc::ltc("heatmap3")),
+                main = "Storm Lake AOI: terrain ruggedness index")
+}
 
 ## get help for vector commands
 gdal_usage("vector")
@@ -421,10 +423,12 @@ args <- list(input = f,
 
 alg$release()
 
-pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)
-ramp <- scales::colour_ramp(pal)
-plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
-            main = "YNP Fires 1984-2022 - Most Recent Burn Year")
+if (requireNamespace("scales")) {
+  pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)
+  ramp <- scales::colour_ramp(pal)
+  plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
+              main = "YNP Fires 1984-2022 - Most Recent Burn Year")
+}
 
 ds$close()
 deleteDataset(f_out)

@@ -194,11 +194,21 @@ rasterize(src_dsn = dsn,
           init = -9999,
           co = c("TILED=YES", "COMPRESS=LZW"))
 
-ds <- new(GDALRaster, out_file)
-pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)
-ramp <- scales::colour_ramp(pal)
-plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
-            main = "YNP Fires 1984-2022 - Most Recent Burn Year")
+(ds <- new(GDALRaster, out_file))
+#> C++ object of class <GDALRaster>
+#>   • Driver: GeoTIFF (GTiff)
+#>   • DSN: "/tmp/RtmpI5FO9f/ynp_fires_1984_2022.tif"
+#>   • Dimensions: 1155, 1218, 1
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Pixel resolution: 90.000000, 90.000000
+#>   • Bbox: 469620.000000, -12960.000000, 573570.000000, 96660.000000
+
+if (requireNamespace("scales")) {
+  pal <- scales::viridis_pal(end = 0.8, direction = -1)(6)
+  ramp <- scales::colour_ramp(pal)
+  plot_raster(ds, legend = TRUE, col_map_fn = ramp, na_col = "#d9d9d9",
+              main = "YNP Fires 1984-2022 - Most Recent Burn Year")
+}
 
 
 ds$close()
