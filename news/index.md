@@ -1,6 +1,9 @@
 # Changelog
 
-## gdalraster 2.5.0.9107 (dev)
+## gdalraster 2.5.0.9108 (dev)
+
+- `gdal_error_handler_r()`: restore behavior from 2.5.0 w.r.t. whether a
+  warning is emitted (2026-05-03)
 
 - (internal) `has_space_char_()`: use `std::any_of` \[cppcheck style\]
   (2026-05-03)
