@@ -1,6 +1,9 @@
 # Changelog
 
-## gdalraster 2.5.0.9106 (dev)
+## gdalraster 2.5.0.9107 (dev)
+
+- (internal) `has_space_char_()`: use `std::any_of` \[cppcheck style\]
+  (2026-05-03)
 
 - Doc: move vector-api-overview from web article to vignette
   (2026-05-02)

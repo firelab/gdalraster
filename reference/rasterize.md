@@ -197,7 +197,7 @@ rasterize(src_dsn = dsn,
 (ds <- new(GDALRaster, out_file))
 #> C++ object of class <GDALRaster>
 #>   • Driver: GeoTIFF (GTiff)
-#>   • DSN: "/tmp/RtmpqDkMe1/ynp_fires_1984_2022.tif"
+#>   • DSN: "/tmp/RtmpqVyisl/ynp_fires_1984_2022.tif"
 #>   • Dimensions: 1155, 1218, 1
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Pixel resolution: 90.000000, 90.000000
