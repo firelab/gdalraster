@@ -1,6 +1,12 @@
 # Changelog
 
-## gdalraster 2.5.0.9104 (dev)
+## gdalraster 2.5.0.9105 (dev)
+
+- Geom API: add
+  [`g_segmentize()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md),
+  interface to `OGR_G_Segmentize()`
+  ([\#966](https://github.com/firelab/gdalraster/issues/966))
+  (2026-05-02)
 
 - add
   [`lib_versions()`](https://firelab.github.io/gdalraster/reference/lib_versions.md):
