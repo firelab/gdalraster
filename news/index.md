@@ -1,6 +1,9 @@
 # Changelog
 
-## gdalraster 2.5.0.9105 (dev)
+## gdalraster 2.5.0.9106 (dev)
+
+- Doc: move vector-api-overview from web article to vignette
+  (2026-05-02)
 
 - Geom API: add
   [`g_segmentize()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md),
