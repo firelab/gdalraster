@@ -101,7 +101,7 @@ rasterFromRaster(srcfile = lcp_file,
                  options = opt,
                  init = -32767)
 #> ℹ initializing destination raster...
-#> ✔ done [8ms]
+#> ✔ done [6ms]
 #> 
 ds_slp <- new(GDALRaster, slpp_file, read_only = FALSE)
 
@@ -138,9 +138,6 @@ for (row in 0:(nrows-1)) {
 
 # min, max, mean, sd
 ds_slp$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#>  ■■■■■■■■■                         25% |  ETA:  0s
-#> ✔ Done (10ms)
-#> 
 #> [1]   0.00000 138.00000  44.76464  26.79985
 
 ds_slp$close()

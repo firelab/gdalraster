@@ -2,6 +2,8 @@
 
 ## gdalraster 2.6.0
 
+CRAN release: 2026-05-04
+
 ### Dependencies
 
 - packages **glue** and **ltc** have been added to `Suggests`
