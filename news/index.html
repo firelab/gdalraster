@@ -76,7 +76,7 @@
 <div class="section level4">
 <h4 id="raster-2-6-0">Raster<a class="anchor" aria-label="anchor" href="#raster-2-6-0"></a></h4>
 <ul><li>class method <code>GDALRaster$addBand()</code>: accept an R vector to add a MEM band from data pointer without copying (<a href="https://github.com/firelab/gdalraster/issues/960" class="external-link">#960</a>)</li>
-<li>add <code>GDALRaster$getInterBandCovMatrix()</code>: class method to fetch or compute the covariance matrix between bands of a dataset using <code>GDALDatasetGetInterBandCovarianceMatrix()</code> in GDAL 3.13</li>
+<li>add <code>GDALRaster$getInterBandCovMatrix()</code>: class method to fetch or compute the covariance matrix between bands of a dataset using <code>GDALDatasetGetInterBandCovarianceMatrix()</code> in GDAL 3.13 (<a href="https://github.com/firelab/gdalraster/issues/959" class="external-link">#959</a>)</li>
 <li>add <code><a href="../reference/dem_derivatives.html">northness()</a></code> and <code><a href="../reference/dem_derivatives.html">eastness()</a></code>: convenience functions for transforming aspect degrees</li>
 </ul></div>
 <div class="section level4">
@@ -89,7 +89,7 @@
 <ul><li>configure the default progress bar to show elapsed time upon completion (<a href="https://github.com/firelab/gdalraster/issues/935" class="external-link">#935</a>, <a href="https://github.com/firelab/gdalraster/issues/936" class="external-link">#936</a>)</li>
 <li>format various console messages using <strong>cli</strong> functions</li>
 <li>redirect <code>/vsistdout/</code> to the compliant output stream to allow using GDAL standard output streaming in the R terminal (<a href="https://github.com/firelab/gdalraster/issues/963" class="external-link">#963</a>)</li>
-<li>add <code><a href="../reference/lib_versions.html">lib_versions()</a></code>: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions</li>
+<li>add <code><a href="../reference/lib_versions.html">lib_versions()</a></code>: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions (<a href="https://github.com/firelab/gdalraster/issues/965" class="external-link">#965</a>)</li>
 <li>suppress warning messages in the <code>show()</code> method for <code>GDALRaster</code> and <code>GDALVector</code> (e.g., if no spatial reference is defined)</li>
 <li>add <code><a href="../reference/progress_bar_clear.html">progress_bar_clear()</a></code>: terminate/reset any active <strong>cli</strong> progress bars (<a href="https://github.com/firelab/gdalraster/issues/939" class="external-link">#939</a>)</li>
 </ul></div>
@@ -104,13 +104,13 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-2-6-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-2-6-0"></a></h3>
-<ul><li>move <a href="https://firelab.github.io/gdalraster/articles/vector-api-overview.html">Vector API Overview</a> from web article to vignette</li>
+<ul><li>move <a href="https://firelab.github.io/gdalraster/articles/vector-api-overview.html">Vector API Overview</a> from a web-only article to package vignette</li>
 <li>add new examples for GDAL CLI pipelines and <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code> in web article <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples">Using <code>gdal</code> CLI algorithms from R</a>
 </li>
 <li>update (primarily documentation) for the <code>"UInt8"</code> pixel data type in GDAL &gt;= 3.13 (<a href="https://github.com/firelab/gdalraster/issues/933" class="external-link">#933</a>)</li>
 <li>add links to the new GDAL documentation on <a href="https://gdal.org/en/latest/user/geometry_validity.html" class="external-link">geometry validity and repair</a> (<a href="https://github.com/firelab/gdalraster/issues/932" class="external-link">#932</a>)</li>
 <li>
-<code><a href="../reference/g_util.html">g_make_valid()</a></code>: update documentation to describe the new behavior of <code>MakeValid()</code> in GDAL 3.13(<a href="https://github.com/firelab/gdalraster/issues/934" class="external-link">#934</a>)</li>
+<code><a href="../reference/g_util.html">g_make_valid()</a></code>: update documentation to describe the new behavior of <code>MakeValid()</code> in GDAL 3.13 (<a href="https://github.com/firelab/gdalraster/issues/934" class="external-link">#934</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="internal-2-6-0">Internal<a class="anchor" aria-label="anchor" href="#internal-2-6-0"></a></h3>
