@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.0.9108</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,34 +53,76 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.5.0.9108" id="gdalraster-2509108-dev">gdalraster 2.5.0.9108 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2509108-dev"></a></h2>
-<ul><li><p><code>gdal_error_handler_r()</code>: restore behavior from 2.5.0 w.r.t. whether a warning is emitted (2026-05-03)</p></li>
-<li><p>(internal) <code>has_space_char_()</code>: use <code>std::any_of</code> [cppcheck style] (2026-05-03)</p></li>
-<li><p>Doc: move vector-api-overview from web article to vignette (2026-05-02)</p></li>
-<li><p>Geom API: add <code><a href="../reference/g_unary_op.html">g_segmentize()</a></code>, interface to <code>OGR_G_Segmentize()</code> (<a href="https://github.com/firelab/gdalraster/issues/966" class="external-link">#966</a>) (2026-05-02)</p></li>
-<li><p>add <code><a href="../reference/lib_versions.html">lib_versions()</a></code>: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions (2026-05-02)</p></li>
-<li><p>redirect <code>/vsistdout/</code> to the compliant output stream to allow using GDAL standard output streaming in the R terminal (<a href="https://github.com/firelab/gdalraster/issues/963" class="external-link">#963</a>) (2026-04-29)</p></li>
-<li><p><code>GDALRaster$addBand()</code>: accept an R vector to add a MEM band from data pointer without copying (<a href="https://github.com/firelab/gdalraster/issues/960" class="external-link">#960</a>) (2026-04-27)</p></li>
-<li><p>add <code>GDALRaster$getInterBandCovMatrix()</code>: class method to fetch or compute the covariance matrix between bands of a dataset using <code>GDALDatasetGetInterBandCovarianceMatrix()</code> in GDAL 3.13 (2026-04-26)</p></li>
-<li><p>rename <code><a href="../reference/rvector_to_MEM.html">vector_to_MEM()</a></code> as <code><a href="../reference/rvector_to_MEM.html">rvector_to_MEM()</a></code> but keep an alias for now (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>) (2026-04-25)</p></li>
-<li><p>add <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code> (GDAL CLI): a variation of <code><a href="../reference/gdal_cli.html">gdal_run()</a></code> suitable for use with the R native pipe operator (<a href="https://github.com/firelab/gdalraster/issues/956" class="external-link">#956</a>) (2026-04-25)</p></li>
-<li><p>add <code><a href="../reference/g_query.html">g_invalid_reason()</a></code>: interface to <code>OGR_G_GetInvalidityReason()</code> in GDAL &gt;=3.13 (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>) (2026-04-25)</p></li>
-<li><p>add <code>.rasterize_polygon()</code> for internal use (<a href="https://github.com/firelab/gdalraster/issues/955" class="external-link">#955</a>) (2026-04-23)</p></li>
-<li><p><code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>) (2026-04-18)</p></li>
-<li><p><code><a href="../reference/gdal_cli.html">gdal_usage()</a></code>: replace <code>[may be repeated]</code> with packed values, repeated arg allowed or not (<a href="https://github.com/firelab/gdalraster/issues/953" class="external-link">#953</a>) (2026-04-18)</p></li>
-<li><p>add <code><a href="../reference/dem_derivatives.html">northness()</a></code> and <code><a href="../reference/dem_derivatives.html">eastness()</a></code>: convenience functions for transforming aspect degrees, and use in a new <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples">CLI pipeline example</a> for <code>gdal raster calc</code> (2026-04-18)</p></li>
-<li><p><code>GDALAlg::setArg()</code>: more robust handling of algorithm arguments with object input (<a href="https://github.com/firelab/gdalraster/issues/949" class="external-link">#949</a>, also adding a new pipeline example in <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html">use-gdal-cli-from-r</a>) (2026-04-17)</p></li>
-<li><p>class <code>GDALVector</code>: lint/cleanup class constructors, also addressing <a href="https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579" class="external-link">Rcpp 1471 comment</a> (2026-04-12)</p></li>
-<li><p>suppress warning messages in the <code>show()</code> method for <code>GDALRaster</code> and <code>GDALVector</code> (e.g., if no spatial reference is defined) (2026-04-03)</p></li>
-<li><p>complete formatting console messages with <strong>cli</strong> (<a href="https://github.com/firelab/gdalraster/issues/942" class="external-link">#942</a>) (2026-04-02)</p></li>
-<li><p><code><a href="../reference/gdal_cli.html">gdal_run()</a></code>: add arguments <code>close</code> and <code>quiet</code> (<a href="https://github.com/firelab/gdalraster/issues/941" class="external-link">#941</a>) (2026-04-02)</p></li>
-<li><p><strong>cli</strong>-format the global error handler and class <code>GDALRaster</code> messages (<a href="https://github.com/firelab/gdalraster/issues/940" class="external-link">#940</a>) (2026-04-02)</p></li>
-<li><p>progress bar improvements and format console messages with <strong>cli</strong> [WIP] (<a href="https://github.com/firelab/gdalraster/issues/939" class="external-link">#939</a>) (2026-04-01)</p></li>
-<li><p>configure the default progress bar to show elapsed time upon completion (adding <strong>glue</strong> in <code>Suggests</code> for <strong>cli</strong>, <a href="https://github.com/firelab/gdalraster/issues/935" class="external-link">#935</a>, <a href="https://github.com/firelab/gdalraster/issues/936" class="external-link">#936</a>) (2026-03-30)</p></li>
-<li><p><code><a href="../reference/g_util.html">g_make_valid()</a></code>: condition tests for changes to <code>MakeValid()</code> in GDAL 3.13 and update documentation to describe the new behavior (<a href="https://github.com/firelab/gdalraster/issues/934" class="external-link">#934</a>) (2026-03-28)</p></li>
-<li><p>update (primarily documentation) for the <code>"UInt8"</code> pixel data type in GDAL &gt;= 3.13 (<a href="https://github.com/firelab/gdalraster/issues/933" class="external-link">#933</a>) (2026-03-28)</p></li>
-<li><p>doc: add links to the new GDAL documentation on <a href="https://gdal.org/en/latest/user/geometry_validity.html" class="external-link">geometry validity and repair</a> (<a href="https://github.com/firelab/gdalraster/issues/932" class="external-link">#932</a>) (2026-03-28)</p></li>
+<h2 class="pkg-version" data-toc-text="2.6.0" id="gdalraster-260">gdalraster 2.6.0<a class="anchor" aria-label="anchor" href="#gdalraster-260"></a></h2>
+<div class="section level3">
+<h3 id="dependencies-2-6-0">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-2-6-0"></a></h3>
+<ul><li>packages <strong>glue</strong> and <strong>ltc</strong> have been added to <code>Suggests</code>
+</li>
 </ul></div>
+<div class="section level3">
+<h3 id="api-change-2-6-0">API change<a class="anchor" aria-label="anchor" href="#api-change-2-6-0"></a></h3>
+<ul><li>rename <code><a href="../reference/rvector_to_MEM.html">vector_to_MEM()</a></code> as <code><a href="../reference/rvector_to_MEM.html">rvector_to_MEM()</a></code> but keep an alias to the deprecated name for now (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="features-2-6-0">Features<a class="anchor" aria-label="anchor" href="#features-2-6-0"></a></h3>
+<div class="section level4">
+<h4 id="gdal-cli-bindings-2-6-0">GDAL CLI bindings<a class="anchor" aria-label="anchor" href="#gdal-cli-bindings-2-6-0"></a></h4>
+<ul><li>add <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code>: a variation of <code><a href="../reference/gdal_cli.html">gdal_run()</a></code> suitable for use with the R native pipe operator (<a href="https://github.com/firelab/gdalraster/issues/956" class="external-link">#956</a>)</li>
+<li>
+<code><a href="../reference/gdal_cli.html">gdal_run()</a></code>: add arguments <code>close</code> and <code>quiet</code> (<a href="https://github.com/firelab/gdalraster/issues/941" class="external-link">#941</a>)</li>
+<li>
+<code><a href="../reference/gdal_cli.html">gdal_usage()</a></code>: replace <code>[may be repeated]</code> with whether packed values / repeated arg allowed or not (<a href="https://github.com/firelab/gdalraster/issues/953" class="external-link">#953</a>)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="raster-2-6-0">Raster<a class="anchor" aria-label="anchor" href="#raster-2-6-0"></a></h4>
+<ul><li>class method <code>GDALRaster$addBand()</code>: accept an R vector to add a MEM band from data pointer without copying (<a href="https://github.com/firelab/gdalraster/issues/960" class="external-link">#960</a>)</li>
+<li>add <code>GDALRaster$getInterBandCovMatrix()</code>: class method to fetch or compute the covariance matrix between bands of a dataset using <code>GDALDatasetGetInterBandCovarianceMatrix()</code> in GDAL 3.13</li>
+<li>add <code><a href="../reference/dem_derivatives.html">northness()</a></code> and <code><a href="../reference/dem_derivatives.html">eastness()</a></code>: convenience functions for transforming aspect degrees</li>
+</ul></div>
+<div class="section level4">
+<h4 id="geometry-api-2-6-0">Geometry API<a class="anchor" aria-label="anchor" href="#geometry-api-2-6-0"></a></h4>
+<ul><li>add <code><a href="../reference/g_query.html">g_invalid_reason()</a></code>: interface to <code>OGR_G_GetInvalidityReason()</code> in GDAL &gt;= 3.13 (<a href="https://github.com/firelab/gdalraster/issues/957" class="external-link">#957</a>)</li>
+<li>add <code><a href="../reference/g_unary_op.html">g_segmentize()</a></code>: interface to <code>OGR_G_Segmentize()</code> (<a href="https://github.com/firelab/gdalraster/issues/966" class="external-link">#966</a>)</li>
+</ul></div>
+<div class="section level4">
+<h4 id="terminal-ui-2-6-0">Terminal UI<a class="anchor" aria-label="anchor" href="#terminal-ui-2-6-0"></a></h4>
+<ul><li>configure the default progress bar to show elapsed time upon completion (<a href="https://github.com/firelab/gdalraster/issues/935" class="external-link">#935</a>, <a href="https://github.com/firelab/gdalraster/issues/936" class="external-link">#936</a>)</li>
+<li>format various console messages using <strong>cli</strong> functions</li>
+<li>redirect <code>/vsistdout/</code> to the compliant output stream to allow using GDAL standard output streaming in the R terminal (<a href="https://github.com/firelab/gdalraster/issues/963" class="external-link">#963</a>)</li>
+<li>add <code><a href="../reference/lib_versions.html">lib_versions()</a></code>: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions</li>
+<li>suppress warning messages in the <code>show()</code> method for <code>GDALRaster</code> and <code>GDALVector</code> (e.g., if no spatial reference is defined)</li>
+<li>add <code><a href="../reference/progress_bar_clear.html">progress_bar_clear()</a></code>: terminate/reset any active <strong>cli</strong> progress bars (<a href="https://github.com/firelab/gdalraster/issues/939" class="external-link">#939</a>)</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="fixes-2-6-0">Fixes<a class="anchor" aria-label="anchor" href="#fixes-2-6-0"></a></h3>
+<ul><li>use the <code>CLI_SHOULD_TICK</code> macro in the C++ progress bar to avoid unnecessary updates on screen for small performance improvement in certain cases (<a href="https://github.com/firelab/gdalraster/issues/939" class="external-link">#939</a>)</li>
+<li>
+<code>GDALAlg::setArg()</code>: more robust handling of algorithm arguments with object input</li>
+<li>class <code>GDALVector</code>: lint/cleanup class constructors also addressing <a href="https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579" class="external-link">Rcpp 1471 issue comment</a>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-2-6-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-2-6-0"></a></h3>
+<ul><li>move <a href="https://firelab.github.io/gdalraster/articles/vector-api-overview.html">Vector API Overview</a> from web article to vignette</li>
+<li>add new examples for GDAL CLI pipelines and <code><a href="../reference/gdal_cli.html">gdal_run_piped()</a></code> in web article <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples">Using <code>gdal</code> CLI algorithms from R</a>
+</li>
+<li>update (primarily documentation) for the <code>"UInt8"</code> pixel data type in GDAL &gt;= 3.13 (<a href="https://github.com/firelab/gdalraster/issues/933" class="external-link">#933</a>)</li>
+<li>add links to the new GDAL documentation on <a href="https://gdal.org/en/latest/user/geometry_validity.html" class="external-link">geometry validity and repair</a> (<a href="https://github.com/firelab/gdalraster/issues/932" class="external-link">#932</a>)</li>
+<li>
+<code><a href="../reference/g_util.html">g_make_valid()</a></code>: update documentation to describe the new behavior of <code>MakeValid()</code> in GDAL 3.13(<a href="https://github.com/firelab/gdalraster/issues/934" class="external-link">#934</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-2-6-0">Internal<a class="anchor" aria-label="anchor" href="#internal-2-6-0"></a></h3>
+<ul><li>
+<code><a href="../reference/g_util.html">g_make_valid()</a></code>: condition tests for changes to <code>MakeValid()</code> in GDAL 3.13</li>
+<li>
+<code><a href="../reference/calc.html">calc()</a></code>: use a unique temp name when the output dataset is MEM and a specific name is not given (<a href="https://github.com/firelab/gdalraster/issues/954" class="external-link">#954</a>)</li>
+<li>add undocumented <code>.rasterize_polygon()</code> for internal use, currently only for <strong>FIESTA</strong> support (<a href="https://github.com/firelab/gdalraster/issues/955" class="external-link">#955</a>)</li>
+<li>
+<code>has_space_char_()</code>: use <code>std::any_of</code> to avoid <code>cppcheck</code> style warning</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.5.0" id="gdalraster-250">gdalraster 2.5.0<a class="anchor" aria-label="anchor" href="#gdalraster-250"></a></h2><p class="text-muted">CRAN release: 2026-03-25</p>
 <div class="section level3">

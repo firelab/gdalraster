@@ -1,141 +1,128 @@
 # Changelog
 
-## gdalraster 2.5.0.9108 (dev)
+## gdalraster 2.6.0
 
-- `gdal_error_handler_r()`: restore behavior from 2.5.0 w.r.t. whether a
-  warning is emitted (2026-05-03)
+### Dependencies
 
-- (internal) `has_space_char_()`: use `std::any_of` \[cppcheck style\]
-  (2026-05-03)
+- packages **glue** and **ltc** have been added to `Suggests`
 
-- Doc: move vector-api-overview from web article to vignette
-  (2026-05-02)
-
-- Geom API: add
-  [`g_segmentize()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md),
-  interface to `OGR_G_Segmentize()`
-  ([\#966](https://github.com/firelab/gdalraster/issues/966))
-  (2026-05-02)
-
-- add
-  [`lib_versions()`](https://firelab.github.io/gdalraster/reference/lib_versions.md):
-  return a named list of library version information for GDAL and its
-  major dependencies in a consistent format, as alternative to the
-  separate version info functions (2026-05-02)
-
-- redirect `/vsistdout/` to the compliant output stream to allow using
-  GDAL standard output streaming in the R terminal
-  ([\#963](https://github.com/firelab/gdalraster/issues/963))
-  (2026-04-29)
-
-- `GDALRaster$addBand()`: accept an R vector to add a MEM band from data
-  pointer without copying
-  ([\#960](https://github.com/firelab/gdalraster/issues/960))
-  (2026-04-27)
-
-- add `GDALRaster$getInterBandCovMatrix()`: class method to fetch or
-  compute the covariance matrix between bands of a dataset using
-  `GDALDatasetGetInterBandCovarianceMatrix()` in GDAL 3.13 (2026-04-26)
+### API change
 
 - rename
   [`vector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
   as
   [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
-  but keep an alias for now
+  but keep an alias to the deprecated name for now
   ([\#957](https://github.com/firelab/gdalraster/issues/957))
-  (2026-04-25)
+
+### Features
+
+#### GDAL CLI bindings
 
 - add
-  [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
-  (GDAL CLI): a variation of
+  [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
+  a variation of
   [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
   suitable for use with the R native pipe operator
   ([\#956](https://github.com/firelab/gdalraster/issues/956))
-  (2026-04-25)
-
-- add
-  [`g_invalid_reason()`](https://firelab.github.io/gdalraster/reference/g_query.md):
-  interface to `OGR_G_GetInvalidityReason()` in GDAL \>=3.13
-  ([\#957](https://github.com/firelab/gdalraster/issues/957))
-  (2026-04-25)
-
-- add `.rasterize_polygon()` for internal use
-  ([\#955](https://github.com/firelab/gdalraster/issues/955))
-  (2026-04-23)
-
-- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
-  use a unique temp name when the output dataset is MEM and a specific
-  name is not given
-  ([\#954](https://github.com/firelab/gdalraster/issues/954))
-  (2026-04-18)
-
+- [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
+  add arguments `close` and `quiet`
+  ([\#941](https://github.com/firelab/gdalraster/issues/941))
 - [`gdal_usage()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
-  replace `[may be repeated]` with packed values, repeated arg allowed
-  or not ([\#953](https://github.com/firelab/gdalraster/issues/953))
-  (2026-04-18)
+  replace `[may be repeated]` with whether packed values / repeated arg
+  allowed or not
+  ([\#953](https://github.com/firelab/gdalraster/issues/953))
 
+#### Raster
+
+- class method `GDALRaster$addBand()`: accept an R vector to add a MEM
+  band from data pointer without copying
+  ([\#960](https://github.com/firelab/gdalraster/issues/960))
+- add `GDALRaster$getInterBandCovMatrix()`: class method to fetch or
+  compute the covariance matrix between bands of a dataset using
+  `GDALDatasetGetInterBandCovarianceMatrix()` in GDAL 3.13
 - add
   [`northness()`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md)
   and
   [`eastness()`](https://firelab.github.io/gdalraster/reference/dem_derivatives.md):
-  convenience functions for transforming aspect degrees, and use in a
-  new [CLI pipeline
-  example](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples)
-  for `gdal raster calc` (2026-04-18)
+  convenience functions for transforming aspect degrees
 
-- `GDALAlg::setArg()`: more robust handling of algorithm arguments with
-  object input
-  ([\#949](https://github.com/firelab/gdalraster/issues/949), also
-  adding a new pipeline example in
-  [use-gdal-cli-from-r](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html))
-  (2026-04-17)
+#### Geometry API
 
-- class `GDALVector`: lint/cleanup class constructors, also addressing
-  [Rcpp 1471
-  comment](https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579)
-  (2026-04-12)
+- add
+  [`g_invalid_reason()`](https://firelab.github.io/gdalraster/reference/g_query.md):
+  interface to `OGR_G_GetInvalidityReason()` in GDAL \>= 3.13
+  ([\#957](https://github.com/firelab/gdalraster/issues/957))
+- add
+  [`g_segmentize()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
+  interface to `OGR_G_Segmentize()`
+  ([\#966](https://github.com/firelab/gdalraster/issues/966))
 
-- suppress warning messages in the `show()` method for `GDALRaster` and
-  `GDALVector` (e.g., if no spatial reference is defined) (2026-04-03)
-
-- complete formatting console messages with **cli**
-  ([\#942](https://github.com/firelab/gdalraster/issues/942))
-  (2026-04-02)
-
-- [`gdal_run()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md):
-  add arguments `close` and `quiet`
-  ([\#941](https://github.com/firelab/gdalraster/issues/941))
-  (2026-04-02)
-
-- **cli**-format the global error handler and class `GDALRaster`
-  messages ([\#940](https://github.com/firelab/gdalraster/issues/940))
-  (2026-04-02)
-
-- progress bar improvements and format console messages with **cli**
-  \[WIP\] ([\#939](https://github.com/firelab/gdalraster/issues/939))
-  (2026-04-01)
+#### Terminal UI
 
 - configure the default progress bar to show elapsed time upon
-  completion (adding **glue** in `Suggests` for **cli**,
-  [\#935](https://github.com/firelab/gdalraster/issues/935),
+  completion ([\#935](https://github.com/firelab/gdalraster/issues/935),
   [\#936](https://github.com/firelab/gdalraster/issues/936))
-  (2026-03-30)
+- format various console messages using **cli** functions
+- redirect `/vsistdout/` to the compliant output stream to allow using
+  GDAL standard output streaming in the R terminal
+  ([\#963](https://github.com/firelab/gdalraster/issues/963))
+- add
+  [`lib_versions()`](https://firelab.github.io/gdalraster/reference/lib_versions.md):
+  return a named list of library version information for GDAL and its
+  major dependencies in a consistent format, as alternative to the
+  separate version info functions
+- suppress warning messages in the `show()` method for `GDALRaster` and
+  `GDALVector` (e.g., if no spatial reference is defined)
+- add
+  [`progress_bar_clear()`](https://firelab.github.io/gdalraster/reference/progress_bar_clear.md):
+  terminate/reset any active **cli** progress bars
+  ([\#939](https://github.com/firelab/gdalraster/issues/939))
 
-- [`g_make_valid()`](https://firelab.github.io/gdalraster/reference/g_util.md):
-  condition tests for changes to `MakeValid()` in GDAL 3.13 and update
-  documentation to describe the new behavior
-  ([\#934](https://github.com/firelab/gdalraster/issues/934))
-  (2026-03-28)
+### Fixes
 
+- use the `CLI_SHOULD_TICK` macro in the C++ progress bar to avoid
+  unnecessary updates on screen for small performance improvement in
+  certain cases
+  ([\#939](https://github.com/firelab/gdalraster/issues/939))
+- `GDALAlg::setArg()`: more robust handling of algorithm arguments with
+  object input
+- class `GDALVector`: lint/cleanup class constructors also addressing
+  [Rcpp 1471 issue
+  comment](https://github.com/RcppCore/Rcpp/pull/1471#issuecomment-4225783579)
+
+### Documentation
+
+- move [Vector API
+  Overview](https://firelab.github.io/gdalraster/articles/vector-api-overview.html)
+  from web article to vignette
+- add new examples for GDAL CLI pipelines and
+  [`gdal_run_piped()`](https://firelab.github.io/gdalraster/reference/gdal_cli.md)
+  in web article [Using `gdal` CLI algorithms from
+  R](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples)
 - update (primarily documentation) for the `"UInt8"` pixel data type in
   GDAL \>= 3.13
   ([\#933](https://github.com/firelab/gdalraster/issues/933))
-  (2026-03-28)
-
-- doc: add links to the new GDAL documentation on [geometry validity and
+- add links to the new GDAL documentation on [geometry validity and
   repair](https://gdal.org/en/latest/user/geometry_validity.html)
   ([\#932](https://github.com/firelab/gdalraster/issues/932))
-  (2026-03-28)
+- [`g_make_valid()`](https://firelab.github.io/gdalraster/reference/g_util.md):
+  update documentation to describe the new behavior of `MakeValid()` in
+  GDAL 3.13([\#934](https://github.com/firelab/gdalraster/issues/934))
+
+### Internal
+
+- [`g_make_valid()`](https://firelab.github.io/gdalraster/reference/g_util.md):
+  condition tests for changes to `MakeValid()` in GDAL 3.13
+- [`calc()`](https://firelab.github.io/gdalraster/reference/calc.md):
+  use a unique temp name when the output dataset is MEM and a specific
+  name is not given
+  ([\#954](https://github.com/firelab/gdalraster/issues/954))
+- add undocumented `.rasterize_polygon()` for internal use, currently
+  only for **FIESTA** support
+  ([\#955](https://github.com/firelab/gdalraster/issues/955))
+- `has_space_char_()`: use `std::any_of` to avoid `cppcheck` style
+  warning
 
 ## gdalraster 2.5.0
 
