@@ -15,7 +15,7 @@ CRAN release: 2026-05-04
   as
   [`rvector_to_MEM()`](https://firelab.github.io/gdalraster/reference/rvector_to_MEM.md)
   but keep an alias to the deprecated name for now
-  ([\#957](https://github.com/firelab/gdalraster/issues/957))
+  ([\#958](https://github.com/firelab/gdalraster/issues/958))
 
 ### Features
 
