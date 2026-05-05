@@ -1029,16 +1029,19 @@ SEXP srs_get_axes(const std::string &srs,
     Rcpp::List axes_out = Rcpp::List::create();
     bool is_axis_found = false;
     for (int i = 0; i < axes_count; ++i) {
+        Rcpp::String axis_name_r = NA_STRING;
         const char *axis_name = nullptr;
         OGRAxisOrientation orientation = OAO_Other;
         axis_name = OSRGetAxis(hSRS, pszTargetKey, i, &orientation);
 
-        if (!axis_name)
-            axis_name = std::to_string(i).c_str();
-        else
+        if (!axis_name) {
+            axis_name_r = Rcpp::String(std::to_string(i));
+        }
+        else {
+            axis_name_r = Rcpp::String(axis_name);
             is_axis_found = true;
+        }
 
-        Rcpp::String axis_name_r(axis_name);
         axis_name_r.replace_all(" ", "_");
 
         if (orientation == OAO_Other)
