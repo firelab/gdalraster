@@ -1,5 +1,13 @@
 # Changelog
 
+## gdalraster 2.6.0.9000 (dev)
+
+- (internal) fix clang warning in
+  [`srs_get_axes()`](https://firelab.github.io/gdalraster/reference/srs_query.md)
+  \[-Wdangling-assignment-gsl\]
+  ([\#972](https://github.com/firelab/gdalraster/issues/972))
+  (2026-05-05)
+
 ## gdalraster 2.6.0
 
 CRAN release: 2026-05-04
