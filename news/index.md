@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.6.0.9000 (dev)
+## gdalraster 2.6.0.9001 (dev)
+
+- [`get_pixel_line()`](https://firelab.github.io/gdalraster/reference/get_pixel_line.md):
+  treat points “exactly” on the right or bottom raster edge as inside
+  ([\#973](https://github.com/firelab/gdalraster/issues/973))
+  (2026-05-06)
 
 - (internal) fix clang warning in
   [`srs_get_axes()`](https://firelab.github.io/gdalraster/reference/srs_query.md)
