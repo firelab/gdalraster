@@ -121,7 +121,7 @@ var.names <- c("veg_type", "veg_cov", "veg_ht")
 tbl <- combine(rasterfiles, var.names)
 #> → combining 3 rasters...
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (19ms)
+#> ✔ Done (21ms)
 #> 
 nrow(tbl)
 #> [1] 2083
@@ -170,7 +170,7 @@ head(tbl)
 ds <- new(GDALRaster, cmb_file)
 ds$info()
 #> Driver: GTiff/GeoTIFF
-#> Files: /tmp/RtmpVjibW1/fbfm_cov_cmbid.tif
+#> Files: /tmp/Rtmpzb37Ui/fbfm_cov_cmbid.tif
 #> Size is 143, 107
 #> Coordinate System is:
 #> PROJCRS["NAD83 / UTM zone 12N",

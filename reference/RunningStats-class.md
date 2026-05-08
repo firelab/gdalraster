@@ -8,8 +8,8 @@ not stored in memory, so this class can be used to compute statistics
 for very large data streams.
 
 `RunningStats` is a C++ class exposed directly to R (via
-`RCPP_EXPOSED_CLASS`). Methods of the class are accessed using the `$`
-operator.
+`RCPP_EXPOSED_CLASS`). Fields and methods and of the class are accessed
+using the `$` operator.
 
 ## Arguments
 
@@ -45,6 +45,9 @@ computes statistics for a whole raster band.
     ## Constructor
     rs <- new(RunningStats, na_rm)
 
+    ## Read/write fields (per-object settings)
+    rs$returnCountAsInteger64
+
     ## Methods
     rs$update(newvalues)
     rs$get_count()
@@ -64,6 +67,16 @@ computes statistics for a whole raster band.
 Returns an object of class `RunningStats`. The `na_rm` argument defaults
 to `TRUE` if omitted.
 
+### Read/write fields (per-object settings)
+
+`$returnCountAsInteger64` A logical value specifying whether to return
+the count of values currently in the data stream as
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
+type. The default is `FALSE` in which case the count is returned as R
+`numeric` (i.e., `double`). Can be set to `TRUE` to support very large
+counts without loss of precision (returning the internal `int64_t`
+counter without a cast to `double`).
+
 ### Methods
 
 `$update(newvalues)`  
@@ -72,7 +85,11 @@ Updates the `RunningStats` object with a numeric vector of `newvalues`
 for side effects.
 
 `$get_count()`  
-Returns the count of values received from the data stream.
+Returns the count of values received from the data stream. Returns a
+`numeric` value (i.e., `double`) unless `returnCountAsInteger64 = TRUE`
+in which case the count is returned as
+[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
+(see above).
 
 `$get_mean()`  
 Returns the mean of values received from the data stream.
@@ -100,7 +117,6 @@ No return value, called for side effects.
 ## Examples
 
 ``` r
-set.seed(42)
 (rs <- new(RunningStats, na_rm = TRUE))
 #> C++ object of class <RunningStats>
 #>   • Number of values: 0
@@ -116,45 +132,68 @@ length(chunk)
 #> [1] 1000
 
 rs$get_mean()
-#> [1] 0.4882555
+#> [1] 0.4785359
 mean(chunk)
-#> [1] 0.4882555
+#> [1] 0.4785359
 
 rs$get_min()
-#> [1] 0.0002388966
+#> [1] 0.0003301252
 min(chunk)
-#> [1] 0.0002388966
+#> [1] 0.0003301252
 
 rs$get_max()
-#> [1] 0.9984908
+#> [1] 0.9983521
 max(chunk)
-#> [1] 0.9984908
+#> [1] 0.9983521
 
 rs$get_var()
-#> [1] 0.08493159
+#> [1] 0.08724637
 var(chunk)
-#> [1] 0.08493159
+#> [1] 0.08724637
 
 rs$get_sd()
-#> [1] 0.2914302
+#> [1] 0.295375
 sd(chunk)
-#> [1] 0.2914302
+#> [1] 0.295375
 
+rs$returnCountAsInteger64 <- TRUE
 # \donttest{
 ## 10^9 values read in 10,000 chunks
-## should take under 1 minute on most PC hardware
+## should take under 1 minute on typical hardware
 for (i in 1:1e4) {
   chunk <- runif(1e5)
   rs$update(chunk)
 }
 rs$get_count()
+#> integer64
 #> [1] 1000001000
 rs$get_mean()
 #> [1] 0.5000044
 rs$get_var()
-#> [1] 0.08333479
+#> [1] 0.08333477
 
 object.size(rs)
 #> 704 bytes
 # }
+
+## large numbers with small differences
+rs$reset()
+rs$get_count()
+#> integer64
+#> [1] 0
+
+values <- runif(100000L, min = 100000000, max = 100000000.06)
+rs$update(values)
+
+rs$get_count()
+#> integer64
+#> [1] 100000
+
+rs$get_mean() |> format(nsmall = 3, scientific = FALSE)
+#> [1] "100000000.030"
+
+rs$get_var()
+#> [1] 0.0002985316
+var(values)
+#> [1] 0.0002985316
 ```
