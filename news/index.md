@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.6.0.9001 (dev)
+## gdalraster 2.6.0.9002 (dev)
+
+- `RunningStats` class: support optionally returning count as
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
+  ([\#975](https://github.com/firelab/gdalraster/issues/975))
+  (2026-05-07)
 
 - [`get_pixel_line()`](https://firelab.github.io/gdalraster/reference/get_pixel_line.md):
   treat points “exactly” on the right or bottom raster edge as inside
