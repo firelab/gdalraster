@@ -62,7 +62,7 @@ copyDatasetFiles(lcp_tmp, lcp_file)
 #> [1] TRUE
 ds_copy <- new(GDALRaster, lcp_tmp)
 ds_copy$getFileList()
-#> [1] "/tmp/RtmpZ2w32y/storm_lake_copy.lcp" "/tmp/RtmpZ2w32y/storm_lake_copy.prj"
+#> [1] "/tmp/RtmpKzbHo6/storm_lake_copy.lcp" "/tmp/RtmpKzbHo6/storm_lake_copy.prj"
 ds_copy$close()
 
 deleteDataset(lcp_tmp)

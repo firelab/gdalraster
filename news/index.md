@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.6.0.9002 (dev)
+## gdalraster 2.6.0.9003 (dev)
+
+- (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
+  ([\#974](https://github.com/firelab/gdalraster/issues/974))
+  (2026-05-08)
 
 - `RunningStats` class: support optionally returning count as
   [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
