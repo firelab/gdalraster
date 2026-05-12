@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.6.0.9003" id="gdalraster-2609003-dev">gdalraster 2.6.0.9003 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2609003-dev"></a></h2>
-<ul><li><p>(internal) replace <code>ARE_REAL_EQUAL()</code> with <code>equal_within_ulps_()</code> (<a href="https://github.com/firelab/gdalraster/issues/974" class="external-link">#974</a>) (2026-05-08)</p></li>
+<h2 class="pkg-version" data-toc-text="2.6.0.9004" id="gdalraster-2609004-dev">gdalraster 2.6.0.9004 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2609004-dev"></a></h2>
+<ul><li><p>add <code>GDALVector$writeArrowBatch()</code>: write a batch of rows from a data frame using GDAL Arrow C stream interface (<a href="https://github.com/firelab/gdalraster/issues/976" class="external-link">#976</a>) (2026-05-11)</p></li>
+<li><p>(internal) replace <code>ARE_REAL_EQUAL()</code> with <code>equal_within_ulps_()</code> (<a href="https://github.com/firelab/gdalraster/issues/974" class="external-link">#974</a>) (2026-05-08)</p></li>
 <li><p><code>RunningStats</code> class: support optionally returning count as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> (<a href="https://github.com/firelab/gdalraster/issues/975" class="external-link">#975</a>) (2026-05-07)</p></li>
 <li><p><code><a href="../reference/get_pixel_line.html">get_pixel_line()</a></code>: treat points “exactly” on the right or bottom raster edge as inside (<a href="https://github.com/firelab/gdalraster/issues/973" class="external-link">#973</a>) (2026-05-06)</p></li>
 <li><p>(internal) fix clang warning in <code><a href="../reference/srs_query.html">srs_get_axes()</a></code> [-Wdangling-assignment-gsl] (<a href="https://github.com/firelab/gdalraster/issues/972" class="external-link">#972</a>) (2026-05-05)</p></li>

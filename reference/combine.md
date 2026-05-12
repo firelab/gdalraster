@@ -167,7 +167,7 @@ head(tbl)
 ds <- new(GDALRaster, cmb_file)
 ds$info()
 #> Driver: GTiff/GeoTIFF
-#> Files: /tmp/RtmpAYrb0w/fbfm_cov_cmbid.tif
+#> Files: /tmp/RtmpADVWQe/fbfm_cov_cmbid.tif
 #> Size is 143, 107
 #> Coordinate System is:
 #> PROJCRS["NAD83 / UTM zone 12N",

@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.6.0.9003 (dev)
+## gdalraster 2.6.0.9004 (dev)
+
+- add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
+  frame using GDAL Arrow C stream interface
+  ([\#976](https://github.com/firelab/gdalraster/issues/976))
+  (2026-05-11)
 
 - (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
   ([\#974](https://github.com/firelab/gdalraster/issues/974))
