@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.6.0.9004 (dev)
+## gdalraster 2.6.0.9005 (dev)
+
+- add
+  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
+  wrapper of `OGR_G_PointOnSurface()` in the GDAL API (2026-05-13)
 
 - add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
   frame using GDAL Arrow C stream interface
