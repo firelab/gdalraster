@@ -59,9 +59,6 @@ dem_proc("slope", f_dem, f_slp)
 f_asp <- basename(tempfile(pattern = "storml_asp", fileext = ".tif"))
 f_asp <- file.path("/vsimem", f_asp)
 dem_proc("aspect", f_dem, f_asp)
-#>  ■■■■■■■■■■■                       34% |  ETA:  0s
-#> ✔ Done (18ms)
-#> 
 
 # compute masked aspect as an in-memory raster
 expr <- "ifelse(SLOPE >= 2, ASPECT, -9999)"
@@ -73,10 +70,10 @@ expr <- "ifelse(SLOPE >= 2, ASPECT, -9999)"
                        nodata_value = -9999,
                        setRasterNodataValue = TRUE,
                        return_obj = TRUE))
-#> ℹ output written to: "calc20943f81c7db"
+#> ℹ output written to: "calc208416481631"
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory Raster (MEM)
-#>   • DSN: "calc20943f81c7db"
+#>   • DSN: "calc208416481631"
 #>   • Dimensions: 143, 107, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000

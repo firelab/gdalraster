@@ -234,7 +234,11 @@ written to an existing database.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># MTBS fire perimeters</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># for GDAL &lt; 3.11.4 (see https://github.com/OSGeo/gdal/issues/12934)</span></span></span>
+<span class="r-in"><span><span class="va">save_opt</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_config_option.html">get_config_option</a></span><span class="op">(</span><span class="st">"OGR2OGR_USE_ARROW_API"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="set_config_option.html">set_config_option</a></span><span class="op">(</span><span class="st">"OGR2OGR_USE_ARROW_API"</span>, <span class="st">"NO"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># MTBS fire perimeters</span></span></span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ynp_fires_1984_2022.gpkg"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">mtbs</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">f</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
@@ -256,7 +260,7 @@ written to an existing database.</p>
 <span class="r-in"><span><span class="op">(</span><span class="va">bnd</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">ynp_dsn</span>, <span class="st">"ynp_bnd"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpAnhjQT/ynp_features.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/Rtmpz094C4/ynp_features.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: POLYGON</span>
@@ -269,7 +273,7 @@ written to an existing database.</p>
 <span class="r-in"><span><span class="op">(</span><span class="va">bnd_mtsp</span> <span class="op">&lt;-</span> <span class="fu">ogr_reproject</span><span class="op">(</span><span class="va">ynp_dsn</span>, <span class="st">"ynp_bnd"</span>, <span class="va">out_dsn</span>, <span class="va">mtbs</span><span class="op">$</span><span class="fu">getSpatialRef</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpAnhjQT/file209457bbee81.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/Rtmpz094C4/file20842ef1055a.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: POLYGON</span>
@@ -328,6 +332,9 @@ written to an existing database.</p>
 <span class="r-in"><span><span class="va">mtbs</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bnd</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bnd_mtsp</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># reset config option to original</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="set_config_option.html">set_config_option</a></span><span class="op">(</span><span class="st">"OGR2OGR_USE_ARROW_API"</span>, <span class="va">save_opt</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
