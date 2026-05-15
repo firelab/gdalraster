@@ -1,27 +1,19 @@
 test_that("ogr_reproject works", {
 
-    # NOTE: temporarily disabling the Arrow code path in ogr2ogr and avoiding
-    # the use of any virtual file systems while attempting to fix:
-    # https://github.com/firelab/gdalraster/issues/769
-
-    # BLAS/LAPACK are not involved in vector reprojection
-    # cf. https://lists.osgeo.org/pipermail/gdal-dev/2025-August/060834.html
-
-    # at time of writing, the CRAN check errors on systems with alternative
-    # BLAS/LAPACK implementations cannot be reproduced
-    # cf. https://github.com/firelab/gdalraster/issues/769#issuecomment-3192160052
-
-    # the Arrow code path in gdal/apps/ogr2ogr_lib.cpp is implicated in the
-    # error messages reported from the CRAN checks, so consider it as possibly
-    # related
+    # The Arrow code path in gdal/apps/ogr2ogr_lib.cpp has known bugs in older
+    # GDAL versions.
     # cf. https://gdal.org/en/stable/programs/ogr2ogr.html#known-issues
 
-    # for now, perform only basic tests across all GDAL versions, and limit
-    # additional tests to the GDAL "stable" version or later as of July 2025
-    # (>= GDAL 3.11.3)
+    # Perform only basic tests across all GDAL versions, and limit additional
+    # tests to GDAL >= 3.11.4.
 
+    # Workaround for GDAL < 3.11.4:
+    #   https://github.com/OSGeo/gdal/issues/12934
+    #   GPKG driver: fix random crash in GetNextArrowArrayAsynchronous()
     set_config_option("OGR2OGR_USE_ARROW_API", "NO")
     on.exit(set_config_option("OGR2OGR_USE_ARROW_API", ""), add = TRUE)
+    set_config_option("OGR_GPKG_STREAM_BASE_IMPL", "YES")
+    on.exit(set_config_option("OGR_GPKG_STREAM_BASE_IMPL", ""), add = TRUE)
 
     f <- system.file("extdata/ynp_features.zip", package = "gdalraster")
     # ynp_dsn <- file.path("/vsizip", f, "ynp_features.gpkg")
@@ -51,10 +43,8 @@ test_that("ogr_reproject works", {
     expect_equal(lyr$getFeatureCount(), 1)
     lyr$close()
 
-    # FIXME: remove or adjust this GDAL version requirement once the possible
-    # involvement of the Arrow code path is either confirmed or refuted
-    # (see notes above)
-    skip_if(gdal_version_num() < gdal_compute_version(3, 11, 3))
+    # see notes above
+    skip_if(gdal_version_num() < gdal_compute_version(3, 11, 4))
 
     ## spat_bbox
     bb <- c(-111.18, 44.78, -111.03, 45.07)
