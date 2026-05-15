@@ -386,9 +386,13 @@ test_that("footprint runs without error", {
 
 test_that("ogr2ogr works", {
     # this may be removed in the future
-    # cf. https://gdal.org/en/stable/programs/ogr2ogr.html#known-issues
+    # https://gdal.org/en/stable/programs/ogr2ogr.html#known-issues
+    # https://github.com/OSGeo/gdal/issues/12934
+    #   GPKG driver: fix random crash in GetNextArrowArrayAsynchronous()
     set_config_option("OGR2OGR_USE_ARROW_API", "NO")
     on.exit(set_config_option("OGR2OGR_USE_ARROW_API", ""))
+    set_config_option("OGR_GPKG_STREAM_BASE_IMPL", "YES")
+    on.exit(set_config_option("OGR_GPKG_STREAM_BASE_IMPL", ""), add = TRUE)
 
     src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package="gdalraster")
 
