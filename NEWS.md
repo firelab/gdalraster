@@ -6,7 +6,7 @@
 
 ## API change
 
-* rename `vector_to_MEM()` as `rvector_to_MEM()` but keep an alias to the deprecated name for now (#957)
+* rename `vector_to_MEM()` as `rvector_to_MEM()` but keep an alias to the deprecated name for now (#958)
 
 ## Features
 
@@ -19,7 +19,7 @@
 ### Raster
 
 * class method `GDALRaster$addBand()`: accept an R vector to add a MEM band from data pointer without copying (#960)
-* add `GDALRaster$getInterBandCovMatrix()`: class method to fetch or compute the covariance matrix between bands of a dataset using `GDALDatasetGetInterBandCovarianceMatrix()` in GDAL 3.13
+* add `GDALRaster$getInterBandCovMatrix()`: class method to fetch or compute the covariance matrix between bands of a dataset using `GDALDatasetGetInterBandCovarianceMatrix()` in GDAL 3.13 (#959)
 * add `northness()` and `eastness()`: convenience functions for transforming aspect degrees
 
 ### Geometry API
@@ -32,7 +32,7 @@
 * configure the default progress bar to show elapsed time upon completion (#935, #936)
 * format various console messages using **cli** functions
 * redirect `/vsistdout/` to the compliant output stream to allow using GDAL standard output streaming in the R terminal (#963)
-* add `lib_versions()`: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions
+* add `lib_versions()`: return a named list of library version information for GDAL and its major dependencies in a consistent format, as alternative to the separate version info functions (#965)
 * suppress warning messages in the `show()` method for `GDALRaster` and `GDALVector` (e.g., if no spatial reference is defined)
 * add `progress_bar_clear()`: terminate/reset any active **cli** progress bars (#939)
 
@@ -44,11 +44,11 @@
 
 ## Documentation
 
-* move [Vector API Overview](https://firelab.github.io/gdalraster/articles/vector-api-overview.html) from web article to vignette
+* move [Vector API Overview](https://firelab.github.io/gdalraster/articles/vector-api-overview.html) from a web-only article to package vignette
 * add new examples for GDAL CLI pipelines and `gdal_run_piped()` in web article [Using `gdal` CLI algorithms from R](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html#pipeline-examples)
 * update (primarily documentation) for the `"UInt8"` pixel data type in GDAL >= 3.13 (#933)
 * add links to the new GDAL documentation on [geometry validity and repair](https://gdal.org/en/latest/user/geometry_validity.html) (#932)
-* `g_make_valid()`: update documentation to describe the new behavior of `MakeValid()` in GDAL 3.13(#934)
+* `g_make_valid()`: update documentation to describe the new behavior of `MakeValid()` in GDAL 3.13 (#934)
 
 ## Internal
 
