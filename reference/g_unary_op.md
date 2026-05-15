@@ -215,6 +215,13 @@ that contains all the points in the input geometry. Requires GDAL \>=
   silently returns an empty geometry collection. Requires GDAL \>= 3.12
   and GEOS \>= 3.10.
 
+`g_point_on_surface()` returns a point guaranteed to lie on the surface.
+Applies to surface and multisurface geometry types (e.g., POLYGON,
+MULTIPOLYGON, CURVEPOLYGON), otherwise `NULL` is returned. The point
+returned by this function is guaranteed to lie within polygons, whereas
+the centroid may be outside. Wrapper of `OGR_G_PointOnSurface()` in the
+GDAL API.
+
 `g_segmentize()` modifies a geometry such that it has no segment longer
 then the given `max_length`. Interpolated points will have Z and M
 values (if needed) set to `0`. Distance computation is performed in 2D
@@ -258,12 +265,6 @@ Delaunay Triangulation of the space between the polygons, until the
 target criterion parameter is reached. This can be expressed as a ratio
 between the lengths of the longest and shortest edges. `1` produces the
 convex hull; `0` produces a hull with maximum concaveness.
-
-`g_point_on_surface()` returns a point guaranteed to lie on the surface.
-Applies to surface and multisurface geometry types (e.g., POLYGON,
-MULTIPOLYGON, CURVEPOLYGON), otherwise `NULL` is returned. The point
-returned by this function is guaranteed to lie within polygons, whereas
-the centroid may be outside.
 
 `g_simplify()`:
 

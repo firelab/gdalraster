@@ -264,7 +264,12 @@ API. Requires GEOS &gt;= 3.4.</p></li>
 <li><p><code>constrained = TRUE</code>: returns a constrained Delaunay triangulation of the
 vertices of the given polygon(s). For non-polygonal inputs, silently returns
 an empty geometry collection. Requires GDAL &gt;= 3.12 and GEOS &gt;= 3.10.</p></li>
-</ul><p><code>g_segmentize()</code> modifies a geometry such that it has no segment longer then
+</ul><p><code>g_point_on_surface()</code> returns a point guaranteed to lie on the surface.
+Applies to surface and multisurface geometry types (e.g., POLYGON,
+MULTIPOLYGON, CURVEPOLYGON), otherwise <code>NULL</code> is returned. The point returned
+by this function is guaranteed to lie within polygons, whereas the centroid
+may be outside. Wrapper of <code>OGR_G_PointOnSurface()</code> in the GDAL API.</p>
+<p><code>g_segmentize()</code> modifies a geometry such that it has no segment longer then
 the given <code>max_length</code>. Interpolated points will have Z and M values
 (if needed) set to <code>0</code>. Distance computation is performed in 2D only.</p>
 <p><code>g_simplify()</code> computes a simplified geometry. By default, it simplifies
@@ -295,11 +300,6 @@ of the space between the polygons, until the target criterion parameter is
 reached. This can be expressed as a ratio between the lengths of the longest
 and shortest edges. <code>1</code> produces the convex hull; <code>0</code> produces a hull with
 maximum concaveness.</p>
-<p><code>g_point_on_surface()</code> returns a point guaranteed to lie on the surface.
-Applies to surface and multisurface geometry types (e.g., POLYGON,
-MULTIPOLYGON, CURVEPOLYGON), otherwise <code>NULL</code> is returned. The point returned
-by this function is guaranteed to lie within polygons, whereas the centroid
-may be outside.</p>
 <p><code>g_simplify()</code>:</p><ul><li><p>With <code>preserve_topology = TRUE</code> (the default):<br>
 Simplifies a geometry, ensuring that the result is a valid geometry having
 the same dimension and number of components as the input. The simplification
