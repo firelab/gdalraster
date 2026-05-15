@@ -98,7 +98,10 @@
 #' [warp()] for raster reprojection
 #'
 #' @examples
-#' \dontshow{set_config_option("OGR2OGR_USE_ARROW_API", "NO")}
+#' # for GDAL < 3.11.4 (see https://github.com/OSGeo/gdal/issues/12934)
+#' save_opt <- get_config_option("OGR2OGR_USE_ARROW_API")
+#' set_config_option("OGR2OGR_USE_ARROW_API", "NO")
+#'
 #' # MTBS fire perimeters
 #' f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 #' (mtbs <- new(GDALVector, f, "mtbs_perims"))
@@ -132,6 +135,9 @@
 #' mtbs$close()
 #' bnd$close()
 #' bnd_mtsp$close()
+#'
+#' # reset config option to original
+#' set_config_option("OGR2OGR_USE_ARROW_API", save_opt)
 #' \dontshow{unlink(out_dsn)}
 #' \dontshow{unlink(ynp_dsn)}
 #' \dontshow{set_config_option("OGR2OGR_USE_ARROW_API", "")}
