@@ -189,6 +189,16 @@ vsi_read_dir(zf)
 (zf_gpkg <- file.path(zf, "ynp_features.gpkg"))
 ```
 
+```{r, include = FALSE}
+# workaround for GDAL < 3.11.4:
+#   https://github.com/OSGeo/gdal/issues/12934
+#   GPKG driver: fix random crash in GetNextArrowArrayAsynchronous()
+ogr_arrow_opt <- get_config_option("OGR2OGR_USE_ARROW_API")
+set_config_option("OGR2OGR_USE_ARROW_API", "NO")
+gpkg_stream_base_opt <- get_config_option("OGR_GPKG_STREAM_BASE_IMPL")
+set_config_option("OGR_GPKG_STREAM_BASE_IMPL", "YES")
+```
+
 It is possible to chain multiple file system handlers. The [/vsicurl/](https://gdal.org/en/stable/user/virtual_file_systems.html#vsicurl-http-https-ftp-files-random-access) prefix specifies a file system handler that allows on-the-fly random reading of files available through web protocols, without prior download of the entire file. For example, a zip file residing on a web server instead of the local file system could be accessed with a path like:
 
 ```
@@ -800,4 +810,6 @@ lyr_out$close()
 unlink(json_file)
 vsi_unlink(mtbs_dsn)
 vsi_rmdir("/vsimem/tmp/")
+set_config_option("OGR2OGR_USE_ARROW_API", ogr_arrow_opt)
+set_config_option("OGR_GPKG_STREAM_BASE_IMPL", gpkg_stream_base_opt)
 ```
