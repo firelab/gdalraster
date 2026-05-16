@@ -1,3 +1,10 @@
+# gdalraster 2.6.1
+
+* fix clang warning `[-Wdangling-assignment-gsl]` in `srs_get_axes()`
+* avoid GDAL issue [12934](https://github.com/OSGeo/gdal/issues/12934) in the vignette code for [Vector API Overview](https://firelab.github.io/gdalraster/articles/vector-api-overview.html) if GDAL < 3.11.4 on some platforms
+* add a configuration option in the example code for `ogr_reproject()` to avoid the potential GDAL issue 12934
+* condition tests of `ogr_reproject()` on GDAL 3.11.4 and add the `OGR_GPKG_STREAM_BASE_IMPL=YES` configuration option
+
 # gdalraster 2.6.0
 
 ## Dependencies
