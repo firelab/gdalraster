@@ -55,14 +55,6 @@ g_delaunay_triangulation(
   quiet = FALSE
 )
 
-g_point_on_surface(
-  geom,
-  as_wkb = TRUE,
-  as_iso = FALSE,
-  byte_order = "LSB",
-  quiet = FALSE
-)
-
 g_segmentize(
   geom,
   max_length,
@@ -215,13 +207,6 @@ that contains all the points in the input geometry. Requires GDAL \>=
   silently returns an empty geometry collection. Requires GDAL \>= 3.12
   and GEOS \>= 3.10.
 
-`g_point_on_surface()` returns a point guaranteed to lie on the surface.
-Applies to surface and multisurface geometry types (e.g., POLYGON,
-MULTIPOLYGON, CURVEPOLYGON), otherwise `NULL` is returned. The point
-returned by this function is guaranteed to lie within polygons, whereas
-the centroid may be outside. Wrapper of `OGR_G_PointOnSurface()` in the
-GDAL API.
-
 `g_segmentize()` modifies a geometry such that it has no segment longer
 then the given `max_length`. Interpolated points will have Z and M
 values (if needed) set to `0`. Distance computation is performed in 2D
@@ -320,15 +305,6 @@ if (geos_version()$major > 3 || geos_version()$minor >= 4) {
   g_delaunay_triangulation(g, as_wkb = FALSE)
 }
 #> [1] "GEOMETRYCOLLECTION (POLYGON ((0 1,0 0,1 0,0 1)),POLYGON ((0 1,1 0,1 1,0 1)))"
-
-# https://postgis.net/docs/ST_PointOnSurface.html
-g <- "POLYGON ((130 120, 120 190, 30 140, 50 20, 190 20, 170 100, 90 60, 90 130, 130 120))"
-pt <- g_point_on_surface(g)
-plot_geom(g)
-plot_geom(pt, pch = 16, add = TRUE)
-centroid <- g_create("POINT", g_centroid(g))
-plot_geom(centroid, add = TRUE)
-
 
 g <- "LINESTRING(0 0,0 10)"
 g_segmentize(g, 1) |> g_wk2wk()

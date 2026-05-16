@@ -1,35 +1,22 @@
 # Changelog
 
-## gdalraster 2.6.0.9005 (dev)
+## gdalraster 2.6.1
 
-- add
-  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
-  wrapper of `OGR_G_PointOnSurface()` in the GDAL API (2026-05-13)
+CRAN release: 2026-05-16
 
-- add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
-  frame using GDAL Arrow C stream interface
-  ([\#976](https://github.com/firelab/gdalraster/issues/976))
-  (2026-05-11)
-
-- (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
-  ([\#974](https://github.com/firelab/gdalraster/issues/974))
-  (2026-05-08)
-
-- `RunningStats` class: support optionally returning count as
-  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
-  ([\#975](https://github.com/firelab/gdalraster/issues/975))
-  (2026-05-07)
-
-- [`get_pixel_line()`](https://firelab.github.io/gdalraster/reference/get_pixel_line.md):
-  treat points “exactly” on the right or bottom raster edge as inside
-  ([\#973](https://github.com/firelab/gdalraster/issues/973))
-  (2026-05-06)
-
-- (internal) fix clang warning in
+- fix clang warning `[-Wdangling-assignment-gsl]` in
   [`srs_get_axes()`](https://firelab.github.io/gdalraster/reference/srs_query.md)
-  \[-Wdangling-assignment-gsl\]
-  ([\#972](https://github.com/firelab/gdalraster/issues/972))
-  (2026-05-05)
+- avoid GDAL issue [12934](https://github.com/OSGeo/gdal/issues/12934)
+  in the vignette code for [Vector API
+  Overview](https://firelab.github.io/gdalraster/articles/vector-api-overview.html)
+  if GDAL \< 3.11.4 on some platforms
+- add a configuration option in the example code for
+  [`ogr_reproject()`](https://firelab.github.io/gdalraster/reference/ogr_reproject.md)
+  to avoid the potential GDAL issue 12934
+- condition tests of
+  [`ogr_reproject()`](https://firelab.github.io/gdalraster/reference/ogr_reproject.md)
+  on GDAL 3.11.4 and add the `OGR_GPKG_STREAM_BASE_IMPL=YES`
+  configuration option
 
 ## gdalraster 2.6.0
 

@@ -100,7 +100,6 @@ assignment).
     lyr$convertToLinear
     lyr$wkbByteOrder
     lyr$arrowStreamOptions
-    lyr$writeArrowBatchOptions
     lyr$quiet
     lyr$transactionsForce
 
@@ -145,7 +144,6 @@ assignment).
 
     lyr$getArrowStream()
     lyr$releaseArrowStream()
-    lyr$writeArrowBatch(df)
 
     lyr$setFeature(feature)
     lyr$createFeature(feature)
@@ -253,48 +251,21 @@ listed below. For more information about options for Arrow stream, see
 the GDAL API documentation for
 [OGR_L_GetArrowStream()](https://gdal.org/en/stable/api/vector_c_api.html#_CPPv420OGR_L_GetArrowStream9OGRLayerHP16ArrowArrayStreamPPc).
 
-- `INCLUDE_FID=YES/NO`. Defaults to `YES`.
+- INCLUDE_FID=YES/NO. Defaults to YES.
 
-- `MAX_FEATURES_IN_BATCH=integer`. Maximum number of features to
-  retrieve in an ArrowArray batch. Defaults to `65536`.
+- MAX_FEATURES_IN_BATCH=integer. Maximum number of features to retrieve
+  in an ArrowArray batch. Defaults to 65536.
 
-- `TIMEZONE=unknown/UTC/(+|:)HH:MM` or any other value supported by
-  Arrow (GDAL \>= 3.8).
+- TIMEZONE=unknown/UTC/(+\|:)HH:MM or any other value supported by Arrow
+  (GDAL \>= 3.8).
 
-- `GEOMETRY_METADATA_ENCODING=OGC/GEOARROW` (GDAL \>= 3.8). The GDAL
-  default is `OGC` if not specified.
+- GEOMETRY_METADATA_ENCODING=OGC/GEOARROW (GDAL \>= 3.8). The GDAL
+  default is OGC if not specified.
 
-- `GEOMETRY_ENCODING=WKB` (Arrow/Parquet drivers). To force a fallback
-  to the generic implementation when the native geometry encoding is not
+- GEOMETRY_ENCODING=WKB (Arrow/Parquet drivers). To force a fallback to
+  the generic implementation when the native geometry encoding is not
   WKB. Otherwise the geometry will be returned with its native Arrow
   encoding (possibly using GeoArrow encoding).
-
-`$writeArrowBatchOptions`  
-Character vector of `"NAME=VALUE"` pairs giving options used by the
-`$writeArrowBatch()` method (see below). The available options may be
-driver and GDAL version specific. For more information, see the GDAL API
-documentation for
-[OGR_L_WriteArrowBatch()](https://gdal.org/en/latest/api/vector_c_api.html#_CPPv421OGR_L_WriteArrowBatch9OGRLayerHPK11ArrowSchemaP10ArrowArray12CSLConstList).
-
-- `FID=name`. Name of the FID column in the data frame. If not provided,
-  `GetFIDColumn()` is used to determine it. The column must be of type
-  `integer` or `integer64`.
-
-- `IF_FID_NOT_PRESERVED=NOTHING/ERROR/WARNING`. Action to perform when
-  the input FID is not preserved in the output layer. The default is
-  `NOTHING`. Setting it to `ERROR` will cause the function to error out.
-  Setting it to `WARNING` will cause the function to emit a warning but
-  continue its processing.
-
-- `IF_FIELD_NOT_PRESERVED=ERROR/WARNING`. (since GDAL 3.9) Action to
-  perform when the input field value is not preserved in the output
-  layer. The default is `WARNING`, which will cause the function to emit
-  a warning but continue its processing. Setting it to `ERROR` will
-  cause the function to error out if a lossy conversion is detected.
-
-- `GEOMETRY_NAME=name`. Name of the geometry column. If not provided,
-  `GetGeometryColumn()` is used. The corresponding data frame column
-  must be a list column containing `raw` vectors of WKB.
 
 `$quiet`  
 A logical value, `FALSE` by default. Set to `TRUE` to suppress various
@@ -674,18 +645,6 @@ nothing). This is equivalent to calling the `$release()` method on the
 `nanoarrow_array_stream` object. No return value, called for side
 effects.
 
-`$writeArrowBatch(df)`  
-Writes a batch of rows from a data frame. This is similar to the
-`$batchCreateFeature()` method described below, but uses GDAL's Arrow C
-stream interface for column oriented write when supported by the format
-driver. The column names and data types of the input data frame must be
-compatible with the layer schema. Geometry columns must be list columns
-containing `raw` vectors of WKB. The writable field
-`$writeArrowBatchOptions` can be used to set options before calling this
-method (see above). Returns a `logical` value, `TRUE` indicating
-success. This method and `$createFeature()` / `$batchCreateFeature()`
-are mutually exclusive in the same session.
-
 `$setFeature(feature)`  
 Rewrites/replaces an existing feature. This method writes a feature
 based on the feature id within the input feature. The `feature` argument
@@ -886,26 +845,25 @@ file.copy(f, dsn)
 (lyr <- new(GDALVector, dsn, "mtbs_perims"))
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/Rtmpz094C4/ynp_fires_1984_2022.gpkg"
+#>   • DSN: "/tmp/RtmpQxtZds/ynp_fires_1984_2022.gpkg"
 #>   • Layer: mtbs_perims
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Geometry: MULTIPOLYGON
 
 str(lyr)
-#> Reference class 'Rcpp_GDALVector' [package "gdalraster"] with 12 fields
-#>  $ arrowStreamOptions    : chr ""
-#>  $ convertToLinear       : logi FALSE
-#>  $ defaultGeomColName    : chr "geom"
-#>  $ m_dialect             : chr ""
-#>  $ m_is_sql              : logi FALSE
-#>  $ m_layer_name          : chr "mtbs_perims"
-#>  $ promoteToMulti        : logi FALSE
-#>  $ quiet                 : logi FALSE
-#>  $ returnGeomAs          : chr "WKB"
-#>  $ transactionsForce     : logi FALSE
-#>  $ wkbByteOrder          : chr "LSB"
-#>  $ writeArrowBatchOptions: chr ""
-#>  and 75 methods, of which 61 are  possibly relevant:
+#> Reference class 'Rcpp_GDALVector' [package "gdalraster"] with 11 fields
+#>  $ arrowStreamOptions: chr ""
+#>  $ convertToLinear   : logi FALSE
+#>  $ defaultGeomColName: chr "geom"
+#>  $ m_dialect         : chr ""
+#>  $ m_is_sql          : logi FALSE
+#>  $ m_layer_name      : chr "mtbs_perims"
+#>  $ promoteToMulti    : logi FALSE
+#>  $ quiet             : logi FALSE
+#>  $ returnGeomAs      : chr "WKB"
+#>  $ transactionsForce : logi FALSE
+#>  $ wkbByteOrder      : chr "LSB"
+#>  and 74 methods, of which 60 are  possibly relevant:
 #>    OGRFeatureFromList_dumpReadble, batchCreateFeature, bbox,
 #>    clearSpatialFilter, close, commitTransaction, createFeature, deleteFeature,
 #>    fetch, finalize, getArrowStream, getAttributeFilter, getDriverLongName,
@@ -918,7 +876,7 @@ str(lyr)
 #>    releaseArrowStream, resetReading, rollbackTransaction, setAttributeFilter,
 #>    setFeature, setIgnoredFields, setMetadata, setNextByIndex,
 #>    setSelectedFields, setSpatialFilter, setSpatialFilterRect, show#envRefClass,
-#>    startTransaction, syncToDisk, testCapability, upsertFeature, writeArrowBatch
+#>    startTransaction, syncToDisk, testCapability, upsertFeature
 
 ## dataset info
 lyr$getDriverShortName()
@@ -926,7 +884,7 @@ lyr$getDriverShortName()
 lyr$getDriverLongName()
 #> [1] "GeoPackage"
 lyr$getFileList()
-#> [1] "/tmp/Rtmpz094C4/ynp_fires_1984_2022.gpkg"
+#> [1] "/tmp/RtmpQxtZds/ynp_fires_1984_2022.gpkg"
 
 ## layer info
 lyr$getName()
@@ -1430,7 +1388,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-05-15 23:30:29" "2026-05-15 23:30:29"
+#>  $ dt_modified: POSIXct, format: "2026-05-16 17:15:34" "2026-05-16 17:15:34"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...
@@ -1456,7 +1414,7 @@ str(feat)
 #>  $ doubles    : num 2.35
 #>  $ strings    : chr "A test string 2"
 #>  $ dates      : Date, format: "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-05-15 23:30:29"
+#>  $ dt_modified: POSIXct, format: "2026-05-16 17:15:34"
 #>  $ blobs      :List of 1
 #>   ..$ : raw  41 20 62 69 ...
 #>  $ geom       :List of 1
@@ -1496,7 +1454,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2 - edited"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-05-15 23:30:29" "2026-05-15 23:30:30"
+#>  $ dt_modified: POSIXct, format: "2026-05-16 17:15:34" "2026-05-16 17:15:35"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...
