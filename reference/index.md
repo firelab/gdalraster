@@ -323,6 +323,7 @@
   [`g_convex_hull()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
   [`g_concave_hull()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
   [`g_delaunay_triangulation()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
+  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
   [`g_segmentize()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
   [`g_simplify()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)
   [`g_unary_union()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)

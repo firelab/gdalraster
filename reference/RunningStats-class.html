@@ -6,16 +6,16 @@ The min, max, sum and count are also tracked. The input data values are not
 stored in memory, so this class can be used to compute statistics for very
 large data streams.
 RunningStats is a C++ class exposed directly to R (via
-RCPP_EXPOSED_CLASS). Methods of the class are accessed using the $
-operator."><meta property="og:description" content="RunningStats computes summary statistics on a data stream efficiently.
+RCPP_EXPOSED_CLASS). Fields and methods and of the class are accessed
+using the $ operator."><meta property="og:description" content="RunningStats computes summary statistics on a data stream efficiently.
 Mean and variance are calculated with Welford's online algorithm
 (https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance).
 The min, max, sum and count are also tracked. The input data values are not
 stored in memory, so this class can be used to compute statistics for very
 large data streams.
 RunningStats is a C++ class exposed directly to R (via
-RCPP_EXPOSED_CLASS). Methods of the class are accessed using the $
-operator."></head><body>
+RCPP_EXPOSED_CLASS). Fields and methods and of the class are accessed
+using the $ operator."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -23,7 +23,7 @@ operator."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ operator."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Class to calculate mean and variance in one pass</h1>
-      <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/v.2.6.1/R/running_stats.R" class="external-link"><code>R/running_stats.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/R/running_stats.R" class="external-link"><code>R/running_stats.R</code></a></small>
       <div class="d-none name"><code>RunningStats-class.Rd</code></div>
     </div>
 
@@ -77,8 +77,8 @@ The min, max, sum and count are also tracked. The input data values are not
 stored in memory, so this class can be used to compute statistics for very
 large data streams.</p>
 <p><code>RunningStats</code> is a C++ class exposed directly to <span style="R">R</span> (via
-<code>RCPP_EXPOSED_CLASS</code>). Methods of the class are accessed using the <code>$</code>
-operator.</p>
+<code>RCPP_EXPOSED_CLASS</code>). Fields and methods and of the class are accessed
+using the <code>$</code> operator.</p>
     </div>
 
 
@@ -121,16 +121,19 @@ computes statistics for a whole raster band.</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## Constructor</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>rs <span class="ot">&lt;-</span> <span class="fu">new</span>(RunningStats, na_rm)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">## Methods</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">update</span>(newvalues)</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_count</span>()</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_mean</span>()</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_min</span>()</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_max</span>()</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_sum</span>()</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_var</span>()</span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_sd</span>()</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">reset</span>()</span></code></pre><p></p></div>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="do">## Read/write fields (per-object settings)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>rs<span class="sc">$</span>returnCountAsInteger64</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="do">## Methods</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">update</span>(newvalues)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_count</span>()</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_mean</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_min</span>()</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_max</span>()</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_sum</span>()</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_var</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">get_sd</span>()</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>rs<span class="sc">$</span><span class="fu">reset</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -146,6 +149,18 @@ defaults to <code>TRUE</code> if omitted.</p>
 </div>
 
 <div class="section">
+<h3 id="read-write-fields-per-object-settings-">Read/write fields (per-object settings)<a class="anchor" aria-label="anchor" href="#read-write-fields-per-object-settings-"></a></h3>
+
+
+<p><code>$returnCountAsInteger64</code>
+A logical value specifying whether to return the count of values currently
+in the data stream as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> type. The default is <code>FALSE</code> in
+which case the count is returned as R <code>numeric</code> (i.e., <code>double</code>). Can be set
+to <code>TRUE</code> to support very large counts without loss of precision (returning
+the internal <code>int64_t</code> counter without a cast to <code>double</code>).</p>
+</div>
+
+<div class="section">
 <h3 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h3>
 
 
@@ -154,7 +169,9 @@ Updates the <code>RunningStats</code> object with a numeric vector of <code>newv
 (i.e., a chunk of values from the data stream). No return value, called
 for side effects.</p>
 <p><code>$get_count()</code><br>
-Returns the count of values received from the data stream.</p>
+Returns the count of values received from the data stream. Returns a
+<code>numeric</code> value (i.e., <code>double</code>) unless <code>returnCountAsInteger64 = TRUE</code> in
+which case the count is returned as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code> (see above).</p>
 <p><code>$get_mean()</code><br>
 Returns the mean of values received from the data stream.</p>
 <p><code>$get_min()</code><br>
@@ -178,8 +195,7 @@ No return value, called for side effects.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">(</span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">RunningStats</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">(</span><span class="va">rs</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">RunningStats</span>, na_rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;RunningStats&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Number of values</span>: 0</span>
 <span class="r-in"><span></span></span>
@@ -194,47 +210,72 @@ No return value, called for side effects.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_mean</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4882555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4785359</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4882555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4785359</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_min</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0002388966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0003301252</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0002388966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0003301252</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_max</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9984908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9983521</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9984908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9983521</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_var</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08493159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08724637</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08493159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08724637</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_sd</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2914302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.295375</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2914302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.295375</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># not needed to count this number of values, but for demonstration:</span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="va">returnCountAsInteger64</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co">## 10^9 values read in 10,000 chunks</span></span></span>
-<span class="r-in"><span><span class="co">## should take under 1 minute on most PC hardware</span></span></span>
+<span class="r-in"><span><span class="co">## should take under 1 minute on typical hardware</span></span></span>
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">1e4</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">chunk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">1e5</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">rs</span><span class="op">$</span><span class="fu">update</span><span class="op">(</span><span class="va">chunk</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_count</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> integer64</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1000001000</span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_mean</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5000044</span>
 <span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_var</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08333479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08333477</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">rs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 704 bytes</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## large numbers with small differences</span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">reset</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_count</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> integer64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100000L</span>, min <span class="op">=</span> <span class="fl">100000000</span>, max <span class="op">=</span> <span class="fl">100000000.06</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">update</span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_count</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> integer64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 100000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_mean</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span>nsmall <span class="op">=</span> <span class="fl">3</span>, scientific <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100000000.030"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">rs</span><span class="op">$</span><span class="fu">get_var</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0002985316</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0002985316</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

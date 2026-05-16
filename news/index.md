@@ -1,8 +1,35 @@
 # Changelog
 
+## gdalraster 2.6.1.9000 (dev)
+
+- add
+  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
+  wrapper of `OGR_G_PointOnSurface()` in the GDAL API (2026-05-13)
+
+- add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
+  frame using GDAL Arrow C stream interface
+  ([\#976](https://github.com/firelab/gdalraster/issues/976))
+  (2026-05-11)
+
+- (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
+  ([\#974](https://github.com/firelab/gdalraster/issues/974))
+  (2026-05-08)
+
+- `RunningStats` class: support optionally returning count as
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
+  ([\#975](https://github.com/firelab/gdalraster/issues/975))
+  (2026-05-07)
+
+- [`get_pixel_line()`](https://firelab.github.io/gdalraster/reference/get_pixel_line.md):
+  treat points “exactly” on the right or bottom raster edge as inside
+  ([\#973](https://github.com/firelab/gdalraster/issues/973))
+  (2026-05-06)
+
 ## gdalraster 2.6.1
 
 CRAN release: 2026-05-16
+
+### Maintenance release
 
 - fix clang warning `[-Wdangling-assignment-gsl]` in
   [`srs_get_axes()`](https://firelab.github.io/gdalraster/reference/srs_query.md)

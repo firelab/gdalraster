@@ -38,7 +38,8 @@ class `GDALRaster`, then `NA` is returned for points that fall outside
 the raster extent and a warning emitted giving the number points that
 were outside. This latter case is equivalent to calling the
 `$get_pixel_line()` class method on the `GDALRaster` object (see
-Examples).
+Examples). Points exactly on the raster right or bottom edge are
+considered inside as of gdalraster 2.7.0.
 
 ## See also
 
