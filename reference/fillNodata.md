@@ -73,7 +73,7 @@ f <- system.file("extdata/storml_elev_orig.tif", package="gdalraster")
 tbl <- buildRAT(f)
 #> ℹ scanning raster...
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (9ms)
+#> ✔ Done (10ms)
 #> 
 head(tbl)
 #>   VALUE COUNT

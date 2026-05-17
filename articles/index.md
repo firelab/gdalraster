@@ -18,6 +18,8 @@
   Reference](https://firelab.github.io/gdalraster/articles/gdal-config-quick-ref.md):
 - [Using 'gdal' CLI algorithms from
   R](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.md):
+- [Using R and GDAL in
+  conda](https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.md):
 
 ### Archive
 
