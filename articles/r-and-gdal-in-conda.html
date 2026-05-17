@@ -103,16 +103,16 @@ with geospatial data:</p>
 <ul>
 <li>install different versions of binary software packages and required
 dependencies on multiple supported platforms</li>
-<li>assemble sets of packages in isolation from the rest of the
-computing platform using environments</li>
+<li>assemble sets of packages in isolation from the rest of the compute
+platform using environments</li>
 <li>manage and switch between environments that use various packages for
 different projects</li>
 <li>access to current R or previous release version, a large number of
 CRAN packages, and current GDAL with dependencies</li>
 <li>benefit from lightweight <a href="https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/" class="external-link">modular
 GDAL packaging</a> based on deferred plugin loading</li>
-<li>available plugins include format drivers that sometimes are not
-available in other package managers, such as the Arrow and Parquet
+<li>available plugins include format drivers that sometimes are
+unavailable in other package managers, such as the Arrow and Parquet
 vector drivers</li>
 </ul>
 <p>Conda-forge provides pre-compiled binary packages for
@@ -128,8 +128,8 @@ platform along with basic installation instructions. For more detailed
 instructions, see <a href="https://github.com/conda-forge/miniforge" class="external-link uri">https://github.com/conda-forge/miniforge</a>.</p>
 <p>Other conda distributions could also be used. Conda-forge recommends
 the use of Miniforge instead of the Anaconda Distribution to reduce
-chances of unsolvable/conflicting installations, and it is also a
-smaller download.</p>
+chances of unsolvable/conflicting installations, and it is a smaller
+download.</p>
 <p>On Linux, at the end of the installation you will prompted with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">$</span> Proceed with initialization<span class="pp">?</span> [yes<span class="kw">|</span><span class="ex">no]</span></span></code></pre></div>
 <p>Enter <code>yes</code> so that the <code>PATH</code> environment
@@ -165,11 +165,10 @@ terminal is:</p>
 <p>When creating a new environment, you can add R by explicitly
 including <code>r-base</code> in the list of packages. The
 <code>r-essentials</code> package is a bundle of commonly used R
-packages, which importantly, also includes the
-<code>r-recommended</code> bundle (i.e., the packages
-<code>graphics</code>, <code>methods</code>, <code>stats</code>,
-<code>tools</code>, <code>utils</code>, etc. that are normally included
-with base R).</p>
+packages, which also includes the <code>r-recommended</code> bundle
+(i.e., the packages <code>graphics</code>, <code>methods</code>,
+<code>stats</code>, <code>tools</code>, <code>utils</code>, etc. that
+are normally included with base R).</p>
 <p>The example below creates an R environment named <code>r_env</code>
 with <strong>gdalraster</strong> included. The package channel can be
 specified with <code>--channel conda-forge</code>, or here using short
@@ -185,8 +184,10 @@ above if a different <code>conda</code> distribution is used.</p>
 <p>R package names in conda-forge always have the <code>r-</code>
 prefix. When using R in <code>conda</code>, packages should be installed
 with the <code>conda</code> package manager rather than from source or
-CRAN binaries with <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code>. A web portal for
-exploring packages available in conda-forge can be found at: <a href="https://conda-forge.org/packages/" class="external-link uri">https://conda-forge.org/packages/</a>.</p>
+binaries using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (i.e., should not mix
+packages from CRAN or other repositories such as R-universe). A web
+portal for exploring packages available in conda-forge can be found at:
+<a href="https://conda-forge.org/packages/" class="external-link uri">https://conda-forge.org/packages/</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="gdal-installation-in-conda">GDAL installation in conda<a class="anchor" aria-label="anchor" href="#gdal-installation-in-conda"></a>
@@ -195,7 +196,7 @@ exploring packages available in conda-forge can be found at: <a href="https://co
 take advantage of GDAL’s support of deferred plugins for geospatial
 format drivers. This provides an efficient and streamlined approach to
 handling dependencies. The plugin system for <code>conda</code> was
-developed by <a href="https://quansight.com/" class="external-link">Quansight</a> and <a href="https://hobu.co/" class="external-link">Hobu</a>, more details available at:</p>
+developed by <a href="https://quansight.com/" class="external-link">Quansight</a> and <a href="https://hobu.co/" class="external-link">Hobu</a>, with more details at:</p>
 <p><a href="https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/" class="external-link uri">https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/</a></p>
 <p>The list of available packages is reproduced here.</p>
 <p>GDAL conda-forge packages:</p>
@@ -254,27 +255,27 @@ plugin</li>
 <code>r-gdalraster</code> so installed automatically, but the additional
 driver plugins are optional. We’ll install additional drivers before
 starting an R session in order to work with Parquet vector files. The
-follow command installs <code>libgdal-arrow-parquet</code> in the active
-environment (assuming conda-forge as the default channel):</p>
+following command installs <code>libgdal-arrow-parquet</code> in the
+active environment (assuming conda-forge is the default channel):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">conda</span> install libgdal-arrow-parquet</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="working-with-gdalraster-in-conda">Working with gdalraster in conda<a class="anchor" aria-label="anchor" href="#working-with-gdalraster-in-conda"></a>
 </h2>
 <p>We can now start an R session in the active environment by typing R +
-&lt;enter&gt;.</p>
+&lt;Enter&gt;.</p>
 <p>The code below uses a sample GeoPackage file included with
 <strong>gdalraster</strong> containing perimeter polygons of fires
-within Yellowstone National Park during 1984-2022 (Monitoring Trends in
-Burn Severity program <a href="https://www.mtbs.gov/" class="external-link">MTBS</a>). The
+within Yellowstone National Park during 1984-2022 [Monitoring Trends in
+Burn Severity program <a href="https://www.mtbs.gov/" class="external-link">MTBS</a>]. The
 polygons are in a Lambert Conformal Conic projection (Montana State
-Plane EPSG:32100). The GeoPackage layer is converted into Parquet file
+Plane EPSG:32100). The GeoPackage layer will be converted to Parquet
 format, with inverse projection to WGS84 latitude / longitude
 coordinates.</p>
 <p><strong>gdalraster</strong> provides <a href="https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html">API
 bindings</a> to GDAL’s command line interface (CLI) algorithms. The
-<code>vector reproject</code> algorithm implements the format conversion
-with reprojection.</p>
+<code>vector reproject</code> algorithm implements reprojection with
+optional format conversion.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://firelab.github.io/gdalraster/">gdalraster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; GDAL 3.13.0 (released 2026-05-04), GEOS 3.14.1, PROJ 9.8.1</span></span>
@@ -300,6 +301,7 @@ with reprojection.</p>
 <span><span class="co">#&gt;  $ read_field_domains     : logi FALSE</span></span>
 <span><span class="co">#&gt;  $ creation_fld_dom_types : chr ""</span></span>
 <span></span>
+<span><span class="co"># source GPKG with MTBS fire perimeters</span></span>
 <span><span class="va">src</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ynp_fires_1984_2022.gpkg"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">src_lyr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">src</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; C++ object of class &lt;GDALVector&gt;</span></span>
@@ -313,6 +315,7 @@ with reprojection.</p>
 <span><span class="va">src_lyr</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 61</span></span>
 <span></span>
+<span><span class="co"># get info on GDAL algorithm usage</span></span>
 <span><span class="fu"><a href="../reference/gdal_cli.html">gdal_usage</a></span><span class="op">(</span><span class="st">"vector reproject"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Usage: vector reproject [OPTIONS] &lt;INPUT&gt; &lt;OUTPUT&gt;</span></span>

@@ -24,7 +24,7 @@ geospatial data:
 
 - install different versions of binary software packages and required
   dependencies on multiple supported platforms
-- assemble sets of packages in isolation from the rest of the computing
+- assemble sets of packages in isolation from the rest of the compute
   platform using environments
 - manage and switch between environments that use various packages for
   different projects
@@ -33,8 +33,8 @@ geospatial data:
 - benefit from lightweight [modular GDAL
   packaging](https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/)
   based on deferred plugin loading
-- available plugins include format drivers that sometimes are not
-  available in other package managers, such as the Arrow and Parquet
+- available plugins include format drivers that sometimes are
+  unavailable in other package managers, such as the Arrow and Parquet
   vector drivers
 
 Conda-forge provides pre-compiled binary packages for **gdalraster**
@@ -53,8 +53,7 @@ instructions, see <https://github.com/conda-forge/miniforge>.
 
 Other conda distributions could also be used. Conda-forge recommends the
 use of Miniforge instead of the Anaconda Distribution to reduce chances
-of unsolvable/conflicting installations, and it is also a smaller
-download.
+of unsolvable/conflicting installations, and it is a smaller download.
 
 On Linux, at the end of the installation you will prompted with:
 
@@ -101,9 +100,9 @@ conda activate <ENV_NAME>
 
 When creating a new environment, you can add R by explicitly including
 `r-base` in the list of packages. The `r-essentials` package is a bundle
-of commonly used R packages, which importantly, also includes the
-`r-recommended` bundle (i.e., the packages `graphics`, `methods`,
-`stats`, `tools`, `utils`, etc. that are normally included with base R).
+of commonly used R packages, which also includes the `r-recommended`
+bundle (i.e., the packages `graphics`, `methods`, `stats`, `tools`,
+`utils`, etc. that are normally included with base R).
 
 The example below creates an R environment named `r_env` with
 **gdalraster** included. The package channel can be specified with
@@ -123,10 +122,11 @@ if a different `conda` distribution is used.
 
 R package names in conda-forge always have the `r-` prefix. When using R
 in `conda`, packages should be installed with the `conda` package
-manager rather than from source or CRAN binaries with
-[`install.packages()`](https://rdrr.io/r/utils/install.packages.html). A
-web portal for exploring packages available in conda-forge can be found
-at: <https://conda-forge.org/packages/>.
+manager rather than from source or binaries using
+[`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
+(i.e., should not mix packages from CRAN or other repositories such as
+R-universe). A web portal for exploring packages available in
+conda-forge can be found at: <https://conda-forge.org/packages/>.
 
 ## GDAL installation in conda
 
@@ -134,8 +134,8 @@ GDAL is available in conda-forge as a modular set of packages that take
 advantage of GDAL’s support of deferred plugins for geospatial format
 drivers. This provides an efficient and streamlined approach to handling
 dependencies. The plugin system for `conda` was developed by
-[Quansight](https://quansight.com/) and [Hobu](https://hobu.co/), more
-details available at:
+[Quansight](https://quansight.com/) and [Hobu](https://hobu.co/), with
+more details at:
 
 <https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/>
 
@@ -167,9 +167,9 @@ GDAL plugin conda-forge packages:
 The package `libgdal-core` is a dependency of `r-gdalraster` so
 installed automatically, but the additional driver plugins are optional.
 We’ll install additional drivers before starting an R session in order
-to work with Parquet vector files. The follow command installs
+to work with Parquet vector files. The following command installs
 `libgdal-arrow-parquet` in the active environment (assuming conda-forge
-as the default channel):
+is the default channel):
 
 ``` bash
 conda install libgdal-arrow-parquet
@@ -178,21 +178,21 @@ conda install libgdal-arrow-parquet
 ## Working with gdalraster in conda
 
 We can now start an R session in the active environment by typing R +
-\<enter\>.
+\<Enter\>.
 
 The code below uses a sample GeoPackage file included with
 **gdalraster** containing perimeter polygons of fires within Yellowstone
-National Park during 1984-2022 (Monitoring Trends in Burn Severity
-program [MTBS](https://www.mtbs.gov/)). The polygons are in a Lambert
+National Park during 1984-2022 \[Monitoring Trends in Burn Severity
+program [MTBS](https://www.mtbs.gov/)\]. The polygons are in a Lambert
 Conformal Conic projection (Montana State Plane EPSG:32100). The
-GeoPackage layer is converted into Parquet file format, with inverse
+GeoPackage layer will be converted to Parquet format, with inverse
 projection to WGS84 latitude / longitude coordinates.
 
 **gdalraster** provides [API
 bindings](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html)
 to GDAL’s command line interface (CLI) algorithms. The
-`vector reproject` algorithm implements the format conversion with
-reprojection.
+`vector reproject` algorithm implements reprojection with optional
+format conversion.
 
 ``` r
 
@@ -220,6 +220,7 @@ gdal_formats("Parquet") |> str()
 #>  $ read_field_domains     : logi FALSE
 #>  $ creation_fld_dom_types : chr ""
 
+# source GPKG with MTBS fire perimeters
 src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 (src_lyr <- new(GDALVector, src, "mtbs_perims"))
 #> C++ object of class <GDALVector>
@@ -233,6 +234,7 @@ src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 src_lyr$getFeatureCount()
 #> [1] 61
 
+# get info on GDAL algorithm usage
 gdal_usage("vector reproject")
 #> 
 #> Usage: vector reproject [OPTIONS] <INPUT> <OUTPUT>
