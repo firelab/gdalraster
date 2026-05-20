@@ -176,7 +176,7 @@ ds$getNoDataValue(band = 1)
 # min, max, mean, sd of pixel values in the band
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
 #>  ■■■■■■■■■■■■■■■■                  50% |  ETA:  0s
-#> ✔ Done (18ms)
+#> ✔ Done (16ms)
 #> 
 #> [1]  0.00000 71.00000 23.69950 23.17744
 
