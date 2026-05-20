@@ -294,6 +294,9 @@ ds$close()
 ## subsample along X and Y
 f_dst4 <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst4, scaleaxes_specs = "x(2),y(2)")
+#>  ■■■■■■■■■                         25% |  ETA:  0s
+#> ✔ Done (65ms)
+#> 
 (ds <- mdim_as_classic(f_dst4, "Band1", 1, 0))
 #> C++ object of class <GDALRaster>
 #>   • Driver: (driverless dataset)
