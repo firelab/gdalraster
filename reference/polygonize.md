@@ -175,8 +175,8 @@ fld <- "evt_value"
 set_config_option("SQLITE_USE_OGR_VFS", "YES")
 set_config_option("OGR_SQLITE_JOURNAL", "MEMORY")
 polygonize(evt_file, dsn, layer, fld)
-#>  ■■■■■■■■■■■■■                     41% |  ETA:  0s
-#> ✔ Done (99ms)
+#>  ■                                  0% |  ETA:  0s
+#> ✔ Done (113ms)
 #> 
 set_config_option("SQLITE_USE_OGR_VFS", "")
 set_config_option("OGR_SQLITE_JOURNAL", "")
