@@ -15,7 +15,7 @@ pixel, a four direction conic search is done to find values to interpolate
 from (using inverse distance weighting).
 Once all values are interpolated, zero or more smoothing iterations
 (3x3 average filters on interpolated pixels) are applied to smooth out
-artifacts."></head><body>
+artifacts."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -64,8 +64,7 @@ artifacts."></head><body>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Fill selected pixels by interpolation from surrounding areas</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Fill selected pixels by interpolation from surrounding areas</h1>
       <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a></small>
       <div class="d-none name"><code>fillNodata.Rd</code></div>
     </div>
@@ -146,9 +145,6 @@ An error is raised if the operation fails.</p>
 <span class="r-in"><span><span class="co">## get count of nodata</span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="buildRAT.html">buildRAT</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> scanning raster...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■                               </span>   1% |  ETA:  0s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Done (9ms)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   VALUE COUNT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2438     9</span>

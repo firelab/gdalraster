@@ -11,7 +11,7 @@ extension. This function is basically a wrapper for CPLAddFileInZip()
 in the GDAL Common Portability Library, but optionally creates a new ZIP
 file first (with CPLCreateZip()). It provides a subset of functionality
 in the GDAL sozip command-line utility
-(https://gdal.org/en/stable/programs/sozip.html). Requires GDAL &amp;gt;= 3.7."></head><body>
+(https://gdal.org/en/stable/programs/sozip.html). Requires GDAL &amp;gt;= 3.7."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -60,8 +60,7 @@ in the GDAL sozip command-line utility
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Create/append to a potentially Seek-Optimized ZIP file (SOZip)</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Create/append to a potentially Seek-Optimized ZIP file (SOZip)</h1>
       <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/R/gdal_helpers.R" class="external-link"><code>R/gdal_helpers.R</code></a></small>
       <div class="d-none name"><code>addFilesInZip.Rd</code></div>
     </div>
@@ -211,11 +210,11 @@ files (see <code><a href="set_config_option.html">set_config_option()</a></code>
 <span class="r-in"><span>  <span class="fu">DONTSHOW</span><span class="op">(</span><span class="op">{</span><span class="fu"><a href="vsi_unlink.html">vsi_unlink</a></span><span class="op">(</span><span class="va">zip_file</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Adding <span style="color: #0000BB;">"ynp_fires_1984_2022.gpkg"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">"ynp_fires_1984_2022.gpkg"</span> <span style="color: #B2B2B2;">[21ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">"ynp_fires_1984_2022.gpkg"</span> <span style="color: #B2B2B2;">[16ms]</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Files in zip archive:"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                       Name Length                Date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ynp_fires_1984_2022.gpkg 307200 2026-06-12 03:59:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ynp_fires_1984_2022.gpkg 307200 2026-06-12 05:24:00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SOZip metadata:"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $START_DATA_OFFSET</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "54"</span>
@@ -247,7 +246,7 @@ files (see <code><a href="set_config_option.html">set_config_option()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SOZIP_VALID</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "YES"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> INFO: Open of `/vsizip//tmp/RtmpkGyEBt/ynp_fires.zip/ynp_fires_1984_2022.gpkg'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> INFO: Open of `/vsizip//tmp/Rtmpk9Iee8/ynp_fires.zip/ynp_fires_1984_2022.gpkg'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       using driver `GPKG' successful.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Layer name: mtbs_perims</span>

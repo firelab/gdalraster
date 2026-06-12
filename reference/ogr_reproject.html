@@ -7,7 +7,7 @@ for reprojection to occur."><meta property="og:description" content="ogr_reproje
 spatial reference system and writes the new layer to a specified output
 dataset. The output may be in a different vector file format than the input
 dataset. A source SRS definition must be available in the source layer
-for reprojection to occur."></head><body>
+for reprojection to occur."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -56,8 +56,7 @@ for reprojection to occur."></head><body>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Reproject a vector layer</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Reproject a vector layer</h1>
       <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/R/ogr_reproject.R" class="external-link"><code>R/ogr_reproject.R</code></a></small>
       <div class="d-none name"><code>ogr_reproject.Rd</code></div>
     </div>
@@ -261,7 +260,7 @@ written to an existing database.</p>
 <span class="r-in"><span><span class="op">(</span><span class="va">bnd</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">ynp_dsn</span>, <span class="st">"ynp_bnd"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpkGyEBt/ynp_features.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/Rtmpk9Iee8/ynp_features.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: POLYGON</span>
@@ -274,7 +273,7 @@ written to an existing database.</p>
 <span class="r-in"><span><span class="op">(</span><span class="va">bnd_mtsp</span> <span class="op">&lt;-</span> <span class="fu">ogr_reproject</span><span class="op">(</span><span class="va">ynp_dsn</span>, <span class="st">"ynp_bnd"</span>, <span class="va">out_dsn</span>, <span class="va">mtbs</span><span class="op">$</span><span class="fu">getSpatialRef</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpkGyEBt/file21d958d91575.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/Rtmpk9Iee8/file21db1f6dee49.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: ynp_bnd</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: POLYGON</span>
