@@ -1,35 +1,31 @@
-# Using R and GDAL in conda
+# Using R and GDAL from conda-forge
 
-DRAFT: last updated 2026-05-17
+DRAFT: last updated 2026-05-25
 
 Conda is an open-source, cross-platform, language-agnostic package
-manager and environment management system. It was originally developed
-to solve package management challenges faced by Python data scientists,
-and today is a popular package manager for Python and R
-\[[Wikipedia](https://en.wikipedia.org/wiki/Conda_(package_manager))\].
+manager and environment management system. The conda package format is
+general purpose and covers a wide selection of programming languages,
+including C, C++, Fortran, Rust, Go, Python, and R.
 
 Conda uses the concept of channels as the base for hosting and managing
 packages. Conda is often associated with the commercial company Anaconda
 which provides the [Anaconda.org](https://anaconda.org/) channel of
 packages. Alternatively, the conda-forge project builds and distributes
-packages via [conda-forge.org](https://conda-forge.org/), specializing
-in hard-to-build or unique packages that often arise in a scientific
-computing context. Conda-forge is community-driven and
-community-curated. Both conda and conda-forge are
+packages via [conda-forge.org](https://conda-forge.org/). Conda-forge is
+community-driven and community-curated. Both conda and conda-forge are
 [NumFocus-affiliated](https://numfocus.org/project/conda-forge)
 projects.
 
 Conda offers features potentially of interest to R users who work with
 geospatial data:
 
-- install different versions of binary software packages and required
-  dependencies on multiple supported platforms
-- assemble sets of packages in isolation from the rest of the compute
-  platform using environments
+- install different versions of binary packages with their required
+  dependencies on multiple platforms
+- assemble sets of packages in isolation using environments
 - manage and switch between environments that use various packages for
   different projects
-- access to current R or previous release version, a large number of
-  CRAN packages, and current GDAL with dependencies
+- access R and a large number of CRAN packages, along with current GDAL
+  and its dependencies
 - benefit from lightweight [modular GDAL
   packaging](https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/)
   based on deferred plugin loading
@@ -43,7 +39,14 @@ that track CRAN releases, for the following platforms:
 [![Conda
 Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster.svg)](https://anaconda.org/conda-forge/r-gdalraster)
 
-## Installation
+Several tools are available for managing packages in the [conda
+ecosystem](https://pixi.prefix.dev/latest/conda_ecosystem/). The next
+few sections describe `conda`. [Pixi](https://pixi.prefix.dev/latest/)
+might also be considered as a fast, modern, and reproducible package
+management tool. The section “Pixi for conda package management” further
+below describes a Pixi-equivalent setup.
+
+## Using conda from Miniforge
 
 Install Miniforge: <https://conda-forge.org/download/>
 
@@ -128,7 +131,7 @@ manager rather than from source or binaries using
 R-universe). A web portal for exploring packages available in
 conda-forge can be found at: <https://conda-forge.org/packages/>.
 
-## GDAL installation in conda
+## Installing GDAL from conda-forge
 
 GDAL is available in conda-forge as a modular set of packages that take
 advantage of GDAL’s support of deferred plugins for geospatial format
@@ -139,23 +142,26 @@ more details at:
 
 <https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/>
 
-The list of available packages is reproduced here.
+The following packages are available from conda-forge.
 
-GDAL conda-forge packages:
+GDAL library packages:
 
-- `libgdal-core`: core C++ library
-- `libgdal`: core C++ library and all plugins except arrow/parquet
-- `gdal`: python library without the plugins
+- `libgdal-core`: core C++ library with a number of built-in drivers
+- `gdal`: Python bindings and Python utilities
+- `libgdal` meta package: core C++ library and all plugins except
+  arrow/parquet
 
-GDAL plugin conda-forge packages:
+Driver plugins:
 
 - `libgdal-arrow-parquet`: `vector.arrow` and `vector.parquet` drivers
   as a plugin
+- `libgdal-avif`: `raster.avif` driver as a plugin
 - `libgdal-fits`: `raster.fits` driver as a plugin
 - `libgdal-grib`: `raster.grib` driver as a plugin
 - `libgdal-hdf4`: `raster.hdf4` driver as a plugin
 - `libgdal-hdf5`: `raster.hdf5` driver as a plugin
-- `libgdal-jp2openjpeg`:`raster.jp2openjpeg` driver as a plugin
+- `libgdal-heif`: `raster.heif` driver as a plugin
+- `libgdal-jp2openjpeg`: `raster.jp2openjpeg` driver as a plugin
 - `libgdal-kea`: `raster.kea` driver as a plugin
 - `libgdal-netcdf`: `raster.netcdf` driver as a plugin
 - `libgdal-pdf`: `raster.pdf` driver as a plugin
@@ -164,7 +170,7 @@ GDAL plugin conda-forge packages:
 - `libgdal-tiledb`: `raster.tiledb` driver as a plugin
 - `libgdal-xls`: `vector.xls` driver as a plugin
 
-The package `libgdal-core` is a dependency of `r-gdalraster` so
+The package `libgdal-core` is a dependency of `r-gdalraster` so it is
 installed automatically, but the additional driver plugins are optional.
 We’ll install additional drivers before starting an R session in order
 to work with Parquet vector files. The following command installs
@@ -175,7 +181,48 @@ is the default channel):
 conda install libgdal-arrow-parquet
 ```
 
-## Working with gdalraster in conda
+## Pixi for conda package management
+
+Pixi is an alternative to using `conda` as described above. It is a
+modern, Rust-based package manager with lockfiles, tasks, and
+multi-environment support. Pixi introduces a workspace-centric approach
+rather than focusing solely on environments.
+
+Installation instructions can be found in the Pixi [Getting
+Started](https://pixi.prefix.dev/latest/installation/) guide. Once
+installed you can create an environment in a Pixi workspace, basically
+equivalent to the setup described above for conda:
+
+``` bash
+pixi init r_example
+cd r_example
+pixi add r-essentials r-gdalraster libgdal-arrow-parquet
+pixi shell
+```
+
+The last command starts an interactive subshell with the environment
+activated (use `exit` to leave the shell). You get a digest-level
+`pixi.lock` lock file automatically, so the environment is fully
+reproducible as long as the lock file is commited with the rest of the
+project.
+
+Pixi also supports using tools and libraries
+[globally](https://pixi.prefix.dev/latest/global_tools/introduction/),
+similar to conda’s base environment without having to use an activate
+command:
+
+``` bash
+pixi global install gdal libgdal-core
+pixi global install libgdal-arrow-parquet  # if needed
+```
+
+As noted above for conda environments, R packages should be installed
+with `pixi add` in this case rather than from source or binaries using
+[`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
+(i.e., should not mix packages from CRAN or other repositories such as
+R-universe).
+
+## Example using gdalraster from conda-forge
 
 We can now start an R session in the active environment by typing R +
 \<Enter\>.
@@ -199,7 +246,7 @@ format conversion.
 library(gdalraster)
 #> GDAL 3.13.0 (released 2026-05-04), GEOS 3.14.1, PROJ 9.8.1
 
-# check that the Parquet driver is available
+## verify the Parquet driver is available
 gdal_formats("Parquet") |> str()
 #> 'data.frame':    1 obs. of  17 variables:
 #>  $ short_name             : chr "Parquet"
@@ -220,7 +267,7 @@ gdal_formats("Parquet") |> str()
 #>  $ read_field_domains     : logi FALSE
 #>  $ creation_fld_dom_types : chr ""
 
-# source GPKG with MTBS fire perimeters
+## gdalraster example GeoPackage file with MTBS fire perimeters
 src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 (src_lyr <- new(GDALVector, src, "mtbs_perims"))
 #> C++ object of class <GDALVector>
@@ -234,7 +281,7 @@ src <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
 src_lyr$getFeatureCount()
 #> [1] 61
 
-# get info on GDAL algorithm usage
+## get usage info for the algorithm
 gdal_usage("vector reproject")
 #> 
 #> Usage: vector reproject [OPTIONS] <INPUT> <OUTPUT>
@@ -312,13 +359,13 @@ gdal_usage("vector reproject")
 #> 
 #> For more details: <https://gdal.org/programs/gdal_vector_reproject.html>
 
-# inverse project to WGS84
+## inverse project to WGS84
 dst <- "/home/ctoney/data/ynp_fires_1984_2022.parquet"
 args <- list(input = src_lyr,
              output = dst,
              output_crs = "EPSG:4326")
 
-# run the algorithm and close datasets when finished
+## run the algorithm and close datasets when finished
 gdal_run("vector reproject", args, close = TRUE)
 #> ✔ Done (21ms)
 #> 
@@ -335,6 +382,7 @@ gdal_run("vector reproject", args, close = TRUE)
 #>   • CRS: WGS 84 (EPSG:4326)
 #>   • Geometry: MULTIPOLYGON
 
+## verify the output dataset
 dst_lyr$info()
 #> INFO: Open of `/home/ctoney/data/ynp_fires_1984_2022.parquet'
 #>       using driver `Parquet' successful.
@@ -384,7 +432,7 @@ dst_lyr$info()
 #> ig_date: Date
 #> ig_year: Integer (0.0)
 
-# check the linework
+## check the linework
 features <- dst_lyr$fetch(-1)
 nrow(features)
 #> [1] 61
@@ -412,6 +460,7 @@ dst_lyr$close()
   conda-forge](https://conda-forge.org/blog/2025/11/22/r-support/)
 - [r-gdalraster
   feedstock](https://github.com/conda-forge/r-gdalraster-feedstock)
+- [GDAL Binaries: Cross-Platform Package
+  Managers](https://gdal.org/en/stable/download.html#cross-platform-package-managers)
 - [Installing pip
   packages](https://www.anaconda.com/docs/getting-started/working-with-conda/packages/pip-install)
-- [conda-forge status dashboard](https://conda-forge.org/status/)

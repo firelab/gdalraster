@@ -46,7 +46,7 @@ usage in a GDAL Raster Attribute Table)."></head><body>
     <li><a class="dropdown-item" href="../articles/vector-read-benchmarks.html">Vector Read Benchmarks</a></li>
     <li><a class="dropdown-item" href="../articles/gdal-config-quick-ref.html">GDAL Config Quick Reference</a></li>
     <li><a class="dropdown-item" href="../articles/use-gdal-cli-from-r.html">Using 'gdal' CLI algorithms from R</a></li>
-    <li><a class="dropdown-item" href="../articles/r-and-gdal-in-conda.html">Using R and GDAL in conda</a></li>
+    <li><a class="dropdown-item" href="../articles/r-and-gdal-in-conda.html">Using R and GDAL from conda-forge</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Archived articles</h6></li>
     <li><a class="dropdown-item" href="../articles/gdalvector-draft.html">Draft Bindings to the GDAL/OGR Vector API</a></li>
@@ -265,6 +265,9 @@ Users should consider what is appropriate for a particular case.</p>
 <span class="r-in"><span>                na_value <span class="op">=</span> <span class="op">-</span><span class="fl">9999</span>,</span></span>
 <span class="r-in"><span>                join_df <span class="op">=</span> <span class="va">evt_df</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> scanning raster...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■                               </span>   1% |  ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Done (11ms)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 24</span>

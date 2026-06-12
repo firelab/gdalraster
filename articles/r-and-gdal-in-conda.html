@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Using R and GDAL in conda • gdalraster</title>
+<title>Using R and GDAL from conda-forge • gdalraster</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using R and GDAL in conda">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using R and GDAL from conda-forge">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -41,7 +41,7 @@
     <li><a class="dropdown-item" href="../articles/vector-read-benchmarks.html">Vector Read Benchmarks</a></li>
     <li><a class="dropdown-item" href="../articles/gdal-config-quick-ref.html">GDAL Config Quick Reference</a></li>
     <li><a class="dropdown-item" href="../articles/use-gdal-cli-from-r.html">Using 'gdal' CLI algorithms from R</a></li>
-    <li><a class="dropdown-item" href="../articles/r-and-gdal-in-conda.html">Using R and GDAL in conda</a></li>
+    <li><a class="dropdown-item" href="../articles/r-and-gdal-in-conda.html">Using R and GDAL from conda-forge</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Archived articles</h6></li>
     <li><a class="dropdown-item" href="../articles/gdalvector-draft.html">Draft Bindings to the GDAL/OGR Vector API</a></li>
@@ -75,7 +75,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Using R and GDAL in conda</h1>
+      <h1>Using R and GDAL from conda-forge</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/firelab/gdalraster/blob/main/vignettes/articles/r-and-gdal-in-conda.Rmd" class="external-link"><code>vignettes/articles/r-and-gdal-in-conda.Rmd</code></a></small>
@@ -84,31 +84,29 @@
 
     
     
-<p>DRAFT: last updated 2026-05-17</p>
+<p>DRAFT: last updated 2026-05-25</p>
 <p>Conda is an open-source, cross-platform, language-agnostic package
-manager and environment management system. It was originally developed
-to solve package management challenges faced by Python data scientists,
-and today is a popular package manager for Python and R [<a href="https://en.wikipedia.org/wiki/Conda_(package_manager)" class="external-link">Wikipedia</a>].</p>
+manager and environment management system. The conda package format is
+general purpose and covers a wide selection of programming languages,
+including C, C++, Fortran, Rust, Go, Python, and R.</p>
 <p>Conda uses the concept of channels as the base for hosting and
 managing packages. Conda is often associated with the commercial company
 Anaconda which provides the <a href="https://anaconda.org/" class="external-link">Anaconda.org</a> channel of packages.
 Alternatively, the conda-forge project builds and distributes packages
-via <a href="https://conda-forge.org/" class="external-link">conda-forge.org</a>, specializing
-in hard-to-build or unique packages that often arise in a scientific
-computing context. Conda-forge is community-driven and
-community-curated. Both conda and conda-forge are <a href="https://numfocus.org/project/conda-forge" class="external-link">NumFocus-affiliated</a>
+via <a href="https://conda-forge.org/" class="external-link">conda-forge.org</a>. Conda-forge
+is community-driven and community-curated. Both conda and conda-forge
+are <a href="https://numfocus.org/project/conda-forge" class="external-link">NumFocus-affiliated</a>
 projects.</p>
 <p>Conda offers features potentially of interest to R users who work
 with geospatial data:</p>
 <ul>
-<li>install different versions of binary software packages and required
-dependencies on multiple supported platforms</li>
-<li>assemble sets of packages in isolation from the rest of the compute
-platform using environments</li>
+<li>install different versions of binary packages with their required
+dependencies on multiple platforms</li>
+<li>assemble sets of packages in isolation using environments</li>
 <li>manage and switch between environments that use various packages for
 different projects</li>
-<li>access to current R or previous release version, a large number of
-CRAN packages, and current GDAL with dependencies</li>
+<li>access R and a large number of CRAN packages, along with current
+GDAL and its dependencies</li>
 <li>benefit from lightweight <a href="https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/" class="external-link">modular
 GDAL packaging</a> based on deferred plugin loading</li>
 <li>available plugins include format drivers that sometimes are
@@ -119,8 +117,13 @@ vector drivers</li>
 <strong>gdalraster</strong> that track CRAN releases, for the following
 platforms:</p>
 <p><a href="https://anaconda.org/conda-forge/r-gdalraster" class="external-link"><img src="https://img.shields.io/conda/pn/conda-forge/r-gdalraster.svg" alt="Conda Platforms"></a></p>
+<p>Several tools are available for managing packages in the <a href="https://pixi.prefix.dev/latest/conda_ecosystem/" class="external-link">conda
+ecosystem</a>. The next few sections describe <code>conda</code>. <a href="https://pixi.prefix.dev/latest/" class="external-link">Pixi</a> might also be considered
+as a fast, modern, and reproducible package management tool. The section
+“Pixi for conda package management” further below describes a
+Pixi-equivalent setup.</p>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="using-conda-from-miniforge">Using conda from Miniforge<a class="anchor" aria-label="anchor" href="#using-conda-from-miniforge"></a>
 </h2>
 <p>Install Miniforge: <a href="https://conda-forge.org/download/" class="external-link uri">https://conda-forge.org/download/</a></p>
 <p>The webpage provides links to the installer for each supported
@@ -190,7 +193,7 @@ portal for exploring packages available in conda-forge can be found at:
 <a href="https://conda-forge.org/packages/" class="external-link uri">https://conda-forge.org/packages/</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="gdal-installation-in-conda">GDAL installation in conda<a class="anchor" aria-label="anchor" href="#gdal-installation-in-conda"></a>
+<h2 id="installing-gdal-from-conda-forge">Installing GDAL from conda-forge<a class="anchor" aria-label="anchor" href="#installing-gdal-from-conda-forge"></a>
 </h2>
 <p>GDAL is available in conda-forge as a modular set of packages that
 take advantage of GDAL’s support of deferred plugins for geospatial
@@ -198,22 +201,26 @@ format drivers. This provides an efficient and streamlined approach to
 handling dependencies. The plugin system for <code>conda</code> was
 developed by <a href="https://quansight.com/" class="external-link">Quansight</a> and <a href="https://hobu.co/" class="external-link">Hobu</a>, with more details at:</p>
 <p><a href="https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/" class="external-link uri">https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/</a></p>
-<p>The list of available packages is reproduced here.</p>
-<p>GDAL conda-forge packages:</p>
+<p>The following packages are available from conda-forge.</p>
+<p>GDAL library packages:</p>
 <ul>
 <li>
-<code>libgdal-core</code>: core C++ library</li>
+<code>libgdal-core</code>: core C++ library with a number of
+built-in drivers</li>
 <li>
-<code>libgdal</code>: core C++ library and all plugins except
-arrow/parquet</li>
+<code>gdal</code>: Python bindings and Python utilities</li>
 <li>
-<code>gdal</code>: python library without the plugins</li>
+<code>libgdal</code> meta package: core C++ library and all plugins
+except arrow/parquet</li>
 </ul>
-<p>GDAL plugin conda-forge packages:</p>
+<p>Driver plugins:</p>
 <ul>
 <li>
 <code>libgdal-arrow-parquet</code>: <code>vector.arrow</code> and
 <code>vector.parquet</code> drivers as a plugin</li>
+<li>
+<code>libgdal-avif</code>: <code>raster.avif</code> driver as a
+plugin</li>
 <li>
 <code>libgdal-fits</code>: <code>raster.fits</code> driver as a
 plugin</li>
@@ -227,7 +234,10 @@ plugin</li>
 <code>libgdal-hdf5</code>: <code>raster.hdf5</code> driver as a
 plugin</li>
 <li>
-<code>libgdal-jp2openjpeg</code>:<code>raster.jp2openjpeg</code>
+<code>libgdal-heif</code>: <code>raster.heif</code> driver as a
+plugin</li>
+<li>
+<code>libgdal-jp2openjpeg</code>: <code>raster.jp2openjpeg</code>
 driver as a plugin</li>
 <li>
 <code>libgdal-kea</code>: <code>raster.kea</code> driver as a
@@ -252,15 +262,44 @@ plugin</li>
 plugin</li>
 </ul>
 <p>The package <code>libgdal-core</code> is a dependency of
-<code>r-gdalraster</code> so installed automatically, but the additional
-driver plugins are optional. We’ll install additional drivers before
-starting an R session in order to work with Parquet vector files. The
-following command installs <code>libgdal-arrow-parquet</code> in the
+<code>r-gdalraster</code> so it is installed automatically, but the
+additional driver plugins are optional. We’ll install additional drivers
+before starting an R session in order to work with Parquet vector files.
+The following command installs <code>libgdal-arrow-parquet</code> in the
 active environment (assuming conda-forge is the default channel):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">conda</span> install libgdal-arrow-parquet</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="working-with-gdalraster-in-conda">Working with gdalraster in conda<a class="anchor" aria-label="anchor" href="#working-with-gdalraster-in-conda"></a>
+<h2 id="pixi-for-conda-package-management">Pixi for conda package management<a class="anchor" aria-label="anchor" href="#pixi-for-conda-package-management"></a>
+</h2>
+<p>Pixi is an alternative to using <code>conda</code> as described
+above. It is a modern, Rust-based package manager with lockfiles, tasks,
+and multi-environment support. Pixi introduces a workspace-centric
+approach rather than focusing solely on environments.</p>
+<p>Installation instructions can be found in the Pixi <a href="https://pixi.prefix.dev/latest/installation/" class="external-link">Getting Started</a>
+guide. Once installed you can create an environment in a Pixi workspace,
+basically equivalent to the setup described above for conda:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="ex">pixi</span> init r_example</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="bu">cd</span> r_example</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">pixi</span> add r-essentials r-gdalraster libgdal-arrow-parquet</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="ex">pixi</span> shell</span></code></pre></div>
+<p>The last command starts an interactive subshell with the environment
+activated (use <code>exit</code> to leave the shell). You get a
+digest-level <code>pixi.lock</code> lock file automatically, so the
+environment is fully reproducible as long as the lock file is commited
+with the rest of the project.</p>
+<p>Pixi also supports using tools and libraries <a href="https://pixi.prefix.dev/latest/global_tools/introduction/" class="external-link">globally</a>,
+similar to conda’s base environment without having to use an activate
+command:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">pixi</span> global install gdal libgdal-core</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="ex">pixi</span> global install libgdal-arrow-parquet  <span class="co"># if needed</span></span></code></pre></div>
+<p>As noted above for conda environments, R packages should be installed
+with <code>pixi add</code> in this case rather than from source or
+binaries using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (i.e., should not mix
+packages from CRAN or other repositories such as R-universe).</p>
+</div>
+<div class="section level2">
+<h2 id="example-using-gdalraster-from-conda-forge">Example using gdalraster from conda-forge<a class="anchor" aria-label="anchor" href="#example-using-gdalraster-from-conda-forge"></a>
 </h2>
 <p>We can now start an R session in the active environment by typing R +
 &lt;Enter&gt;.</p>
@@ -276,11 +315,11 @@ coordinates.</p>
 bindings</a> to GDAL’s command line interface (CLI) algorithms. The
 <code>vector reproject</code> algorithm implements reprojection with
 optional format conversion.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://firelab.github.io/gdalraster/">gdalraster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; GDAL 3.13.0 (released 2026-05-04), GEOS 3.14.1, PROJ 9.8.1</span></span>
 <span></span>
-<span><span class="co"># check that the Parquet driver is available</span></span>
+<span><span class="co">## verify the Parquet driver is available</span></span>
 <span><span class="fu"><a href="../reference/gdal_formats.html">gdal_formats</a></span><span class="op">(</span><span class="st">"Parquet"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    1 obs. of  17 variables:</span></span>
 <span><span class="co">#&gt;  $ short_name             : chr "Parquet"</span></span>
@@ -301,7 +340,7 @@ optional format conversion.</p>
 <span><span class="co">#&gt;  $ read_field_domains     : logi FALSE</span></span>
 <span><span class="co">#&gt;  $ creation_fld_dom_types : chr ""</span></span>
 <span></span>
-<span><span class="co"># source GPKG with MTBS fire perimeters</span></span>
+<span><span class="co">## gdalraster example GeoPackage file with MTBS fire perimeters</span></span>
 <span><span class="va">src</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ynp_fires_1984_2022.gpkg"</span>, package <span class="op">=</span> <span class="st">"gdalraster"</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">src_lyr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">src</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; C++ object of class &lt;GDALVector&gt;</span></span>
@@ -315,7 +354,7 @@ optional format conversion.</p>
 <span><span class="va">src_lyr</span><span class="op">$</span><span class="fu">getFeatureCount</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 61</span></span>
 <span></span>
-<span><span class="co"># get info on GDAL algorithm usage</span></span>
+<span><span class="co">## get usage info for the algorithm</span></span>
 <span><span class="fu"><a href="../reference/gdal_cli.html">gdal_usage</a></span><span class="op">(</span><span class="st">"vector reproject"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Usage: vector reproject [OPTIONS] &lt;INPUT&gt; &lt;OUTPUT&gt;</span></span>
@@ -393,13 +432,13 @@ optional format conversion.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; For more details: &lt;https://gdal.org/programs/gdal_vector_reproject.html&gt;</span></span>
 <span></span>
-<span><span class="co"># inverse project to WGS84</span></span>
+<span><span class="co">## inverse project to WGS84</span></span>
 <span><span class="va">dst</span> <span class="op">&lt;-</span> <span class="st">"/home/ctoney/data/ynp_fires_1984_2022.parquet"</span></span>
 <span><span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">src_lyr</span>,</span>
 <span>             output <span class="op">=</span> <span class="va">dst</span>,</span>
 <span>             output_crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># run the algorithm and close datasets when finished</span></span>
+<span><span class="co">## run the algorithm and close datasets when finished</span></span>
 <span><span class="fu"><a href="../reference/gdal_cli.html">gdal_run</a></span><span class="op">(</span><span class="st">"vector reproject"</span>, <span class="va">args</span>, close <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ✔ Done (21ms)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -416,6 +455,7 @@ optional format conversion.</p>
 <span><span class="co">#&gt;   • CRS: WGS 84 (EPSG:4326)</span></span>
 <span><span class="co">#&gt;   • Geometry: MULTIPOLYGON</span></span>
 <span></span>
+<span><span class="co">## verify the output dataset</span></span>
 <span><span class="va">dst_lyr</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; INFO: Open of `/home/ctoney/data/ynp_fires_1984_2022.parquet'</span></span>
 <span><span class="co">#&gt;       using driver `Parquet' successful.</span></span>
@@ -465,7 +505,7 @@ optional format conversion.</p>
 <span><span class="co">#&gt; ig_date: Date</span></span>
 <span><span class="co">#&gt; ig_year: Integer (0.0)</span></span>
 <span></span>
-<span><span class="co"># check the linework</span></span>
+<span><span class="co">## check the linework</span></span>
 <span><span class="va">features</span> <span class="op">&lt;-</span> <span class="va">dst_lyr</span><span class="op">$</span><span class="fu">fetch</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">features</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 61</span></span>
@@ -473,7 +513,7 @@ optional format conversion.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">features</span>, xlab <span class="op">=</span> <span class="st">"longitude"</span>, ylab <span class="op">=</span> <span class="st">"latitude"</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Yellowstone NP Fire Perimeters 1984-2022"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="img/ynp_mtbs_parquet_ex.png" class="r-plt" alt="A plot of fire perimeters in Yellowstone National Park during 1984 to 2022. The plot has black linework on white background. The coordinate system is geographic, with longitude on the x axis and latitude on the y axis." width="80%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">src_lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">dst_lyr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><sup>Created with <a href="https://reprex.tidyverse.org" class="external-link">reprex
@@ -487,10 +527,10 @@ v2.1.1</a></sup></p>
 support in conda-forge</a></li>
 <li><a href="https://github.com/conda-forge/r-gdalraster-feedstock" class="external-link">r-gdalraster
 feedstock</a></li>
+<li><a href="https://gdal.org/en/stable/download.html#cross-platform-package-managers" class="external-link">GDAL
+Binaries: Cross-Platform Package Managers</a></li>
 <li><a href="https://www.anaconda.com/docs/getting-started/working-with-conda/packages/pip-install" class="external-link">Installing
 pip packages</a></li>
-<li><a href="https://conda-forge.org/status/" class="external-link">conda-forge status
-dashboard</a></li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
