@@ -4,6 +4,7 @@
 
 - **GDAL is by**: Frank Warmerdam, Even Rouault and others ([GDAL
   contributors](https://github.com/OSGeo/gdal/graphs/contributors))
+
 - ***gdalraster*** logo designed by: Sylvain Beorchia
 
 &nbsp;
