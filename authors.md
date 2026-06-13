@@ -2,10 +2,11 @@
 
 ## Authors
 
-**GDAL is by**[GDAL
-contributors](https://github.com/OSGeo/gdal/graphs/contributors)  
+- **GDAL is by**: Frank Warmerdam, Even Rouault and others ([GDAL
+  contributors](https://github.com/OSGeo/gdal/graphs/contributors))
+- ***gdalraster*** logo designed by: Sylvain Beorchia
 
-*gdalraster* logo designed by: Sylvain Beorchia
+&nbsp;
 
 - **Chris Toney**. Author, maintainer.
   [](https://orcid.org/0000-0001-5734-6510)
