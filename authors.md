@@ -3,7 +3,7 @@
 ## Authors
 
 **GDAL is by**[GDAL
-contributors](https://github.com/OSGeo/gdal/graphs/contributors)
+contributors](https://github.com/OSGeo/gdal/graphs/contributors)  
 
 *gdalraster* logo designed by: Sylvain Beorchia
 
