@@ -2,12 +2,8 @@
 
 ## Authors
 
-- **GDAL is by**: Frank Warmerdam, Even Rouault and others ([GDAL
-  contributors](https://github.com/OSGeo/gdal/graphs/contributors))
-
-- ***gdalraster*** logo designed by: Sylvain Beorchia
-
-&nbsp;
+**GDAL is by**: Frank Warmerdam, Even Rouault and others ([GDAL
+contributors](https://github.com/OSGeo/gdal/graphs/contributors))
 
 - **Chris Toney**. Author, maintainer.
   [](https://orcid.org/0000-0001-5734-6510)
@@ -33,9 +29,13 @@
 - **Peter Dimov**. Contributor, copyright holder.  
   Boost combine hashes method in src/cmb_table.h
 
-See file
-[`inst/COPYRIGHTS`](https://github.com/firelab/gdalraster/blob/HEAD/inst/COPYRIGHTS)
-for details.
+&nbsp;
+
+- See file
+  [`inst/COPYRIGHTS`](https://github.com/firelab/gdalraster/blob/HEAD/inst/COPYRIGHTS)
+  for details.
+
+- ***gdalraster*** logo designed by: Sylvain Beorchia
 
 ## Citation
 
