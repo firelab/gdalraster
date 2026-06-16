@@ -242,8 +242,8 @@ figures:
   bg: white
 
 authors:
-  before: "<ul class=\"list-unstyled\"><li><p><strong>GDAL is by</strong>: Frank Warmerdam, Even Rouault and others (<a href=\"https://github.com/OSGeo/gdal/graphs/contributors\" class=\"external-link\">GDAL contributors</a>)</p></li><li><p><strong>*gdalraster*</strong> logo designed by: Sylvain Beorchia</p></li></ul>"
-  after: "<small class=\"dont-index\">See file <a href=\"https://github.com/firelab/gdalraster/blob/HEAD/inst/COPYRIGHTS\" class=\"external-link\"><code>inst/COPYRIGHTS</code></a> for details.</small>"
+  before: "<strong>GDAL is by</strong>: Frank Warmerdam, Even Rouault and others (<a href=\"https://github.com/OSGeo/gdal/graphs/contributors\" class=\"external-link\">GDAL contributors</a>)"
+  after: "<ul class=\"list-unstyled\"><li><p>See file <a href=\"https://github.com/firelab/gdalraster/blob/HEAD/inst/COPYRIGHTS\" class=\"external-link\"><code>inst/COPYRIGHTS</code></a> for details.</p></li><li><p><strong>*gdalraster*</strong> logo designed by: Sylvain Beorchia</p></li></ul>"
 
 footer:
   structure:
