@@ -175,8 +175,12 @@ test_that("ogr_proc works", {
                                         out_geom_type = "MULTIPOLYGON",
                                         mode_opt = opt))
 
-    # SHPT_POLYGON shapefiles, reported as layers of type wkbPolygon
-    expect_equal(lyr_out$getGeomType(), "POLYGON")
+    if (gdal_version_num() < gdal_compute_version(3, 14, 0))
+        # SHPT_POLYGON shapefiles, reported as layers of type wkbPolygon
+        expect_equal(lyr_out$getGeomType(), "POLYGON")
+    else
+        expect_equal(lyr_out$getGeomType(), "MULTIPOLYGON")
+
     expect_true(srs_is_same(lyr$getSpatialRef(), lyr_out$getSpatialRef()))
     lyr_out$returnGeomAs <- "WKT"
     d <- lyr_out$fetch(-1)

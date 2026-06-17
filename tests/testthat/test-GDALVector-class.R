@@ -414,7 +414,8 @@ test_that("read methods work correctly", {
     lyr$promoteToMulti <- FALSE
     geom_fld <-lyr$defaultGeomColName
     d <- lyr$fetch(-1)
-    expect_true("POLYGON" %in% d[, geom_fld])
+    if (gdal_version_num() < gdal_compute_version(3, 14, 0))
+        expect_true("POLYGON" %in% d[, geom_fld])
     expect_true("MULTIPOLYGON" %in% d[, geom_fld])
     lyr$promoteToMulti <- TRUE
     d <- lyr$fetch(-1)
@@ -1071,7 +1072,8 @@ test_that("feature write methods work", {
     expect_equal(f$real_fld, feat1$real_fld)
     expect_equal(f$str_fld, feat1$str_fld)
     expect_equal(f$date_fld, feat1$date_fld)
-    expect_true(g_equals(f$geom, feat1$geom))
+    if (gdal_version_num() < gdal_compute_version(3, 14, 0))
+        expect_true(g_equals(f$geom, feat1$geom))
 
     lyr$close()
 
@@ -1085,7 +1087,8 @@ test_that("feature write methods work", {
     expect_equal(lyr$m_dialect, "SQLITE")
     expect_no_error(f <- lyr$getFeature(test1_fid))
     expect_equal(f$id, feat1$id)
-    expect_true(g_equals(f$geom, feat1$geom))
+    if (gdal_version_num() < gdal_compute_version(3, 14, 0))
+        expect_true(g_equals(f$geom, feat1$geom))
 
     lyr$close()
 

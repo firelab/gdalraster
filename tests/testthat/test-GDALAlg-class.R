@@ -486,7 +486,11 @@ test_that("`setVectorArgsFromObject` and `outputLayerNameForOpen` work", {
     expect_equal(toupper(lyr_out$getName()), "SQL_TEST")
     expect_equal(lyr_out$getFeatureCount(), 1)
     feat <- lyr_out$getNextFeature()
-    expect_equal(toupper(g_name(feat$geom)), "POLYGON")
+
+    if (gdal_version_num() < gdal_compute_version(3, 14, 0))
+        expect_equal(toupper(g_name(feat$geom)), "POLYGON")
+    else
+        expect_equal(toupper(g_name(feat$geom)), "MULTIPOLYGON")
 
     alg$release()
     lyr_out$close()
