@@ -35,7 +35,7 @@ jobs:
 
     steps:
     # NO NEED TO CHECKOUT HERE
-    - uses: r-hub/actions/setup@41d32aff3f6bd4ded6b81dcc9b4da3d0bc2a6aec # v1.7.3
+    - uses: r-hub/actions/setup@4b161272a59fcd8192e5bd5e6ce183c025cb80fa # v1.7.4
       with:
         config: ${{ github.event.inputs.config }}
       id: rhub-setup
