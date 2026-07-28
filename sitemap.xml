@@ -74,6 +74,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/get_cache_max.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_cache_used.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_config_option.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/get_data_ptr.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_num_cpus.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_pixel_line.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/get_usable_physical_ram.html</loc></url>

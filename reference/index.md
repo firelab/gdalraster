@@ -458,6 +458,8 @@
   : Clear progress bar
 - [`dump_open_datasets()`](https://firelab.github.io/gdalraster/reference/dump_open_datasets.md)
   : Report open datasets
+- [`get_data_ptr()`](https://firelab.github.io/gdalraster/reference/get_data_ptr.md)
+  : Get pointer address of an R vector as a character string
 
 ### PROJ configuration
 

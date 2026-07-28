@@ -1,6 +1,13 @@
 # Changelog
 
-## gdalraster 2.6.1.9000 (dev)
+## gdalraster 2.6.1.9001 (dev)
+
+- expose
+  [`get_data_ptr()`](https://firelab.github.io/gdalraster/reference/get_data_ptr.md):
+  get pointer address of R data with format suitable as DATAPOINTER for
+  a GDAL MEM dataset (2026-07-28)
+  ([\#993](https://github.com/firelab/gdalraster/issues/993), thanks to
+  [@h-a-graham](https://github.com/h-a-graham))
 
 - add
   [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):

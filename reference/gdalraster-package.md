@@ -187,7 +187,8 @@ implemented in several stand-alone functions:
   [`http_enabled()`](https://firelab.github.io/gdalraster/reference/http_enabled.md),
   [`push_error_handler()`](https://firelab.github.io/gdalraster/reference/push_error_handler.md),
   [`pop_error_handler()`](https://firelab.github.io/gdalraster/reference/pop_error_handler.md),
-  [`dump_open_datasets()`](https://firelab.github.io/gdalraster/reference/dump_open_datasets.md)
+  [`dump_open_datasets()`](https://firelab.github.io/gdalraster/reference/dump_open_datasets.md),
+  [`get_data_ptr()`](https://firelab.github.io/gdalraster/reference/get_data_ptr.md)
 
 - PROJ configuration:
   [`proj_version()`](https://firelab.github.io/gdalraster/reference/proj_version.md),
