@@ -3196,13 +3196,24 @@ bbox_to_wkt <- function(bbox, extend_x = 0, extend_y = 0) {
     .Call(`_gdalraster_rasterize_polygon`, rasterXsize, rasterYsize, part_sizes, polygonX, polygonY, fnRasterIO, burn_value, attr_value)
 }
 
-#' Get pointer address of R data as a character string
+#' Get pointer address of an R vector as a character string
 #'
-#' @param x Vector of type numeric, integer, raw or complex.
+#' `get_data_ptr()` returns a character string representation of the address
+#' of the first value in the C array underlying a given R vector of `raw`,
+#' `integer`, `double` or `complex`. The returned string is suitable for use
+#' as a DATAPOINTER for a GDAL MEM dataset
+#' (\url{https://gdal.org/en/stable/drivers/raster/mem.html}).
+#' @param x Vector of type `double`, `integer`, `raw` or `complex`.
 #' @returns Character string pointer address with format suitable as
 #' DATAPOINTER for a GDAL MEM dataset.
-#' @noRd
-.get_data_ptr <- function(x) {
+#'
+#' @seealso
+#' [rvector_to_MEM()]
+#'
+#' @examples
+#' v <- sample(0:255, 20, replace = TRUE)
+#' get_data_ptr(v)
+get_data_ptr <- function(x) {
     .Call(`_gdalraster_get_data_ptr`, x)
 }
 

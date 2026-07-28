@@ -182,7 +182,8 @@
   \code{\link[=http_enabled]{http_enabled()}},
   \code{\link[=push_error_handler]{push_error_handler()}},
   \code{\link[=pop_error_handler]{pop_error_handler()}},
-  \code{\link[=dump_open_datasets]{dump_open_datasets()}}
+  \code{\link[=dump_open_datasets]{dump_open_datasets()}},
+  \code{\link[=get_data_ptr]{get_data_ptr()}}
 
   \item PROJ configuration:
   \code{\link[=proj_version]{proj_version()}},
