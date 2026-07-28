@@ -1044,7 +1044,7 @@ rvector_to_MEM <- function(data, xsize, ysize, nbands = 1L, gt = NULL,
 
     gt_str <- paste(gt, collapse = "/")
     band_offset <- as.double(xsize) * ysize * dt_size(dt)
-    ptr <- .get_data_ptr(data)
+    ptr <- get_data_ptr(data)
 
     dsn_fmt <- "MEM:::DATAPOINTER=%s,PIXELS=%d,LINES=%d,BANDS=%d,DATATYPE=%s,GEOTRANSFORM=%s,BANDOFFSET=%d"
     dsn <- sprintf(dsn_fmt, ptr, xsize, ysize, nbands, dt, gt_str, band_offset)

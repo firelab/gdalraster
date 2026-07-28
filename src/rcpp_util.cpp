@@ -222,13 +222,24 @@ Rcpp::CharacterVector wrap_gdal_string_list_(const CPLStringList &string_list) {
     return out;
 }
 
-//' Get pointer address of R data as a character string
+//' Get pointer address of an R vector as a character string
 //'
-//' @param x Vector of type numeric, integer, raw or complex.
+//' `get_data_ptr()` returns a character string representation of the address
+//' of the first value in the C array underlying a given R vector of `raw`,
+//' `integer`, `double` or `complex`. The returned string is suitable for use
+//' as a DATAPOINTER for a GDAL MEM dataset
+//' (\url{https://gdal.org/en/stable/drivers/raster/mem.html}).
+//' @param x Vector of type `double`, `integer`, `raw` or `complex`.
 //' @returns Character string pointer address with format suitable as
 //' DATAPOINTER for a GDAL MEM dataset.
-//' @noRd
-// [[Rcpp::export(name = ".get_data_ptr")]]
+//'
+//' @seealso
+//' [rvector_to_MEM()]
+//'
+//' @examples
+//' v <- sample(0:255, 20, replace = TRUE)
+//' get_data_ptr(v)
+// [[Rcpp::export()]]
 std::string get_data_ptr(const Rcpp::RObject &x) {
     if (x.isNULL())
         Rcpp::stop("'x' must be a vector of numeric, integer, raw or complex");

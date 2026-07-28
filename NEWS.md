@@ -1,4 +1,6 @@
-# gdalraster 2.6.1.9000 (dev)
+# gdalraster 2.6.1.9001 (dev)
+
+* expose `get_data_ptr()`: get pointer address of R data with format suitable as DATAPOINTER for a GDAL MEM dataset (2026-07-28) (#993, thanks to @h-a-graham)
 
 * add `g_point_on_surface()`: wrapper of `OGR_G_PointOnSurface()` in the GDAL API (2026-05-13)
 

@@ -205,6 +205,7 @@ reference:
   - pop_error_handler
   - progress_bar_clear
   - dump_open_datasets
+  - get_data_ptr
 - subtitle: PROJ configuration
 - contents:
   - proj_networking
