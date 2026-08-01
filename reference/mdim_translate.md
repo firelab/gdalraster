@@ -224,8 +224,8 @@ if (isTRUE(gdal_get_driver_md("netCDF")$NETCDF_HAS_NC4 == "YES")) {
 
 f_dst <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst, creation_options = opt)
-#>  ■■■■■■■■                          24% |  ETA: 30s
-#> ✔ Done (9.6s)
+#>  ■■■■■■■■                          24% |  ETA: 26s
+#> ✔ Done (8.4s)
 #> 
 info <- mdim_info(f_dst, cout = FALSE) |> yyjsonr::read_json_str()
 # str(info)
