@@ -1,6 +1,6 @@
 # Using R and GDAL from conda-forge
 
-DRAFT: last updated 2026-05-25
+Last updated: 2026-05-25
 
 Conda is an open-source, cross-platform, language-agnostic package
 manager and environment management system. The conda package format is
