@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-DRAFT: last updated 2026-05-25
+Last updated: 2026-05-25
 
 Conda is an open-source, cross-platform, language-agnostic package manager and environment management system. The conda package format is general purpose and covers a wide selection of programming languages, including C, C++, Fortran, Rust, Go, Python, and R.
 
