@@ -1036,43 +1036,43 @@ test_that("geometry binary predicates/ops return correct values", {
     g_list2 <- list(g2, g3)
 
     res <- g_intersection(g_list1, g_list2)
-    expect_true(g_equals(res[[1]], "POLYGON ((5 5,5 0,0 0,5 5))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((5 5,5 0,0 0,5 5))")))
     expect_true(g_is_empty(res[[2]]))
     # same but testing defaults in case any arguments are nulled out
     res <- g_intersection(g_list1, g_list2,
                           as_wkb = NULL, as_iso = NULL,
                           byte_order = NULL, quiet = NULL)
-    expect_true(g_equals(res[[1]], "POLYGON ((5 5,5 0,0 0,5 5))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((5 5,5 0,0 0,5 5))")))
     expect_true(g_is_empty(res[[2]]))
 
     res <- g_union(g_list1, g_list2)
-    expect_true(g_equals(res[[1]], "POLYGON ((5 5,10 10,10 0,5 0,0 0,5 5))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((5 5,10 10,10 0,5 0,0 0,5 5))")))
     expect_false(g_is_empty(res[[2]]))
     # same but testing defaults in case any arguments are nulled out
     res <- g_union(g_list1, g_list2,
                    as_wkb = NULL, as_iso = NULL,
                    byte_order = NULL, quiet = NULL)
-    expect_true(g_equals(res[[1]], "POLYGON ((5 5,10 10,10 0,5 0,0 0,5 5))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((5 5,10 10,10 0,5 0,0 0,5 5))")))
     expect_false(g_is_empty(res[[2]]))
 
     res <- g_difference(g_list1, g_list2)
-    expect_true(g_equals(res[[1]], "POLYGON ((10 10,10 0,5 0,5 5,10 10))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((10 10,10 0,5 0,5 5,10 10))")))
     expect_false(g_is_empty(res[[2]]))
     # same but testing defaults in case any arguments are nulled out
     res <- g_difference(g_list1, g_list2,
                         as_wkb = NULL, as_iso = NULL,
                         byte_order = NULL, quiet = NULL)
-    expect_true(g_equals(res[[1]], "POLYGON ((10 10,10 0,5 0,5 5,10 10))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((10 10,10 0,5 0,5 5,10 10))")))
     expect_false(g_is_empty(res[[2]]))
 
     res <- g_sym_difference(g_list1, g_list2)
-    expect_true(g_equals(res[[1]], "POLYGON ((10 10,10 0,5 0,5 5,10 10))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((10 10,10 0,5 0,5 5,10 10))")))
     expect_equal(g_name(res[[2]]), "MULTIPOLYGON")
     # same but testing defaults in case any arguments are nulled out
     res <- g_sym_difference(g_list1, g_list2,
                             as_wkb = NULL, as_iso = NULL,
                             byte_order = NULL, quiet = NULL)
-    expect_true(g_equals(res[[1]], "POLYGON ((10 10,10 0,5 0,5 5,10 10))"))
+    expect_true(g_equals(g_normalize(res[[1]]), g_normalize("POLYGON ((10 10,10 0,5 0,5 5,10 10))")))
     expect_equal(g_name(res[[2]]), "MULTIPOLYGON")
 })
 
@@ -1462,7 +1462,7 @@ test_that("make_valid works", {
                                          as_iso = NULL,
                                          byte_order = NULL,
                                          quiet = NULL))
-    expect_true(g_equals(g_wk2wk(wkb1), wkt1))
+    expect_true(g_equals(g_normalize(g_wk2wk(wkb1)), g_normalize(wkt1)))
 
     # invalid - error if GDAL < 3.13
     # GDAL >= 3.13:
@@ -1484,14 +1484,14 @@ test_that("make_valid works", {
     expect_no_error(wkb3 <- g_make_valid(wkt3))
     expected_wkt3 <-
         "MULTIPOLYGON (((10 0,0 0,5 5,10 0)),((10 10,5 5,0 10,10 10)))"
-    expect_true(g_equals(g_wk2wk(wkb3), expected_wkt3))
+    expect_true(g_equals(g_normalize(wkb3), g_normalize(expected_wkt3)))
 
     # STRUCTURE method
     wkt4 <- "POLYGON ((0 0,0 10,10 10,10 0,0 0),(5 5,15 10,15 0,5 5))"
     expect_no_error(wkb4 <- g_make_valid(wkt4, method = "STRUCTURE"))
     expected_wkt4 <-
         "POLYGON ((0 10,10 10,10.0 7.5,5 5,10.0 2.5,10 0,0 0,0 10))"
-    expect_true(g_equals(g_wk2wk(wkb4), expected_wkt4))
+    expect_true(g_equals(g_normalize(wkb4), g_normalize(expected_wkt4)))
 
     # vector of WKT input
     wkt_vec <- c(wkt1, wkt2, wkt3, wkt4, NA)
@@ -1504,7 +1504,7 @@ test_that("make_valid works", {
         expect_false(is.null(wkb_list[[2]]))
     }
     expect_true(is.null(wkb_list[[5]]))
-    expect_true(g_equals(g_wk2wk(wkb_list[[4]]), expected_wkt4))
+    expect_true(g_equals(g_normalize(wkb_list[[4]]), g_normalize(expected_wkt4)))
 
     # list of WKB input
     rm(wkb_list)
@@ -1518,7 +1518,7 @@ test_that("make_valid works", {
         expect_false(is.null(wkb_list[[2]]))
     }
     expect_true(is.null(wkb_list[[5]]))
-    expect_true(g_equals(g_wk2wk(wkb_list[[4]]), expected_wkt4))
+    expect_true(g_equals(g_normalize(wkb_list[[4]]), g_normalize(expected_wkt4)))
 })
 
 test_that("normalize works", {
