@@ -1307,10 +1307,10 @@ fid <- poi$getLastWriteFID()
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-08-23
+#> [1] 2026-09-01
 #> 
 #> $editdate
-#> [1] 2026-08-23
+#> [1] 2026-09-01
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1398,7 +1398,7 @@ poi$syncToDisk()
 #> [1] 2016-02-03
 #> 
 #> $editdate
-#> [1] 2026-08-23
+#> [1] 2026-09-01
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1434,10 +1434,10 @@ poi$getFeature(fid)
 #> [1] Information
 #> 
 #> $createdate
-#> [1] 2026-08-23
+#> [1] 2026-09-01
 #> 
 #> $editdate
-#> [1] 2026-08-23
+#> [1] 2026-09-01
 #> 
 #> $geom
 #> [1] WKB POINT: raw 01 01 00 00 ...
@@ -1520,7 +1520,7 @@ system.time(res <- lyr$batchCreateFeature(d))
 #> ✔ Done (1.6s)
 #> 
 #>    user  system elapsed 
-#>   1.570   0.008   1.578
+#>   1.555   0.006   1.562
 
 (all(res))
 #> [1] TRUE
@@ -1552,7 +1552,7 @@ system.time({
     lyr$rollbackTransaction()
 })
 #>    user  system elapsed 
-#>   0.810   0.004   0.815
+#>   0.793   0.007   0.801
 
 (all(res2))
 #> [1] TRUE
@@ -1565,22 +1565,22 @@ d_out <- lyr$fetch(-1)
 head(d_out)
 #> OGR feature set
 #>   FID               pt_desc         create_time                           geom
-#> 1   1 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
-#> 2   2 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
-#> 3   3 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
-#> 4   4 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
-#> 5   5 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
-#> 6   6 random points batch 1 2026-08-23 02:44:20 WKB POINT: raw 01 01 00 00 ...
+#> 1   1 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
+#> 2   2 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
+#> 3   3 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
+#> 4   4 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
+#> 5   5 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
+#> 6   6 random points batch 1 2026-09-01 13:34:56 WKB POINT: raw 01 01 00 00 ...
 
 tail(d_out)
 #> OGR feature set
 #>           FID               pt_desc         create_time
-#> 199995 199995 random points batch 2 2026-08-23 02:44:22
-#> 199996 199996 random points batch 2 2026-08-23 02:44:22
-#> 199997 199997 random points batch 2 2026-08-23 02:44:22
-#> 199998 199998 random points batch 2 2026-08-23 02:44:22
-#> 199999 199999 random points batch 2 2026-08-23 02:44:22
-#> 200000 200000 random points batch 2 2026-08-23 02:44:22
+#> 199995 199995 random points batch 2 2026-09-01 13:34:58
+#> 199996 199996 random points batch 2 2026-09-01 13:34:58
+#> 199997 199997 random points batch 2 2026-09-01 13:34:58
+#> 199998 199998 random points batch 2 2026-09-01 13:34:58
+#> 199999 199999 random points batch 2 2026-09-01 13:34:58
+#> 200000 200000 random points batch 2 2026-09-01 13:34:58
 #>                                  geom
 #> 199995 WKB POINT: raw 01 01 00 00 ...
 #> 199996 WKB POINT: raw 01 01 00 00 ...
@@ -1721,7 +1721,7 @@ lyr_out <- ogr_proc(mode = "Intersection",
                     out_geom_type = "MULTIPOLYGON",
                     mode_opt = opt)
 #>  ■■                                 4% |  ETA:  0s
-#> ✔ Done (19ms)
+#> ✔ Done (18ms)
 #> 
 
 # the output layer has attributes of both the input and method layers
