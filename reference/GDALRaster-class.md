@@ -88,9 +88,10 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
     # to specify dataset open options:
     ds <- new(GDALRaster, filename, read_only = TRUE|FALSE, open_options)
     # to open without using shared mode:
-    new(GDALRaster, filename, read_only, open_options, shared = FALSE)
+    ds <- new(GDALRaster, filename, read_only, open_options, shared = FALSE)
     # to specify certain allowed driver(s):
-    new(GDALRaster, filename, read_only, open_options, shared, allowed_drivers)
+    ds <- new(GDALRaster, filename, read_only, open_options, shared,
+              allowed_drivers)
 
     ## Read/write fields (per-object settings)
     ds$infoOptions
@@ -1279,7 +1280,7 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Byte",
                  init = -9999)
 #> ℹ initializing destination raster...
-#> ✔ done [9ms]
+#> ✔ done [8ms]
 #> 
 
 ds_new <- new(GDALRaster, new_file, read_only = FALSE)
