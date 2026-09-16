@@ -203,7 +203,7 @@ pixi shell
 The last command starts an interactive subshell with the environment
 activated (use `exit` to leave the shell). You get a digest-level
 `pixi.lock` lock file automatically, so the environment is fully
-reproducible as long as the lock file is commited with the rest of the
+reproducible as long as the lock file is committed with the rest of the
 project.
 
 Pixi also supports using tools and libraries
