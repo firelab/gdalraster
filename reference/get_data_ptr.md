@@ -32,5 +32,5 @@ a GDAL MEM dataset.
 ``` r
 v <- sample(0:255, 20, replace = TRUE)
 get_data_ptr(v)
-#> [1] "0x55cfc40514f8"
+#> [1] "0x560008f414f8"
 ```

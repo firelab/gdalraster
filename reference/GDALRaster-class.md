@@ -1280,7 +1280,7 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Byte",
                  init = -9999)
 #> ℹ initializing destination raster...
-#> ✔ done [7ms]
+#> ✔ done [6ms]
 #> 
 
 ds_new <- new(GDALRaster, new_file, read_only = FALSE)
