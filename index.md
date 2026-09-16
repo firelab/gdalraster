@@ -240,3 +240,7 @@ docker pull ghcr.io/hypertidy/gdal-r-full:latest
   Ref](https://firelab.github.io/gdalraster/articles/gdal-config-quick-ref.html)
 - [Vector Read
   Benchmarks](https://firelab.github.io/gdalraster/articles/vector-read-benchmarks.html)
+
+------------------------------------------------------------------------
+
+_(Logo designed by Sylvain Beorchia)
