@@ -38,11 +38,11 @@ The package supports:
   ([`mdim_as_classic()`](https://firelab.github.io/gdalraster/reference/mdim_as_classic.html),
   [`mdim_info()`](https://firelab.github.io/gdalraster/reference/mdim_info.html),
   [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.html))
-- coordinate transformation
-- spatial reference systems
+- spatial reference systems and coordinate transformation (PROJ via GDAL
+  headers)
 - [geometry
   API](https://firelab.github.io/gdalraster/reference/index.html#geometry)
-  operating on raw vectors of WKB or WKT strings
+  operating on raw vectors of WKB or WKT strings (GEOS via GDAL headers)
 - [vector
   utilities](https://firelab.github.io/gdalraster/reference/index.html#vector-utilities)
 - GDAL facilities for [vector
