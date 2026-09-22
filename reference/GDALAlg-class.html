@@ -9,7 +9,10 @@ Experimental (see the section Development Status below)
 GDALAlg is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
 Fields and methods of the class are accessed using the $ operator.
 Arguments to class constructors and class methods must be given in the order
-documented (naming optional)."><meta property="og:description" content="GDALAlg provides bindings to GDALAlgorithm and related classes
+documented (naming optional).
+An object of class GDALAlg contains a pointer to the algorithm instance.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings."><meta property="og:description" content="GDALAlg provides bindings to GDALAlgorithm and related classes
 that implement the gdal command line interface (CLI) in the GDAL
 API. An object of class GDALAlg represents an instance of a CLI algorithm
 with methods to obtain algorithm information and argument information, run
@@ -19,7 +22,10 @@ Experimental (see the section Development Status below)
 GDALAlg is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
 Fields and methods of the class are accessed using the $ operator.
 Arguments to class constructors and class methods must be given in the order
-documented (naming optional)."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
+documented (naming optional).
+An object of class GDALAlg contains a pointer to the algorithm instance.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -27,7 +33,7 @@ documented (naming optional)."><meta property="og:image" content="https://firela
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,29 +91,12 @@ the algorithm, and access its output.</p>
 Fields and methods of the class are accessed using the <code>$</code> operator.
 Arguments to class constructors and class methods must be given in the order
 documented (naming optional).</p>
+<p>An object of class <code>GDALAlg</code> contains a pointer to the algorithm instance.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings.</p>
     </div>
 
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-cmd">cmd<a class="anchor" aria-label="anchor" href="#arg-cmd"></a></dt>
-<dd><p>A character string or character vector containing the path to the
-algorithm, e.g., <code>"raster reproject"</code> or <code>c("raster", "reproject")</code>.</p></dd>
-
-
-<dt id="arg-args">args<a class="anchor" aria-label="anchor" href="#arg-args"></a></dt>
-<dd><p>Either a character vector or a named list containing input
-arguments of the algorithm (see section <code>Algorithm Argument Syntax</code> below).</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>GDALAlg</code>, which contains a pointer to the
-algorithm instance. Class methods are described in Details, along with a set
-of writable fields for per-object settings.</p>
-    </div>
     <div class="section level2">
     <h2 id="usage-see-details-">Usage (see Details)<a class="anchor" aria-label="anchor" href="#usage-see-details-"></a></h2>
 
@@ -148,10 +137,13 @@ of writable fields for per-object settings.</p>
 
 
 <p><code>new(GDALAlg, cmd)</code><br>
-Instantiate an algorithm without specifying input arguments.</p>
+Instantiate an algorithm without specifying input arguments. <code>cmd</code> is a
+character string or character vector containing the path to the algorithm,
+e.g., <code>"raster reproject"</code> or <code>c("raster", "reproject")</code>.</p>
 <p><code>new(GDALAlg, cmd, args)</code><br>
 Instantiate an algorithm giving input arguments as a character vector or
-named list. See the section <code>Algorithm Argument Syntax</code> for details.</p>
+named list in <code>args</code>. See the section <code>Algorithm Argument Syntax</code> for
+details.</p>
 </div>
 
 <div class="section">

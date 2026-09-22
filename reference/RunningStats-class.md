@@ -11,21 +11,12 @@ for very large data streams.
 `RCPP_EXPOSED_CLASS`). Fields and methods and of the class are accessed
 using the `$` operator.
 
-## Arguments
-
-- na_rm:
-
-  Logical scalar. `TRUE` to remove `NA` from the input data (the
-  default) or `FALSE` to retain `NA`.
-
-## Value
-
-An object of class `RunningStats`. A `RunningStats` object maintains the
-current minimum, maximum, mean, variance, sum and count of values that
-have been read from the stream. It can be updated repeatedly with new
-values (i.e., chunks of data read from the input stream), but its memory
-footprint is negligible. Class methods for updating with new values, and
-retrieving the current values of statistics, are described in Details.
+An object of class `RunningStats` maintains the current minimum,
+maximum, mean, variance, sum and count of values that have been read
+from the stream. It can be updated repeatedly with new values (i.e.,
+chunks of data read from the input stream), but its memory footprint is
+negligible. Class methods for updating with new values, and retrieving
+the current values of statistics, are described in Details.
 
 ## Note
 
@@ -64,8 +55,9 @@ computes statistics for a whole raster band.
 ### Constructor
 
 `new(RunningStats, na_rm)`  
-Returns an object of class `RunningStats`. The `na_rm` argument defaults
-to `TRUE` if omitted.
+`na_rm` is a logical value, `TRUE` to remove `NA` from the input data
+(the default) or `FALSE` to retain `NA`. Returns an object of class
+`RunningStats`.
 
 ### Read/write fields (per-object settings)
 

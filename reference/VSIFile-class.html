@@ -8,7 +8,10 @@ It provides analogs of several Standard C file I/O functions, allowing
 virtualization of disk I/O so that non-file data sources can be made to
 appear as files.
 VSIFile is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
-Fields and methods of the class are accessed using the $ operator.'><meta property="og:description" content='VSIFile provides bindings to the GDAL VSIVirtualHandle API. Encapsulates a
+Fields and methods of the class are accessed using the $ operator.
+An object of class VSIFile contains a pointer to a VSIVirtualHandle.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings.'><meta property="og:description" content='VSIFile provides bindings to the GDAL VSIVirtualHandle API. Encapsulates a
 VSIVirtualHandle
 (https://gdal.org/en/stable/api/cpl_cpp.html#_CPPv416VSIVirtualHandle).
 This API abstracts binary file I/O across "regular" file systems, URLs,
@@ -17,7 +20,10 @@ It provides analogs of several Standard C file I/O functions, allowing
 virtualization of disk I/O so that non-file data sources can be made to
 appear as files.
 VSIFile is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
-Fields and methods of the class are accessed using the $ operator.'><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
+Fields and methods of the class are accessed using the $ operator.
+An object of class VSIFile contains a pointer to a VSIVirtualHandle.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings.'><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -25,7 +31,7 @@ Fields and methods of the class are accessed using the $ operator.'><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,37 +88,12 @@ virtualization of disk I/O so that non-file data sources can be made to
 appear as files.</p>
 <p><code>VSIFile</code> is a C++ class exposed directly to <span style="R">R</span> (via <code>RCPP_EXPOSED_CLASS</code>).
 Fields and methods of the class are accessed using the <code>$</code> operator.</p>
+<p>An object of class <code>VSIFile</code> contains a pointer to a <code>VSIVirtualHandle</code>.
+Class methods are described in Details, along with a set of writable fields
+for per-object settings.</p>
     </div>
 
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>Character string containing the filename to open. It may be
-a file in a regular local filesystem, or a filename with a GDAL /vsiPREFIX/
-(see <a href="https://gdal.org/en/stable/user/virtual_file_systems.html" class="external-link">https://gdal.org/en/stable/user/virtual_file_systems.html</a>).</p></dd>
-
-
-<dt id="arg-access">access<a class="anchor" aria-label="anchor" href="#arg-access"></a></dt>
-<dd><p>Character string containing the access requested (i.e., <code>"r"</code>,
-<code>"r+"</code>, <code>"w"</code>, <code>"w+</code>). Defaults to <code>"r"</code>. Binary access is always implied
-and the "b" does not need to be included in <code>access</code>.</p><table class="table table"><tr><td><strong>Access</strong></td><td><strong>Explanation</strong></td><td><strong>If file exists</strong></td></tr><tr><td><code>"r"</code></td><td>open file for reading</td><td>read from start</td></tr><tr><td><code>"r+"</code></td><td>open file for read/write</td><td>read from start</td></tr><tr><td><code>"w"</code></td><td>create file for writing</td><td>destroy contents</td></tr><tr><td><code>"w+"</code></td><td>create file for read/write</td><td>destroy contents</td></tr></table></dd>
-
-
-<dt id="arg-options">options<a class="anchor" aria-label="anchor" href="#arg-options"></a></dt>
-<dd><p>Optional character vector of <code>NAME=VALUE</code> pairs specifying
-filesystem-dependent options. These are the options provided by
-<code>VSIFOpenEx2L()</code> in the GDAL API (GDAL &gt;= 3.3, see Details).</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>VSIFile</code> which contains a pointer to a
-<code>VSIVirtualHandle</code>. Class methods are described in Details, along with a set
-of writable fields for per-object settings.</p>
-    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>File offsets are given as <span style="R">R</span> <code>numeric</code> (i.e., <code>double</code> type), optionally
@@ -171,16 +152,18 @@ allow sequential write only.</p>
 <h3 id="constructors">Constructors<a class="anchor" aria-label="anchor" href="#constructors"></a></h3>
 
 
-<p><code>new(VSIFile, filename)</code><br>
+<p><code>new(VSIFile, filename)</code><br><code>filename</code> is a character string containing the filename to open. It may be
+a file in a regular local filesystem, or a filename with a GDAL /vsiPREFIX/
+(see <a href="https://gdal.org/en/stable/user/virtual_file_systems.html" class="external-link">https://gdal.org/en/stable/user/virtual_file_systems.html</a>).
 Returns an object of class <code>VSIFile</code>, or an error is raised if a file
 handle cannot be obtained.</p>
 <p><code>new(VSIFile, filename, access)</code><br>
 Alternate constructor for passing <code>access</code> as a character string
-(e.g., <code>"r"</code>, <code>"r+"</code>, <code>"w"</code>, <code>"w+"</code>).
-Returns an object of class <code>VSIFile</code> with an open file handle, or an error
+(e.g., <code>"r"</code>, <code>"r+"</code>, <code>"w"</code>, <code>"w+"</code>). Defaults to <code>"r"</code>. Binary access is
+always implied and the "b" does not need to be included.</p><table class="table table"><tr><td><strong>Access</strong></td><td><strong>Explanation</strong></td><td><strong>If file exists</strong></td></tr><tr><td><code>"r"</code></td><td>open file for reading</td><td>read from start</td></tr><tr><td><code>"r+"</code></td><td>open file for read/write</td><td>read from start</td></tr><tr><td><code>"w"</code></td><td>create file for writing</td><td>destroy contents</td></tr><tr><td><code>"w+"</code></td><td>create file for read/write</td><td>destroy contents</td></tr></table><p>Returns an object of class <code>VSIFile</code> with an open file handle, or an error
 is raised if a file handle cannot be obtained.</p>
 <p><code>new(VSIFile, filename, access, options)</code><br>
-Alternate constructor for passing <code>access</code> as a character string, and
+Alternate constructor for passing <code>access</code> as a character string and
 <code>options</code> as a character vector of "NAME=VALUE" pairs (all arguments
 required, GDAL &gt;= 3.3 required for <code>options</code> support).</p>
 <p>The <code>options</code> argument is highly file system dependent. Supported options

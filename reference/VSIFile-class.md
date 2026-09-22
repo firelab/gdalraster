@@ -13,39 +13,9 @@ appear as files.
 `RCPP_EXPOSED_CLASS`). Fields and methods of the class are accessed
 using the `$` operator.
 
-## Arguments
-
-- filename:
-
-  Character string containing the filename to open. It may be a file in
-  a regular local filesystem, or a filename with a GDAL /vsiPREFIX/ (see
-  <https://gdal.org/en/stable/user/virtual_file_systems.html>).
-
-- access:
-
-  Character string containing the access requested (i.e., `"r"`, `"r+"`,
-  `"w"`, `"w+`). Defaults to `"r"`. Binary access is always implied and
-  the "b" does not need to be included in `access`.
-
-  |            |                            |                    |
-  |------------|----------------------------|--------------------|
-  | **Access** | **Explanation**            | **If file exists** |
-  | `"r"`      | open file for reading      | read from start    |
-  | `"r+"`     | open file for read/write   | read from start    |
-  | `"w"`      | create file for writing    | destroy contents   |
-  | `"w+"`     | create file for read/write | destroy contents   |
-
-- options:
-
-  Optional character vector of `NAME=VALUE` pairs specifying
-  filesystem-dependent options. These are the options provided by
-  `VSIFOpenEx2L()` in the GDAL API (GDAL \>= 3.3, see Details).
-
-## Value
-
-An object of class `VSIFile` which contains a pointer to a
-`VSIVirtualHandle`. Class methods are described in Details, along with a
-set of writable fields for per-object settings.
+An object of class `VSIFile` contains a pointer to a `VSIVirtualHandle`.
+Class methods are described in Details, along with a set of writable
+fields for per-object settings.
 
 ## Note
 
@@ -104,17 +74,31 @@ would allow sequential write only.
 ### Constructors
 
 `new(VSIFile, filename)`  
-Returns an object of class `VSIFile`, or an error is raised if a file
-handle cannot be obtained.
+`filename` is a character string containing the filename to open. It may
+be a file in a regular local filesystem, or a filename with a GDAL
+/vsiPREFIX/ (see
+<https://gdal.org/en/stable/user/virtual_file_systems.html>). Returns an
+object of class `VSIFile`, or an error is raised if a file handle cannot
+be obtained.
 
 `new(VSIFile, filename, access)`  
 Alternate constructor for passing `access` as a character string (e.g.,
-`"r"`, `"r+"`, `"w"`, `"w+"`). Returns an object of class `VSIFile` with
-an open file handle, or an error is raised if a file handle cannot be
-obtained.
+`"r"`, `"r+"`, `"w"`, `"w+"`). Defaults to `"r"`. Binary access is
+always implied and the "b" does not need to be included.
+
+|            |                            |                    |
+|------------|----------------------------|--------------------|
+| **Access** | **Explanation**            | **If file exists** |
+| `"r"`      | open file for reading      | read from start    |
+| `"r+"`     | open file for read/write   | read from start    |
+| `"w"`      | create file for writing    | destroy contents   |
+| `"w+"`     | create file for read/write | destroy contents   |
+
+Returns an object of class `VSIFile` with an open file handle, or an
+error is raised if a file handle cannot be obtained.
 
 `new(VSIFile, filename, access, options)`  
-Alternate constructor for passing `access` as a character string, and
+Alternate constructor for passing `access` as a character string and
 `options` as a character vector of "NAME=VALUE" pairs (all arguments
 required, GDAL \>= 3.3 required for `options` support).
 

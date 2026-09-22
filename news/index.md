@@ -1,36 +1,35 @@
 # Changelog
 
-## gdalraster 2.6.1.9001 (dev)
-
-- expose
-  [`get_data_ptr()`](https://firelab.github.io/gdalraster/reference/get_data_ptr.md):
-  get pointer address of R data with format suitable as DATAPOINTER for
-  a GDAL MEM dataset (2026-07-28)
-  ([\#993](https://github.com/firelab/gdalraster/issues/993), thanks to
-  [@h-a-graham](https://github.com/h-a-graham))
-
-- add
-  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
-  wrapper of `OGR_G_PointOnSurface()` in the GDAL API (2026-05-13)
+## gdalraster 2.7.0
 
 - add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
   frame using GDAL Arrow C stream interface
   ([\#976](https://github.com/firelab/gdalraster/issues/976))
-  (2026-05-11)
-
-- (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
-  ([\#974](https://github.com/firelab/gdalraster/issues/974))
-  (2026-05-08)
-
-- `RunningStats` class: support optionally returning count as
-  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
-  ([\#975](https://github.com/firelab/gdalraster/issues/975))
-  (2026-05-07)
-
+- add
+  [`get_data_ptr()`](https://firelab.github.io/gdalraster/reference/get_data_ptr.md):
+  get the pointer address of R data with format suitable as
+  `DATAPOINTER` for a GDAL MEM dataset
+  ([\#993](https://github.com/firelab/gdalraster/issues/993))
+- add
+  [`g_point_on_surface()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md):
+  wrapper of `OGR_G_PointOnSurface()` in the GDAL API
 - [`get_pixel_line()`](https://firelab.github.io/gdalraster/reference/get_pixel_line.md):
   treat points “exactly” on the right or bottom raster edge as inside
   ([\#973](https://github.com/firelab/gdalraster/issues/973))
-  (2026-05-06)
+- `RunningStats` class: support optionally returning the count as
+  [`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html)
+  ([\#975](https://github.com/firelab/gdalraster/issues/975))
+- fix
+  [`print.OGRFeatureSet()`](https://firelab.github.io/gdalraster/reference/print.OGRFeatureSet.md):
+  avoid error if geometry column is missing
+- minor reformat the documentation of Rcpp exposed classes to satisfy
+  CRAN requirements w.r.t. `.Rd` files without `\usage`
+- (internal) replace `ARE_REAL_EQUAL()` with `equal_within_ulps_()`
+  ([\#974](https://github.com/firelab/gdalraster/issues/974))
+- (internal) fix tests for some geometry functions due to changes in
+  GEOS 3.15.0
+- (internal) fix test for `GDALAlg::setArg()` due to an argument data
+  type change at GDAL 3.14
 
 ## gdalraster 2.6.1
 

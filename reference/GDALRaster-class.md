@@ -12,41 +12,7 @@ using the `$` operator. **Note that all arguments to class methods are
 required and must be given in the order documented.** Naming the
 arguments is optional but may be preferred for readability.
 
-## Arguments
-
-- filename:
-
-  Character string containing the file name of a raster dataset to open,
-  as full path or relative to the current working directory. In some
-  cases, `filename` may not refer to a local file system, but instead
-  contain format-specific information on how to access a dataset such as
-  database connection string, URL, /vsiPREFIX/, etc. (see GDAL raster
-  format descriptions:
-  <https://gdal.org/en/stable/drivers/raster/index.html>).
-
-- read_only:
-
-  Logical. `TRUE` to open the dataset read-only (the default), or
-  `FALSE` to open with write access.
-
-- open_options:
-
-  Optional character vector of `NAME=VALUE` pairs specifying dataset
-  open options.
-
-- shared:
-
-  Logical. `FALSE` to open the dataset without using shared mode.
-  Default is `TRUE` (see Note).
-
-- allowed_drivers:
-
-  Optional character vector of driver short names that must be
-  considered. By default, all known raster drivers are considered.
-
-## Value
-
-An object of class `GDALRaster`, which contains a pointer to the opened
+An object of class `GDALRaster` contains a pointer to the opened
 dataset. Class methods that operate on the dataset are described in
 Details, along with a set of writable fields for per-object settings.
 Values may be assigned to the class fields as needed during the lifetime
@@ -204,8 +170,16 @@ override the default resampling to one of `BILINEAR`, `CUBIC`,
 ### Constructors
 
 `new(GDALRaster, filename, read_only)`  
-Returns an object of class `GDALRaster`. The `read_only` argument
-defaults to `TRUE` if not specified.
+`filename` is a character string containing the file name of a raster
+dataset to open, as full path or relative to the current working
+directory. In some cases, `filename` may not refer to a local file
+system, but instead contain format-specific information on how to access
+a dataset such as database connection string, URL, /vsiPREFIX/, etc.
+(see GDAL raster format descriptions:
+<https://gdal.org/en/stable/drivers/raster/index.html>). `read_only` is
+a logical value, `TRUE` to open the dataset read-only (the default if
+not given), or `FALSE` to open with write access. Returns an object of
+class `GDALRaster`.
 
 `new(GDALRaster, filename, read_only, open_options)`  
 Alternate constructor for passing dataset `open_options`, a character
@@ -215,15 +189,16 @@ write access. Returns an object of class `GDALRaster`.
 
 `new(GDALRaster, filename, read_only, open_options, shared)`  
 Alternate constructor for specifying the `shared` mode for dataset
-opening. The `shared` argument defaults to `TRUE` but can be set to
-`FALSE` with this constructor (see Note). All arguments are required
-with this form of the constructor, but `open_options` can be `NULL`.
-Returns an object of class `GDALRaster`.
+opening. `shared` is a logical value, `FALSE` to open the dataset
+without using shared mode. Default is `TRUE` (see Note). All arguments
+are required with this form of the constructor, but `open_options` can
+be `NULL`. Returns an object of class `GDALRaster`.
 
 `new(GDALRaster, filename, read_only, open_options, shared, allowed_drivers)`  
 Alternate constructor for specifying the driver(s) allowed for dataset
-opening as a character vector of driver short names. All arguments are
-required with this form of the constructor, but `open_options` and/or
+opening as a character vector of driver short names. By default, all
+known raster drivers are considered. All arguments are required with
+this form of the constructor, but `open_options` and/or
 `allowed_drivers` can be `NULL`. Returns an object of class
 `GDALRaster`.
 
@@ -1280,7 +1255,7 @@ rasterFromRaster(srcfile = lcp_file,
                  dtName = "Byte",
                  init = -9999)
 #> ℹ initializing destination raster...
-#> ✔ done [7ms]
+#> ✔ done [8ms]
 #> 
 
 ds_new <- new(GDALRaster, new_file, read_only = FALSE)

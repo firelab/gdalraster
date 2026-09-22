@@ -6,14 +6,22 @@ CmbTable is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
 Methods of the class are accessed using the $ operator. Note that all
 arguments to class methods are required and must be given in the
 order documented. Naming the arguments is optional but may be preferred
-for readability."><meta property="og:description" content="CmbTable implements a hash table having a vector of integers as the key,
+for readability.
+An object of class CmbTable contains a hash table having a vector of
+integers as the key, and the count of occurrences of each unique integer
+combination as the value. Class methods that operate on the hash table are
+described in Details."><meta property="og:description" content="CmbTable implements a hash table having a vector of integers as the key,
 and the count of occurrences of each unique integer combination as the
 value. A unique ID is assigned to each unique combination of input values.
 CmbTable is a C++ class exposed directly to R (via RCPP_EXPOSED_CLASS).
 Methods of the class are accessed using the $ operator. Note that all
 arguments to class methods are required and must be given in the
 order documented. Naming the arguments is optional but may be preferred
-for readability."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
+for readability.
+An object of class CmbTable contains a hash table having a vector of
+integers as the key, and the count of occurrences of each unique integer
+combination as the value. Class methods that operate on the hash table are
+described in Details."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +29,7 @@ for readability."><meta property="og:image" content="https://firelab.github.io/g
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,29 +84,13 @@ Methods of the class are accessed using the <code>$</code> operator. <strong>Not
 arguments to class methods are required and must be given in the
 order documented.</strong> Naming the arguments is optional but may be preferred
 for readability.</p>
+<p>An object of class <code>CmbTable</code> contains a hash table having a vector of
+integers as the key, and the count of occurrences of each unique integer
+combination as the value. Class methods that operate on the hash table are
+described in Details.</p>
     </div>
 
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-keylen">keyLen<a class="anchor" aria-label="anchor" href="#arg-keylen"></a></dt>
-<dd><p>The number of integer values comprising each combination.</p></dd>
-
-
-<dt id="arg-varnames">varNames<a class="anchor" aria-label="anchor" href="#arg-varnames"></a></dt>
-<dd><p>Optional character vector of names for the variables in the
-combination.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>CmbTable</code>. Contains a hash table having a
-vector of <code>keyLen</code> integers as the key, and the count of occurrences of each
-unique integer combination as the value. Class methods that operate on the
-hash table are described in Details.</p>
-    </div>
     <div class="section level2">
     <h2 id="usage-see-details-">Usage (see Details)<a class="anchor" aria-label="anchor" href="#usage-see-details-"></a></h2>
 
@@ -106,7 +98,7 @@ hash table are described in Details.</p>
 
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="do">## Constructors</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>cmb <span class="ot">&lt;-</span> <span class="fu">new</span>(CmbTable, keyLen)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># or, giving the variable names:</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># or, giving explicit variable names:</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>cmb <span class="ot">&lt;-</span> <span class="fu">new</span>(CmbTable, keyLen, varNames)</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="do">## Methods</span></span>
@@ -124,11 +116,12 @@ hash table are described in Details.</p>
 <h3 id="constructors">Constructors<a class="anchor" aria-label="anchor" href="#constructors"></a></h3>
 
 
-<p><code>new(CmbTable, keyLen)</code><br>
+<p><code>new(CmbTable, keyLen)</code><br><code>keyLen</code> specifies the number of integer values comprising each combination.
 Default variable names will be assigned as <code>V1</code>, <code>V2</code>, ....
 Returns an object of class <code>CmbTable</code>.</p>
 <p><code>new(CmbTable, keyLen, varNames)</code><br>
-Alternate constructor to specify variable names.
+Alternate constructor to specify names of the variables in the combination
+as a character vector given in <code>varNames</code>.
 Returns an object of class <code>CmbTable</code>.</p>
 </div>
 

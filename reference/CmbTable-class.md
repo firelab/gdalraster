@@ -11,29 +11,16 @@ operator. **Note that all arguments to class methods are required and
 must be given in the order documented.** Naming the arguments is
 optional but may be preferred for readability.
 
-## Arguments
-
-- keyLen:
-
-  The number of integer values comprising each combination.
-
-- varNames:
-
-  Optional character vector of names for the variables in the
-  combination.
-
-## Value
-
-An object of class `CmbTable`. Contains a hash table having a vector of
-`keyLen` integers as the key, and the count of occurrences of each
-unique integer combination as the value. Class methods that operate on
-the hash table are described in Details.
+An object of class `CmbTable` contains a hash table having a vector of
+integers as the key, and the count of occurrences of each unique integer
+combination as the value. Class methods that operate on the hash table
+are described in Details.
 
 ## Usage (see Details)
 
     ## Constructors
     cmb <- new(CmbTable, keyLen)
-    # or, giving the variable names:
+    # or, giving explicit variable names:
     cmb <- new(CmbTable, keyLen, varNames)
 
     ## Methods
@@ -48,12 +35,14 @@ the hash table are described in Details.
 ### Constructors
 
 `new(CmbTable, keyLen)`  
-Default variable names will be assigned as `V1`, `V2`, .... Returns an
-object of class `CmbTable`.
+`keyLen` specifies the number of integer values comprising each
+combination. Default variable names will be assigned as `V1`, `V2`, ....
+Returns an object of class `CmbTable`.
 
 `new(CmbTable, keyLen, varNames)`  
-Alternate constructor to specify variable names. Returns an object of
-class `CmbTable`.
+Alternate constructor to specify names of the variables in the
+combination as a character vector given in `varNames`. Returns an object
+of class `CmbTable`.
 
 ### Methods
 

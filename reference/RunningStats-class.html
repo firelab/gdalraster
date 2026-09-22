@@ -7,7 +7,13 @@ stored in memory, so this class can be used to compute statistics for very
 large data streams.
 RunningStats is a C++ class exposed directly to R (via
 RCPP_EXPOSED_CLASS). Fields and methods and of the class are accessed
-using the $ operator."><meta property="og:description" content="RunningStats computes summary statistics on a data stream efficiently.
+using the $ operator.
+An object of class RunningStats maintains the current minimum, maximum,
+mean, variance, sum and count of values that have been read from the stream.
+It can be updated repeatedly with new values (i.e., chunks of data read from
+the input stream), but its memory footprint is negligible. Class methods for
+updating with new values, and retrieving the current values of statistics,
+are described in Details."><meta property="og:description" content="RunningStats computes summary statistics on a data stream efficiently.
 Mean and variance are calculated with Welford's online algorithm
 (https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance).
 The min, max, sum and count are also tracked. The input data values are not
@@ -15,7 +21,13 @@ stored in memory, so this class can be used to compute statistics for very
 large data streams.
 RunningStats is a C++ class exposed directly to R (via
 RCPP_EXPOSED_CLASS). Fields and methods and of the class are accessed
-using the $ operator."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
+using the $ operator.
+An object of class RunningStats maintains the current minimum, maximum,
+mean, variance, sum and count of values that have been read from the stream.
+It can be updated repeatedly with new values (i.e., chunks of data read from
+the input stream), but its memory footprint is negligible. Class methods for
+updating with new values, and retrieving the current values of statistics,
+are described in Details."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -23,7 +35,7 @@ using the $ operator."><meta property="og:image" content="https://firelab.github
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,27 +91,15 @@ large data streams.</p>
 <p><code>RunningStats</code> is a C++ class exposed directly to <span style="R">R</span> (via
 <code>RCPP_EXPOSED_CLASS</code>). Fields and methods and of the class are accessed
 using the <code>$</code> operator.</p>
+<p>An object of class <code>RunningStats</code> maintains the current minimum, maximum,
+mean, variance, sum and count of values that have been read from the stream.
+It can be updated repeatedly with new values (i.e., chunks of data read from
+the input stream), but its memory footprint is negligible. Class methods for
+updating with new values, and retrieving the current values of statistics,
+are described in Details.</p>
     </div>
 
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-na-rm">na_rm<a class="anchor" aria-label="anchor" href="#arg-na-rm"></a></dt>
-<dd><p>Logical scalar. <code>TRUE</code> to remove <code>NA</code> from the input data (the
-default) or <code>FALSE</code> to retain <code>NA</code>.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>RunningStats</code>. A <code>RunningStats</code> object
-maintains the current minimum, maximum, mean, variance, sum and count of
-values that have been read from the stream. It can be updated repeatedly
-with new values (i.e., chunks of data read from the input stream), but its
-memory footprint is negligible. Class methods for updating with new values,
-and retrieving the current values of statistics, are described in Details.</p>
-    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The intended use is computing summary statistics for specific subsets or
@@ -143,9 +143,9 @@ computes statistics for a whole raster band.</p>
 <h3 id="constructor">Constructor<a class="anchor" aria-label="anchor" href="#constructor"></a></h3>
 
 
-<p><code>new(RunningStats, na_rm)</code><br>
-Returns an object of class <code>RunningStats</code>. The <code>na_rm</code> argument
-defaults to <code>TRUE</code> if omitted.</p>
+<p><code>new(RunningStats, na_rm)</code><br><code>na_rm</code> is a logical value, <code>TRUE</code> to remove <code>NA</code> from the input data (the
+default) or <code>FALSE</code> to retain <code>NA</code>.
+Returns an object of class <code>RunningStats</code>.</p>
 </div>
 
 <div class="section">

@@ -21,7 +21,12 @@ Fields and methods of the class are accessed using the $ operator. Note
 that all arguments to class methods are required and must be given in the
 order documented. Most GDALVector methods take zero or one argument, so
 this is usually not an issue. Class constructors are the main exception.
-Naming the arguments is optional but may be preferred for readability."><meta property="og:description" content="GDALVector provides an interface for accessing a vector layer in a GDAL
+Naming the arguments is optional but may be preferred for readability.
+An object of class GDALVector contains pointers to the opened layer and
+the GDAL dataset that owns it. Class methods that operate on the layer are
+described in Details, along with a set of writable fields for per-object
+settings. Values may be assigned to the class fields as needed during the
+lifetime of the object (i.e., by regular &amp;lt;- or = assignment)."><meta property="og:description" content="GDALVector provides an interface for accessing a vector layer in a GDAL
 dataset and calling methods on the underlying OGRLayer object.
 An object of class GDALVector persists an open connection to the dataset,
 and exposes methods to:
@@ -43,7 +48,12 @@ Fields and methods of the class are accessed using the $ operator. Note
 that all arguments to class methods are required and must be given in the
 order documented. Most GDALVector methods take zero or one argument, so
 this is usually not an issue. Class constructors are the main exception.
-Naming the arguments is optional but may be preferred for readability."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
+Naming the arguments is optional but may be preferred for readability.
+An object of class GDALVector contains pointers to the opened layer and
+the GDAL dataset that owns it. Class methods that operate on the layer are
+described in Details, along with a set of writable fields for per-object
+settings. Values may be assigned to the class fields as needed during the
+lifetime of the object (i.e., by regular &amp;lt;- or = assignment)."><meta property="og:image" content="https://firelab.github.io/gdalraster/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -51,7 +61,7 @@ Naming the arguments is optional but may be preferred for readability."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,56 +128,14 @@ that all arguments to class methods are required and must be given in the
 order documented.</strong> Most <code>GDALVector</code> methods take zero or one argument, so
 this is usually not an issue. Class constructors are the main exception.
 Naming the arguments is optional but may be preferred for readability.</p>
+<p>An object of class <code>GDALVector</code> contains pointers to the opened layer and
+the GDAL dataset that owns it. Class methods that operate on the layer are
+described in Details, along with a set of writable fields for per-object
+settings. Values may be assigned to the class fields as needed during the
+lifetime of the object (i.e., by regular <code>&lt;-</code> or <code>=</code> assignment).</p>
     </div>
 
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-
-
-<dl><dt id="arg-dsn">dsn<a class="anchor" aria-label="anchor" href="#arg-dsn"></a></dt>
-<dd><p>Character string containing the data source name (DSN), usually a
-filename or database connection string.</p></dd>
-
-
-<dt id="arg-layer">layer<a class="anchor" aria-label="anchor" href="#arg-layer"></a></dt>
-<dd><p>Character string containing the name of a layer within the
-data source. May also be given as an SQL SELECT statement to be executed
-against the data source, defining a layer as the result set.</p></dd>
-
-
-<dt id="arg-read-only">read_only<a class="anchor" aria-label="anchor" href="#arg-read-only"></a></dt>
-<dd><p>Logical scalar. <code>TRUE</code> to open the layer read-only (the
-default), or <code>FALSE</code> to open with write access.</p></dd>
-
-
-<dt id="arg-open-options">open_options<a class="anchor" aria-label="anchor" href="#arg-open-options"></a></dt>
-<dd><p>Optional character vector of <code>NAME=VALUE</code> pairs
-specifying dataset open options.</p></dd>
-
-
-<dt id="arg-spatial-filter">spatial_filter<a class="anchor" aria-label="anchor" href="#arg-spatial-filter"></a></dt>
-<dd><p>Optional character string containing a geometry in
-Well Known Text (WKT) format which represents a spatial filter.</p></dd>
-
-
-<dt id="arg-dialect">dialect<a class="anchor" aria-label="anchor" href="#arg-dialect"></a></dt>
-<dd><p>Optional character string to control the statement dialect
-when SQL is used to define the layer. By default, the OGR SQL engine will
-be used, except for RDBMS drivers that will use their dedicated SQL engine,
-unless <code>"OGRSQL"</code> is explicitly passed as the dialect. The <code>"SQLITE"</code>
-dialect can also be used.</p></dd>
-
-</dl></div>
-    <div class="section level2">
-    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>GDALVector</code>, which contains pointers to the
-opened layer and the GDAL dataset that owns it. Class methods that operate
-on the layer are described in Details, along with a set of writable fields
-for per-object settings. Values may be assigned to the class fields as
-needed during the lifetime of the object (i.e., by regular <code>&lt;-</code> or
-<code>=</code> assignment).</p>
-    </div>
     <div class="section level2">
     <h2 id="usage-see-details-">Usage (see Details)<a class="anchor" aria-label="anchor" href="#usage-see-details-"></a></h2>
 
@@ -265,26 +233,34 @@ needed during the lifetime of the object (i.e., by regular <code>&lt;-</code> or
 <h3 id="constructors">Constructors<a class="anchor" aria-label="anchor" href="#constructors"></a></h3>
 
 
-<p><code>new(GDALVector, dsn)</code><br>
-The first layer by index is assumed if the <code>layer</code> argument is omitted, so
-this form of the constructor might be used for single-layer formats like
-shapefile.</p>
+<p><code>new(GDALVector, dsn)</code><br><code>dsn</code> is a character string containing the data source name (DSN), usually a
+filename or database connection string.
+The first layer by index is assumed if a <code>layer</code> argument is not given (see
+below), so this form of the constructor might be used for single-layer
+formats like shapefile.</p>
 <p><code>new(GDALVector, dsn, layer)</code><br>
-Constructor specifying the name of a layer to open. The <code>layer</code> argument
-may also be given as an SQL SELECT statement to define a layer as the result
-set.</p>
+Constructor specifying the name of a layer to open. <code>layer</code> is a character
+string containing the name of a layer within the data source. It may also be
+given as a SQL SELECT statement to be executed against the data source,
+defining a layer as the result set.</p>
 <p><code>new(GDALVector, dsn, layer, read_only)</code><br>
 Constructor specifying read/write access (<code>read_only = TRUE|FALSE</code>).
 The <code>layer</code> argument is required in this form of the constructor, but may be
 given as empty string (<code>""</code>), in which case the first layer by index will be
 assumed.</p>
 <p><code>new(GDALVector, dsn, layer, read_only, open_options)</code><br>
-Constructor specifying dataset open options as a character vector of
+Constructor specifying dataset <code>open_options</code> as a character vector of
 <code>NAME=VALUE</code> pairs.</p>
 <p><code>new(GDALVector, dsn, layer, read_only, open_options, spatial_filter, dialect))</code><br>
-Constructor to specify a spatial filter and/or SQL dialect. All arguments
-are required in this form of the constructor, but <code>open_options</code> may be
-<code>NULL</code>, and <code>spatial_filter</code> or <code>dialect</code> may be an empty string (<code>""</code>).</p>
+Constructor to specify a spatial filter and/or SQL dialect. <code>spatial_filter</code>
+is a character string containing a geometry in Well Known Text (WKT) format.
+<code>dialect</code> ia a character string to control the statement dialect when SQL is
+used to define the layer. By default, the OGR SQL engine will be used, except
+for RDBMS drivers that will use their dedicated SQL engine, unless <code>"OGRSQL"</code>
+is explicitly passed as the dialect. The <code>"SQLITE"</code> dialect can also be used.
+All arguments are required in this form of the constructor, but
+<code>open_options</code> may be <code>NULL</code>, and <code>spatial_filter</code> or <code>dialect</code> may be an
+empty string (<code>""</code>).</p>
 </div>
 
 <div class="section">
@@ -861,7 +837,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="op">(</span><span class="va">lyr</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALVector</span>, <span class="va">dsn</span>, <span class="st">"mtbs_perims"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpSnfAlq/ynp_fires_1984_2022.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpE2jRUY/ynp_fires_1984_2022.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: mtbs_perims</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / Montana (EPSG:32100)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: MULTIPOLYGON</span>
@@ -901,7 +877,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getDriverLongName</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "GeoPackage"</span>
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getFileList</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpSnfAlq/ynp_fires_1984_2022.gpkg"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpE2jRUY/ynp_fires_1984_2022.gpkg"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## layer info</span></span></span>
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">getName</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -1405,7 +1381,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num  1.23 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr  "A test string" "A test string 2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2025-01-01" "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-21 18:54:59" "2026-09-21 18:54:59"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-22 19:11:34" "2026-09-22 19:11:34"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
@@ -1431,7 +1407,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr "A test string 2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-21 18:54:59"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-22 19:11:34"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ geom       :List of 1</span>
@@ -1471,7 +1447,7 @@ The layer can be re-opened on the existing <code>dsn</code> with
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ doubles    : num  1.23 2.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ strings    : chr  "A test string" "A test string 2 - edited"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ dates      : Date, format: "2025-01-01" "2024-01-02"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-21 18:54:59" "2026-09-21 18:55:00"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dt_modified: POSIXct, format: "2026-09-22 19:11:34" "2026-09-22 19:11:35"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ blobs      :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ : raw  41 20 62 69 ...</span>

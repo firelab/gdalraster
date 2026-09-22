@@ -15,21 +15,7 @@ the algorithm, and access its output.
 using the `$` operator. Arguments to class constructors and class
 methods must be given in the order documented (naming optional).
 
-## Arguments
-
-- cmd:
-
-  A character string or character vector containing the path to the
-  algorithm, e.g., `"raster reproject"` or `c("raster", "reproject")`.
-
-- args:
-
-  Either a character vector or a named list containing input arguments
-  of the algorithm (see section `Algorithm Argument Syntax` below).
-
-## Value
-
-An object of class `GDALAlg`, which contains a pointer to the algorithm
+An object of class `GDALAlg` contains a pointer to the algorithm
 instance. Class methods are described in Details, along with a set of
 writable fields for per-object settings.
 
@@ -66,11 +52,14 @@ writable fields for per-object settings.
 ### Constructors
 
 `new(GDALAlg, cmd)`  
-Instantiate an algorithm without specifying input arguments.
+Instantiate an algorithm without specifying input arguments. `cmd` is a
+character string or character vector containing the path to the
+algorithm, e.g., `"raster reproject"` or `c("raster", "reproject")`.
 
 `new(GDALAlg, cmd, args)`  
 Instantiate an algorithm giving input arguments as a character vector or
-named list. See the section `Algorithm Argument Syntax` for details.
+named list in `args`. See the section `Algorithm Argument Syntax` for
+details.
 
 ### Read/write fields (per-object settings)
 
