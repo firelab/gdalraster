@@ -40,7 +40,7 @@ contributors](https://github.com/OSGeo/gdal/graphs/contributors))
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/firelab/gdalraster/blob/v.2.7.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/firelab/gdalraster/blob/main/inst/CITATION)
 
 Toney C, Sumner MD (2026). *gdalraster: R Bindings to the Geospatial
 Data Abstraction Library (GDAL)*. USDA Forest Service, Rocky Mountain
