@@ -856,7 +856,7 @@ file.copy(f, dsn)
 (lyr <- new(GDALVector, dsn, "mtbs_perims"))
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/Rtmpnsm3cv/ynp_fires_1984_2022.gpkg"
+#>   • DSN: "/tmp/Rtmpgz1vSP/ynp_fires_1984_2022.gpkg"
 #>   • Layer: mtbs_perims
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Geometry: MULTIPOLYGON
@@ -896,7 +896,7 @@ lyr$getDriverShortName()
 lyr$getDriverLongName()
 #> [1] "GeoPackage"
 lyr$getFileList()
-#> [1] "/tmp/Rtmpnsm3cv/ynp_fires_1984_2022.gpkg"
+#> [1] "/tmp/Rtmpgz1vSP/ynp_fires_1984_2022.gpkg"
 
 ## layer info
 lyr$getName()
@@ -1400,7 +1400,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-09-22 20:56:00" "2026-09-22 20:56:00"
+#>  $ dt_modified: POSIXct, format: "2026-09-22 21:20:15" "2026-09-22 21:20:15"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...
@@ -1426,7 +1426,7 @@ str(feat)
 #>  $ doubles    : num 2.35
 #>  $ strings    : chr "A test string 2"
 #>  $ dates      : Date, format: "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-09-22 20:56:00"
+#>  $ dt_modified: POSIXct, format: "2026-09-22 21:20:15"
 #>  $ blobs      :List of 1
 #>   ..$ : raw  41 20 62 69 ...
 #>  $ geom       :List of 1
@@ -1466,7 +1466,7 @@ str(feat_set)
 #>  $ doubles    : num  1.23 2.35
 #>  $ strings    : chr  "A test string" "A test string 2 - edited"
 #>  $ dates      : Date, format: "2025-01-01" "2024-01-02"
-#>  $ dt_modified: POSIXct, format: "2026-09-22 20:56:00" "2026-09-22 20:56:01"
+#>  $ dt_modified: POSIXct, format: "2026-09-22 21:20:15" "2026-09-22 21:20:16"
 #>  $ blobs      :List of 2
 #>   ..$ : raw  41 20 62 69 ...
 #>   ..$ : raw  41 20 62 69 ...

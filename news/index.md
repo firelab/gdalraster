@@ -2,6 +2,8 @@
 
 ## gdalraster 2.7.0
 
+CRAN release: 2026-09-22
+
 - add `GDALVector$writeArrowBatch()`: write a batch of rows from a data
   frame using GDAL Arrow C stream interface
   ([\#976](https://github.com/firelab/gdalraster/issues/976))
