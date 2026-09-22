@@ -243,8 +243,6 @@ docker pull ghcr.io/hypertidy/gdal-r-full:latest
 
 ------------------------------------------------------------------------
 
-_(Logo designed by Sylvain Beorchia)
-
 # Package index
 
 ## Package overview
