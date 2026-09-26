@@ -83,32 +83,44 @@
 
     
     
-<p>Last updated: 2026-05-25</p>
+<p>Last updated: 2026-09-26</p>
 <p>Conda is an open-source, cross-platform, language-agnostic package
 manager and environment management system. The conda package format is
 general purpose and covers a wide selection of programming languages,
-including C, C++, Fortran, Rust, Go, Python, and R.</p>
-<p>Conda uses the concept of channels as the base for hosting and
-managing packages. Conda is often associated with the commercial company
-Anaconda which provides the <a href="https://anaconda.org/" class="external-link">Anaconda.org</a> channel of packages.
-Alternatively, the conda-forge project builds and distributes packages
-via <a href="https://conda-forge.org/" class="external-link">conda-forge.org</a>. Conda-forge
-is community-driven and community-curated. Both conda and conda-forge
-are <a href="https://numfocus.org/project/conda-forge" class="external-link">NumFocus-affiliated</a>
-projects.</p>
+including C, C++, Fortran, Rust, Go, Python, and R. Conda uses the
+concept of channels as the base for hosting and managing packages.</p>
+<div class="section level2">
+<h2 id="the-origins-of-conda">The origins of conda<a class="anchor" aria-label="anchor" href="#the-origins-of-conda"></a>
+</h2>
+<p>The conda packaging format and its associated tooling were initially
+created by Anaconda (back then Continuum Analytics), as part of their
+Anaconda Distribution and Miniconda products. The tools were open-source
+early on, and a platform for free channel hosting was also made
+available: <a href="https://anaconda.org/" class="external-link">anaconda.org</a>. Soon
+enough, community-driven initiatives started to use these tools and
+services to build their own distributions.</p>
+<p>These days, the most known community-driven distribution is <a href="https://conda-forge.org/" class="external-link">conda-forge</a>, which is still served
+from anaconda.org, but also from other mirrors. The original tools
+written in Python like conda and conda-build are now maintained by the
+community, and other implementations exist, like Mamba (C++) or Pixi
+(Rust).</p>
+</div>
+<div class="section level2">
+<h2 id="conda-for-r-spatial">Conda for R spatial<a class="anchor" aria-label="anchor" href="#conda-for-r-spatial"></a>
+</h2>
 <p>Conda offers features potentially of interest to R users who work
 with geospatial data:</p>
 <ul>
-<li>install different versions of binary packages with their required
-dependencies on multiple platforms</li>
+<li>install different versions of binary packages and their dependencies
+on multiple platforms</li>
 <li>assemble sets of packages in isolation using environments</li>
 <li>manage and switch between environments that use various packages for
 different projects</li>
-<li>access R and a large number of CRAN packages, along with current
-GDAL and its dependencies</li>
+<li>access R and many CRAN packages, along with current GDAL and its
+dependencies</li>
 <li>benefit from lightweight <a href="https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/" class="external-link">modular
 GDAL packaging</a> based on deferred plugin loading</li>
-<li>available plugins include format drivers that sometimes are
+<li>plugins are available for format drivers that are sometimes
 unavailable in other package managers, such as the Arrow and Parquet
 vector drivers</li>
 </ul>
@@ -121,6 +133,7 @@ ecosystem</a>. The next few sections describe <code>conda</code>. <a href="https
 as a fast, modern, and reproducible package management tool. The section
 “Pixi for conda package management” further below describes a
 Pixi-equivalent setup.</p>
+</div>
 <div class="section level2">
 <h2 id="using-conda-from-miniforge">Using conda from Miniforge<a class="anchor" aria-label="anchor" href="#using-conda-from-miniforge"></a>
 </h2>
@@ -187,9 +200,9 @@ above if a different <code>conda</code> distribution is used.</p>
 prefix. When using R in <code>conda</code>, packages should be installed
 with the <code>conda</code> package manager rather than from source or
 binaries using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> (i.e., should not mix
-packages from CRAN or other repositories such as R-universe). A web
-portal for exploring packages available in conda-forge can be found at:
-<a href="https://conda-forge.org/packages/" class="external-link uri">https://conda-forge.org/packages/</a>.</p>
+packages from CRAN or other repositories such as R-universe). Web
+portals for exploring packages available in conda-forge include <a href="https://conda-forge.org/packages/" class="external-link uri">https://conda-forge.org/packages/</a>, and the <a href="http://conda-metadata-app.streamlit.app/" class="external-link">conda metadata
+browser</a> for more detailed information on each package.</p>
 </div>
 <div class="section level2">
 <h2 id="installing-gdal-from-conda-forge">Installing GDAL from conda-forge<a class="anchor" aria-label="anchor" href="#installing-gdal-from-conda-forge"></a>
