@@ -44,6 +44,17 @@ g_concave_hull(
   quiet = FALSE
 )
 
+g_concave_hull_of_polygons(
+  geom,
+  length_ratio,
+  is_tight,
+  allow_holes,
+  as_wkb = TRUE,
+  as_iso = FALSE,
+  byte_order = "LSB",
+  quiet = FALSE
+)
+
 g_delaunay_triangulation(
   geom,
   constrained = FALSE,
@@ -139,6 +150,20 @@ g_unary_union(
 
   Logical value, whether holes are allowed.
 
+- length_ratio:
+
+  Numeric value in interval `[0, 1]`. The target criterion parameter for
+  `g_concave_hull_of_polygons()`. Specifies the Maximum Edge Length as a
+  fraction of the difference between the longest and shortest edge
+  lengths between the polygons. This normalizes the Maximum Edge Length
+  to be scale-free. A value of `1` produces the convex hull; a value of
+  `0` produces the original polygons.
+
+- is_tight:
+
+  Logical value, whether the hull must follow the outer boundaries of
+  the input polygons.
+
 - constrained:
 
   Logical value, `TRUE` to return a constrained Delaunay triangulation
@@ -202,6 +227,21 @@ better approximation than the convex hull to the area occupied by the
 input. Frequently used to convert a multi-point into a polygonal area
 that contains all the points in the input geometry. Requires GDAL \>=
 3.6 and GEOS \>= 3.11.
+
+`g_concave_hull_of_polygons()` computes the concave hull of a set of
+polygons, respecting the polygons as constraints. A concave hull is a
+(possibly) non-convex polygon containing all the input polygons. The
+computed hull "fills the gap" between the polygons, and does not
+intersect their interior. A set of polygons has a sequence of hulls of
+increasing concaveness, determined by a numeric target parameter. The
+concave hull is constructed by removing the longest outer edges of the
+Delaunay Triangulation of the space between the polygons, until the
+target criterion parameter is reached. The "Maximum Edge Length"
+parameter limits the length of the longest edge between polygons to be
+no larger than this value. This can be expressed as a ratio between the
+lengths of the longest and shortest edges. The input must be a valid
+Polygon or MultiPolygon (i.e., they must be non-overlapping). Requires
+GDAL \>= 3.13 and GEOS \>= 3.11.
 
 `g_delaunay_triangulation()`
 
@@ -291,6 +331,14 @@ convex hull; `0` produces a hull with maximum concaveness.
 `preserve_topology = TRUE` does not preserve boundaries shared between
 polygons.
 
+## See also
+
+Concave Hull of Polygons:  
+https://lin-ear-th-inking.blogspot.com/2022/05/concave-hulls-of-polygons.html
+
+Algorithm for Concave Hull of Polygons:  
+https://lin-ear-th-inking.blogspot.com/2022/05/algorithm-for-concave-hull-of-polygons.html
+
 ## Examples
 
 ``` r
@@ -313,6 +361,16 @@ if (gdal_version_num() >= gdal_compute_version(3, 6, 0) &&
   g_concave_hull(g, ratio = 0.5, allow_holes = FALSE, as_wkb = FALSE)
 }
 #> [1] "POLYGON ((0.4 0.5,0 1,0.6 0.5,1 1,1 0,0 0,0.4 0.5))"
+
+# g_concave_hull_of_polygons() requires GDAL >= 3.13 and GEOS >= 3.11
+if (gdal_version_num() >= gdal_compute_version(3, 13, 0) &&
+    (geos_version()$major > 3 || geos_version()$minor >= 11)) {
+  g <- "MULTIPOLYGON(((0 0,0 1,1 1,1 0.9,0.1 0.9,0.1 0.1,1 0.1,1 0,0 0)),
+        ((1.1 1,2 1,2 0,1.1 0,1.1 0.1,1.9 0.1,1.9 0.9, 1.1 0.9,1.1 1)))"
+  plot_geom(g)
+  g2 <- g_concave_hull_of_polygons(g, 0.5, FALSE, FALSE)
+  plot_geom(g2)
+}
 
 # g_delaunay_triangulation() requires GEOS >= 3.4
 if (geos_version()$major > 3 || geos_version()$minor >= 4) {
