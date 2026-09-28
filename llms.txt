@@ -238,6 +238,8 @@ docker pull ghcr.io/hypertidy/gdal-r-full:latest
   Caching](https://firelab.github.io/gdalraster/articles/gdal-block-cache.html)
 - [GDAL Config Quick
   Ref](https://firelab.github.io/gdalraster/articles/gdal-config-quick-ref.html)
+- [Using R and GDAL from
+  conda-forge](https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.html)
 - [Vector Read
   Benchmarks](https://firelab.github.io/gdalraster/articles/vector-read-benchmarks.html)
 

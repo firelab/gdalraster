@@ -125,11 +125,10 @@ set_config_option("GDAL_HTTP_CONNECTTIMEOUT", "10")
 set_config_option("GDAL_HTTP_TIMEOUT", "10")
 
 vsi_stat(url_file)
-#> ! GDAL WARNING 1: HTTP response code on https://raw.githubusercontent.com/firelab/gdalraster/main/sample-data/landsat_c2ard_sr_mt_hood_jul2022_utm.tif: 0
-#> [1] FALSE
+#> [1] TRUE
 vsi_stat(url_file, "type")
-#> [1] "unknown"
+#> [1] "file"
 vsi_stat(url_file, "size")
 #> integer64
-#> [1] -1
+#> [1] 13067777
 ```
