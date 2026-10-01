@@ -222,6 +222,9 @@ tbl <- buildRAT(ds,
                 na_value = -9999,
                 join_df = evt_df)
 #> ℹ scanning raster...
+#>  ■                                  1% |  ETA:  0s
+#> ✔ Done (10ms)
+#> 
 
 nrow(tbl)
 #> [1] 24

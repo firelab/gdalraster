@@ -123,6 +123,7 @@ implemented in several stand-alone functions:
   [`g_measures`](https://firelab.github.io/gdalraster/reference/g_measures.md),
   [`g_coords()`](https://firelab.github.io/gdalraster/reference/g_coords.md),
   [`g_envelope()`](https://firelab.github.io/gdalraster/reference/g_envelope.md),
+  [`g_export_to_json()`](https://firelab.github.io/gdalraster/reference/g_export_to_json.md),
   [`g_transform()`](https://firelab.github.io/gdalraster/reference/g_transform.md),
   [`geos_version()`](https://firelab.github.io/gdalraster/reference/geos_version.md),
   [`plot_geom()`](https://firelab.github.io/gdalraster/reference/plot_geom.md)

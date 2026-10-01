@@ -340,6 +340,8 @@
   : Extract coordinate values from geometries
 - [`g_envelope()`](https://firelab.github.io/gdalraster/reference/g_envelope.md)
   : Obtain the 2D or 3D bounding envelope for input geometries
+- [`g_export_to_json()`](https://firelab.github.io/gdalraster/reference/g_export_to_json.md)
+  : Convert WKB/WKT geometries into GeoJSON-style format
 - [`g_transform()`](https://firelab.github.io/gdalraster/reference/g_transform.md)
   : Apply a coordinate transformation to a WKB/WKT geometry
 - [`geos_version()`](https://firelab.github.io/gdalraster/reference/geos_version.md)
