@@ -69,9 +69,6 @@ description of all available options for each processing mode.
 elev_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
 out_file <- file.path(tempdir(), "storml_hillshade.tif")
 dem_proc("hillshade", elev_file, out_file)
-#>  ■■                                 2% |  ETA:  0s
-#> ✔ Done (17ms)
-#> 
 
 ds <- new(GDALRaster, out_file)
 plot_raster(ds)
