@@ -204,7 +204,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpGehUTv/rastcalc21094fda205e.tif"
+#> ℹ output written to: "/tmp/Rtmp8IFHUn/rastcalc21fb4922632c.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -228,10 +228,10 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
 (ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
-#> ℹ output written to: "calc21097f7b20c6"
+#> ℹ output written to: "calc21fb3ce131c6"
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory Raster (MEM)
-#>   • DSN: "calc21097f7b20c6"
+#>   • DSN: "calc21fb3ce131c6"
 #>   • Dimensions: 149, 112, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -305,15 +305,12 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpGehUTv/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/Rtmp8IFHUn/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
 tbl <- combine(rasterfiles, var.names, bands)
 #> → combining 2 rasters...
-#>  ■                                  1% |  ETA:  0s
-#> ✔ Done (14ms)
-#> 
 tbl_subset <- subset(tbl, SLP >= 40 & FBFM %in% c(101,102))
 print(tbl_subset)
 #> [1] cmbid count SLP   FBFM 

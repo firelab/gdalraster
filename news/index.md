@@ -1,6 +1,10 @@
 # Changelog
 
-## gdalraster 2.7.0.9000 (dev)
+## gdalraster 2.7.0.9001 (dev)
+
+- class `GDALAlg`: add argument information for “not available in a
+  pipeline step”, and mutual / unidirectional dependencies (GDAL \>=
+  3.13) (2026-09-30)
 
 - add
   [`g_concave_hull_of_polygons()`](https://firelab.github.io/gdalraster/reference/g_unary_op.md)

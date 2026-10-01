@@ -33,7 +33,7 @@ for per-object settings."><meta property="og:image" content="https://firelab.git
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -252,6 +252,14 @@ object (<code>"OBJECT"</code>), or both (<code>"NAME", "OBJECT"</code>) when it 
 output (<code>NULL</code> if the argument is not a dataset type)</p></li>
 <li><p><code>mutual_exclusion_group</code>: character string, the name of the mutual
 exclusion group to which this argument belongs</p></li>
+<li><p><code>mutual_dependency_group</code>: character string, the name of the mutual
+dependency group to which this argument belongs (GDAL &gt;= 3.13)</p></li>
+<li><p><code>depends_on</code>: character vector of argument names that this argument depends
+on, including both regular dependencies and mutual dependencies
+(GDAL &gt;= 3.13)</p></li>
+<li><p><code>available_in_pipeline_step</code>: logical, <code>TRUE</code> if the argument is available
+in a pipeline step, or<code>FALSE</code> if it is only available in standalone mode
+(GDAL &gt;= 3.13)</p></li>
 </ul><p><code>$usage()</code><br>
 Print a help message for the algorithm to the console. No return value.</p>
 <p><code>$usageAsJSON()</code><br>
