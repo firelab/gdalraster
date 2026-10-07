@@ -45,6 +45,10 @@ The package supports:
 - [using GDAL’s new CLI
   algorithms](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.html)
   from R when built against GDAL \>= 3.11.3
+- GDAL traditional utilities for
+  [raster](https://firelab.github.io/gdalraster/reference/index.html#raster-utilities)
+  and
+  [vector](https://firelab.github.io/gdalraster/reference/index.html#vector-utilities)
 - manual creation of uninitialized raster and vector datasets
 - vector layer creation and schema management
 - read/set parameters and metadata for raster bands and vector layers
@@ -52,29 +56,25 @@ The package supports:
 - build/read/set color tables and raster attribute tables
 - virtual raster (VRT) for virtual cropping, resampling, kernel
   filtering, mosaicing
-- [raster
-  utilities](https://firelab.github.io/gdalraster/reference/index.html#raster-utilities)
 - GDAL multidimensional raster
   ([`mdim_as_classic()`](https://firelab.github.io/gdalraster/reference/mdim_as_classic.html),
   [`mdim_info()`](https://firelab.github.io/gdalraster/reference/mdim_info.html),
   [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.html))
+- GDAL facilities for [vector
+  geoprocessing](https://firelab.github.io/gdalraster/reference/ogr_proc.html)
 - spatial reference systems and coordinate transformation (PROJ via GDAL
   headers)
 - [geometry
   API](https://firelab.github.io/gdalraster/reference/index.html#geometry)
   operating on raw vectors of WKB or WKT strings (GEOS via GDAL headers)
-- [vector
-  utilities](https://firelab.github.io/gdalraster/reference/index.html#vector-utilities)
-- GDAL facilities for [vector
-  geoprocessing](https://firelab.github.io/gdalraster/reference/ogr_proc.html)
 - [dataset
   management](https://firelab.github.io/gdalraster/reference/index.html#general-data-management)
   (inspect/copy files/rename/delete)
 - create/append to Seek-Optimized ZIP
   ([SOZip](https://github.com/sozip/sozip-spec))
-- abstraction of [file system
+- VSI abstraction for [file system
   operations](https://firelab.github.io/gdalraster/reference/index.html#virtual-file-systems)
-  on URLs, cloud storage, in-memory files, etc.
+  on URLs, cloud storage, in-memory, etc.
 - Standard C binary file I/O through VSI (class
   [`VSIFile`](https://firelab.github.io/gdalraster/reference/VSIFile-class.html))
 
