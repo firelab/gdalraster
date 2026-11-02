@@ -144,6 +144,9 @@ raster_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
 
 pixel_extract(raster_file, pts)
 #> ℹ extracting from band 1
+#>  ■■■■                              10% |  ETA:  0s
+#> ✔ Done (11ms)
+#> 
 #>    id storml_elev
 #> 1   1        2648
 #> 2   2        2876
