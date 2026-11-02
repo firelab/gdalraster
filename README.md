@@ -126,7 +126,7 @@ provides pre-compiled binary packages that track CRAN releases, for the
 following platforms:
 
 [![Conda
-Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster.svg)](https://anaconda.org/conda-forge/r-gdalraster)
+Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster?color=blue)](https://anaconda.org/conda-forge/r-gdalraster)
 
 To install **gdalraster** into a particular conda environment with
 [conda](https://docs.conda.io/projects/conda/en/stable/), in the
