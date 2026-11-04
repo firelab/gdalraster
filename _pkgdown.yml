@@ -234,10 +234,6 @@ articles:
   - gdal-config-quick-ref
   - articles/use-gdal-cli-from-r
   - articles/r-and-gdal-in-conda
-- title: Presentations
-  navbar: Presentations
-  contents:
-  - articles/foss4gna-2026-gdalraster
 - title: Archive
   navbar: Archived articles
   contents:
