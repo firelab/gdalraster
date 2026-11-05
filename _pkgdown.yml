@@ -234,10 +234,20 @@ articles:
   - gdal-config-quick-ref
   - articles/use-gdal-cli-from-r
   - articles/r-and-gdal-in-conda
+- title: Presentations
+  navbar: Presentations
+  contents:
+  - foss4gna-gdalraster
 - title: Archive
   navbar: Archived articles
   contents:
   - articles/gdalvector-draft
+
+external-articles:
+- name: foss4gna-gdalraster
+  title: FOSS4G North America 2026
+  description: gdalraster: Comprehensive GDAL API Bindings for R
+  href: https://firelab.github.io/gdalraster/foss4gna-gdalraster.html
 
 figures:
   dev: png
