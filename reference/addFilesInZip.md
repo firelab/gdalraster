@@ -151,7 +151,7 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 #> 
 #> [1] "Files in zip archive:"
 #>                       Name Length                Date
-#> 1 ynp_fires_1984_2022.gpkg 307200 2026-11-04 16:49:00
+#> 1 ynp_fires_1984_2022.gpkg 307200 2026-11-05 01:12:00
 #> [1] "SOZip metadata:"
 #> $START_DATA_OFFSET
 #> [1] "54"
@@ -183,7 +183,7 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 #> $SOZIP_VALID
 #> [1] "YES"
 #> 
-#> INFO: Open of `/vsizip//tmp/Rtmp9ZG9v1/ynp_fires.zip/ynp_fires_1984_2022.gpkg'
+#> INFO: Open of `/vsizip//tmp/Rtmp3VRTLt/ynp_fires.zip/ynp_fires_1984_2022.gpkg'
 #>       using driver `GPKG' successful.
 #> 
 #> Layer name: mtbs_perims

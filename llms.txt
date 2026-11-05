@@ -754,6 +754,13 @@ docker pull ghcr.io/hypertidy/gdal-r-full:latest
 - [Using R and GDAL from
   conda-forge](https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.md):
 
+### Presentations
+
+- [FOSS4G North America
+  2026](https://firelab.github.io/gdalraster/foss4gna-gdalraster.html):
+
+  gdalraster - Comprehensive GDAL API Bindings for R
+
 ### Archive
 
 - [Draft Bindings to the GDAL/OGR Vector
