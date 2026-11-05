@@ -246,7 +246,7 @@ articles:
 external-articles:
 - name: foss4gna-gdalraster
   title: FOSS4G North America 2026
-  description: gdalraster: Comprehensive GDAL API Bindings for R
+  description: gdalraster - Comprehensive GDAL API Bindings for R
   href: https://firelab.github.io/gdalraster/foss4gna-gdalraster.html
 
 figures:
