@@ -47,7 +47,7 @@ Conda-forge provides pre-compiled binary packages for **gdalraster**
 that track CRAN releases, for the following platforms:
 
 [![Conda
-Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster.svg)](https://anaconda.org/conda-forge/r-gdalraster)
+Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster?color=blue)](https://anaconda.org/conda-forge/r-gdalraster)
 
 Several tools are available for managing packages in the [conda
 ecosystem](https://pixi.prefix.dev/latest/conda_ecosystem/). The next
