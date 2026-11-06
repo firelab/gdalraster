@@ -33,7 +33,8 @@ Conda offers features potentially of interest to R users who work with geospatia
 
 Conda-forge provides pre-compiled binary packages for **gdalraster** that track CRAN releases, for the following platforms:
 
-[![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster.svg)](https://anaconda.org/conda-forge/r-gdalraster)
+[![Conda
+Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster?color=blue)](https://anaconda.org/conda-forge/r-gdalraster)
 
 Several tools are available for managing packages in the [conda ecosystem](https://pixi.prefix.dev/latest/conda_ecosystem/). The next few sections describe `conda`. [Pixi](https://pixi.prefix.dev/latest/) might also be considered as a fast, modern, and reproducible package management tool. The section "Pixi for conda package management" further below describes a Pixi-equivalent setup.
 
