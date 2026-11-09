@@ -1906,7 +1906,8 @@ bool GDALVector::writeArrowBatch(const Rcpp::DataFrame &df) {
     }
 
     if (!OGR_L_IsArrowSchemaSupported(m_hLayer, &schema, nullptr, nullptr)) {
-        schema.release(&schema);
+        if (schema.release)
+            schema.release(&schema);
         if (!quiet) {
             cli_alert_danger_(
                 "the inferred ArrowSchema is not supported for write");
@@ -1922,14 +1923,15 @@ bool GDALVector::writeArrowBatch(const Rcpp::DataFrame &df) {
         // TODO: Should probably separate error vs end of stream.
         //       If error, multi-batch streams potentially could be partially
         //       written.
-        if (stream->get_next(stream, &array) != 0 ||
-            array.release == NULL ) {
-
+        if (stream->get_next(stream, &array) != 0 || array.release == NULL)
             break;
-        }
+
         bool res = OGR_L_WriteArrowBatch(m_hLayer, &schema, &array,
                                          opt.empty() ? nullptr : opt.List());
-        array.release(&array);
+
+        if (array.release)
+            array.release(&array);
+
         if (!res) {
             ret = false;
             if (!quiet)
@@ -1938,8 +1940,11 @@ bool GDALVector::writeArrowBatch(const Rcpp::DataFrame &df) {
         }
     }
 
-    schema.release(&schema);
-    stream->release(stream);
+    if (schema.release)
+        schema.release(&schema);
+
+    if (stream->release)
+        stream->release(stream);
 
     return ret;
 #endif
