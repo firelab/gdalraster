@@ -1,4 +1,6 @@
-# gdalraster 2.7.0.9002 (dev)
+# gdalraster 2.7.0.9003 (dev)
+
+* fix `GDALVector$writeArrowBatch()`: add missing null check before calling release on the input array struct (#1023) (2026-11-09)
 
 * adds `g_export_to_json()`: convert WKB/WKT geometries into GeoJSON-style format using `OGR_G_ExportToJsonEx()` in the GDAL Vector C API (#1017) (2026-10-01)
 
