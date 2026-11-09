@@ -2076,4 +2076,33 @@ test_that("writeArrowBatch works", {
     eas168 <- lyr_parquet$fetch(-1)
     expect_true(g_equals(eas168[1, "geometry"], eas168[2, "geometry"]))
     lyr_parquet$setAttributeFilter("")
+
+    # write to Parquet file created programmatically
+    # only geometry until we have CreateFieldFromArrowSchema()
+    f2_parquet <- tempfile(fileext = ".parquet")
+    expect_no_error(
+        lyr2_parquet <- ogr_ds_create(
+                            "Parquet", f2_parquet, "test",
+                            geom_type = "POINT",
+                            srs = "WGS84",
+                            overwrite = TRUE,
+                            return_obj = TRUE))
+
+    on.exit(lyr2_parquet$close(), add = TRUE)
+    on.exit(deleteDataset(f2_parquet), add = TRUE)
+
+    features <- list(
+        list(geometry = g_wk2wk("POINT (1 1)")),
+        list(geometry = g_wk2wk("POINT (1 2)")))
+    d <- as.data.frame(do.call(rbind, features))
+
+    expect_true(lyr2_parquet$writeArrowBatch(d))
+
+    # re-open and check
+    lyr2_parquet$close()
+    lyr2_parquet <- new(GDALVector, f2_parquet)
+    d2 <- lyr2_parquet$fetch(-1)
+    expect_equal(nrow(d2), 2)
+    expect_true(g_equals(d2$geometry[[1]], d$geometry[[1]]))
+    expect_true(g_equals(d2$geometry[[2]], d$geometry[[2]]))
 })
