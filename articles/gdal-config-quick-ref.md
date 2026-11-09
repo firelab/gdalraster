@@ -21,7 +21,7 @@ Note that specific usage is context dependent. Passing `value = ""`
 ``` r
 
 library(gdalraster)
-#> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
+#> GDAL 3.12.2 (released 2026-02-03), GEOS 3.14.1, PROJ 9.7.1
 
 set_config_option("GDAL_NUM_THREADS", "ALL_CPUS")
 # unset:

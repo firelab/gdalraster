@@ -131,7 +131,7 @@ removed in a future version*.
 v <- sample(0:255, 20, replace = TRUE)
 (ds_mem <- rvector_to_MEM(v, xsize = 5, ysize = 4))
 #> C++ object of class <GDALRaster>
-#>   • Driver: In Memory Raster (MEM)
+#>   • Driver: In Memory raster, vector and multidimensional raster (MEM)
 #>   • DSN: <data pointer>
 #>   • Dimensions: 5, 4, 1
 #>   • CRS: not set
@@ -166,7 +166,7 @@ ds_mem$addBand("Byte", b)
 ds_mem$setRasterColorInterp(3, "Blue")
 
 ds_mem$info()
-#> Driver: MEM/In Memory Raster
+#> Driver: MEM/In Memory raster, vector and multidimensional raster
 #> Files: none associated
 #> Size is 400, 300
 #> Origin = (0.000000000000000,0.000000000000000)

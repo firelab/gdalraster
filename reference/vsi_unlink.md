@@ -36,10 +36,9 @@ mem_file <- file.path("/vsimem", "tmp.tif")
 copyDatasetFiles(mem_file, elev_file)
 #> [1] TRUE
 vsi_read_dir("/vsimem")
-#> [1] "ogr2sqlite"               "tmp.tif"                 
-#> [3] "ynp_fires_1984_2022.gpkg"
+#> [1] "tmp.tif"                  "ynp_fires_1984_2022.gpkg"
 vsi_unlink(mem_file)
 #> [1] 0
 vsi_read_dir("/vsimem")
-#> [1] "ogr2sqlite"               "ynp_fires_1984_2022.gpkg"
+#> [1] "ynp_fires_1984_2022.gpkg"
 ```

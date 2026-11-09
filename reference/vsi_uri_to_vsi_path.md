@@ -24,8 +24,7 @@ Character vector of VSI paths.
 ## Examples
 
 ``` r
-if (FALSE) { # gdal_version_num() >= gdal_compute_version(3, 12, 0)
 # Requires GDAL >= 3.12
 vsi_uri_to_vsi_path("gs://cmip6/")
-}
+#> [1] "/vsigs/cmip6/"
 ```

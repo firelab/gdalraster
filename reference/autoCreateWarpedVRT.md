@@ -115,15 +115,15 @@ ds2$info()
 #>             LENGTHUNIT["metre",1]],
 #>     ID["EPSG",5070]]
 #> Data axis to CRS axis mapping: 1,2
-#> Origin = (-1332272.514894899679348,2686786.510187031701207)
-#> Pixel Size = (30.017093608756117,-30.017093608756117)
+#> Origin = (-1332272.514894899679348,2686786.510187032166868)
+#> Pixel Size = (30.017093608771027,-30.017093608771027)
 #> Corner Coordinates:
 #> Upper Left  (-1332272.515, 2686786.510) (113d17'20.73"W, 46d 4'32.57"N)
 #> Lower Left  (-1332272.515, 2682974.339) (113d16'48.70"W, 46d 2'30.94"N)
 #> Upper Right (-1327529.814, 2686786.510) (113d13'44.00"W, 46d 5' 0.36"N)
 #> Lower Right (-1327529.814, 2682974.339) (113d13'12.07"W, 46d 2'58.72"N)
 #> Center      (-1329901.164, 2684880.425) (113d15'16.38"W, 46d 3'45.66"N)
-#> Band 1 Block=158x127 Type=Int32, ColorInterp=Gray
+#> Band 1 Block=158x127 Type=Int16, ColorInterp=Gray
 #>   NoData Value=32767
 #>   Metadata:
 #>     RepresentationType=ATHEMATIC

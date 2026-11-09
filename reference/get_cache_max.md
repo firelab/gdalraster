@@ -59,5 +59,5 @@ option](https://gdal.org/en/stable/user/configoptions.html#performance-and-cachi
 ``` r
 get_cache_max()
 #> integer64
-#> [1] 838
+#> [1] 837
 ```

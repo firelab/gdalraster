@@ -40,41 +40,41 @@ containing a named list with the following elements:
 lib_versions()
 #> $gdal
 #> $gdal$name
-#> [1] "3.8.4"
+#> [1] "3.12.2"
 #> 
 #> $gdal$major
 #> [1] 3
 #> 
 #> $gdal$minor
-#> [1] 8
+#> [1] 12
 #> 
 #> $gdal$patch
-#> [1] 4
+#> [1] 2
 #> 
 #> 
 #> $proj
 #> $proj$name
-#> [1] "9.4.0"
+#> [1] "9.7.1"
 #> 
 #> $proj$major
 #> [1] 9
 #> 
 #> $proj$minor
-#> [1] 4
+#> [1] 7
 #> 
 #> $proj$patch
-#> [1] 0
+#> [1] 1
 #> 
 #> 
 #> $geos
 #> $geos$name
-#> [1] "3.12.1"
+#> [1] "3.14.1"
 #> 
 #> $geos$major
 #> [1] 3
 #> 
 #> $geos$minor
-#> [1] 12
+#> [1] 14
 #> 
 #> $geos$patch
 #> [1] 1

@@ -85,12 +85,12 @@ Returns the destination filename invisibly.
 lcp_file <- system.file("extdata/storm_lake.lcp", package="gdalraster")
 ds_lcp <- new(GDALRaster, lcp_file)
 ds_lcp$getMetadata(band = 2, domain = "")
-#> [1] "SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
-#> [2] "SLOPE_MAX=54"                                                                                                                         
+#> [1] "SLOPE_UNIT=0"                                                                                                                         
+#> [2] "SLOPE_UNIT_NAME=Degrees"                                                                                                              
 #> [3] "SLOPE_MIN=-9999"                                                                                                                      
-#> [4] "SLOPE_NUM_CLASSES=53"                                                                                                                 
-#> [5] "SLOPE_UNIT=0"                                                                                                                         
-#> [6] "SLOPE_UNIT_NAME=Degrees"                                                                                                              
+#> [4] "SLOPE_MAX=54"                                                                                                                         
+#> [5] "SLOPE_NUM_CLASSES=53"                                                                                                                 
+#> [6] "SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
 
 slpp_file <- file.path(tempdir(), "storml_slpp.tif")
 opt = c("COMPRESS=LZW")
@@ -101,7 +101,7 @@ rasterFromRaster(srcfile = lcp_file,
                  options = opt,
                  init = -32767)
 #> ℹ initializing destination raster...
-#> ✔ done [7ms]
+#> ✔ done [5ms]
 #> 
 ds_slp <- new(GDALRaster, slpp_file, read_only = FALSE)
 

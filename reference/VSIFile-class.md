@@ -400,9 +400,9 @@ ds$info()
 #> Origin = (323476.071970863151364,5105081.983031376264989)
 #> Pixel Size = (30.000000000000000,-30.000000000000000)
 #> Metadata:
-#>   DESCRIPTION=LCP file created by GDAL. Storm Lake AOI, Beaverhead-Deerlodge National Forest, Montana.
 #>   LATITUDE=46
 #>   LINEAR_UNIT=Meters
+#>   DESCRIPTION=LCP file created by GDAL. Storm Lake AOI, Beaverhead-Deerlodge National Forest, Montana.
 #> Corner Coordinates:
 #> Upper Left  (  323476.072, 5105081.983) 
 #> Lower Left  (  323476.072, 5101871.983) 
@@ -412,83 +412,83 @@ ds$info()
 #> Band 1 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Elevation
 #>   Metadata:
-#>     ELEVATION_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     ELEVATION_MAX=3046
-#>     ELEVATION_MIN=-9999
-#>     ELEVATION_NUM_CLASSES=-1
 #>     ELEVATION_UNIT=0
 #>     ELEVATION_UNIT_NAME=Meters
+#>     ELEVATION_MIN=-9999
+#>     ELEVATION_MAX=3046
+#>     ELEVATION_NUM_CLASSES=-1
+#>     ELEVATION_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 2 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Slope
 #>   Metadata:
-#>     SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     SLOPE_MAX=54
-#>     SLOPE_MIN=-9999
-#>     SLOPE_NUM_CLASSES=53
 #>     SLOPE_UNIT=0
 #>     SLOPE_UNIT_NAME=Degrees
+#>     SLOPE_MIN=-9999
+#>     SLOPE_MAX=54
+#>     SLOPE_NUM_CLASSES=53
+#>     SLOPE_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 3 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Aspect
 #>   Metadata:
-#>     ASPECT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     ASPECT_MAX=359
-#>     ASPECT_MIN=-9999
-#>     ASPECT_NUM_CLASSES=-1
 #>     ASPECT_UNIT=2
 #>     ASPECT_UNIT_NAME=Azimuth degrees
+#>     ASPECT_MIN=-9999
+#>     ASPECT_MAX=359
+#>     ASPECT_NUM_CLASSES=-1
+#>     ASPECT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 4 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Fuel models
 #>   Metadata:
-#>     FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     FUEL_MODEL_MAX=183
-#>     FUEL_MODEL_MIN=-9999
-#>     FUEL_MODEL_NUM_CLASSES=12
 #>     FUEL_MODEL_OPTION=0
 #>     FUEL_MODEL_OPTION_DESC=no custom models AND no conversion file needed
+#>     FUEL_MODEL_MIN=-9999
+#>     FUEL_MODEL_MAX=183
+#>     FUEL_MODEL_NUM_CLASSES=12
 #>     FUEL_MODEL_VALUES=0,98,99,101,102,121,122,123,142,162,165,181,183
+#>     FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 5 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Canopy cover
 #>   Metadata:
-#>     CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CANOPY_COV_MAX=75
-#>     CANOPY_COV_MIN=-9999
-#>     CANOPY_COV_NUM_CLASSES=8
 #>     CANOPY_COV_UNIT=1
 #>     CANOPY_COV_UNIT_NAME=Percent
+#>     CANOPY_COV_MIN=-9999
+#>     CANOPY_COV_MAX=75
+#>     CANOPY_COV_NUM_CLASSES=8
+#>     CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 6 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Canopy height
 #>   Metadata:
-#>     CANOPY_HT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CANOPY_HT_MAX=390
-#>     CANOPY_HT_MIN=-9999
-#>     CANOPY_HT_NUM_CLASSES=8
 #>     CANOPY_HT_UNIT=3
 #>     CANOPY_HT_UNIT_NAME=Meters x 10
+#>     CANOPY_HT_MIN=-9999
+#>     CANOPY_HT_MAX=390
+#>     CANOPY_HT_NUM_CLASSES=8
+#>     CANOPY_HT_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 7 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Canopy base height
 #>   Metadata:
-#>     CBH_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CBH_MAX=100
-#>     CBH_MIN=-9999
-#>     CBH_NUM_CLASSES=22
 #>     CBH_UNIT=3
 #>     CBH_UNIT_NAME=Meters x 10
+#>     CBH_MIN=-9999
+#>     CBH_MAX=100
+#>     CBH_NUM_CLASSES=22
+#>     CBH_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 #> Band 8 Block=143x1 Type=Int16, ColorInterp=Undefined
 #>   Description = Canopy bulk density
 #>   Metadata:
-#>     CBD_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
-#>     CBD_MAX=34
-#>     CBD_MIN=-9999
-#>     CBD_NUM_CLASSES=15
 #>     CBD_UNIT=3
 #>     CBD_UNIT_NAME=kg/m^3 x 100
+#>     CBD_MIN=-9999
+#>     CBD_MAX=34
+#>     CBD_NUM_CLASSES=15
+#>     CBD_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif
 
 # retrieve Description from the metadata
 # band = 0 for dataset-level metadata, domain = "" for default domain
 ds$getMetadata(band = 0, domain = "")
-#> [1] "DESCRIPTION=LCP file created by GDAL. Storm Lake AOI, Beaverhead-Deerlodge National Forest, Montana."
-#> [2] "LATITUDE=46"                                                                                         
-#> [3] "LINEAR_UNIT=Meters"                                                                                  
+#> [1] "LATITUDE=46"                                                                                         
+#> [2] "LINEAR_UNIT=Meters"                                                                                  
+#> [3] "DESCRIPTION=LCP file created by GDAL. Storm Lake AOI, Beaverhead-Deerlodge National Forest, Montana."
 ds$getMetadataItem(band = 0, mdi_name = "DESCRIPTION", domain = "")
 #> [1] "LCP file created by GDAL. Storm Lake AOI, Beaverhead-Deerlodge National Forest, Montana."
 

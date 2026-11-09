@@ -344,13 +344,13 @@ ds_b5vrt$res()  # 30 30
 # summarize band 5 reflectance where FBFM = 165
 # LCP band 4 contains FBFM (a classification of fuel beds):
 ds_lcp$getMetadata(band = 4, domain = "")
-#> [1] "FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
-#> [2] "FUEL_MODEL_MAX=183"                                                                                                                        
+#> [1] "FUEL_MODEL_OPTION=0"                                                                                                                       
+#> [2] "FUEL_MODEL_OPTION_DESC=no custom models AND no conversion file needed"                                                                     
 #> [3] "FUEL_MODEL_MIN=-9999"                                                                                                                      
-#> [4] "FUEL_MODEL_NUM_CLASSES=12"                                                                                                                 
-#> [5] "FUEL_MODEL_OPTION=0"                                                                                                                       
-#> [6] "FUEL_MODEL_OPTION_DESC=no custom models AND no conversion file needed"                                                                     
-#> [7] "FUEL_MODEL_VALUES=0,98,99,101,102,121,122,123,142,162,165,181,183"                                                                         
+#> [4] "FUEL_MODEL_MAX=183"                                                                                                                        
+#> [5] "FUEL_MODEL_NUM_CLASSES=12"                                                                                                                 
+#> [6] "FUEL_MODEL_VALUES=0,98,99,101,102,121,122,123,142,162,165,181,183"                                                                         
+#> [7] "FUEL_MODEL_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
 
 # verify Landsat nodata (0):
 ds_b5vrt$getNoDataValue(band=1)

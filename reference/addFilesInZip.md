@@ -147,11 +147,11 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
   DONTSHOW({vsi_unlink(zip_file)})
 }
 #> ℹ Adding "ynp_fires_1984_2022.gpkg"
-#> ✔ Adding "ynp_fires_1984_2022.gpkg" [15ms]
+#> ✔ Adding "ynp_fires_1984_2022.gpkg" [12ms]
 #> 
 #> [1] "Files in zip archive:"
 #>                       Name Length                Date
-#> 1 ynp_fires_1984_2022.gpkg 307200 2026-11-06 23:35:00
+#> 1 ynp_fires_1984_2022.gpkg 307200 2026-11-09 21:39:00
 #> [1] "SOZip metadata:"
 #> $START_DATA_OFFSET
 #> [1] "54"
@@ -183,7 +183,7 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 #> $SOZIP_VALID
 #> [1] "YES"
 #> 
-#> INFO: Open of `/vsizip//tmp/RtmpnUJHn8/ynp_fires.zip/ynp_fires_1984_2022.gpkg'
+#> INFO: Open of `/vsizip//tmp/RtmpYz2q7S/ynp_fires.zip/ynp_fires_1984_2022.gpkg'
 #>       using driver `GPKG' successful.
 #> 
 #> Layer name: mtbs_perims

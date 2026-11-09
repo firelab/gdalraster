@@ -102,6 +102,7 @@ names(all_opt)
 #> [37] "TIFFTAG_TRANSFERFUNCTION_BLUE"  "TIFFTAG_TRANSFERRANGE_BLACK"   
 #> [39] "TIFFTAG_TRANSFERRANGE_WHITE"    "STREAMABLE_OUTPUT"             
 #> [41] "GEOTIFF_KEYS_FLAVOR"            "GEOTIFF_VERSION"               
+#> [43] "COLOR_TABLE_MULTIPLIER"        
 
 # $description and $default will be NA if no value is provided by the driver
 # $values will be NULL if the option is not a 'string-select' type
@@ -114,10 +115,16 @@ all_opt$PREDICTOR
 #> [1] "Predictor Type (1=default, 2=horizontal differencing, 3=floating point prediction)"
 #> 
 #> $default
-#> [1] NA
+#> [1] 1
 #> 
 #> $values
 #> NULL
+#> 
+#> $min
+#> [1] NA
+#> 
+#> $max
+#> [1] NA
 #> 
 
 all_opt$BIGTIFF
@@ -128,9 +135,15 @@ all_opt$BIGTIFF
 #> [1] "Force creation of BigTIFF file"
 #> 
 #> $default
-#> [1] NA
+#> [1] "IF_NEEDED"
 #> 
 #> $values
 #> [1] "YES"       "NO"        "IF_NEEDED" "IF_SAFER" 
+#> 
+#> $min
+#> [1] NA
+#> 
+#> $max
+#> [1] NA
 #> 
 ```

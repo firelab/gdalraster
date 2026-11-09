@@ -80,7 +80,7 @@ identifyDriver(src) |> gdal_formats()
 #>   short_name    extensions raster multidim_raster vector geography_network
 #> 1       GPKG gpkg gpkg.zip   TRUE           FALSE   TRUE             FALSE
 #>   rw_flag virtual_io subdatasets  long_name         sql_dialects
-#> 1     rw+       TRUE        TRUE GeoPackage NATIVE OGRSQL SQLITE
+#> 1    rw+u       TRUE        TRUE GeoPackage NATIVE OGRSQL SQLITE
 #>          creation_datatypes                               creation_field_types
 #> 1 Byte Int16 UInt16 Float32 Integer Integer64 Real String Date DateTime Binary
 #>      creation_field_subtypes multiple_vec_layers read_field_domains

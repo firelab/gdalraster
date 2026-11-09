@@ -120,7 +120,6 @@ Roberto de Beauclair Seixas, Maur Riguette Mediano and Marcelo Gattass.
 ## Examples
 
 ``` r
-if (FALSE) { # gdal_version_num() >= gdal_compute_version(3, 9, 0)
 dem <- system.file("extdata/storml_elev.tif", package="gdalraster")
 
 ## no reprojection, the point coordinates are in the same projection as DEM
@@ -133,6 +132,11 @@ ptsB <-c(324803.0, 5104517.0, 10,
 ptsB <- matrix(ptsB, nrow = 3, ncol = 3, byrow = TRUE)
 
 is_los_visible(dem, ptA, ptsB)
+#> → checking line-of-sight...
+#>  ■■■■■■■■■■■                       33% |  ETA:  0s
+#> ✔ Done (7ms)
+#> 
+#> [1]  TRUE  TRUE FALSE
 
 ## pairwise, same ptA location with varying height
 ptsA <- c(324625.0, 5104724.0, 1,
@@ -141,37 +145,84 @@ ptsA <- c(324625.0, 5104724.0, 1,
 ptsA <- matrix(ptsA, nrow = 3, ncol = 3, byrow = TRUE)
 
 is_los_visible(dem, ptsA, ptsB)
+#> → checking line-of-sight...
+#> [1] TRUE TRUE TRUE
 
 ## WKB points
 (ptsA_wkb <- g_create("POINT", ptsA))
+#> [[1]]
+#>  [1] 01 01 00 00 80 00 00 00 00 44 d0 13 41 00 00 00 00 15 79 53 41 00 00 00 00
+#> [26] 00 00 f0 3f
+#> 
+#> [[2]]
+#>  [1] 01 01 00 00 80 00 00 00 00 44 d0 13 41 00 00 00 00 15 79 53 41 00 00 00 00
+#> [26] 00 00 24 40
+#> 
+#> [[3]]
+#>  [1] 01 01 00 00 80 00 00 00 00 44 d0 13 41 00 00 00 00 15 79 53 41 00 00 00 00
+#> [26] 00 40 8f 40
+#> 
 
 # as WKT
 g_wk2wk(ptsA_wkb)
+#> [1] "POINT (324625 5104724 1)"    "POINT (324625 5104724 10)"  
+#> [3] "POINT (324625 5104724 1000)"
 
 # or as ISO WKT
 g_wk2wk(ptsA_wkb, as_iso = TRUE)
+#> [1] "POINT Z (324625 5104724 1)"    "POINT Z (324625 5104724 10)"  
+#> [3] "POINT Z (324625 5104724 1000)"
 
 is_los_visible(dem, ptsA_wkb, ptsB)
+#> → checking line-of-sight...
+#> [1] TRUE TRUE TRUE
 
 ## reprojecting ptsA, and the DEM given as a dataset object
 (ds <- new(GDALRaster, dem))
+#> C++ object of class <GDALRaster>
+#>   • Driver: GeoTIFF (GTiff)
+#>   • DSN: "/home/runner/work/_temp/Library/gdalraster/extdata/storml_elev.tif"
+#>   • Dimensions: 143, 107, 1
+#>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#>   • Pixel resolution: 30.000000, 30.000000
+#>   • Bbox: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031
 
 ptsA_wkb_wgs84 <- g_transform(ptsA_wkb, ds$getSpatialRef(), "WGS84")
 g_wk2wk(ptsA_wkb_wgs84)
+#> [1] "POINT (-113.267911021074 46.0735865085109 1)"   
+#> [2] "POINT (-113.267911021074 46.0735865085109 10)"  
+#> [3] "POINT (-113.267911021074 46.0735865085109 1000)"
 
 is_los_visible(ds, ptsA_wkb_wgs84, ptsB, srsA = "WGS84")
+#> → transforming `ptsA`...
+#> → checking line-of-sight...
+#> [1] TRUE TRUE TRUE
 
 ## read ptsB from a vector dataset, use original ptA
 
 dsn <- system.file("extdata/storml_los_pts_b.geojson", package="gdalraster")
 (lyr <- new(GDALVector, dsn))
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoJSON (GeoJSON)
+#>   • DSN:
+#>   "/home/runner/work/_temp/Library/gdalraster/extdata/storml_los_pts_b.geojson"
+#>   • Layer: storml_los_pts_b
+#>   • CRS: WGS 84 (EPSG:4326)
+#>   • Geometry: POINT25D
 
 (features <- lyr$fetch(-1))
+#> OGR feature set
+#>   FID                             desc                           geom
+#> 1   0                    on Storm Lake WKB POINT: raw 01 01 00 00 ...
+#> 2   1 south of lake, high on far ridge WKB POINT: raw 01 01 00 00 ...
+#> 3   2    west of lake, over high ridge WKB POINT: raw 01 01 00 00 ...
 
 is_los_visible(ds, ptA, features$geom, srsB = lyr$getSpatialRef(),
                ZinterpB = "ACTUAL")
+#> → transforming `ptsB`...
+#> → checking line-of-sight...
+#> [1]  TRUE  TRUE FALSE
 
 ds$close()
 lyr$close()
-}
 ```

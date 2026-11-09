@@ -187,13 +187,13 @@ GDAL documentation on geometry validity and repair:
 ## g_make_valid() requires GEOS >= 3.8, otherwise is only a validity test
 geos_version()
 #> $name
-#> [1] "3.12.1"
+#> [1] "3.14.1"
 #> 
 #> $major
 #> [1] 3
 #> 
 #> $minor
-#> [1] 12
+#> [1] 14
 #> 
 #> $patch
 #> [1] 1

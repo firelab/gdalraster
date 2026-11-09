@@ -24,7 +24,7 @@ loaded. A raster dataset is opened by creating a new instance of
 ``` r
 
 library(gdalraster)
-#> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
+#> GDAL 3.12.2 (released 2026-02-03), GEOS 3.14.1, PROJ 9.7.1
 
 tcc_file <- system.file("extdata/storml_tcc.tif", package="gdalraster")
 ds <- new(GDALRaster, tcc_file, read_only = TRUE)
@@ -176,7 +176,7 @@ ds$getNoDataValue(band = 1)
 # min, max, mean, sd of pixel values in the band
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
 #>  ■■■■■■■■■■■■■■■■                  50% |  ETA:  0s
-#> ✔ Done (13ms)
+#> ✔ Done (10ms)
 #> 
 #> [1]  0.00000 71.00000 23.69950 23.17744
 
@@ -399,7 +399,13 @@ getCreationOptions("GTiff", "COMPRESS")
 #> $COMPRESS$values
 #>  [1] "NONE"         "LZW"          "PACKBITS"     "JPEG"         "CCITTRLE"    
 #>  [6] "CCITTFAX3"    "CCITTFAX4"    "DEFLATE"      "LZMA"         "ZSTD"        
-#> [11] "WEBP"         "LERC"         "LERC_DEFLATE" "LERC_ZSTD"
+#> [11] "WEBP"         "LERC"         "LERC_DEFLATE" "LERC_ZSTD"   
+#> 
+#> $COMPRESS$min
+#> [1] NA
+#> 
+#> $COMPRESS$max
+#> [1] NA
 
 getCreationOptions("GTiff", "SPARSE_OK")
 #> $SPARSE_OK
@@ -414,6 +420,12 @@ getCreationOptions("GTiff", "SPARSE_OK")
 #> 
 #> $SPARSE_OK$values
 #> NULL
+#> 
+#> $SPARSE_OK$min
+#> [1] NA
+#> 
+#> $SPARSE_OK$max
+#> [1] NA
 ```
 
 ## Using create()

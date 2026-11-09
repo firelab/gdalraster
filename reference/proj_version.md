@@ -33,15 +33,15 @@ A list of length four containing:
 ``` r
 proj_version()
 #> $name
-#> [1] "9.4.0"
+#> [1] "9.7.1"
 #> 
 #> $major
 #> [1] 9
 #> 
 #> $minor
-#> [1] 4
+#> [1] 7
 #> 
 #> $patch
-#> [1] 0
+#> [1] 1
 #> 
 ```

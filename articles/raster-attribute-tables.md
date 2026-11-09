@@ -58,7 +58,7 @@ that define usage as a GDAL RAT, for passing to
 ``` r
 
 library(gdalraster)
-#> GDAL 3.8.4 (released 2024-02-08), GEOS 3.12.1, PROJ 9.4.0
+#> GDAL 3.12.2 (released 2026-02-03), GEOS 3.14.1, PROJ 9.7.1
 
 # LANDFIRE Existing Vegetation Type (EVT)
 evt_file <- system.file("extdata/storml_evt.tif", package="gdalraster")
@@ -102,7 +102,7 @@ tbl <- buildRAT(ds,
                 join_df = evt_df)
 #> ℹ scanning raster...
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (13ms)
+#> ✔ Done (10ms)
 #> 
 
 nrow(tbl)

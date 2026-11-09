@@ -33,13 +33,13 @@ List elements will be `NA` if GDAL \< 3.4.
 ``` r
 geos_version()
 #> $name
-#> [1] "3.12.1"
+#> [1] "3.14.1"
 #> 
 #> $major
 #> [1] 3
 #> 
 #> $minor
-#> [1] 12
+#> [1] 14
 #> 
 #> $patch
 #> [1] 1

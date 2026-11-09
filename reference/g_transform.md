@@ -114,7 +114,7 @@ will be transformed to
 ``` r
 pt <- "POINT (-114.0 47.0)"
 g_transform(pt, "WGS84", "EPSG:5070", as_wkb = FALSE)
-#> [1] "POINT (-1367125.77866242 2797551.11860518)"
+#> [1] "POINT (-1367125.77866242 2797551.11860519)"
 
 # correct geometries that incorrectly go from a longitude on a side of the
 # antimeridian to the other side

@@ -74,12 +74,12 @@ ds <- new(GDALRaster, lcp_file)
 ds$getDescription(band=5)
 #> [1] "Canopy cover"
 ds$getMetadata(band=5, domain="")
-#> [1] "CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
-#> [2] "CANOPY_COV_MAX=75"                                                                                                                         
+#> [1] "CANOPY_COV_UNIT=1"                                                                                                                         
+#> [2] "CANOPY_COV_UNIT_NAME=Percent"                                                                                                              
 #> [3] "CANOPY_COV_MIN=-9999"                                                                                                                      
-#> [4] "CANOPY_COV_NUM_CLASSES=8"                                                                                                                  
-#> [5] "CANOPY_COV_UNIT=1"                                                                                                                         
-#> [6] "CANOPY_COV_UNIT_NAME=Percent"                                                                                                              
+#> [4] "CANOPY_COV_MAX=75"                                                                                                                         
+#> [5] "CANOPY_COV_NUM_CLASSES=8"                                                                                                                  
+#> [6] "CANOPY_COV_FILE=/netapp/sharedwebfs1/shared/landfire/public/temp_q8dTbIJ4w6Qi36Omkzk0/LCP_LF2022_FBFM40_220_CONUS/temp/merged_modified.tif"
 ds$close()
 
 # create a GTiff file with Byte data type for the canopy cover band
@@ -92,7 +92,7 @@ tcc_file <- calc(expr = "ifelse(CANCOV == -9999, 255, CANCOV)",
                  dtName = "Byte",
                  nodata_value = 255,
                  setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpnUJHn8/rastcalc243d103d8274.tif"
+#> ℹ output written to: "/tmp/RtmpYz2q7S/rastcalc223d13f7b0ff.tif"
 
 ds_tcc <- new(GDALRaster, tcc_file, read_only=FALSE)
 

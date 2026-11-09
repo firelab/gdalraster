@@ -332,14 +332,104 @@ Using `gdal` CLI algorithms from R
 ## Examples
 
 ``` r
-if (FALSE) { # length(gdal_global_reg_names()) > 0
 ## top-level commands
 gdal_commands(recurse = FALSE)
+#> → "convert"
+#> ℹ Convert a dataset (shortcut for 'gdal raster convert' or 'gdal vector convert').
+#> ℹ <https://gdal.org/programs/gdal_convert.html>
+#> 
+#> → "dataset"
+#> ℹ Commands to manage datasets.
+#> ℹ <https://gdal.org/programs/gdal_dataset.html>
+#> 
+#> → "driver"
+#> ℹ Command for driver specific operations.
+#> 
+#> → "info"
+#> ℹ Return information on a dataset (shortcut for 'gdal raster info' or 'gdal vector info').
+#> ℹ <https://gdal.org/programs/gdal_info.html>
+#> 
+#> → "mdim"
+#> ℹ Multidimensional commands.
+#> ℹ <https://gdal.org/programs/gdal_mdim.html>
+#> 
+#> → "pipeline"
+#> ℹ Process a dataset applying several steps.
+#> ℹ <https://gdal.org/programs/gdal_pipeline.html>
+#> 
+#> → "raster"
+#> ℹ Raster commands.
+#> ℹ <https://gdal.org/programs/gdal_raster.html>
+#> 
+#> → "vector"
+#> ℹ Vector commands.
+#> ℹ <https://gdal.org/programs/gdal_vector.html>
+#> 
+#> → "vsi"
+#> ℹ GDAL Virtual System Interface (VSI) commands.
+#> ℹ <https://gdal.org/programs/gdal_vsi.html>
+#> 
 
 ## convert storml_elev.tif to GeoPackage raster
 gdal_commands("convert")
+#> → "convert"
+#> ℹ Convert a dataset (shortcut for 'gdal raster convert' or 'gdal vector convert').
+#> ℹ <https://gdal.org/programs/gdal_convert.html>
+#> 
+#> → "mdim convert"
+#> ℹ Convert a multidimensional dataset.
+#> ℹ <https://gdal.org/programs/gdal_mdim_convert.html>
+#> 
+#> → "raster convert"
+#> ℹ Convert a raster dataset.
+#> ℹ <https://gdal.org/programs/gdal_raster_convert.html>
+#> 
+#> → "vector convert"
+#> ℹ Convert a vector dataset.
+#> ℹ <https://gdal.org/programs/gdal_vector_convert.html>
+#> 
 
 gdal_usage("raster convert")
+#> 
+#> Usage: raster convert [OPTIONS] <INPUT> <OUTPUT>
+#> 
+#> Convert a raster dataset. 
+#> 
+#> Positional arguments:
+#>   -i, --input <INPUT>
+#>     Input raster datasets
+#>     [required]
+#>   -o, --output <OUTPUT>
+#>     Output raster dataset
+#>     [required]
+#> 
+#> Options:
+#>   -f, --of, --format, --output-format <OUTPUT-FORMAT>
+#>     Output format ("GDALG" allowed)
+#>   --co, --creation-option <KEY>=<VALUE>
+#>     Creation option
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --overwrite
+#>     Whether overwriting existing output is allowed
+#>     [default: FALSE]
+#>     [mutually exclusive with --append]
+#>   --append
+#>     Append as a subdataset to existing output
+#>     [default: FALSE]
+#>     [mutually exclusive with --overwrite]
+#> 
+#> Advanced options:
+#>   --if, --input-format <INPUT-FORMAT>
+#>     Input formats
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --oo, --open-option <KEY>=<VALUE>
+#>     Open options
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#> 
+#> For more details: <https://gdal.org/programs/gdal_raster_convert.html>
 
 f_tif <- system.file("extdata/storml_elev.tif", package="gdalraster")
 f_gpkg <- file.path(tempdir(), "storml_elev.gpkg")
@@ -351,12 +441,27 @@ args <- c("--overwrite", f_tif, f_gpkg)
 
 # or, assign to a variable and access algorithm output as a dataset object
 (alg <- gdal_run("raster convert", args))
+#>  ■                                  0% |  ETA:  0s
+#> ✔ Done (8ms)
+#> 
+#> C++ object of class <GDALAlg>
+#>   • Command: "raster convert"
+#>   • Description: Convert a raster dataset.
+#>   • Help URL: <https://gdal.org/programs/gdal_raster_convert.html>
 
 (ds <- alg$output())
+#> C++ object of class <GDALRaster>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/tmp/RtmpYz2q7S/storml_elev.gpkg"
+#>   • Dimensions: 143, 107, 1
+#>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
+#>   • Pixel resolution: 30.000000, 30.000000
+#>   • Bbox: 323476.071971, 5101871.983031, 327766.071971, 5105081.983031
 
 alg$release()
 
 plot_raster(ds, legend = TRUE)
+
 
 ds$close()
 unlink(f_gpkg)
@@ -372,12 +477,143 @@ if (requireNamespace("ltc")) {
                 col_map_fn = rev(ltc::ltc("heatmap3")),
                 main = "Storm Lake AOI: terrain ruggedness index")
 }
+#> Loading required namespace: ltc
+
 
 ## get help for vector commands
 gdal_usage("vector")
+#> 
+#> Usage: vector <SUBCOMMAND> [OPTIONS]
+#> where <SUBCOMMAND> is one of:
+#>   - buffer              : Compute a buffer around geometries of a vector dataset.
+#>   - check-coverage      : Check a polygon coverage for validity
+#>   - check-geometry      : Check a dataset for invalid geometries
+#>   - clean-coverage      : Alter polygon boundaries to make shared edges identical, removing gaps and overlaps
+#>   - clip                : Clip a vector dataset.
+#>   - concat              : Concatenate vector datasets.
+#>   - convert             : Convert a vector dataset.
+#>   - edit                : Edit metadata of a vector dataset.
+#>   - explode-collections : Explode geometries of type collection of a vector dataset.
+#>   - filter              : Filter a vector dataset.
+#>   - geom                : Geometry operations on a vector dataset.
+#>   - grid                : Create a regular grid from scattered points.
+#>   - index               : Create a vector index of vector datasets.
+#>   - info                : Return information on a vector dataset.
+#>   - layer-algebra       : Perform algebraic operation between 2 layers.
+#>   - make-point          : Create point geometries from attribute fields
+#>   - make-valid          : Fix validity of geometries of a vector dataset.
+#>   - partition           : Partition a vector dataset into multiple files.
+#>   - pipeline            : Process a vector dataset applying several steps.
+#>   - rasterize           : Burns vector geometries into a raster.
+#>   - reproject           : Reproject a vector dataset.
+#>   - segmentize          : Segmentize geometries of a vector dataset.
+#>   - select              : Select a subset of fields from a vector dataset.
+#>   - set-field-type      : Modify the type of a field of a vector dataset.
+#>   - set-geom-type       : Modify the geometry type of a vector dataset.
+#>   - simplify            : Simplify geometries of a vector dataset.
+#>   - simplify-coverage   : Simplify shared boundaries of a polygonal vector dataset.
+#>   - sql                 : Apply SQL statement(s) to a dataset.
+#>   - swap-xy             : Swap X and Y coordinates of geometries of a vector dataset.
+#> 
+#> Options:
+#>   --drivers
+#>     Display vector driver list as JSON document and exit
+#>   --output-string <OUTPUT-STRING>
+#>     Output string, in which the result is placed
+#> 
+#> For more details: <https://gdal.org/programs/gdal_vector.html>
 
 ## clip a vector layer by a bounding box
 gdal_usage("vector clip")
+#> 
+#> Usage: vector clip [OPTIONS] <INPUT> <OUTPUT>
+#> 
+#> Clip a vector dataset. 
+#> 
+#> Positional arguments:
+#>   -i, --input <INPUT>
+#>     Input vector datasets
+#>     [required]
+#>   -o, --output <OUTPUT>
+#>     Output vector dataset
+#>     [required]
+#> 
+#> Options:
+#>   -l, --layer, --input-layer <INPUT-LAYER>
+#>     Input layer name(s)
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   -f, --of, --format, --output-format <OUTPUT-FORMAT>
+#>     Output format ("GDALG" allowed)
+#>   --co, --creation-option <KEY>=<VALUE>
+#>     Creation option
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --lco, --layer-creation-option <KEY>=<VALUE>
+#>     Layer creation option
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --overwrite
+#>     Whether overwriting existing output is allowed
+#>     [default: FALSE]
+#>   --update
+#>     Whether to open existing dataset in update mode
+#>     [default: FALSE]
+#>   --overwrite-layer
+#>     Whether overwriting existing output is allowed
+#>     [default: FALSE]
+#>   --append
+#>     Whether appending to existing layer is allowed
+#>     [default: FALSE]
+#>     [mutually exclusive with --upsert]
+#>   --output-layer <OUTPUT-LAYER>
+#>     Output layer name
+#>   --skip-errors
+#>     Skip errors when writing features
+#>   --active-layer <ACTIVE-LAYER>
+#>     Set active layer (if not specified, all)
+#>   --bbox <BBOX>
+#>     Clipping bounding box as xmin,ymin,xmax,ymax
+#>     [4 values]
+#>     [packed values allowed, repeated arg not allowed]
+#>     [mutually exclusive with --geometry, --like]
+#>   --bbox-crs <BBOX-CRS>
+#>     CRS of clipping bounding box
+#>   --geometry <GEOMETRY>
+#>     Clipping geometry (WKT or GeoJSON)
+#>     [mutually exclusive with --bbox, --like]
+#>   --geometry-crs <GEOMETRY-CRS>
+#>     CRS of clipping geometry
+#>   --like <DATASET>
+#>     Dataset to use as a template for bounds
+#>     [mutually exclusive with --bbox, --geometry]
+#>   --like-sql <SELECT-STATEMENT>
+#>     SELECT statement to run on the 'like' dataset
+#>     [mutually exclusive with --like-where]
+#>   --like-layer <LAYER-NAME>
+#>     Name of the layer of the 'like' dataset
+#>   --like-where <WHERE-EXPRESSION>
+#>     WHERE SQL clause to run on the 'like' dataset
+#>     [mutually exclusive with --like-sql]
+#> 
+#> Advanced options:
+#>   --if, --input-format <INPUT-FORMAT>
+#>     Input formats
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --oo, --open-option <KEY>=<VALUE>
+#>     Open options
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --output-oo, --output-open-option <KEY>=<VALUE>
+#>     Output open options
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --upsert
+#>     Upsert features (implies 'append')
+#>     [mutually exclusive with --append]
+#> 
+#> For more details: <https://gdal.org/programs/gdal_vector_clip.html>
 
 f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package="gdalraster")
 f_clip <- file.path(tempdir(), "ynp_fires_clip.gpkg")
@@ -389,12 +625,24 @@ bb <- paste(bb, collapse = ",")
 
 args <- c("--bbox", bb, "--overwrite", f, f_clip)
 (alg <- gdal_run("vector clip", args))
+#> C++ object of class <GDALAlg>
+#>   • Command: "vector clip"
+#>   • Description: Clip a vector dataset.
+#>   • Help URL: <https://gdal.org/programs/gdal_vector_clip.html>
 
 (lyr <- alg$output())
+#> C++ object of class <GDALVector>
+#>   • Driver: GeoPackage (GPKG)
+#>   • DSN: "/tmp/RtmpYz2q7S/ynp_fires_clip.gpkg"
+#>   • Layer: mtbs_perims
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Geometry: MULTIPOLYGON
 
 lyr$bbox()
+#> [1] 469686  11442 544070  85508
 
 lyr$getFeatureCount()
+#> [1] 40
 
 lyr$close()
 alg$release()
@@ -402,6 +650,109 @@ unlink(f_clip)
 
 ## rasterize a vector layer and return output as a GDALRaster object
 gdal_usage("vector rasterize")
+#> 
+#> Usage: vector rasterize [OPTIONS] <INPUT> <OUTPUT>
+#> 
+#> Burns vector geometries into a raster. 
+#> 
+#> Positional arguments:
+#>   -i, --input <INPUT>
+#>     Input vector datasets
+#>     [required]
+#>   -o, --output <OUTPUT>
+#>     Output raster dataset
+#>     [required]
+#> 
+#> Options:
+#>   -f, --of, --format, --output-format <OUTPUT-FORMAT>
+#>     Output format
+#>   --co, --creation-option <KEY>=<VALUE>
+#>     Creation option
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --overwrite
+#>     Whether overwriting existing output is allowed
+#>     [default: FALSE]
+#>   -b, --band <BAND>
+#>     The band(s) to burn values into (1-based index)
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --invert
+#>     Invert the rasterization
+#>     [default: FALSE]
+#>   --all-touched
+#>     Enables the ALL_TOUCHED rasterization option
+#>   --burn <BURN>
+#>     Burn value
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   -a, --attribute-name <ATTRIBUTE-NAME>
+#>     Attribute name
+#>   --3d
+#>     Indicates that a burn value should be extracted from the Z values of the feature
+#>   -l, --input-layer <INPUT-LAYER>
+#>     Input layer name
+#>     [mutually exclusive with --sql]
+#>   --where <WHERE>
+#>     SQL where clause
+#>   --sql <SQL>
+#>     SQL select statement
+#>     [mutually exclusive with --input-layer]
+#>   --dialect <DIALECT>
+#>     SQL dialect
+#>   --nodata <NODATA>
+#>     Assign a specified nodata value to output bands
+#>   --init <INIT>
+#>     Pre-initialize output bands with specified value
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --crs <CRS>
+#>     Override the projection for the output file
+#>   --transformer-option <NAME>=<VALUE>
+#>     Set a transformer option suitable to pass to GDALCreateGenImgProjTransformer2
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --extent <xmin>,<ymin>,<xmax>,<ymax>
+#>     Set the target georeferenced extent
+#>     [4 values]
+#>     [packed values allowed, repeated arg not allowed]
+#>   --resolution <xres>,<yres>
+#>     Set the target resolution
+#>     [2 values]
+#>     [packed values allowed, repeated arg not allowed]
+#>     [mutually exclusive with --size]
+#>   --tap, --target-aligned-pixels
+#>     (target aligned pixels) Align the coordinates of the extent of the output file to the values of the resolution
+#>   --size <xsize>,<ysize>
+#>     Set the target size in pixels and lines
+#>     [2 values]
+#>     [packed values allowed, repeated arg not allowed]
+#>     [mutually exclusive with --resolution]
+#>   --ot, --datatype, --output-data-type <OUTPUT-DATA-TYPE>
+#>     Output data type
+#>     [Byte|Int8|UInt16|Int16|UInt32|Int32|UInt64|Int64|CInt16|CInt32|Float16|Float32|Float64|CFloat32|CFloat64]
+#>   --optimization <OPTIMIZATION>
+#>     Force the algorithm used (results are identical)
+#>     [AUTO|RASTER|VECTOR]
+#>     [default: AUTO]
+#>   --add
+#>     Add to existing raster
+#>     [default: FALSE]
+#>   --update
+#>     Whether to open existing dataset in update mode
+#>     [default: FALSE]
+#> 
+#> Advanced options:
+#>   --oo, --open-option <KEY>=<VALUE>
+#>     Open options
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --if, --input-format <INPUT-FORMAT>
+#>     Input formats
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#> 
+#> For more details: <https://gdal.org/programs/gdal_vector_rasterize.html>
 
 f_out = file.path(tempdir(), "ynp_fire_year.tif")
 
@@ -418,8 +769,19 @@ args <- list(input = f,
              nodata = -32767)
 
 (alg <- gdal_run("vector rasterize", args))
+#> C++ object of class <GDALAlg>
+#>   • Command: "vector rasterize"
+#>   • Description: Burns vector geometries into a raster.
+#>   • Help URL: <https://gdal.org/programs/gdal_vector_rasterize.html>
 
 (ds <- alg$output())
+#> C++ object of class <GDALRaster>
+#>   • Driver: GeoTIFF (GTiff)
+#>   • DSN: "/tmp/RtmpYz2q7S/ynp_fire_year.tif"
+#>   • Dimensions: 1155, 1218, 1
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Pixel resolution: 90.000000, 90.000000
+#>   • Bbox: 469640.726682, -12997.663642, 573590.726682, 96622.336358
 
 alg$release()
 
@@ -430,8 +792,10 @@ if (requireNamespace("scales")) {
               main = "YNP Fires 1984-2022 - Most Recent Burn Year")
 }
 
+
 ds$close()
 deleteDataset(f_out)
+#> [1] TRUE
 
 ## GDAL CLI pipeline syntax
 # "raster pipeline" example 2 from:
@@ -442,6 +806,122 @@ deleteDataset(f_out)
 # https://gdal.org/en/stable/drivers/raster/gdalg.html
 
 gdal_usage("raster pipeline")
+#> 
+#> Usage: raster pipeline <PIPELINE>
+#> 
+#> Process a raster dataset applying several steps. 
+#> 
+#> Positional arguments:
+#>   --pipeline <PIPELINE>
+#>     Pipeline string
+#> 
+#> <PIPELINE> is of the form: read [READ-OPTIONS] ( ! <STEP-NAME> [STEP-OPTIONS] )* ! write [WRITE-OPTIONS]
+#> 
+#> Options for read input/write output:
+#>   -i, --input <INPUT>
+#>     Input raster datasets
+#>     [1 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   -f, --of, --format, --output-format <OUTPUT-FORMAT>
+#>     Output format ("GDALG" allowed)
+#>   -o, --output <OUTPUT>
+#>     Output raster dataset
+#>   --co, --creation-option <KEY>=<VALUE>
+#>     Creation option
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#>   --overwrite
+#>     Whether overwriting existing output is allowed
+#>     [default: FALSE]
+#>     [mutually exclusive with --append]
+#>   --append
+#>     Append as a subdataset to existing output
+#>     [default: FALSE]
+#>     [mutually exclusive with --overwrite]
+#>   --output-string <OUTPUT-STRING>
+#>     Output string, in which the result is placed
+#> 
+#> Advanced options for read input/write output:
+#>   --if, --input-format <INPUT-FORMAT>
+#>     Input formats
+#>     [0 or more values]
+#>     [packed values allowed, repeated arg allowed]
+#>   --oo, --open-option <KEY>=<VALUE>
+#>     Open options
+#>     [0 or more values]
+#>     [packed values not allowed, repeated arg allowed]
+#> 
+#> Potential steps are:
+#>   aspect
+#>     Generate an aspect map
+#>   blend
+#>     Blend/compose two raster datasets
+#>   calc
+#>     Perform raster algebra
+#>   clip
+#>     Clip a raster dataset.
+#>   color-map
+#>     Generate a RGB or RGBA dataset from a single band, using a color map
+#>   compare
+#>     Compare two raster datasets.
+#>   edit
+#>     Edit a raster dataset.
+#>   fill-nodata
+#>     Fill nodata raster regions by interpolation from edges.
+#>   hillshade
+#>     Generate a shaded relief map
+#>   info
+#>     Return information on a raster dataset.
+#>   materialize
+#>     Materialize a piped dataset on disk to increase the efficiency of the following steps.
+#>   mosaic
+#>     Build a mosaic, either virtual (VRT) or materialized.
+#>   neighbors
+#>     Compute the value of each pixel from its neighbors (focal statistics)
+#>   nodata-to-alpha
+#>     Replace nodata value(s) with an alpha band.
+#>   overview
+#>     Manage overviews of a raster dataset.
+#>   pansharpen
+#>     Perform a pansharpen operation.
+#>   proximity
+#>     Produces a raster proximity map.
+#>   reclassify
+#>     Reclassify values in a raster dataset
+#>   reproject
+#>     Reproject a raster dataset.
+#>   resize
+#>     Resize a raster dataset without changing the georeferenced extents.
+#>   rgb-to-palette
+#>     Convert a RGB image into a pseudo-color / paletted image.
+#>   roughness
+#>     Generate a roughness map
+#>   scale
+#>     Scale the values of the bands of a raster dataset.
+#>   select
+#>     Select a subset of bands from a raster dataset.
+#>   set-type
+#>     Modify the data type of bands of a raster dataset.
+#>   sieve
+#>     Remove small polygons from a raster dataset.
+#>   slope
+#>     Generate a slope map
+#>   stack
+#>     Combine together input bands into a multi-band output, either virtual (VRT) or materialized.
+#>   tee
+#>     Pipes the input into the output stream and side nested pipelines.
+#>   tile
+#>     Generate tiles in separate files from a raster dataset.
+#>   tpi
+#>     Generate a Topographic Position Index (TPI) map
+#>   tri
+#>     Generate a Terrain Ruggedness Index (TRI) map
+#>   unscale
+#>     Convert scaled values of a raster dataset into unscaled values.
+#>   viewshed
+#>     Compute the viewshed of a raster dataset.
+#> 
+#> For more details: <https://gdal.org/programs/gdal_raster_pipeline.html>
 
 f_tif <- system.file("extdata/storml_elev.tif", package="gdalraster")
 f_out <- file.path(tempdir(), "storml_elev_epsg_32100.gdalg.json")
@@ -455,12 +935,24 @@ alg$release()
 
 # content of the .gdalg.json file
 readLines(f_out, warn = FALSE) |> writeLines()
+#> {
+#>   "type":"gdal_streamed_alg",
+#>   "command_line":"gdal raster pipeline read --input \/home\/runner\/work\/_temp\/Library\/gdalraster\/extdata\/storml_elev.tif ! reproject --dst-crs EPSG:32100",
+#>   "gdal_version":"3120200"
+#> }
 
 (ds <- new(GDALRaster, f_out))
+#> C++ object of class <GDALRaster>
+#>   • Driver: GDAL Streamed Algorithm driver (GDALG)
+#>   • DSN: "/tmp/RtmpYz2q7S/storml_elev_epsg_32100.gdalg.json"
+#>   • Dimensions: 145, 110, 1
+#>   • CRS: NAD83 / Montana (EPSG:32100)
+#>   • Pixel resolution: 29.986648, 29.986648
+#>   • Bbox: 307558.912155, 206741.650976, 311906.976180, 210040.182306
 
 plot_raster(ds, legend = TRUE)
 
+
 ds$close()
 unlink(f_out)
-}
 ```

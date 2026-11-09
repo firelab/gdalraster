@@ -91,9 +91,9 @@ remote server to the host where the filtering is done.
 ## Examples
 
 ``` r
-if (FALSE) { # gdal_version_num() >= gdal_compute_version(3, 11, 0)
 # Requires GDAL >= 3.11
 data_dir <- system.file("extdata", package="gdalraster")
 vsi_glob(file.path(data_dir, "ynp*"))
-}
+#> [1] "/home/runner/work/_temp/Library/gdalraster/extdata/ynp_fires_1984_2022.gpkg"
+#> [2] "/home/runner/work/_temp/Library/gdalraster/extdata/ynp_features.zip"        
 ```
