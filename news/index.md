@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.7.0.9002 (dev)
+## gdalraster 2.7.0.9003 (dev)
+
+- fix `GDALVector$writeArrowBatch()`: add missing null check before
+  calling release on the input array struct
+  ([\#1023](https://github.com/firelab/gdalraster/issues/1023))
+  (2026-11-09)
 
 - adds
   [`g_export_to_json()`](https://firelab.github.io/gdalraster/reference/g_export_to_json.md):

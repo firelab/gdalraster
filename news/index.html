@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,8 +56,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.0.9002" id="gdalraster-2709002-dev">gdalraster 2.7.0.9002 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709002-dev"></a></h2>
-<ul><li><p>adds <code><a href="../reference/g_export_to_json.html">g_export_to_json()</a></code>: convert WKB/WKT geometries into GeoJSON-style format using <code>OGR_G_ExportToJsonEx()</code> in the GDAL Vector C API (<a href="https://github.com/firelab/gdalraster/issues/1017" class="external-link">#1017</a>) (2026-10-01)</p></li>
+<h2 class="pkg-version" data-toc-text="2.7.0.9003" id="gdalraster-2709003-dev">gdalraster 2.7.0.9003 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709003-dev"></a></h2>
+<ul><li><p>fix <code>GDALVector$writeArrowBatch()</code>: add missing null check before calling release on the input array struct (<a href="https://github.com/firelab/gdalraster/issues/1023" class="external-link">#1023</a>) (2026-11-09)</p></li>
+<li><p>adds <code><a href="../reference/g_export_to_json.html">g_export_to_json()</a></code>: convert WKB/WKT geometries into GeoJSON-style format using <code>OGR_G_ExportToJsonEx()</code> in the GDAL Vector C API (<a href="https://github.com/firelab/gdalraster/issues/1017" class="external-link">#1017</a>) (2026-10-01)</p></li>
 <li><p>class <code>GDALAlg</code>: add argument information for “not available in a pipeline step”, and mutual / unidirectional dependencies (GDAL &gt;= 3.13) (<a href="https://github.com/firelab/gdalraster/issues/1011" class="external-link">#1011</a>) (2026-09-30)</p></li>
 <li><p>add <code><a href="../reference/g_unary_op.html">g_concave_hull_of_polygons()</a></code> wrapping <code>OGR_G_ConcaveHullOfPolygons()</code> in GDAL &gt;= 3.13 (<a href="https://github.com/firelab/gdalraster/issues/1010" class="external-link">#1010</a>) (2026-09-26)</p></li>
 </ul></div>

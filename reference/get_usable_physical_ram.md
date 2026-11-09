@@ -28,5 +28,5 @@ This memory may already be partly used by other processes.
 ``` r
 get_usable_physical_ram()
 #> integer64
-#> [1] 16759447552
+#> [1] 16759443456
 ```
