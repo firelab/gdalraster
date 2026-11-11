@@ -125,14 +125,24 @@ do not require any separate installation of external libraries for GDAL.
 provides pre-compiled binary packages that track CRAN releases, for the
 following platforms:
 
-[![Conda
-Platforms](https://img.shields.io/conda/pn/conda-forge/r-gdalraster?color=blue)](https://anaconda.org/conda-forge/r-gdalraster)
+[![Anaconda-Server
+Badge](https://anaconda.org/conda-forge/r-gdalraster/badges/platforms.svg)](https://anaconda.org/conda-forge/r-gdalraster)
 
 To install **gdalraster** into a particular conda environment with
 [conda](https://docs.conda.io/projects/conda/en/stable/), in the
 activated environment:
 
     conda install --channel conda-forge r-gdalraster
+
+Or, with [Pixi](https://pixi.prefix.dev/latest/):
+
+    # for adding to your local project
+    pixi add r-gdalraster
+    # for installing globally
+    pixi global install r-gdalraster
+
+See also: [Using R and GDAL from
+conda-forge](https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.html)
 
 ### From R-universe
 
