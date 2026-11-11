@@ -452,7 +452,7 @@ args <- c("--overwrite", f_tif, f_gpkg)
 (ds <- alg$output())
 #> C++ object of class <GDALRaster>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/RtmpiGYW0C/storml_elev.gpkg"
+#>   • DSN: "/tmp/RtmpYlVnqw/storml_elev.gpkg"
 #>   • Dimensions: 143, 107, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -633,7 +633,7 @@ args <- c("--bbox", bb, "--overwrite", f, f_clip)
 (lyr <- alg$output())
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/RtmpiGYW0C/ynp_fires_clip.gpkg"
+#>   • DSN: "/tmp/RtmpYlVnqw/ynp_fires_clip.gpkg"
 #>   • Layer: mtbs_perims
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Geometry: MULTIPOLYGON
@@ -777,7 +777,7 @@ args <- list(input = f,
 (ds <- alg$output())
 #> C++ object of class <GDALRaster>
 #>   • Driver: GeoTIFF (GTiff)
-#>   • DSN: "/tmp/RtmpiGYW0C/ynp_fire_year.tif"
+#>   • DSN: "/tmp/RtmpYlVnqw/ynp_fire_year.tif"
 #>   • Dimensions: 1155, 1218, 1
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Pixel resolution: 90.000000, 90.000000
@@ -944,7 +944,7 @@ readLines(f_out, warn = FALSE) |> writeLines()
 (ds <- new(GDALRaster, f_out))
 #> C++ object of class <GDALRaster>
 #>   • Driver: GDAL Streamed Algorithm driver (GDALG)
-#>   • DSN: "/tmp/RtmpiGYW0C/storml_elev_epsg_32100.gdalg.json"
+#>   • DSN: "/tmp/RtmpYlVnqw/storml_elev_epsg_32100.gdalg.json"
 #>   • Dimensions: 145, 110, 1
 #>   • CRS: NAD83 / Montana (EPSG:32100)
 #>   • Pixel resolution: 29.986648, 29.986648

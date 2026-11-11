@@ -138,15 +138,21 @@
 <h3 id="from-conda-forge">From conda-forge<a class="anchor" aria-label="anchor" href="#from-conda-forge"></a>
 </h3>
 <p><a href="https://github.com/conda-forge/r-gdalraster-feedstock" class="external-link">Conda-forge</a> provides pre-compiled binary packages that track CRAN releases, for the following platforms:</p>
-<p><a href="https://anaconda.org/conda-forge/r-gdalraster" class="external-link"><img src="https://img.shields.io/conda/pn/conda-forge/r-gdalraster?color=blue" alt="Conda Platforms"></a></p>
+<p><a href="https://anaconda.org/conda-forge/r-gdalraster" class="external-link"><img src="https://anaconda.org/conda-forge/r-gdalraster/badges/platforms.svg" alt="Anaconda-Server Badge"></a></p>
 <p>To install <strong>gdalraster</strong> into a particular conda environment with <a href="https://docs.conda.io/projects/conda/en/stable/" class="external-link">conda</a>, in the activated environment:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>conda install <span class="sc">--</span>channel conda<span class="sc">-</span>forge r<span class="sc">-</span>gdalraster</span></code></pre></div>
+<p>Or, with <a href="https://pixi.prefix.dev/latest/" class="external-link">Pixi</a>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># for adding to your local project</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>pixi add r<span class="sc">-</span>gdalraster</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># for installing globally</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>pixi global install r<span class="sc">-</span>gdalraster</span></code></pre></div>
+<p>See also: <a href="https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.html">Using R and GDAL from conda-forge</a></p>
 </div>
 <div class="section level3">
 <h3 id="from-r-universe">From R-universe<a class="anchor" aria-label="anchor" href="#from-r-universe"></a>
 </h3>
 <p><a href="https://firelab.r-universe.dev/gdalraster" class="external-link">R-universe</a> provides pre-compiled binary packages for Windows and macOS that track the development version of <strong>gdalraster</strong>. New packages are built usually within ~1 hour of the most recent commit in branch <code>main</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the development version from r-universe</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gdalraster"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://firelab.r-universe.dev"</span>, <span class="st">"https://cran.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -158,16 +164,16 @@
 </h4>
 <p>GDAL &gt;= 3.1.0 built with GEOS is required, but a more recent version is recommended.</p>
 <p>On Ubuntu, recent versions of geospatial libraries can be installed from the <a href="https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable" class="external-link">ubuntugis-unstable PPA</a> with the following commands. Note that libxml2 is required for the R package <strong>xml2</strong> which is a dependency, so we go ahead and install it here as well:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>sudo add<span class="sc">-</span>apt<span class="sc">-</span>repository ppa<span class="sc">:</span>ubuntugis<span class="sc">/</span>ubuntugis<span class="sc">-</span>unstable</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>sudo apt update</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>sudo apt install libgdal<span class="sc">-</span>dev libgeos<span class="sc">-</span>dev libxml2<span class="sc">-</span>dev</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>sudo add<span class="sc">-</span>apt<span class="sc">-</span>repository ppa<span class="sc">:</span>ubuntugis<span class="sc">/</span>ubuntugis<span class="sc">-</span>unstable</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>sudo apt update</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>sudo apt install libgdal<span class="sc">-</span>dev libgeos<span class="sc">-</span>dev libxml2<span class="sc">-</span>dev</span></code></pre></div>
 <p>The versions in ubuntugis-unstable generally work well and are more up-to-date, but less recent versions in the <a href="https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa" class="external-link">ubuntugis-stable PPA</a> could be used instead.</p>
 <p>Package <strong>sf</strong> provides helpful <a href="https://github.com/r-spatial/sf#linux" class="external-link">instructions</a> for installing the geospatial libraries on other Linux distributions.</p>
 <p>With the dependent libraries available on the system, install from CRAN:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gdalraster"</span><span class="op">)</span></span></code></pre></div>
 <p>Or install the development version from GitHub using package <a href="https://remotes.r-lib.org/" class="external-link">remotes</a>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"firelab/gdalraster"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -175,7 +181,7 @@
 </h4>
 <p><a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">RTools</a> is needed to install from source on Windows. RTools since version 4.2 includes GDAL and all other dependent libraries that are needed to compile <strong>gdalraster</strong>. Note that CRAN release periodic revisions to RTools that often include updates to the libraries as new versions become available. <a href="https://cran.r-project.org/bin/windows/Rtools/rtools45/news.html" class="external-link">Release 6768</a> of RTools 4.5 contains GDAL 3.12.1, GEOS 3.14.1 and PROJ 9.7.1.</p>
 <p>With RTools installed:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the development version from GitHub</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"firelab/gdalraster"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -183,9 +189,9 @@
 <h4 id="macos">macOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h4>
 <p>GDAL can be installed with Homebrew:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>brew install gdal</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>brew install gdal</span></code></pre></div>
 <p>then</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the development version from GitHub</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"firelab/gdalraster"</span><span class="op">)</span></span></code></pre></div>
 <p>It is not recommended to mix source installations and installation of macOS binaries from CRAN. Consider installing the development version from R-universe instead.</p>
@@ -195,7 +201,7 @@
 <h3 id="docker">Docker<a class="anchor" aria-label="anchor" href="#docker"></a>
 </h3>
 <p>See <a href="https://github.com/hypertidy/gdal-r-ci" class="external-link uri">https://github.com/hypertidy/gdal-r-ci</a> (thanks to Michael Sumner):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>docker pull ghcr.io<span class="sc">/</span>hypertidy<span class="sc">/</span>gdal<span class="sc">-</span>r<span class="sc">-</span>full<span class="sc">:</span>latest</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>docker pull ghcr.io<span class="sc">/</span>hypertidy<span class="sc">/</span>gdal<span class="sc">-</span>r<span class="sc">-</span>full<span class="sc">:</span>latest</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

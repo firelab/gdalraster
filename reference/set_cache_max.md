@@ -42,7 +42,7 @@ before using this function.
 ``` r
 (cachemax <- get_cache_max("bytes"))
 #> integer64
-#> [1] 837972170
+#> [1] 837971965
 
 set_cache_max(1e8)
 get_cache_max()  # returns in MB by default

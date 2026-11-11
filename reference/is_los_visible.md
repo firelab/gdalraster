@@ -134,7 +134,7 @@ ptsB <- matrix(ptsB, nrow = 3, ncol = 3, byrow = TRUE)
 is_los_visible(dem, ptA, ptsB)
 #> → checking line-of-sight...
 #>  ■■■■■■■■■■■                       33% |  ETA:  0s
-#> ✔ Done (7ms)
+#> ✔ Done (8ms)
 #> 
 #> [1]  TRUE  TRUE FALSE
 
@@ -221,6 +221,9 @@ is_los_visible(ds, ptA, features$geom, srsB = lyr$getSpatialRef(),
                ZinterpB = "ACTUAL")
 #> → transforming `ptsB`...
 #> → checking line-of-sight...
+#>  ■■■■■■■■■■■                       33% |  ETA:  0s
+#> ✔ Done (7ms)
+#> 
 #> [1]  TRUE  TRUE FALSE
 
 ds$close()
