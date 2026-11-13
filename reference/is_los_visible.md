@@ -134,7 +134,7 @@ ptsB <- matrix(ptsB, nrow = 3, ncol = 3, byrow = TRUE)
 is_los_visible(dem, ptA, ptsB)
 #> → checking line-of-sight...
 #>  ■■■■■■■■■■■                       33% |  ETA:  0s
-#> ✔ Done (9ms)
+#> ✔ Done (6ms)
 #> 
 #> [1]  TRUE  TRUE FALSE
 
