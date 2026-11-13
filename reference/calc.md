@@ -204,14 +204,11 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpYlVnqw/rastcalc21584f36f526.tif"
+#> ℹ output written to: "/tmp/RtmpNGNUTI/rastcalc223e2cbaa2a.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
 ds$getStatistics(band = 1, approx_ok = FALSE, force = TRUE)
-#>  ■■■■■■■■■                         25% |  ETA:  0s
-#> ✔ Done (12ms)
-#> 
 #> [1] 37.000000 57.000000 44.928763  4.384622
 ds$close()
 
@@ -231,10 +228,10 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
 (ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
-#> ℹ output written to: "calc215862b7ad4c"
+#> ℹ output written to: "calc223e354c0c55"
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory raster, vector and multidimensional raster (MEM)
-#>   • DSN: "calc215862b7ad4c"
+#>   • DSN: "calc223e354c0c55"
 #>   • Dimensions: 149, 112, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -308,7 +305,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpYlVnqw/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/RtmpNGNUTI/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)

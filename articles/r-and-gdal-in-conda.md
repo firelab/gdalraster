@@ -152,7 +152,7 @@ dependencies. The plugin system for `conda` was developed by
 [Quansight](https://quansight.com/) and [Hobu](https://hobu.co/), with
 more details at:
 
-<https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/>
+<https://www.quansight.com/blog/introducing-lightweight-versions-of-gdal-and-pdal>
 
 The following packages are available from conda-forge.
 
