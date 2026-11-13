@@ -95,7 +95,7 @@ R package names in conda-forge always have the `r-` prefix. When using R in `con
 
 GDAL is available in conda-forge as a modular set of packages that take advantage of GDAL's support of deferred plugins for geospatial format drivers. This provides an efficient and streamlined approach to handling dependencies. The plugin system for `conda` was developed by [Quansight](https://quansight.com/) and [Hobu](https://hobu.co/), with more details at:
 
-https://quansight.com/post/introducing-lightweight-versions-of-gdal-and-pdal/
+https://www.quansight.com/blog/introducing-lightweight-versions-of-gdal-and-pdal
 
 The following packages are available from conda-forge.
 
