@@ -1,0 +1,288 @@
+---
+title: "Draft Bindings to the GDAL Multidimensional Raster API"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Michael Sumner, Chris Toney
+
+Last modified: 2026-11-14
+
+Comment/discussion: see the GitHub discussion linked from this article's pull request.
+
+## Summary
+
+This document describes R bindings to the GDAL Multidimensional Raster API proposed for inclusion in package **gdalraster**, analogous to the existing support for the raster and vector data models. GDAL reads and writes netCDF, HDF5, Zarr (V2 and V3), GRIB, and virtual stores (kerchunk references, multidimensional VRT) through one API, locally or on cloud object storage via `/vsicurl/`, `/vsis3/`, `/vsigs/` and the other VSI handlers. Low-level, stable access to that API from R should be of interest to developers of higher level interfaces, and to users of large cloud-hosted arrays in the earth and ocean sciences.
+
+**gdalraster** already provides `mdim_info()`, `mdim_translate()` and `mdim_as_classic()` (2.2.0), and the `gdal mdim` command line algorithms via `gdal_alg()` and `gdal_run()`. These work on a data source name and return JSON, a new file, or a classic `GDALRaster`. What is missing is a persistent object for navigating a multidimensional dataset and reading arrays directly, which is what this document proposes.
+
+The proposal is two classes implemented via `RCPP_EXPOSED_CLASS`, with the multidim C API (`GDALGroupH`, `GDALMDArrayH`, `GDALDimensionH`, `GDALAttributeH`, `GDALExtendedDataTypeH`). The bindings would be added in a series of small pull requests and documented as experimental until the interface settles.
+
+## Description of the interface
+
+### Data model
+
+The [GDAL Multidimensional Raster Data Model](https://gdal.org/en/stable/user/multidim_raster_data_model.html):
+
+* a **dataset** opened with `GDAL_OF_MULTIDIM_RASTER` has a root **group**
+* a group contains **arrays**, **dimensions**, **attributes** and sub-groups
+* an **array** (`GDALMDArray`) has an ordered list of dimensions, a data type, attributes, and optionally nodata, scale, offset, unit, and spatial reference
+* a **dimension** has a name, a size, an optional type and direction, and an optional indexing variable (the coordinate values along it)
+* an **attribute** is metadata attached to a group or an array (not to be confused with R object attributes, see below)
+
+### Two classes
+
+* `GDALMultiDimRaster` encapsulates the dataset and its root group. Groups, arrays, dimensions and attributes are addressed by full path from the root, e.g., `"/"`, `"/group/subgroup"`, `"/group/temperature"`.
+* `GDALMDArray` encapsulates one array, and holds a reference to the dataset that contains it so the array stays valid if the dataset object is closed or garbage collected.
+
+This follows `GDALVector`, which encapsulates an `OGRLayer` and the `GDALDataset` that contains it. As discussed in [#766](https://github.com/firelab/gdalraster/discussions/766), the multidimensional case is "analogous to the case when cli output is a vector dataset." Objects of class `GDALMDArray` are returned from C++ with `new` and `Rcpp::wrap()`, without object factories.
+
+Groups, dimensions, attributes and data types are not classes. They are returned as plain R lists and data frames, in the same way that `GDALVector$getLayerDefn()` returns a feature class definition as a list. Groups as objects may be considered later for creating nested structures.
+
+### Path addressing
+
+Methods of `GDALMultiDimRaster` take a full path. `ds$getMDArrayNames("/")` lists the arrays in the root group, and `ds$openMDArray("/group/temperature")` opens an array in a sub-group. This needs `GDALGroupOpenGroupFromFullname()` and `GDALGroupOpenMDArrayFromFullname()` (GDAL >= 3.2).
+
+### Reading
+
+`GDALMDArray$read(start, count, step)` reads a hyperslab. `start` is 0-based, as are all offsets in **gdalraster** class methods, with one value per dimension in the array's own dimension order. The return value is a plain vector, in GDAL's order (the last dimension varies fastest), with no R attributes, the same as `GDALRaster$read()`. Data types follow `GDALRaster`: `readByteAsRaw` is supported as a writable field, Int64 is returned as `bit64::integer64`, and string arrays are returned as `character`. Compound data types are not supported initially.
+
+The stand-alone function `mdim_read()` reads an array by data source name or from an open dataset, and returns the vector with a `"gis"` attribute, following `read_ds()`:
+
+```r
+attr(v, "gis")
+#> list(type = "multidim", dim, dim_names, coords, bbox, srs, datatype,
+#>      nodata, scale, offset, unit, dim_units, calendar)
+```
+
+`gis$dim` is fastest-varying first, i.e., the reverse of the array's dimension order, which is the same convention as `c(xsize, ysize, nbands)` from `read_ds()`. No data are reordered. An argument `as_array = TRUE` additionally sets `dim` on the returned vector for use as an R array.
+
+A note on terms: "attributes" in this document and in the class methods (`getAttributes()`) always means GDAL attributes, i.e., metadata stored on groups and arrays. The only R object attribute set by the read path is `"gis"` (and `dim` if requested).
+
+### Units and time
+
+Units and calendars are returned as stored, as character strings (e.g., `"hours since 1959-01-01 00:00:00"`, `"noleap"`, `"degC"`), consistent with `GDALRaster$getUnitType()`. No dependency on packages **units** or **CFtime** is proposed. Downstream packages can decode them as needed.
+
+## class GDALMultiDimRaster
+
+Proposed class definition. The comment on each method gives the pull request in the planned series where it would be added.
+
+```cpp
+class GDALMultiDimRaster {
+ public:
+    GDALMultiDimRaster();
+    explicit GDALMultiDimRaster(const Rcpp::CharacterVector &filename);
+    GDALMultiDimRaster(const Rcpp::CharacterVector &filename, bool read_only);
+    GDALMultiDimRaster(const Rcpp::CharacterVector &filename, bool read_only,
+                       const Rcpp::Nullable<Rcpp::CharacterVector> &open_options);
+    GDALMultiDimRaster(const Rcpp::CharacterVector &filename, bool read_only,
+                       const Rcpp::Nullable<Rcpp::CharacterVector> &open_options,
+                       bool shared,
+                       const Rcpp::Nullable<Rcpp::CharacterVector> &allowed_drivers);
+
+    // read/write fields exposed to R
+    Rcpp::CharacterVector infoOptions = Rcpp::CharacterVector::create();
+    bool quiet = false;
+
+    // dataset (PR 1)
+    std::string getFilename() const;
+    void open(bool read_only);
+    bool isOpen() const;
+    bool isReadOnly() const;
+    std::string getDriverShortName() const;
+    std::string getDriverLongName() const;
+    Rcpp::CharacterVector getFileList() const;
+    std::string info() const;  // via the existing mdim_info() code
+    void close();
+
+    // navigation by full path (PR 1)
+    Rcpp::CharacterVector getGroupNames(const std::string &path) const;
+    Rcpp::CharacterVector getMDArrayNames(const std::string &path) const;
+    Rcpp::DataFrame getDimensions(const std::string &path) const;
+    Rcpp::List getAttributes(const std::string &path) const;
+    Rcpp::List getGroupInfo(const std::string &path) const;
+
+    // arrays (PR 2)
+    GDALMDArray *openMDArray(const std::string &path) const;
+
+    // creation (PR 7)
+    void createGroup(const std::string &path);
+    void createDimension(const std::string &path, const std::string &name,
+                         const std::string &type, const std::string &direction,
+                         double size);
+    GDALMDArray *createMDArray(const std::string &path,
+                               const Rcpp::CharacterVector &dim_paths,
+                               const std::string &data_type,
+                               const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+    void setAttribute(const std::string &path, const std::string &name,
+                      const Rcpp::RObject &value);
+    void deleteAttribute(const std::string &path, const std::string &name);
+};
+```
+
+## class GDALMDArray
+
+The C++ class needs a name other than `GDALMDArray`, which is defined by GDAL in `gdal_priv.h`. It would be exposed to R as `GDALMDArray` if that works cleanly with `RCPP_EXPOSED_CLASS` and the `Rcpp_` aliases in the documentation (to be checked in PR 2).
+
+```cpp
+class GDALMDArrayR {  // exposed to R as GDALMDArray
+ public:
+    // read/write fields exposed to R
+    bool readByteAsRaw = false;
+    bool quiet = false;
+
+    // description (PR 2)
+    std::string getName() const;
+    std::string getFullName() const;
+    int getDimensionCount() const;
+    Rcpp::DataFrame getDimensions() const;
+    Rcpp::List getDataType() const;
+    Rcpp::List getAttributes() const;
+    SEXP getNoDataValue() const;
+    SEXP getScale() const;
+    SEXP getOffset() const;
+    std::string getUnit() const;
+    std::string getSpatialRef() const;
+    Rcpp::NumericVector getBlockSize() const;
+    Rcpp::List getInfo() const;  // all of the above in one call
+    SEXP getCoordinateValues(int dim) const;
+
+    // I/O (PR 2, write in PR 7)
+    SEXP read(const Rcpp::NumericVector &start,
+              const Rcpp::NumericVector &count,
+              const Rcpp::Nullable<Rcpp::NumericVector> &step) const;
+    void write(const Rcpp::RObject &data,
+               const Rcpp::NumericVector &start,
+               const Rcpp::NumericVector &count,
+               const Rcpp::Nullable<Rcpp::NumericVector> &step);
+
+    // derived arrays, each returns a new GDALMDArray (PR 3, PR 4)
+    GDALMDArrayR *getView(const std::string &view_expr) const;
+    GDALMDArrayR *transpose(const Rcpp::IntegerVector &axes) const;
+    GDALMDArrayR *getUnscaled() const;
+    GDALMDArrayR *getMask() const;
+    GDALMDArrayR *getResampled(...) const;   // GDAL >= 3.4
+    GDALMDArrayR *getGridded(...) const;     // GDAL >= 3.7
+
+    // bridge to the raster data model (PR 3)
+    GDALRaster *asClassicDataset(int idx_xdim, int idx_ydim,
+                                 const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+
+    // chunk-aware I/O and statistics (PR 5)
+    void adviseRead(const Rcpp::NumericVector &start,
+                    const Rcpp::NumericVector &count,
+                    const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    Rcpp::NumericVector getProcessingChunkSize(double max_mem) const;
+    Rcpp::List computeStatistics(bool approx_ok) const;
+
+    // raw block references (PR 6, GDAL >= 3.12)
+    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_idx) const;
+
+    void close();
+};
+```
+
+## Examples
+
+The examples below use public data on Google Cloud Storage, without credentials. Each one shows what works with **gdalraster** today, followed by the proposed interface. The proposed interface is not implemented yet, so its output is not shown.
+
+For remote Zarr, avoid a directory listing on open:
+
+```r
+set_config_option("GDAL_DISABLE_READDIR_ON_OPEN", "EMPTY_DIR")
+```
+
+### Example: a local netCDF file
+
+A small netCDF file cut from ERA5 with `mdim_translate()`: hourly 2 m air temperature over Tasmania for one day. Coordinate subsets keep the source dimension names. Time bounds are numeric, in the units of the stored values.
+
+```r
+## today
+era5 <- paste0('ZARR:"/vsicurl/https://storage.googleapis.com/',
+               'gcp-public-data-arco-era5/ar/',
+               '1959-2022-full_37-1h-0p25deg-chunk-1.zarr-v2"')
+f <- file.path(tempdir(), "era5_tas_tasmania.nc")
+mdim_translate(era5, f, output_format = "netCDF",
+               array_specs = "2m_temperature",
+               subset_specs = c("latitude(-44,-39)", "longitude(143,149)",
+                                "time(534720,534743)"),
+               creation_options = c("FORMAT=NC4", "ARRAY:COMPRESS=DEFLATE"))
+mdim_info(f)
+
+## proposed
+ds <- new(GDALMultiDimRaster, f)
+ds$getMDArrayNames("/")
+arr <- ds$openMDArray("/2m_temperature")
+arr$getDimensions()
+str(arr$getInfo())
+v <- mdim_read(ds, "/2m_temperature")
+str(attr(v, "gis"))
+```
+
+### Example: ERA5 on Zarr, and what chunking costs
+
+The ARCO ERA5 Zarr store has 35 arrays. `2m_temperature` is 552264 hours x 721 latitudes x 1440 longitudes, stored in chunks of 1 x 721 x 1440: one global field per hour. Opening the store reads only the consolidated metadata. Reading one global field is one fetch. A time series at one location needs one fetch per hour, so a month at a point touches 744 chunks.
+
+```r
+## today: one hour as a classic raster via a view
+ds <- mdim_as_classic(era5, "2m_temperature", idx_xdim = 1, idx_ydim = 0,
+                      view_expr = "[534720,...]")
+ds$getBlockSize(1)
+system.time(v <- ds$read(1, 0, 0, 1440, 721, 1440, 721))
+
+## proposed
+ds <- new(GDALMultiDimRaster, era5)
+arr <- ds$openMDArray("/2m_temperature")
+arr$getBlockSize()
+system.time(v <- arr$read(start = c(534720, 0, 0), count = c(1, 721, 1440)))
+```
+
+The time to read one whole block is the baseline for any read on this array: one fetch and one decode. A planned read that touches n distinct chunks costs about n blocks, whatever the number of points it serves.
+
+### Example: a tripolar ocean model grid
+
+CMIP6 GFDL-CM4 historical monthly sea surface temperature, `tos`, is 1980 months x 1080 x 1440 on the MOM6 tripolar grid, in chunks of 12 x 1080 x 1440. The array has no 1-D coordinates: position is given by 2-D `lat` and `lon` arrays named in its `coordinates` attribute, and the top row folds around two northern poles. Time is in `hours since 1850-01-16 12:00:00` with the `noleap` calendar.
+
+```r
+## today
+gfdl <- paste0('ZARR:"/vsicurl/https://storage.googleapis.com/cmip6/CMIP6/CMIP/',
+               'NOAA-GFDL/GFDL-CM4/historical/r1i1p1f1/Omon/tos/gn/v20180701"')
+mdim_info(gfdl, "tos")
+ds <- mdim_as_classic(gfdl, "tos", idx_xdim = 1, idx_ydim = 0,
+                      view_expr = "[0,...]")
+ds$getGeoTransform()  # index space only
+
+## proposed
+ds <- new(GDALMultiDimRaster, gfdl)
+arr <- ds$openMDArray("/tos")
+arr$getAttributes()$coordinates
+lat <- ds$openMDArray("/lat")$read()
+lon <- ds$openMDArray("/lon")$read()
+```
+
+Mapping this array onto a regular grid is the purpose of `GDALMDArray$getGridded()` and `$getResampled()` (planned PR 4).
+
+## Further consideration / TBD
+
+* `mdim_read()` return value: `"gis"` attribute only, or also `dim` by default?
+* Whether `returnMdimAsClassicRaster` for `GDALAlg` ([#766](https://github.com/firelab/gdalraster/discussions/766)) still belongs in this series, or is covered by `GDALMDArray$asClassicDataset()`.
+* `GDALAlg` returning a `GDALMultiDimRaster` object for multidimensional output, as an opt-in field (the dataset name stays the default).
+* The R error handler is called from GDAL worker threads during remote Zarr reads, observed as a C stack usage error and a crashed R session with **gdalraster** 2.7. It ran cleanly with `CPL_LOG_ERRORS=ON` and `GDAL_NUM_THREADS=1`. A fix in the error handler is probably needed first.
+* View subsets in `gdal mdim convert` / `mdim_translate()` rename dimensions (GDAL [#8305](https://github.com/OSGeo/gdal/issues/8305)); index subsets that keep names are requested in GDAL [#14280](https://github.com/OSGeo/gdal/issues/14280).
+* Time subsets in `mdim_translate()` take numeric bounds only. A base R helper for CF time units with the standard, noleap, all_leap and 360_day calendars may be useful.
+* Block-level helpers: `GDALRaster` already has `$get_block_indexing()`, `$getActualBlockSize()`, `$readBlock()`, `$make_chunk_index()` and `$readChunk()`, which work today on 2-D slices via `mdim_as_classic()`. Multidimensional versions should keep the same column scheme, generalized to N dimensions.
+* Planned series of pull requests: 1 `GDALMultiDimRaster` read-only navigation, 2 `GDALMDArray` and hyperslab read, 3 views and the classic bridge, 4 resampling and gridding, 5 chunk-aware I/O and statistics, 6 raw block references, 7 writing, 8 `GDALAlg` integration and a vignette.
+
+## Document changelog
+
+* initial draft (2026-11-14)
+
+## Contributors
+
+* [@mdsumner](https://github.com/mdsumner)
+* [@ctoney](https://github.com/ctoney)
