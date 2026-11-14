@@ -2706,6 +2706,7 @@ END_RCPP
 
 RcppExport SEXP _rcpp_module_boot_mod_cmb_table();
 RcppExport SEXP _rcpp_module_boot_mod_GDALAlg();
+RcppExport SEXP _rcpp_module_boot_mod_GDALMultiDimRaster();
 RcppExport SEXP _rcpp_module_boot_mod_GDALRaster();
 RcppExport SEXP _rcpp_module_boot_mod_GDALVector();
 RcppExport SEXP _rcpp_module_boot_mod_running_stats();
@@ -2926,6 +2927,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gdalraster_transform_bounds", (DL_FUNC) &_gdalraster_transform_bounds, 5},
     {"_rcpp_module_boot_mod_cmb_table", (DL_FUNC) &_rcpp_module_boot_mod_cmb_table, 0},
     {"_rcpp_module_boot_mod_GDALAlg", (DL_FUNC) &_rcpp_module_boot_mod_GDALAlg, 0},
+    {"_rcpp_module_boot_mod_GDALMultiDimRaster", (DL_FUNC) &_rcpp_module_boot_mod_GDALMultiDimRaster, 0},
     {"_rcpp_module_boot_mod_GDALRaster", (DL_FUNC) &_rcpp_module_boot_mod_GDALRaster, 0},
     {"_rcpp_module_boot_mod_GDALVector", (DL_FUNC) &_rcpp_module_boot_mod_GDALVector, 0},
     {"_rcpp_module_boot_mod_running_stats", (DL_FUNC) &_rcpp_module_boot_mod_running_stats, 0},
