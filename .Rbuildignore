@@ -27,3 +27,4 @@ config.status
 ^.lintr
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
