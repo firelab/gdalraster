@@ -53,6 +53,7 @@ for per-object settings."><meta property="og:image" content="https://firelab.git
     <li><a class="dropdown-item" href="../articles/gdal-config-quick-ref.html">GDAL Config Quick Reference</a></li>
     <li><a class="dropdown-item" href="../articles/use-gdal-cli-from-r.html">Using 'gdal' CLI algorithms from R</a></li>
     <li><a class="dropdown-item" href="../articles/r-and-gdal-in-conda.html">Using R and GDAL from conda-forge</a></li>
+    <li><a class="dropdown-item" href="../articles/gdalmultidim-draft.html">Draft Bindings to the GDAL Multidimensional Raster API</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Presentations</h6></li>
     <li><a class="dropdown-item" href="https://firelab.github.io/gdalraster/foss4gna-gdalraster.html">FOSS4G North America 2026</a></li>
@@ -624,8 +625,8 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Help URL</span>: <span style="color: #0000BB; font-style: italic;">&lt;https://gdal.org/programs/gdal_raster_clip.html&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">alg</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■                               </span>   1% |  ETA:  1s</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Done (11ms)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;">■                               </span>   1% |  ETA:  0s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Done (12ms)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
@@ -633,7 +634,7 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-in"><span><span class="op">(</span><span class="va">ds_clip</span> <span class="op">&lt;-</span> <span class="va">alg</span><span class="op">$</span><span class="fu">output</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoTIFF (GTiff)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpWI9TlY/elev_clip.tif"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpBO5iuF/elev_clip.tif"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 123, 87, 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 / UTM zone 12N (EPSG:26912)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 30.000000, 30.000000</span>
@@ -832,7 +833,7 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-in"><span><span class="op">(</span><span class="va">lyr</span> <span class="op">&lt;-</span> <span class="va">alg</span><span class="op">$</span><span class="fu">output</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALVector&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: GeoPackage (GPKG)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpWI9TlY/polygons_test.gpkg"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: "/tmp/RtmpBO5iuF/polygons_test.gpkg"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Layer</span>: poly_multipoly</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: NAD83 (EPSG:4269)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Geometry</span>: POLYGON</span>
@@ -840,7 +841,7 @@ Please use with those cautions in mind. Bug reports may be filed at:
 <span class="r-in"><span><span class="va">alg</span><span class="op">$</span><span class="fu">release</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyr</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> INFO: Open of `/tmp/RtmpWI9TlY/polygons_test.gpkg'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> INFO: Open of `/tmp/RtmpBO5iuF/polygons_test.gpkg'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       using driver `GPKG' successful.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Layer name: poly_multipoly</span>

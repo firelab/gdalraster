@@ -2,6 +2,10 @@
 
 ## gdalraster 2.7.0.9003 (dev)
 
+- add web article “Draft Bindings to the GDAL Multidimensional Raster
+  API”: proposed interface for classes `GDALMultiDimRaster` and
+  `GDALMDArray` (2026-11-14)
+
 - fix `GDALVector$writeArrowBatch()`: add missing null check before
   calling release on the input array struct
   ([\#1023](https://github.com/firelab/gdalraster/issues/1023))

@@ -20,6 +20,8 @@
   R](https://firelab.github.io/gdalraster/articles/use-gdal-cli-from-r.md):
 - [Using R and GDAL from
   conda-forge](https://firelab.github.io/gdalraster/articles/r-and-gdal-in-conda.md):
+- [Draft Bindings to the GDAL Multidimensional Raster
+  API](https://firelab.github.io/gdalraster/articles/gdalmultidim-draft.md):
 
 ### Presentations
 

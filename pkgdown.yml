@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   articles/gdal-block-cache: gdal-block-cache.html
   gdal-config-quick-ref: gdal-config-quick-ref.html
+  articles/gdalmultidim-draft: gdalmultidim-draft.html
   articles/gdalvector-draft: gdalvector-draft.html
   articles/r-and-gdal-in-conda: r-and-gdal-in-conda.html
   raster-api-tutorial: raster-api-tutorial.html
@@ -12,7 +13,7 @@ articles:
   articles/use-gdal-cli-from-r: use-gdal-cli-from-r.html
   vector-api-overview: vector-api-overview.html
   articles/vector-read-benchmarks: vector-read-benchmarks.html
-last_built: 2026-11-13T15:51Z
+last_built: 2026-11-14T01:19Z
 urls:
   reference: https://firelab.github.io/gdalraster/reference
   article: https://firelab.github.io/gdalraster/articles
