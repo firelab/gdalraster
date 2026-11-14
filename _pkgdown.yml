@@ -234,6 +234,7 @@ articles:
   - gdal-config-quick-ref
   - articles/use-gdal-cli-from-r
   - articles/r-and-gdal-in-conda
+  - articles/gdalmultidim-draft
 - title: Presentations
   navbar: Presentations
   contents:
