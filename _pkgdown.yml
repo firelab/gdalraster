@@ -26,6 +26,7 @@ reference:
   - GDALAlg-class
   - GDALRaster-class
   - GDALVector-class
+  - GDALMultiDimRaster-class
   - CmbTable-class
   - RunningStats-class
   - VSIFile-class

@@ -1,5 +1,7 @@
 # gdalraster 2.7.0.9003 (dev)
 
+* add class `GDALMultiDimRaster` (experimental): read-only navigation of a multidimensional raster dataset by full path, with methods `$getGroupNames()`, `$getMDArrayNames()`, `$getDimensions()`, `$getAttributes()`, `$getGroupInfo()` and `$info()` (GDAL >= 3.2); add test dataset `inst/extdata/mdim_small.nc` (2026-11-14)
+
 * add web article "Draft Bindings to the GDAL Multidimensional Raster API": proposed interface for classes `GDALMultiDimRaster` and `GDALMDArray` (2026-11-14)
 
 * fix `GDALVector$writeArrowBatch()`: add missing null check before calling release on the input array struct (#1023) (2026-11-09)
