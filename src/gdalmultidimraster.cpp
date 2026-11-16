@@ -452,15 +452,16 @@ Rcpp::List GDALMultiDimRaster::getGroupInfo(const std::string &path) const {
         Rcpp::Named("attributes") = attrs);
 }
 
-SEXP GDALMultiDimRaster::openMDArray(const std::string &path) const {
+GDALMDArrayR *GDALMultiDimRaster::openMDArray(const std::string &path) const {
     checkAccess_(GA_ReadOnly);
 
     GDALMDArrayH hArray = openMDArray_(path, true);
     auto arr = std::make_unique<GDALMDArrayR>();
     arr->setHandles_(hArray, m_hDataset);
-    // hand the object to R without a copy (cf. Rcpp::wrap() of an exposed
-    // class, which copies)
-    return Rcpp::internal::make_new_object(arr.release());
+    // a returned pointer to an exposed class is owned by R, which deletes it
+    // when the R object is garbage collected (no copy, see the Rcpp modules
+    // vignette, RcppCore/Rcpp#1533)
+    return arr.release();
 }
 
 void GDALMultiDimRaster::show() const {

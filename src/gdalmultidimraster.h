@@ -26,6 +26,8 @@
     typedef struct GDALDimensionHS *GDALDimensionH;
 #endif
 
+class GDALMDArrayR;
+
 class GDALMultiDimRaster {
  public:
     GDALMultiDimRaster();
@@ -61,7 +63,7 @@ class GDALMultiDimRaster {
     Rcpp::DataFrame getDimensions(const std::string &path) const;
     Rcpp::List getAttributes(const std::string &path) const;
     Rcpp::List getGroupInfo(const std::string &path) const;
-    SEXP openMDArray(const std::string &path) const;
+    GDALMDArrayR *openMDArray(const std::string &path) const;
 
     void show() const;
 
