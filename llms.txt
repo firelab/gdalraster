@@ -282,6 +282,11 @@ docker pull ghcr.io/hypertidy/gdal-r-full:latest
   [`Rcpp_GDALVector-class`](https://firelab.github.io/gdalraster/reference/GDALVector-class.md)
   [`GDALVector`](https://firelab.github.io/gdalraster/reference/GDALVector-class.md)
   : Class encapsulating a vector layer in a GDAL dataset
+- [`GDALMultiDimRaster-class`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md)
+  [`Rcpp_GDALMultiDimRaster`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md)
+  [`Rcpp_GDALMultiDimRaster-class`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md)
+  [`GDALMultiDimRaster`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md)
+  : Class encapsulating a multidimensional raster dataset (experimental)
 - [`CmbTable-class`](https://firelab.github.io/gdalraster/reference/CmbTable-class.md)
   [`Rcpp_CmbTable`](https://firelab.github.io/gdalraster/reference/CmbTable-class.md)
   [`Rcpp_CmbTable-class`](https://firelab.github.io/gdalraster/reference/CmbTable-class.md)
