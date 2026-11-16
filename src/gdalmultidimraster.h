@@ -23,6 +23,7 @@
     typedef struct GDALGroupHS *GDALGroupH;
     typedef struct GDALMDArrayHS *GDALMDArrayH;
     typedef struct GDALAttributeHS *GDALAttributeH;
+    typedef struct GDALDimensionHS *GDALDimensionH;
 #endif
 
 class GDALMultiDimRaster {
@@ -60,6 +61,7 @@ class GDALMultiDimRaster {
     Rcpp::DataFrame getDimensions(const std::string &path) const;
     Rcpp::List getAttributes(const std::string &path) const;
     Rcpp::List getGroupInfo(const std::string &path) const;
+    SEXP openMDArray(const std::string &path) const;
 
     void show() const;
 
@@ -80,6 +82,7 @@ class GDALMultiDimRaster {
 
 // helpers shared with the multidim classes, not exported to R
 std::string mdim_normalize_path_(const std::string &path);
+Rcpp::DataFrame mdim_dimensions_to_df_(GDALDimensionH *pahDims, size_t nCount);
 SEXP mdim_attribute_to_sexp_(GDALAttributeH hAttr);
 Rcpp::List mdim_attributes_to_list_(GDALAttributeH *pahAttrs, size_t nCount);
 

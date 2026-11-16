@@ -15,13 +15,14 @@
 #' * retrieve dataset information
 #' * list the groups and arrays in a group
 #' * describe the dimensions of a group or an array
-#' * read the attributes of a group or an array.
+#' * read the attributes of a group or an array
+#' * open an array as an object of class [`GDALMDArray`][GDALMDArray].
 #'
 #' Groups, arrays and dimensions are addressed by their full path from the
 #' root group, e.g., `"/"`, `"/group/subgroup"` or `"/group/temperature"`. A
 #' path without a leading `"/"` is taken from the root. Groups and dimensions
-#' are returned as plain \R lists and data frames. Methods to open and read
-#' an array (class `GDALMDArray`) will be added in a later release.
+#' are returned as plain \R lists and data frames. Arrays are opened as
+#' objects of class [`GDALMDArray`][GDALMDArray].
 #'
 #' **This class is experimental**. Its interface may change in future releases.
 #' Requires GDAL >= 3.2.
@@ -68,6 +69,7 @@
 #' ds$getDimensions(path)
 #' ds$getAttributes(path)
 #' ds$getGroupInfo(path)
+#' ds$openMDArray(path)
 #'
 #' ds$close()
 #' ```
@@ -197,12 +199,20 @@
 #' returned by \code{$getAttributes()}). An error is raised if no group is
 #' found at `path`.
 #'
+#' \code{$openMDArray(path)}\cr
+#' Opens the array at `path` (a character string giving the full path of an
+#' array, e.g., `"/temperature"` or `"/group/temperature"`) and returns an
+#' object of class [`GDALMDArray`][GDALMDArray]. The array holds a reference to
+#' the dataset, so it remains valid after \code{$close()} is called on this
+#' object. An error is raised if no array is found at `path`.
+#'
 #' \code{$close()}\cr
 #' Closes the dataset and the root group. No return value, called for side
 #' effects.
 #'
 #' @seealso
-#' [mdim_info()], [mdim_translate()], [mdim_as_classic()]
+#' [GDALMDArray], [mdim_read()], [mdim_info()], [mdim_translate()],
+#' [mdim_as_classic()]
 #'
 #' GDAL Multidimensional Raster Data Model:\cr
 #' \url{https://gdal.org/en/stable/user/multidim_raster_data_model.html}
@@ -223,6 +233,10 @@
 #' ds$getAttributes("/time")
 #'
 #' str(ds$getGroupInfo("/ocean"))
+#'
+#' arr <- ds$openMDArray("/ocean/sst")
+#' arr$getDimensions()
+#' arr$close()
 #'
 #' ds$infoOptions <- c("-array", "t2m", "-detailed", "-limit", "2")
 #' ds$info()

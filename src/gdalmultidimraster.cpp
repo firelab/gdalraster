@@ -15,11 +15,13 @@
 #include <Rcpp.h>
 
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "gdalraster.h"
 #include "gdalmultidimraster.h"
+#include "gdalmdarray.h"
 #include "rcpp_util.h"
 
 using std::string_literals::operator""s;
@@ -114,8 +116,8 @@ Rcpp::List mdim_attributes_to_list_(GDALAttributeH *pahAttrs, size_t nCount) {
 }
 
 // Describe an array of dimension handles as a data frame, and release them
-static Rcpp::DataFrame dimensions_to_df_(GDALDimensionH *pahDims,
-                                         size_t nCount) {
+Rcpp::DataFrame mdim_dimensions_to_df_(GDALDimensionH *pahDims,
+                                       size_t nCount) {
 
     Rcpp::CharacterVector name(nCount);
     Rcpp::CharacterVector full_name(nCount);
@@ -377,14 +379,14 @@ Rcpp::DataFrame GDALMultiDimRaster::getDimensions(
     if (hGroup != nullptr) {
         pahDims = GDALGroupGetDimensions(hGroup, &nCount, nullptr);
         GDALGroupRelease(hGroup);
-        return dimensions_to_df_(pahDims, nCount);
+        return mdim_dimensions_to_df_(pahDims, nCount);
     }
 
     GDALMDArrayH hArray = openMDArray_(path, false);
     if (hArray != nullptr) {
         pahDims = GDALMDArrayGetDimensions(hArray, &nCount);
         GDALMDArrayRelease(hArray);
-        return dimensions_to_df_(pahDims, nCount);
+        return mdim_dimensions_to_df_(pahDims, nCount);
     }
 
     Rcpp::stop("no group or array found at path: " +
@@ -432,7 +434,7 @@ Rcpp::List GDALMultiDimRaster::getGroupInfo(const std::string &path) const {
 
     size_t nDims = 0;
     GDALDimensionH *pahDims = GDALGroupGetDimensions(hGroup, &nDims, nullptr);
-    Rcpp::DataFrame dims = dimensions_to_df_(pahDims, nDims);
+    Rcpp::DataFrame dims = mdim_dimensions_to_df_(pahDims, nDims);
 
     size_t nAttrs = 0;
     GDALAttributeH *pahAttrs = GDALGroupGetAttributes(hGroup, &nAttrs,
@@ -448,6 +450,17 @@ Rcpp::List GDALMultiDimRaster::getGroupInfo(const std::string &path) const {
         Rcpp::Named("array_names") = array_names,
         Rcpp::Named("dimensions") = dims,
         Rcpp::Named("attributes") = attrs);
+}
+
+SEXP GDALMultiDimRaster::openMDArray(const std::string &path) const {
+    checkAccess_(GA_ReadOnly);
+
+    GDALMDArrayH hArray = openMDArray_(path, true);
+    auto arr = std::make_unique<GDALMDArrayR>();
+    arr->setHandles_(hArray, m_hDataset);
+    // hand the object to R without a copy (cf. Rcpp::wrap() of an exposed
+    // class, which copies)
+    return Rcpp::internal::make_new_object(arr.release());
 }
 
 void GDALMultiDimRaster::show() const {
@@ -609,6 +622,8 @@ RCPP_MODULE(mod_GDALMultiDimRaster) {
         "Return the attributes of a group or array, by full path")
     .const_method("getGroupInfo", &GDALMultiDimRaster::getGroupInfo,
         "Return a list describing a group, by full path")
+    .const_method("openMDArray", &GDALMultiDimRaster::openMDArray,
+        "Open an array by full path, returning an object of class GDALMDArray")
     .const_method("show", &GDALMultiDimRaster::show,
         "S4 show()")
 

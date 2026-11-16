@@ -165,3 +165,211 @@ mdim_as_classic <- function(dsn, array_name, idx_xdim, idx_ydim,
 
     return(ds);
 }
+
+#' Read an MDArray from a multidimensional raster, with dimension information
+#'
+#' `mdim_read()` reads all or part of an array in a GDAL Multidimensional
+#' Raster dataset, and returns a vector with an attribute `"gis"` describing
+#' the dimensions and coordinates of the values read. It is the
+#' multidimensional counterpart of [read_ds()], and uses
+#' [`GDALMDArray$read()`][GDALMDArray]. Requires GDAL >= 3.2.
+#' **This function is experimental**. Its interface may change in future
+#' releases.
+#'
+#' @details
+#' Values are returned as stored, in the same order as returned by
+#' [`GDALMDArray$read()`][GDALMDArray]: the last dimension of the array varies
+#' fastest. Scale and offset are not applied (the unscaled value is
+#' `value * gis$scale + gis$offset`), and the nodata value is returned as `NA`.
+#'
+#' The `"gis"` attribute is a list with elements:
+#' * `type`: `"multidim"`
+#' * `dim`: the number of values read along each dimension, fastest varying
+#' first, i.e., the reverse of the array's dimension order (the same
+#' convention as `c(xsize, ysize, nbands)` in the `"gis"` attribute from
+#' [read_ds()])
+#' * `dim_names`: the dimension names, in the same order as `dim`
+#' * `coords`: a named list, in the same order as `dim`, with the coordinate
+#' values of each dimension for the values read, or `NULL` for a dimension
+#' without an indexing variable
+#' * `bbox`: `c(xmin, ymin, xmax, ymax)` from the coordinates of the
+#' horizontal dimensions (cell edges, assuming regular spacing), or `NA`
+#' values if they cannot be determined
+#' * `srs`: the spatial reference system as WKT, or `""`
+#' * `datatype`: the data type name (e.g., `"Int16"`)
+#' * `nodata`, `scale`, `offset`: numeric values, `NA` if not set
+#' * `unit`: the unit of the array values, or `""`
+#' * `dim_units`: the units of the dimension coordinates, in the same order as
+#' `dim` (e.g., `"degrees_east"`, `"hours since 1900-01-01"`), `""` if not set
+#' * `calendar`: the `calendar` attribute of the time coordinate if present
+#' (e.g., `"standard"`, `"noleap"`), otherwise `NA`.
+#'
+#' Units and calendars are returned as stored, as character strings.
+#'
+#' The horizontal dimensions are those with type `HORIZONTAL_X` and
+#' `HORIZONTAL_Y`, or otherwise the last and second last dimensions of the
+#' array.
+#'
+#' @param x Either an object of class [`GDALMultiDimRaster`][GDALMultiDimRaster],
+#' or a character string giving the data source name of a multidimensional
+#' raster (which is opened read-only and closed on return).
+#' @param array_name Character string giving the full path of the array in
+#' the dataset, e.g., `"/temperature"` or `"/group/temperature"`.
+#' @param start Optional numeric vector of 0-based start indexes, one value per
+#' dimension of the array, in the array's own dimension order. Defaults to `0`
+#' for each dimension.
+#' @param count Optional numeric vector of the number of values to read along
+#' each dimension. Defaults to the rest of each dimension after `start`
+#' (taking `step` into account).
+#' @param step Optional numeric vector of the step between indexes along each
+#' dimension. Defaults to `1` for each dimension.
+#' @param as_array Logical value. If `TRUE`, also set the `dim` attribute of
+#' the returned vector to `gis$dim`, so that it can be used as an \R array
+#' indexed as `[x, y, ...]`. Defaults to `FALSE`.
+#' @param as_raw Logical value. If `TRUE` and the array data type is Byte,
+#' return values as \R `raw`. Defaults to `FALSE`.
+#' @returns A vector of values, with attribute `"gis"` (and `dim` if
+#' `as_array = TRUE`). See Details.
+#'
+#' @seealso
+#' [GDALMultiDimRaster], [GDALMDArray], [read_ds()]
+#'
+#' @examplesIf gdal_version_num() >= gdal_compute_version(3, 2, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster)
+#' f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+#'
+#' v <- mdim_read(f, "/t2m")
+#' str(attr(v, "gis"))
+#'
+#' # the first time step as an R matrix [lon, lat], in degC
+#' ds <- new(GDALMultiDimRaster, f)
+#' v <- mdim_read(ds, "/t2m", start = c(0, 0, 0), count = c(1, 5, 6),
+#'                as_array = TRUE)
+#' gis <- attr(v, "gis")
+#' gis$dim
+#' gis$coords
+#' v[, , 1] * gis$scale + gis$offset
+#' ds$close()
+#' @export
+mdim_read <- function(x, array_name, start = NULL, count = NULL, step = NULL,
+                      as_array = FALSE, as_raw = FALSE) {
+
+    if (is.character(x) && length(x) == 1) {
+        ds <- new(GDALMultiDimRaster, x)
+        on.exit(ds$close(), add = TRUE)
+    } else if (is(x, "Rcpp_GDALMultiDimRaster")) {
+        ds <- x
+    } else {
+        stop("'x' must be a GDALMultiDimRaster object or a character string",
+             call. = FALSE)
+    }
+
+    if (missing(array_name) || !is.character(array_name) ||
+            length(array_name) != 1) {
+        stop("'array_name' must be a character string", call. = FALSE)
+    }
+
+    arr <- ds$openMDArray(array_name)
+    on.exit(arr$close(), add = TRUE)
+    arr$readByteAsRaw <- isTRUE(as_raw)
+
+    dims <- arr$getDimensions()
+    ndim <- nrow(dims)
+
+    if (is.null(start))
+        start <- rep(0, ndim)
+    if (is.null(step))
+        step <- rep(1, ndim)
+    if (length(start) != ndim || length(step) != ndim) {
+        stop("'start' and 'step' must have one value per dimension (",
+             ndim, ")", call. = FALSE)
+    }
+    if (is.null(count)) {
+        count <- ifelse(step > 0,
+                        ceiling((dims$size - start) / step),
+                        floor(start / abs(step)) + 1)
+    }
+    if (length(count) != ndim) {
+        stop("'count' must have one value per dimension (", ndim, ")",
+             call. = FALSE)
+    }
+
+    if (ndim == 0)
+        v <- arr$read()
+    else
+        v <- arr$read(start, count, step)
+
+    # coordinates, units and calendar of each dimension, in array order
+    coords <- vector("list", ndim)
+    dim_units <- rep("", ndim)
+    calendar <- NA_character_
+    for (i in seq_len(ndim)) {
+        var_name <- dims$indexing_variable[i]
+        if (is.na(var_name) || var_name == "")
+            next
+        var <- tryCatch(ds$openMDArray(var_name), error = function(e) NULL)
+        if (is.null(var))
+            next
+        if (var$getDimensionCount() == 1) {
+            coords[i] <- list(var$read(start[i], count[i], step[i]))
+        }
+        dim_units[i] <- var$getUnit()
+        cal <- var$getAttributes()$calendar
+        if (is.na(calendar) && is.character(cal) && length(cal) == 1)
+            calendar <- cal
+        var$close()
+    }
+    names(coords) <- dims$name
+
+    # bbox from the coordinates of the horizontal dimensions
+    bb <- rep(NA_real_, 4)
+    ix <- which(dims$type == "HORIZONTAL_X")
+    iy <- which(dims$type == "HORIZONTAL_Y")
+    if (length(ix) != 1 || length(iy) != 1) {
+        if (ndim >= 2) {
+            ix <- ndim
+            iy <- ndim - 1
+        } else {
+            ix <- iy <- integer(0)
+        }
+    }
+    .edges <- function(cv) {
+        if (!is.numeric(cv) || length(cv) < 2 || anyNA(cv))
+            return(c(NA_real_, NA_real_))
+        half <- abs(mean(diff(cv))) / 2
+        c(min(cv) - half, max(cv) + half)
+    }
+    if (length(ix) == 1 && length(iy) == 1) {
+        ex <- .edges(coords[[ix]])
+        ey <- .edges(coords[[iy]])
+        bb <- c(ex[1], ey[1], ex[2], ey[2])
+    }
+
+    dt <- arr$getDataType()
+    datatype <- if (dt$numeric_type != "") dt$numeric_type else dt$class
+
+    wkt_fmt_config <- get_config_option("OSR_WKT_FORMAT")
+    if (wkt_fmt_config == "")
+        set_config_option("OSR_WKT_FORMAT", "WKT2")
+    srs <- arr$getSpatialRef()
+    set_config_option("OSR_WKT_FORMAT", wkt_fmt_config)
+
+    gis <- list(type = "multidim",
+                dim = rev(as.numeric(count)),
+                dim_names = rev(dims$name),
+                coords = rev(coords),
+                bbox = bb,
+                srs = srs,
+                datatype = datatype,
+                nodata = arr$getNoDataValue(),
+                scale = arr$getScale(),
+                offset = arr$getOffset(),
+                unit = arr$getUnit(),
+                dim_units = rev(dim_units),
+                calendar = calendar)
+
+    if (isTRUE(as_array) && ndim > 0)
+        dim(v) <- gis$dim
+
+    attr(v, "gis") <- gis
+    return(v)
+}

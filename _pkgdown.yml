@@ -27,6 +27,7 @@ reference:
   - GDALRaster-class
   - GDALVector-class
   - GDALMultiDimRaster-class
+  - GDALMDArray-class
   - CmbTable-class
   - RunningStats-class
   - VSIFile-class
@@ -80,6 +81,7 @@ reference:
 - contents:
   - mdim_as_classic
   - mdim_info
+  - mdim_read
   - mdim_translate
 - subtitle: Geotransform conversion
 - contents:
