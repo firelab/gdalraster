@@ -62,14 +62,8 @@ SEXP mdim_attribute_to_sexp_(GDALAttributeH hAttr) {
     GDALExtendedDataTypeRelease(hDT);
 
     if (eClass == GEDTC_STRING) {
-        char **papszValues = GDALAttributeReadAsStringArray(hAttr);
-        Rcpp::CharacterVector out = Rcpp::CharacterVector::create();
-        if (papszValues != nullptr) {
-            for (int i = 0; papszValues[i] != nullptr; ++i)
-                out.push_back(papszValues[i]);
-        }
-        CSLDestroy(papszValues);
-        return out;
+        const CPLStringList values(GDALAttributeReadAsStringArray(hAttr));
+        return wrap_gdal_string_list_(values);
     }
 
     if (eClass == GEDTC_NUMERIC && !GDALDataTypeIsComplex(eDT)) {
@@ -162,16 +156,6 @@ static Rcpp::DataFrame dimensions_to_df_(GDALDimensionH *pahDims,
         Rcpp::Named("direction") = direction,
         Rcpp::Named("indexing_variable") = indexing_variable,
         Rcpp::Named("stringsAsFactors") = false);
-}
-
-static Rcpp::CharacterVector string_list_to_cv_(char **papszList) {
-    Rcpp::CharacterVector out = Rcpp::CharacterVector::create();
-    if (papszList != nullptr) {
-        for (int i = 0; papszList[i] != nullptr; ++i)
-            out.push_back(papszList[i]);
-    }
-    CSLDestroy(papszList);
-    return out;
 }
 
 
@@ -365,9 +349,9 @@ Rcpp::CharacterVector GDALMultiDimRaster::getGroupNames(
     checkAccess_(GA_ReadOnly);
 
     GDALGroupH hGroup = openGroup_(path, true);
-    char **papszNames = GDALGroupGetGroupNames(hGroup, nullptr);
+    const CPLStringList names(GDALGroupGetGroupNames(hGroup, nullptr));
     GDALGroupRelease(hGroup);
-    return string_list_to_cv_(papszNames);
+    return wrap_gdal_string_list_(names);
 }
 
 Rcpp::CharacterVector GDALMultiDimRaster::getMDArrayNames(
@@ -376,9 +360,9 @@ Rcpp::CharacterVector GDALMultiDimRaster::getMDArrayNames(
     checkAccess_(GA_ReadOnly);
 
     GDALGroupH hGroup = openGroup_(path, true);
-    char **papszNames = GDALGroupGetMDArrayNames(hGroup, nullptr);
+    const CPLStringList names(GDALGroupGetMDArrayNames(hGroup, nullptr));
     GDALGroupRelease(hGroup);
-    return string_list_to_cv_(papszNames);
+    return wrap_gdal_string_list_(names);
 }
 
 Rcpp::DataFrame GDALMultiDimRaster::getDimensions(
@@ -441,10 +425,10 @@ Rcpp::List GDALMultiDimRaster::getGroupInfo(const std::string &path) const {
     std::string name = pszName ? pszName : "";
     std::string full_name = pszFullName ? pszFullName : "";
 
-    Rcpp::CharacterVector group_names =
-            string_list_to_cv_(GDALGroupGetGroupNames(hGroup, nullptr));
-    Rcpp::CharacterVector array_names =
-            string_list_to_cv_(GDALGroupGetMDArrayNames(hGroup, nullptr));
+    Rcpp::CharacterVector group_names = wrap_gdal_string_list_(
+            CPLStringList(GDALGroupGetGroupNames(hGroup, nullptr)));
+    Rcpp::CharacterVector array_names = wrap_gdal_string_list_(
+            CPLStringList(GDALGroupGetMDArrayNames(hGroup, nullptr)));
 
     size_t nDims = 0;
     GDALDimensionH *pahDims = GDALGroupGetDimensions(hGroup, &nDims, nullptr);
