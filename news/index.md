@@ -1,6 +1,6 @@
 # Changelog
 
-## gdalraster 2.7.0.9003 (dev)
+## gdalraster 2.7.0.9004 (dev)
 
 - add class `GDALMultiDimRaster` (experimental): read-only navigation of
   a multidimensional raster dataset by full path, with methods
