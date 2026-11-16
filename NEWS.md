@@ -1,4 +1,4 @@
-# gdalraster 2.7.0.9003 (dev)
+# gdalraster 2.7.0.9004 (dev)
 
 * add class `GDALMultiDimRaster` (experimental): read-only navigation of a multidimensional raster dataset by full path, with methods `$getGroupNames()`, `$getMDArrayNames()`, `$getDimensions()`, `$getAttributes()`, `$getGroupInfo()` and `$info()` (GDAL >= 3.2); add test dataset `inst/extdata/mdim_small.nc` (2026-11-14)
 
