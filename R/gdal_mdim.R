@@ -294,7 +294,7 @@ mdim_read <- function(x, array_name, start = NULL, count = NULL, step = NULL,
     }
 
     if (ndim == 0)
-        v <- arr$read()
+        v <- arr$read(NULL, NULL, NULL)
     else
         v <- arr$read(start, count, step)
 

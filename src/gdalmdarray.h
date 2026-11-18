@@ -50,11 +50,8 @@ class GDALMDArrayR {
     Rcpp::List getInfo() const;
     SEXP getCoordinateValues(int dim) const;
 
-    SEXP read() const;
-    SEXP read(const Rcpp::NumericVector &start,
-              const Rcpp::NumericVector &count) const;
-    SEXP read(const Rcpp::NumericVector &start,
-              const Rcpp::NumericVector &count,
+    SEXP read(const Rcpp::Nullable<Rcpp::NumericVector> &start,
+              const Rcpp::Nullable<Rcpp::NumericVector> &count,
               const Rcpp::Nullable<Rcpp::NumericVector> &step) const;
 
     void close();

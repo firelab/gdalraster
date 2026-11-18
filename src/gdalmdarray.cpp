@@ -63,14 +63,12 @@ SEXP mdim_read_array_(GDALMDArrayH hArray,
 
     // dimension sizes
     std::vector<GUInt64> anSize(nDims, 0);
-    {
-        size_t nCount = 0;
-        GDALDimensionH *pahDims = GDALMDArrayGetDimensions(hArray, &nCount);
-        for (size_t i = 0; i < nCount && i < nDims; ++i)
-            anSize[i] = GDALDimensionGetSize(pahDims[i]);
-        if (pahDims != nullptr)
-            GDALReleaseDimensions(pahDims, nCount);
-    }
+    size_t nDimCount = 0;
+    GDALDimensionH *pahDims = GDALMDArrayGetDimensions(hArray, &nDimCount);
+    for (size_t i = 0; i < nDimCount && i < nDims; ++i)
+        anSize[i] = GDALDimensionGetSize(pahDims[i]);
+    if (pahDims != nullptr)
+        GDALReleaseDimensions(pahDims, nDimCount);
 
     std::vector<GUInt64> anStart(nDims, 0);
     std::vector<size_t> anCount(nDims, 1);
@@ -164,14 +162,11 @@ SEXP mdim_read_array_(GDALMDArrayH hArray,
 
     if (eClass == GEDTC_STRING) {
         std::vector<char *> buf(nElems, nullptr);
-        const int ok = [&]() {
-            GDALExtendedDataTypeH hBufDT = GDALExtendedDataTypeCreateString(0);
-            const int ret = GDALMDArrayRead(hArray, panStart, panCount,
-                                            panStep, nullptr, hBufDT,
-                                            buf.data(), nullptr, 0);
-            GDALExtendedDataTypeRelease(hBufDT);
-            return ret;
-        }();
+        // not read_(), which stops on failure: free the strings first
+        GDALExtendedDataTypeH hBufDT = GDALExtendedDataTypeCreateString(0);
+        const int ok = GDALMDArrayRead(hArray, panStart, panCount, panStep,
+                                       nullptr, hBufDT, buf.data(), nullptr, 0);
+        GDALExtendedDataTypeRelease(hBufDT);
         Rcpp::CharacterVector v(nElems);
         for (R_xlen_t i = 0; i < nElems; ++i) {
             if (buf[i] != nullptr) {
@@ -429,28 +424,26 @@ SEXP GDALMDArrayR::getCoordinateValues(int dim) const {
     return out;
 }
 
-SEXP GDALMDArrayR::read() const {
-    checkAccess_();
-
-    return mdim_read_array_(m_hArray, Rcpp::NumericVector::create(),
-                            Rcpp::NumericVector::create(), R_NilValue,
-                            this->readByteAsRaw);
-}
-
-SEXP GDALMDArrayR::read(const Rcpp::NumericVector &start,
-                        const Rcpp::NumericVector &count) const {
-    checkAccess_();
-
-    return mdim_read_array_(m_hArray, start, count, R_NilValue,
-                            this->readByteAsRaw);
-}
-
-SEXP GDALMDArrayR::read(const Rcpp::NumericVector &start,
-                        const Rcpp::NumericVector &count,
+SEXP GDALMDArrayR::read(const Rcpp::Nullable<Rcpp::NumericVector> &start,
+                        const Rcpp::Nullable<Rcpp::NumericVector> &count,
                         const Rcpp::Nullable<Rcpp::NumericVector> &step) const {
     checkAccess_();
 
-    return mdim_read_array_(m_hArray, start, count, step,
+    // NULL start and count read the whole array
+    if (start.isNull() != count.isNull())
+        Rcpp::stop("'start' and 'count' must both be given, or both NULL");
+
+    Rcpp::NumericVector start_in = Rcpp::NumericVector::create();
+    Rcpp::NumericVector count_in = Rcpp::NumericVector::create();
+    if (start.isNotNull()) {
+        start_in = Rcpp::NumericVector(start);
+        count_in = Rcpp::NumericVector(count);
+        if (start_in.size() == 0 || count_in.size() == 0)
+            Rcpp::stop("'start' and 'count' must have one value per "
+                       "dimension, or be NULL");
+    }
+
+    return mdim_read_array_(m_hArray, start_in, count_in, step,
                             this->readByteAsRaw);
 }
 
@@ -577,20 +570,8 @@ RCPP_MODULE(mod_GDALMDArray) {
         "Return a list describing the array")
     .const_method("getCoordinateValues", &GDALMDArrayR::getCoordinateValues,
         "Return the values of the indexing variable of a dimension")
-    .const_method("read",
-        static_cast<SEXP (GDALMDArrayR::*)() const>(&GDALMDArrayR::read),
-        "Read the whole array")
-    .const_method("read",
-        static_cast<SEXP (GDALMDArrayR::*)(const Rcpp::NumericVector &,
-                                           const Rcpp::NumericVector &) const>
-            (&GDALMDArrayR::read),
-        "Read a hyperslab given start and count")
-    .const_method("read",
-        static_cast<SEXP (GDALMDArrayR::*)(
-            const Rcpp::NumericVector &, const Rcpp::NumericVector &,
-            const Rcpp::Nullable<Rcpp::NumericVector> &) const>
-            (&GDALMDArrayR::read),
-        "Read a hyperslab given start, count and step")
+    .const_method("read", &GDALMDArrayR::read,
+        "Read the whole array or a hyperslab given start, count and step")
     .method("close", &GDALMDArrayR::close,
         "Release the array and the dataset reference")
     .const_method("show", &GDALMDArrayR::show,

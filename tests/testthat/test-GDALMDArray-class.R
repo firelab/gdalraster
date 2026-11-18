@@ -72,7 +72,7 @@ test_that("openMDArray and description methods work", {
 
     arr$close()
     expect_false(arr$isOpen())
-    expect_error(arr$read(), "not open")
+    expect_error(arr$read(NULL, NULL, NULL), "not open")
     expect_no_error(show(arr))
 
     ds$close()
@@ -84,17 +84,17 @@ test_that("read works for whole arrays and hyperslabs", {
     arr <- ds$openMDArray("/t2m")
     expected <- t2m_values()
 
-    v <- arr$read()
+    v <- arr$read(NULL, NULL, NULL)
     expect_type(v, "integer")
     expect_null(attributes(v))
     expect_identical(v, expected)
 
     # C order: lon fastest, then lat, then time
     a <- array(expected, dim = c(6, 5, 4))
-    expect_identical(arr$read(c(0, 0, 0), c(1, 1, 6)), a[, 1, 1])
-    expect_identical(arr$read(c(2, 3, 1), c(1, 1, 2)), a[2:3, 4, 3])
-    expect_identical(arr$read(c(0, 2, 4), c(4, 1, 1)), a[5, 3, ])
-    expect_identical(arr$read(c(0, 0, 0), c(1, 5, 6)),
+    expect_identical(arr$read(c(0, 0, 0), c(1, 1, 6), NULL), a[, 1, 1])
+    expect_identical(arr$read(c(2, 3, 1), c(1, 1, 2), NULL), a[2:3, 4, 3])
+    expect_identical(arr$read(c(0, 2, 4), c(4, 1, 1), NULL), a[5, 3, ])
+    expect_identical(arr$read(c(0, 0, 0), c(1, 5, 6), NULL),
                      as.vector(a[, , 1]))
 
     # step, including NULL and negative step
@@ -105,23 +105,26 @@ test_that("read works for whole arrays and hyperslabs", {
                      a[1, 1, 4:1])
 
     # argument checks
-    expect_error(arr$read(c(0, 0), c(1, 1)), "one value per dimension")
-    expect_error(arr$read(c(0, 0, 0), c(5, 1, 1)), "out of range")
-    expect_error(arr$read(c(-1, 0, 0), c(1, 1, 1)), "out of range")
-    expect_error(arr$read(c(0.5, 0, 0), c(1, 1, 1)), "out of range")
-    expect_error(arr$read(c(3, 0, 0), c(2, 1, 1)), "out of range")
+    expect_error(arr$read(c(0, 0), c(1, 1), NULL), "one value per dimension")
+    expect_error(arr$read(c(0, 0, 0), c(5, 1, 1), NULL), "out of range")
+    expect_error(arr$read(c(-1, 0, 0), c(1, 1, 1), NULL), "out of range")
+    expect_error(arr$read(c(0.5, 0, 0), c(1, 1, 1), NULL), "out of range")
+    expect_error(arr$read(c(3, 0, 0), c(2, 1, 1), NULL), "out of range")
     expect_error(arr$read(c(0, 0, 0), c(1, 1, 1), c(0, 1, 1)), "non-zero")
     expect_error(arr$read(c(0, 0, 0), c(3, 1, 1), c(2, 1, 1)), "outside")
+    expect_error(arr$read(c(0, 0, 0), NULL, NULL), "both")
+    expect_error(arr$read(NULL, c(1, 1, 1), NULL), "both")
+    expect_error(arr$read(numeric(0), numeric(0), NULL), "one value per")
 
     # the array remains valid after the dataset is closed
     ds$close()
-    expect_identical(arr$read(c(0, 0, 0), c(1, 1, 2)), a[1:2, 1, 1])
+    expect_identical(arr$read(c(0, 0, 0), c(1, 1, 2), NULL), a[1:2, 1, 1])
     arr$close()
 
     # float array with nodata
     ds <- new(GDALMultiDimRaster, f)
     sst <- ds$openMDArray("/ocean/sst")
-    v <- sst$read()
+    v <- sst$read(NULL, NULL, NULL)
     expect_type(v, "double")
     expect_true(all(is.na(v[1:2])))
     expect_equal(v[4], 1325 * 0.01 + 1, tolerance = 1e-6)
@@ -135,7 +138,7 @@ test_that("read of a Byte array works, optionally as raw", {
     arr <- ds$openMDArray("/Band1")
     expect_equal(arr$getDataType()$numeric_type, "Byte")
 
-    v <- arr$read()
+    v <- arr$read(NULL, NULL, NULL)
     expect_type(v, "integer")
     expect_length(v, 400)
     # same values as the classic raster view
@@ -144,7 +147,7 @@ test_that("read of a Byte array works, optionally as raw", {
     ds_classic$close()
 
     arr$readByteAsRaw <- TRUE
-    v_raw <- arr$read()
+    v_raw <- arr$read(NULL, NULL, NULL)
     expect_type(v_raw, "raw")
     expect_equal(as.integer(v_raw), v)
 
@@ -167,7 +170,7 @@ test_that("block size is reported for a chunked Zarr array", {
     ds <- new(GDALMultiDimRaster, zarr_dir)
     arr <- ds$openMDArray("/t2m")
     expect_equal(arr$getBlockSize(), c(1, 5, 6))
-    expect_identical(arr$read(), t2m_values())
+    expect_identical(arr$read(NULL, NULL, NULL), t2m_values())
     arr$close()
     ds$close()
 })

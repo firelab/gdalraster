@@ -65,8 +65,6 @@ arr$getBlockSize()
 arr$getInfo()
 arr$getCoordinateValues(dim)
 
-arr$read()
-arr$read(start, count)
 arr$read(start, count, step)
 
 arr$close()
@@ -165,18 +163,16 @@ Returns the values of the indexing variable (coordinate array) of the
 dimension at 0-based index \code{dim}, or \code{NULL} if the dimension has no
 indexing variable.
 
-\code{$read()}\cr
-Reads the whole array.
-
-\code{$read(start, count)}\cr
-Reads a hyperslab of the array. \code{start} is a numeric vector of 0-based
-start indexes and \code{count} a numeric vector of the number of values to read,
-each with one value per dimension of the array.
-
 \code{$read(start, count, step)}\cr
-As above, with \code{step} a numeric vector giving the step between indexes for
-each dimension (e.g., \code{2} to read every second value, or a negative value
-to read in reverse order). \code{step} may also be \code{NULL} (step of \code{1}).
+Reads the whole array, or a hyperslab of it. \code{start} is a numeric vector of
+0-based start indexes and \code{count} a numeric vector of the number of values
+to read, each with one value per dimension of the array. \code{step} is a
+numeric vector giving the step between indexes for each dimension (e.g.,
+\code{2} to read every second value, or a negative value to read in reverse
+order), or \code{NULL} for a step of \code{1}. Use \code{start = NULL} and \code{count = NULL}
+to read the whole array, i.e., \code{$read(NULL, NULL, NULL)}. All three
+arguments are required (see Description), but \code{\link[=mdim_read]{mdim_read()}} provides
+defaults for them.
 
 The value returned by \code{$read()} is a plain vector, with the last
 dimension varying fastest (C order, the same layout as data returned by
@@ -211,11 +207,11 @@ arr$getUnit()
 arr$getCoordinateValues(0)
 
 # the first time step, as stored (not scaled)
-v <- arr$read(start = c(0, 0, 0), count = c(1, 5, 6))
+v <- arr$read(start = c(0, 0, 0), count = c(1, 5, 6), step = NULL)
 v
 
 # one grid cell, all time steps, scaled to degC
-arr$read(c(0, 2, 3), c(4, 1, 1)) * arr$getScale() + arr$getOffset()
+arr$read(c(0, 2, 3), c(4, 1, 1), NULL) * arr$getScale() + arr$getOffset()
 
 arr$close()
 ds$close()
