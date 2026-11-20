@@ -1,4 +1,4 @@
-# gdalraster 2.7.0.9004 (dev)
+# gdalraster 2.7.0.9005 (dev)
 
 * add class `GDALMDArray` (experimental), returned by the new method `GDALMultiDimRaster$openMDArray()`: describe an array (dimensions, data type, attributes, nodata, scale, offset, unit, spatial reference, block size, coordinate values) and read a hyperslab with `$read(start, count, step)`; add `mdim_read()` returning the values with a `"gis"` attribute of dimension and coordinate information (GDAL >= 3.2) (2026-11-16)
 
