@@ -795,3 +795,35 @@ test_that("raster compare works", {
 
     alg$release()
 })
+
+test_that("output objects are owned by R without a copy", {
+    # $output() hands the GDALRaster / GDALVector object itself to R (no
+    # copy of a released pointer), so each object is deleted exactly once
+    # when garbage collected
+    elev_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
+    for (i in 1:20) {
+        f_out <- tempfile(fileext = ".tif")
+        alg <- new(GDALAlg, "raster convert", c(elev_file, f_out))
+        expect_true(alg$run())
+        ds <- alg$output()
+        expect_true(is(ds, "Rcpp_GDALRaster"))
+        expect_equal(ds$dim(), c(143, 107, 1))
+        alg$release()
+        rm(ds)
+        invisible(gc())
+        unlink(f_out)
+    }
+
+    dsn <- system.file("extdata/ynp_fires_1984_2022.gpkg", package="gdalraster")
+    f_out <- tempfile(fileext = ".gpkg")
+    alg <- new(GDALAlg, "vector convert", c(dsn, f_out))
+    expect_true(alg$run())
+    lyr <- alg$output()
+    expect_true(is(lyr, "Rcpp_GDALVector"))
+    expect_equal(lyr$getFeatureCount(), 61)
+    alg$release()
+    lyr$close()
+    rm(lyr)
+    invisible(gc())
+    deleteDataset(f_out)
+})
