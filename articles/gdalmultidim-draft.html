@@ -196,7 +196,7 @@ follow <code>GDALRaster</code>: <code>readByteAsRaw</code> is supported
 as a writable field, Int64 is returned as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code>,
 and string arrays are returned as <code>character</code>. Compound data
 types are not supported initially.</p>
-<p>The stand-alone function <code>mdim_read()</code> reads an array by
+<p>The stand-alone function <code><a href="../reference/mdim_read.html">mdim_read()</a></code> reads an array by
 data source name or from an open dataset, and returns the vector with a
 <code>"gis"</code> attribute, following <code><a href="../reference/read_ds.html">read_ds()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -382,7 +382,7 @@ of the stored values.</p>
 <span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/2m_temperature"</span><span class="op">)</span></span>
 <span><span class="va">arr</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">arr</span><span class="op">$</span><span class="fu">getInfo</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">mdim_read</span><span class="op">(</span><span class="va">ds</span>, <span class="st">"/2m_temperature"</span><span class="op">)</span></span>
+<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mdim_read.html">mdim_read</a></span><span class="op">(</span><span class="va">ds</span>, <span class="st">"/2m_temperature"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">v</span>, <span class="st">"gis"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -447,7 +447,7 @@ around two northern poles. Time is in
 </h2>
 <ul>
 <li>
-<code>mdim_read()</code> return value: <code>"gis"</code> attribute
+<code><a href="../reference/mdim_read.html">mdim_read()</a></code> return value: <code>"gis"</code> attribute
 only, or also <code>dim</code> by default?</li>
 <li>Whether <code>returnMdimAsClassicRaster</code> for
 <code>GDALAlg</code> (<a href="https://github.com/firelab/gdalraster/discussions/766" class="external-link">#766</a>)

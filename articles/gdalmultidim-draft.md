@@ -102,9 +102,10 @@ returned as
 and string arrays are returned as `character`. Compound data types are
 not supported initially.
 
-The stand-alone function `mdim_read()` reads an array by data source
-name or from an open dataset, and returns the vector with a `"gis"`
-attribute, following
+The stand-alone function
+[`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
+reads an array by data source name or from an open dataset, and returns
+the vector with a `"gis"` attribute, following
 [`read_ds()`](https://firelab.github.io/gdalraster/reference/read_ds.md):
 
 ``` r
@@ -362,8 +363,8 @@ Mapping this array onto a regular grid is the purpose of
 
 ## Further consideration / TBD
 
-- `mdim_read()` return value: `"gis"` attribute only, or also `dim` by
-  default?
+- [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
+  return value: `"gis"` attribute only, or also `dim` by default?
 - Whether `returnMdimAsClassicRaster` for `GDALAlg`
   ([\#766](https://github.com/firelab/gdalraster/discussions/766)) still
   belongs in this series, or is covered by

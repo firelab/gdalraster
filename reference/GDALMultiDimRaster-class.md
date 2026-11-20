@@ -13,14 +13,17 @@ exposes methods to:
 
 - describe the dimensions of a group or an array
 
-- read the attributes of a group or an array.
+- read the attributes of a group or an array
+
+- open an array as an object of class
+  [`GDALMDArray`](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md).
 
 Groups, arrays and dimensions are addressed by their full path from the
 root group, e.g., `"/"`, `"/group/subgroup"` or `"/group/temperature"`.
 A path without a leading `"/"` is taken from the root. Groups and
-dimensions are returned as plain R lists and data frames. Methods to
-open and read an array (class `GDALMDArray`) will be added in a later
-release.
+dimensions are returned as plain R lists and data frames. Arrays are
+opened as objects of class
+[`GDALMDArray`](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md).
 
 **This class is experimental**. Its interface may change in future
 releases. Requires GDAL \>= 3.2.
@@ -67,6 +70,7 @@ attributes.
     ds$getDimensions(path)
     ds$getAttributes(path)
     ds$getGroupInfo(path)
+    ds$openMDArray(path)
 
     ds$close()
 
@@ -207,12 +211,23 @@ frame as returned by `$getDimensions()`), and `attributes` (a list as
 returned by `$getAttributes()`). An error is raised if no group is found
 at `path`.
 
+`$openMDArray(path)`  
+Opens the array at `path` (a character string giving the full path of an
+array, e.g., `"/temperature"` or `"/group/temperature"`) and returns an
+object of class
+[`GDALMDArray`](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md).
+The array holds a reference to the dataset, so it remains valid after
+`$close()` is called on this object. An error is raised if no array is
+found at `path`.
+
 `$close()`  
 Closes the dataset and the root group. No return value, called for side
 effects.
 
 ## See also
 
+[GDALMDArray](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md),
+[`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md),
 [`mdim_info()`](https://firelab.github.io/gdalraster/reference/mdim_info.md),
 [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.md),
 [`mdim_as_classic()`](https://firelab.github.io/gdalraster/reference/mdim_as_classic.md)
@@ -288,6 +303,14 @@ str(ds$getGroupInfo("/ocean"))
 #>   ..$ indexing_variable: chr(0) 
 #>  $ attributes :List of 1
 #>   ..$ source: chr "synthetic"
+
+arr <- ds$openMDArray("/ocean/sst")
+arr$getDimensions()
+#>   name full_name size         type direction indexing_variable
+#> 1 time     /time    4     TEMPORAL                       /time
+#> 2  lat      /lat    5 HORIZONTAL_Y     NORTH              /lat
+#> 3  lon      /lon    6 HORIZONTAL_X      EAST              /lon
+arr$close()
 
 ds$infoOptions <- c("-array", "t2m", "-detailed", "-limit", "2")
 ds$info()

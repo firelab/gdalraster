@@ -8,14 +8,15 @@ methods to:
 retrieve dataset information
 list the groups and arrays in a group
 describe the dimensions of a group or an array
-read the attributes of a group or an array.
+read the attributes of a group or an array
+open an array as an object of class GDALMDArray.
 
 
 Groups, arrays and dimensions are addressed by their full path from the
 root group, e.g., &quot;/&quot;, &quot;/group/subgroup&quot; or &quot;/group/temperature&quot;. A
 path without a leading &quot;/&quot; is taken from the root. Groups and dimensions
-are returned as plain R lists and data frames. Methods to open and read
-an array (class GDALMDArray) will be added in a later release.
+are returned as plain R lists and data frames. Arrays are opened as
+objects of class GDALMDArray.
 This class is experimental. Its interface may change in future releases.
 Requires GDAL &amp;gt;= 3.2.
 GDALMultiDimRaster is a C++ class exposed directly to R (via
@@ -34,14 +35,15 @@ methods to:
 retrieve dataset information
 list the groups and arrays in a group
 describe the dimensions of a group or an array
-read the attributes of a group or an array.
+read the attributes of a group or an array
+open an array as an object of class GDALMDArray.
 
 
 Groups, arrays and dimensions are addressed by their full path from the
 root group, e.g., &quot;/&quot;, &quot;/group/subgroup&quot; or &quot;/group/temperature&quot;. A
 path without a leading &quot;/&quot; is taken from the root. Groups and dimensions
-are returned as plain R lists and data frames. Methods to open and read
-an array (class GDALMDArray) will be added in a later release.
+are returned as plain R lists and data frames. Arrays are opened as
+objects of class GDALMDArray.
 This class is experimental. Its interface may change in future releases.
 Requires GDAL &amp;gt;= 3.2.
 GDALMultiDimRaster is a C++ class exposed directly to R (via
@@ -118,12 +120,13 @@ persists an open connection to the dataset and its root group, and exposes
 methods to:</p><ul><li><p>retrieve dataset information</p></li>
 <li><p>list the groups and arrays in a group</p></li>
 <li><p>describe the dimensions of a group or an array</p></li>
-<li><p>read the attributes of a group or an array.</p></li>
+<li><p>read the attributes of a group or an array</p></li>
+<li><p>open an array as an object of class <code><a href="GDALMDArray-class.html">GDALMDArray</a></code>.</p></li>
 </ul><p>Groups, arrays and dimensions are addressed by their full path from the
 root group, e.g., <code>"/"</code>, <code>"/group/subgroup"</code> or <code>"/group/temperature"</code>. A
 path without a leading <code>"/"</code> is taken from the root. Groups and dimensions
-are returned as plain <span style="R">R</span> lists and data frames. Methods to open and read
-an array (class <code>GDALMDArray</code>) will be added in a later release.</p>
+are returned as plain <span style="R">R</span> lists and data frames. Arrays are opened as
+objects of class <code><a href="GDALMDArray-class.html">GDALMDArray</a></code>.</p>
 <p><strong>This class is experimental</strong>. Its interface may change in future releases.
 Requires GDAL &gt;= 3.2.</p>
 <p><code>GDALMultiDimRaster</code> is a C++ class exposed directly to <span style="R">R</span> (via
@@ -172,8 +175,9 @@ attributes.</p>
 <span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getDimensions</span>(path)</span>
 <span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getAttributes</span>(path)</span>
 <span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">getGroupInfo</span>(path)</span>
-<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">openMDArray</span>(path)</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>ds<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -293,6 +297,12 @@ Returns a named list describing the group at <code>path</code>, with elements
 frame as returned by <code>$getDimensions()</code>), and <code>attributes</code> (a list as
 returned by <code>$getAttributes()</code>). An error is raised if no group is
 found at <code>path</code>.</p>
+<p><code>$openMDArray(path)</code><br>
+Opens the array at <code>path</code> (a character string giving the full path of an
+array, e.g., <code>"/temperature"</code> or <code>"/group/temperature"</code>) and returns an
+object of class <code><a href="GDALMDArray-class.html">GDALMDArray</a></code>. The array holds a reference to
+the dataset, so it remains valid after <code>$close()</code> is called on this
+object. An error is raised if no array is found at <code>path</code>.</p>
 <p><code>$close()</code><br>
 Closes the dataset and the root group. No return value, called for side
 effects.</p>
@@ -301,7 +311,8 @@ effects.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="mdim_info.html">mdim_info()</a></code>, <code><a href="mdim_translate.html">mdim_translate()</a></code>, <code><a href="mdim_as_classic.html">mdim_as_classic()</a></code></p>
+    <div class="dont-index"><p><a href="GDALMDArray-class.html">GDALMDArray</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_info.html">mdim_info()</a></code>, <code><a href="mdim_translate.html">mdim_translate()</a></code>,
+<code><a href="mdim_as_classic.html">mdim_as_classic()</a></code></p>
 <p>GDAL Multidimensional Raster Data Model:<br><a href="https://gdal.org/en/stable/user/multidim_raster_data_model.html" class="external-link">https://gdal.org/en/stable/user/multidim_raster_data_model.html</a></p></div>
     </div>
 
@@ -372,6 +383,14 @@ effects.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ indexing_variable: chr(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ attributes :List of 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ source: chr "synthetic"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/ocean/sst"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name full_name size         type direction indexing_variable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 time     /time    4     TEMPORAL                       /time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  lat      /lat    5 HORIZONTAL_Y     NORTH              /lat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  lon      /lon    6 HORIZONTAL_X      EAST              /lon</span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="va">infoOptions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-array"</span>, <span class="st">"t2m"</span>, <span class="st">"-detailed"</span>, <span class="st">"-limit"</span>, <span class="st">"2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">info</span><span class="op">(</span><span class="op">)</span></span></span>

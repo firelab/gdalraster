@@ -25,6 +25,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/DEFAULT_DEM_PROC.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/DEFAULT_NODATA.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/GDALAlg-class.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/GDALMDArray-class.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/GDALRaster-class.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/GDALVector-class.html</loc></url>
@@ -96,6 +97,7 @@
 <url><loc>https://firelab.github.io/gdalraster/reference/make_chunk_index.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/mdim_as_classic.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/mdim_info.html</loc></url>
+<url><loc>https://firelab.github.io/gdalraster/reference/mdim_read.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/mdim_translate.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/ogr2ogr.html</loc></url>
 <url><loc>https://firelab.github.io/gdalraster/reference/ogr_define.html</loc></url>
