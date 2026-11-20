@@ -134,3 +134,78 @@ test_that("mdim_translate works", {
 
     ds$close()
 })
+
+test_that("mdim_read works", {
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+
+    # by filename, the whole array
+    v <- mdim_read(f, "/t2m")
+    expect_type(v, "integer")
+    expect_length(v, 120)
+    expect_null(dim(v))
+    gis <- attr(v, "gis")
+    expect_equal(names(gis),
+                 c("type", "dim", "dim_names", "coords", "bbox", "srs",
+                   "datatype", "nodata", "scale", "offset", "unit",
+                   "dim_units", "calendar"))
+    expect_equal(gis$type, "multidim")
+    expect_equal(gis$dim, c(6, 5, 4))
+    expect_equal(gis$dim_names, c("lon", "lat", "time"))
+    expect_equal(names(gis$coords), c("lon", "lat", "time"))
+    expect_equal(gis$coords$lon, seq(145, 146.25, by = 0.25))
+    expect_equal(gis$coords$lat, seq(-41, -42, by = -0.25))
+    expect_equal(gis$coords$time, c(0, 6, 12, 18))
+    expect_equal(gis$bbox, c(144.875, -42.125, 146.375, -40.875))
+    expect_equal(gis$datatype, "Int16")
+    expect_equal(gis$nodata, -32767)
+    expect_equal(gis$scale, 0.01)
+    expect_equal(gis$offset, 0)
+    expect_equal(gis$unit, "degC")
+    expect_equal(gis$dim_units,
+                 c("degrees_east", "degrees_north",
+                   "hours since 2000-01-01 00:00:00"))
+    expect_equal(gis$calendar, "standard")
+
+    # from an open dataset, a hyperslab as an R array [lon, lat, time]
+    ds <- new(GDALMultiDimRaster, f)
+    a <- mdim_read(ds, "/t2m", start = c(1, 1, 2), count = c(2, 3, 4),
+                   as_array = TRUE)
+    expect_equal(dim(a), c(4, 3, 2))
+    full <- array(mdim_read(ds, "/t2m"), dim = c(6, 5, 4))
+    expect_identical(a[, , ], full[3:6, 2:4, 2:3])
+    gis <- attr(a, "gis")
+    expect_equal(gis$coords$lon, seq(145.5, 146.25, by = 0.25))
+    expect_equal(gis$coords$lat, c(-41.25, -41.5, -41.75))
+    expect_equal(gis$coords$time, c(6, 12))
+    expect_equal(gis$bbox, c(145.375, -41.875, 146.375, -41.125))
+
+    # step, with count computed from start and step
+    v <- mdim_read(ds, "/t2m", step = c(2, 2, 2))
+    gis <- attr(v, "gis")
+    expect_equal(gis$dim, c(3, 3, 2))
+    expect_equal(gis$coords$time, c(0, 12))
+    expect_identical(as.vector(v), as.vector(full[c(1, 3, 5), c(1, 3, 5),
+                                                  c(1, 3)]))
+
+    # array in a sub-group, and a 1-D coordinate array
+    v <- mdim_read(ds, "/ocean/sst")
+    expect_type(v, "double")
+    expect_true(is.na(attr(v, "gis")$scale))
+    v <- mdim_read(ds, "/time")
+    expect_equal(as.vector(v), c(0, 6, 12, 18))
+    expect_true(all(is.na(attr(v, "gis")$bbox)))
+
+    # srs from a projected array
+    v <- mdim_read(system.file("extdata/byte.nc", package="gdalraster"),
+                   "/Band1")
+    expect_equal(attr(v, "gis")$bbox, c(440720, 3750120, 441920, 3751320))
+    expect_true(nchar(attr(v, "gis")$srs) > 0)
+
+    expect_error(mdim_read(ds, "/nope"), "array not found")
+    expect_error(mdim_read(ds, "/t2m", start = c(0, 0)), "one value")
+    expect_error(mdim_read(1, "/t2m"), "GDALMultiDimRaster")
+
+    # the dataset is still open after reading
+    expect_true(ds$isOpen())
+    ds$close()
+})
