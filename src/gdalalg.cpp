@@ -2057,7 +2057,9 @@ SEXP GDALAlg::getArgValue_(const GDALAlgorithmArgH &hArg) const {
                 auto ds = std::make_unique<GDALRaster>();
                 ds->setFilename(ds_name);
                 ds->setGDALDatasetH_(hDS);
-                out = Rcpp::wrap(*ds.release());
+                // hand the object itself to R, which owns and deletes it.
+                // Rcpp::wrap(*ptr) would copy it, leaking the original.
+                out = Rcpp::wrap(Rcpp::object<GDALRaster>(ds.release()));
             }
             else if (ds_type & GDAL_OF_VECTOR) {
                 std::string ds_name(GDALArgDatasetValueGetName(hArgDSValue));
@@ -2084,7 +2086,8 @@ SEXP GDALAlg::getArgValue_(const GDALAlgorithmArgH &hArg) const {
                 lyr->setOGRLayerH_(hLayer, layer_name);
                 if (hLayer)
                     lyr->setFieldNames_();
-                out = Rcpp::wrap(*lyr.release());
+                // owned by R, no copy (see the raster case above)
+                out = Rcpp::wrap(Rcpp::object<GDALVector>(lyr.release()));
             }
             else if (ds_type & GDAL_OF_MULTIDIM_RASTER) {
                 // multidim raster currently only as dataset name
