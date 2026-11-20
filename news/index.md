@@ -1,6 +1,6 @@
 # Changelog
 
-## gdalraster 2.7.0.9004 (dev)
+## gdalraster 2.7.0.9005 (dev)
 
 - add class `GDALMDArray` (experimental), returned by the new method
   `GDALMultiDimRaster$openMDArray()`: describe an array (dimensions,
