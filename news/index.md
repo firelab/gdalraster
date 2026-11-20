@@ -2,18 +2,15 @@
 
 ## gdalraster 2.7.0.9011 (dev)
 
-- `GDALAlg`: avoid potential memory leak when returning dataset objects
-  as algorithm output
+- fix `GDALAlg$output()`: avoid memory leak: return the `GDALRaster` or
+  `GDALVector` object itself, owned by R, instead of a copy that leaked
+  the original object
   ([\#1031](https://github.com/firelab/gdalraster/issues/1031))
   (2026-11-20)
 
 - fix `GDALVector$fetch()`: errors on a short last page when
   `returnGeomAs = "BBOX"` or using ignored fields
   ([\#1028](https://github.com/firelab/gdalraster/issues/1028))
-  (2026-11-20)
-
-- fix `GDALAlg$output()`: return the `GDALRaster` or `GDALVector` object
-  itself, owned by R, instead of a copy that leaked the original object
   (2026-11-20)
 
 - add class `GDALMDArray` (experimental), returned by the new method
