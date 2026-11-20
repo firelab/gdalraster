@@ -1716,12 +1716,12 @@ Rcpp::DataFrame GDALVector::fetch(double n) {
 
                     if (fld_subtype == OFSTBoolean) {
                         Rcpp::LogicalVector col = df[col_num];
-                        Rcpp::LogicalVector col_trunc = df_trunc[i + 1];
+                        Rcpp::LogicalVector col_trunc = df_trunc[col_num];
                         std::copy_n(col.cbegin(), row_num, col_trunc.begin());
                     }
                     else {
                         Rcpp::IntegerVector col = df[col_num];
-                        Rcpp::IntegerVector col_trunc = df_trunc[i + 1];
+                        Rcpp::IntegerVector col_trunc = df_trunc[col_num];
                         std::copy_n(col.cbegin(), row_num, col_trunc.begin());
                     }
                 }
@@ -1733,7 +1733,7 @@ Rcpp::DataFrame GDALVector::fetch(double n) {
                 case OFTDateTime:
                 {
                     Rcpp::NumericVector col = df[col_num];
-                    Rcpp::NumericVector col_trunc = df_trunc[i + 1];
+                    Rcpp::NumericVector col_trunc = df_trunc[col_num];
                     std::copy_n(col.cbegin(), row_num, col_trunc.begin());
                 }
                 break;
@@ -1745,7 +1745,7 @@ Rcpp::DataFrame GDALVector::fetch(double n) {
                 case OFTStringList:
                 {
                     Rcpp::List col = df[col_num];
-                    Rcpp::List col_trunc = df_trunc[i + 1];
+                    Rcpp::List col_trunc = df_trunc[col_num];
                     for (size_t n = 0; n < row_num; ++n)
                         col_trunc[n] = col[n];
                 }
@@ -1754,7 +1754,7 @@ Rcpp::DataFrame GDALVector::fetch(double n) {
                 default:
                 {
                     Rcpp::CharacterVector col = df[col_num];
-                    Rcpp::CharacterVector col_trunc = df_trunc[i + 1];
+                    Rcpp::CharacterVector col_trunc = df_trunc[col_num];
                     std::copy_n(col.cbegin(), row_num, col_trunc.begin());
                 }
                 break;
@@ -1771,7 +1771,8 @@ Rcpp::DataFrame GDALVector::fetch(double n) {
 
                 col_num += 1;
 
-                if (STARTS_WITH_CI(this->returnGeomAs.c_str(), "WKB")) {
+                if (STARTS_WITH_CI(this->returnGeomAs.c_str(), "WKB") ||
+                    STARTS_WITH_CI(this->returnGeomAs.c_str(), "BBOX")) {
                     Rcpp::List col = df[col_num];
                     Rcpp::List col_trunc = df_trunc[col_num];
                     for (size_t n = 0; n < row_num; ++n)
