@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.7.0.9010 (dev)
+## gdalraster 2.7.0.9011 (dev)
+
+- `GDALAlg`: avoid potential memory leak when returning dataset objects
+  as algorithm output
+  ([\#1031](https://github.com/firelab/gdalraster/issues/1031))
+  (2026-11-20)
 
 - fix `GDALVector$fetch()`: errors on a short last page when
   `returnGeomAs = "BBOX"` or using ignored fields

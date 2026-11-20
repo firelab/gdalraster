@@ -620,7 +620,7 @@ args$bbox <- c(323776.1, 5102172.0,  327466.1, 5104782.0)
 
 alg$run()
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (10ms)
+#> ✔ Done (14ms)
 #> 
 #> [1] TRUE
 
@@ -628,7 +628,7 @@ alg$run()
 (ds_clip <- alg$output())
 #> C++ object of class <GDALRaster>
 #>   • Driver: GeoTIFF (GTiff)
-#>   • DSN: "/tmp/RtmpNYB9N7/elev_clip.tif"
+#>   • DSN: "/tmp/RtmpNQx98U/elev_clip.tif"
 #>   • Dimensions: 123, 87, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -827,7 +827,7 @@ alg$run()
 (lyr <- alg$output())
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/RtmpNYB9N7/polygons_test.gpkg"
+#>   • DSN: "/tmp/RtmpNQx98U/polygons_test.gpkg"
 #>   • Layer: poly_multipoly
 #>   • CRS: NAD83 (EPSG:4269)
 #>   • Geometry: POLYGON
@@ -835,7 +835,7 @@ alg$run()
 alg$release()
 
 lyr$info()
-#> INFO: Open of `/tmp/RtmpNYB9N7/polygons_test.gpkg'
+#> INFO: Open of `/tmp/RtmpNQx98U/polygons_test.gpkg'
 #>       using driver `GPKG' successful.
 #> 
 #> Layer name: poly_multipoly

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9011</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.0.9010" id="gdalraster-2709010-dev">gdalraster 2.7.0.9010 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709010-dev"></a></h2>
-<ul><li><p>fix <code>GDALVector$fetch()</code>: errors on a short last page when <code>returnGeomAs = "BBOX"</code> or using ignored fields (<a href="https://github.com/firelab/gdalraster/issues/1028" class="external-link">#1028</a>) (2026-11-20)</p></li>
+<h2 class="pkg-version" data-toc-text="2.7.0.9011" id="gdalraster-2709011-dev">gdalraster 2.7.0.9011 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709011-dev"></a></h2>
+<ul><li><p><code>GDALAlg</code>: avoid potential memory leak when returning dataset objects as algorithm output (<a href="https://github.com/firelab/gdalraster/issues/1031" class="external-link">#1031</a>) (2026-11-20)</p></li>
+<li><p>fix <code>GDALVector$fetch()</code>: errors on a short last page when <code>returnGeomAs = "BBOX"</code> or using ignored fields (<a href="https://github.com/firelab/gdalraster/issues/1028" class="external-link">#1028</a>) (2026-11-20)</p></li>
 <li><p>fix <code>GDALAlg$output()</code>: return the <code>GDALRaster</code> or <code>GDALVector</code> object itself, owned by R, instead of a copy that leaked the original object (2026-11-20)</p></li>
 <li><p>add class <code>GDALMDArray</code> (experimental), returned by the new method <code>GDALMultiDimRaster$openMDArray()</code>: describe an array (dimensions, data type, attributes, nodata, scale, offset, unit, spatial reference, block size, coordinate values) and read a hyperslab with <code>$read(start, count, step)</code>; add <code><a href="../reference/mdim_read.html">mdim_read()</a></code> returning the values with a <code>"gis"</code> attribute of dimension and coordinate information (GDAL &gt;= 3.2) (2026-11-16)</p></li>
 <li><p>add class <code>GDALMultiDimRaster</code> (experimental): read-only navigation of a multidimensional raster dataset by full path, with methods <code>$getGroupNames()</code>, <code>$getMDArrayNames()</code>, <code>$getDimensions()</code>, <code>$getAttributes()</code>, <code>$getGroupInfo()</code> and <code>$info()</code> (GDAL &gt;= 3.2); add test dataset <code>inst/extdata/mdim_small.nc</code> (2026-11-14)</p></li>
