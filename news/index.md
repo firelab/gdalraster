@@ -7,6 +7,10 @@
   ([\#1028](https://github.com/firelab/gdalraster/issues/1028))
   (2026-11-20)
 
+- fix `GDALAlg$output()`: return the `GDALRaster` or `GDALVector` object
+  itself, owned by R, instead of a copy that leaked the original object
+  (2026-11-20)
+
 - add class `GDALMDArray` (experimental), returned by the new method
   `GDALMultiDimRaster$openMDArray()`: describe an array (dimensions,
   data type, attributes, nodata, scale, offset, unit, spatial reference,
