@@ -1,6 +1,11 @@
 # Changelog
 
-## gdalraster 2.7.0.9005 (dev)
+## gdalraster 2.7.0.9010 (dev)
+
+- fix `GDALVector$fetch()`: errors on a short last page when
+  `returnGeomAs = "BBOX"` or using ignored fields
+  ([\#1028](https://github.com/firelab/gdalraster/issues/1028))
+  (2026-11-20)
 
 - add class `GDALMDArray` (experimental), returned by the new method
   `GDALMultiDimRaster$openMDArray()`: describe an array (dimensions,
