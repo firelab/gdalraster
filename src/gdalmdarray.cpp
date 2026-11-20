@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <cstdio>
 #include <limits>
 #include <string>
 #include <vector>
@@ -475,7 +476,7 @@ void GDALMDArrayR::show() const {
         if (i > 0)
             shape += ", ";
         char szSize[32];
-        snprintf(szSize, sizeof(szSize), "%.0f", dim_sizes[i]);
+        std::snprintf(szSize, sizeof(szSize), "%.0f", dim_sizes[i]);
         shape += std::string(dim_names[i]) + "=" + szSize;
     }
     Rcpp::NumericVector block = getBlockSize();
@@ -489,7 +490,7 @@ void GDALMDArrayR::show() const {
         if (i > 0)
             block_str += " x ";
         char szSize[32];
-        snprintf(szSize, sizeof(szSize), "%.0f", block[i]);
+        std::snprintf(szSize, sizeof(szSize), "%.0f", block[i]);
         block_str += szSize;
     }
     Rcpp::List dt = getDataType();
