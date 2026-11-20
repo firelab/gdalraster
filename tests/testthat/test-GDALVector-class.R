@@ -2106,3 +2106,32 @@ test_that("writeArrowBatch works", {
     expect_true(g_equals(d2$geometry[[1]], d$geometry[[1]]))
     expect_true(g_equals(d2$geometry[[2]], d$geometry[[2]]))
 })
+
+test_that("fix #1028: fetch() errors on a short last page if geom is BBOX", {
+    f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
+    dsn <- file.path(tempdir(), basename(f))
+    file.copy(f, dsn)
+    lyr <- new(GDALVector, dsn, "mtbs_perims", FALSE)
+    on.exit(lyr$close(), add = TRUE)
+    on.exit(deleteDataset(dsn), add = TRUE)
+
+    lyr$returnGeomAs <- "BBOX"
+    expect_equal(lyr$getFeatureCount(), 61)
+    expect_no_error(d <- lyr$fetch(100))
+    expect_equal(nrow(d), 61)
+    expect_equal(d$geom[[1]], c(502689.85, -12896.38, 505712.88, -10726.12))
+})
+
+test_that("fix #1028: fetch() errors on a short last page with ignored/selected fields", {
+    f <- system.file("extdata/ynp_fires_1984_2022.gpkg", package = "gdalraster")
+    dsn <- file.path(tempdir(), basename(f))
+    file.copy(f, dsn)
+    lyr <- new(GDALVector, dsn, "mtbs_perims", FALSE)
+    on.exit(lyr$close(), add = TRUE)
+    on.exit(deleteDataset(dsn), add = TRUE)
+
+    lyr$setSelectedFields(c("incid_name", "ig_year"))
+    expect_no_error(d <- lyr$fetch(100))
+    expect_equal(nrow(d), 61)
+    expect_equal(ncol(d), 3)
+})
