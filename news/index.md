@@ -1,11 +1,13 @@
 # Changelog
 
-## gdalraster 2.7.0.9013 (dev)
+## gdalraster 2.7.0.9020 (dev)
 
 - class `GDALMDArray`: add methods `$getResampled()` returning a
   resampled and optionally reprojected view of the array (GDAL \>= 3.4),
   and `$getGridded()` returning a gridded view of an array of scattered
-  points (GDAL \>= 3.7) (2026-11-22)
+  points (GDAL \>= 3.7)
+  ([\#1039](https://github.com/firelab/gdalraster/issues/1039);
+  2026-11-22)
 
 - (internal) gdalalg.cpp: suppress compiler warning
   `-Wunused-const-variable` (2026-11-21)
