@@ -1,4 +1,6 @@
-# gdalraster 2.7.0.9011 (dev)
+# gdalraster 2.7.0.9012 (dev)
+
+* (internal) gdalalg.cpp: suppress compiler warning `-Wunused-const-variable` (2026-11-21)
 
 * fix `GDALAlg$output()`: avoid memory leak: return the `GDALRaster` or `GDALVector` object itself, owned by R, instead of a copy that leaked the original object (#1031) (2026-11-20)
 
