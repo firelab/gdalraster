@@ -204,7 +204,7 @@ hi_file <- calc(expr = expr,
                 dtName = "Int16",
                 nodata_value = -32767,
                 setRasterNodataValue = TRUE)
-#> ℹ output written to: "/tmp/RtmpKZ9TRn/rastcalc21085fadd587.tif"
+#> ℹ output written to: "/tmp/RtmpFYPAkh/rastcalc21e65225fd03.tif"
 
 ds <- new(GDALRaster, hi_file)
 # min, max, mean, sd
@@ -228,10 +228,10 @@ expr <- "((B5 * 0.0000275 - 0.2) - (B4 * 0.0000275 - 0.2)) /
 (ndvi <- calc(expr, list(b4, b5), var.names = c("B4", "B5"), fmt = "MEM",
               dtName = "Float32", setRasterNodataValue = TRUE,
               return_obj = TRUE))
-#> ℹ output written to: "calc2108162a4644"
+#> ℹ output written to: "calc21e625cb9090"
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory raster, vector and multidimensional raster (MEM)
-#>   • DSN: "calc2108162a4644"
+#>   • DSN: "calc21e625cb9090"
 #>   • Dimensions: 149, 112, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -295,6 +295,9 @@ sum(tbl_subset$count)   # 85 total pixels
 # the LCP driver does not support in-place write so make a copy as GTiff
 tif_file <- file.path(tempdir(), "storml_lndscp.tif")
 createCopy("GTiff", tif_file, lcp_file)
+#>  ■                                  0% |  ETA:  2s
+#> ✔ Done (11ms)
+#> 
 #> [1] TRUE
 
 expr <- "ifelse( SLP >= 40 & FBFM %in% c(101,102), 99, FBFM)"
@@ -305,7 +308,7 @@ calc(expr = expr,
      dstfile = tif_file,
      out_band = 4,
      write_mode = "update")
-#> ℹ output written to: "/tmp/RtmpKZ9TRn/storml_lndscp.tif"
+#> ℹ output written to: "/tmp/RtmpFYPAkh/storml_lndscp.tif"
 
 # verify the ouput
 rasterfiles <- c(tif_file, tif_file)
