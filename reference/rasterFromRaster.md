@@ -101,7 +101,7 @@ rasterFromRaster(srcfile = lcp_file,
                  options = opt,
                  init = -32767)
 #> ℹ initializing destination raster...
-#> ✔ done [5ms]
+#> ✔ done [6ms]
 #> 
 ds_slp <- new(GDALRaster, slpp_file, read_only = FALSE)
 
