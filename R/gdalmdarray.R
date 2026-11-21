@@ -17,6 +17,8 @@
 #' * read coordinate values of a dimension
 #' * read a hyperslab of the array (start, count and optional step per
 #' dimension)
+#' * advise an upcoming read, get a chunk size for processing, and compute
+#' statistics
 #' * derive new arrays without copying data: a view given a slicing
 #' expression, a transposed view, an unscaled view, a mask, a resampled or
 #' reprojected view, and a gridded view of scattered points
@@ -74,6 +76,12 @@
 #' arr$getMask(options)
 #' arr$getResampled(new_dim_sizes, resample_alg, target_srs, options)
 #' arr$getGridded(grid_options, x_array, y_array, options)
+#'
+#' arr$adviseRead(start, count, options)
+#' arr$getProcessingChunkSize(max_chunk_memory)
+#' arr$getStatistics(approx_ok, force)
+#' arr$computeStatistics(approx_ok, options)
+#' arr$cache(options)
 #' arr$asClassicDataset(idx_xdim, idx_ydim, options)
 #'
 #' arr$close()
@@ -95,7 +103,8 @@
 #'
 #' \code{$quiet}\cr
 #' A logical value, `TRUE` to suppress console output from class methods.
-#' Defaults to `FALSE`. Reserved for methods added in later releases.
+#' Defaults to `FALSE` (e.g., a progress bar from
+#' \code{$computeStatistics()}).
 #'
 #' ## Methods
 #'
@@ -280,6 +289,67 @@
 #' The new dimensions are named `dimX` and `dimY`, with indexing variables of
 #' the same names.
 #'
+#' ## Chunk-aware I/O and statistics
+#'
+#' \code{$adviseRead(start, count, options)}\cr
+#' Advises the driver of an upcoming read of the hyperslab given by `start`
+#' and `count` (as for \code{$read()}, both `NULL` for the whole array).
+#' Many drivers ignore the advice, but it can greatly accelerate access with
+#' some. The Zarr driver fetches and decodes the blocks that intersect the
+#' hyperslab using multiple threads and keeps them in memory for the reads
+#' that follow on this array object (the call returns when that is done).
+#' `options` is a character vector of driver-specific `NAME=VALUE` pairs, or
+#' `NULL` (requires GDAL >= 3.4 when not empty). For Zarr these are
+#' `"CACHE_SIZE=<bytes>"`, the maximum memory to use (by default half of the
+#' remaining GDAL block cache), and `"NUM_THREADS=<integer>|ALL_CPUS"` (by
+#' default from the `GDAL_NUM_THREADS` configuration option). Returns logical
+#' `TRUE` on success (ignoring the advice is a success).
+#'
+#' \code{$getProcessingChunkSize(max_chunk_memory)}\cr
+#' Returns a numeric vector with a chunk size along each dimension, suitable
+#' for processing the array piece by piece. The chunk is a multiple of the
+#' block size (see \code{$getBlockSize()}) along each dimension, within
+#' `max_chunk_memory` bytes, or one block if a block is larger than that. For
+#' an array with no block size, the chunk is built up from the last
+#' dimension. See [mdim_chunk_index()] for the index of chunks of a given
+#' size.
+#'
+#' \code{$getStatistics(approx_ok, force)}\cr
+#' Returns a named numeric vector of statistics of the array values: `min`,
+#' `max`, `mean`, `sd` (standard deviation) and `valid_count` (the number of
+#' values that are not nodata). Statistics already stored for the array are
+#' returned if there are any. Otherwise, they are computed if `force` is
+#' `TRUE`, or `NA` values are returned if `force` is `FALSE`. `approx_ok` is
+#' a logical value, `TRUE` to allow statistics computed from a subset of the
+#' values (currently ignored by GDAL, which always uses all of the values).
+#' Statistics are of the values as stored (scale and offset not applied).
+#'
+#' \code{$computeStatistics(approx_ok, options)}\cr
+#' Computes statistics of the array values and returns them as a named numeric
+#' vector, as for \code{$getStatistics()}. The array is read one processing
+#' chunk at a time, so memory use is bounded for arrays of any size. A
+#' progress bar is shown unless \code{$quiet} is `TRUE`. `options` is a
+#' character vector of `NAME=VALUE` pairs, or `NULL` (requires GDAL >= 3.8
+#' when not empty, e.g., `"UPDATE_METADATA=YES"` to store the minimum and
+#' maximum in the `actual_range` attribute of a netCDF or Zarr array opened
+#' for update). Once computed, the statistics are generally saved by GDAL
+#' for later calls to \code{$getStatistics()}, in a file `pam.aux.xml` or
+#' `<filename>.aux.xml` next to the dataset, written when the dataset is
+#' closed. If that location is not writable (e.g., a remote dataset), GDAL
+#' reports a failure to write the file at that time, which can be ignored.
+#'
+#' \code{$cache(options)}\cr
+#' Caches the content of the array in a file named as the dataset filename
+#' with the extension `.gmac` added (a netCDF dataset), or in the directory
+#' given by the `GDAL_PAM_PROXY_DIR` configuration option if that file cannot
+#' be written. Reads of the array then use the cache automatically, also in
+#' later sessions. The main purpose is to cache a view that is expensive to
+#' compute, such as a transposed array. The cache is not checked against the
+#' source: it must be deleted manually if the source array changes. `options`
+#' is a character vector of `NAME=VALUE` pairs, or `NULL`. Currently the only
+#' option is `"BLOCKSIZE=bs0,bs1,...,bsN"`, the block size of the cached
+#' array. Returns logical `TRUE` on success. Requires GDAL >= 3.4.
+#'
 #' ## Classic raster view
 #'
 #' \code{$asClassicDataset(idx_xdim, idx_ydim, options)}\cr
@@ -302,7 +372,8 @@
 #' Closes the array and releases the reference to its dataset.
 #'
 #' @seealso
-#' [GDALMultiDimRaster], [GDALRaster], [mdim_read()], [mdim_info()],
+#' [GDALMultiDimRaster], [GDALRaster], [mdim_read()], [mdim_chunk_index()],
+#' [mdim_info()],
 #' [mdim_as_classic()]
 #'
 #' @examplesIf gdal_version_num() >= gdal_compute_version(3, 2, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster)
@@ -330,6 +401,9 @@
 #' # the same, from a view with the scale and offset applied
 #' arr$getUnscaled()$read(c(0, 2, 3), c(4, 1, 1), NULL)
 #'
+#' # a chunk size for processing within 120 bytes (60 values of Int16)
+#' arr$getProcessingChunkSize(120)
+#'
 #' # the first time step as a view, and its mask of valid values
 #' v1 <- arr$getView("[0,...]")
 #' v1$getDimensions()$size
@@ -346,6 +420,18 @@
 #'
 #' arr$close()
 #' ds$close()
+#'
+#' ## statistics of the stored values, read one processing chunk at a time
+#' # (on a copy of the file, since GDAL saves the statistics next to it)
+#' f_tmp <- file.path(tempdir(), "mdim_small.nc")
+#' file.copy(f, f_tmp)
+#' ds <- new(GDALMultiDimRaster, f_tmp)
+#' arr <- ds$openMDArray("/t2m")
+#' arr$quiet <- TRUE
+#' arr$computeStatistics(FALSE, NULL)
+#' arr$close()
+#' ds$close()
+#' \dontshow{unlink(c(f_tmp, paste0(f_tmp, ".aux.xml")))}
 #'
 #' ## resampling and reprojection (GDAL >= 3.4)
 #' if (gdal_version_num() >= gdal_compute_version(3, 4, 0)) {

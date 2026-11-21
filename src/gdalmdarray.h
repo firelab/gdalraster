@@ -73,6 +73,16 @@ class GDALMDArrayR {
         const std::string &grid_options, SEXP x_array, SEXP y_array,
         const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
+    bool adviseRead(const Rcpp::Nullable<Rcpp::NumericVector> &start,
+                    const Rcpp::Nullable<Rcpp::NumericVector> &count,
+                    const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    Rcpp::NumericVector getProcessingChunkSize(double max_chunk_memory) const;
+    Rcpp::NumericVector getStatistics(bool approx_ok, bool force) const;
+    Rcpp::NumericVector computeStatistics(
+        bool approx_ok,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    bool cache(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+
     void close();
     void show() const;
 

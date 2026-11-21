@@ -45,6 +45,36 @@ static bool is_whole_in_range_(double x, double lo, double hi) {
     return x >= lo && x <= hi;
 }
 
+static CPLStringList options_to_csl_(
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+    CPLStringList aosOptions;
+    if (options.isNotNull()) {
+        Rcpp::CharacterVector options_in(options);
+        for (R_xlen_t i = 0; i < options_in.size(); ++i)
+            aosOptions.AddString(options_in[i]);
+    }
+    return aosOptions;
+}
+
+// min, max, mean, sd and valid_count as a named vector (all NA if !ok)
+static Rcpp::NumericVector stats_to_vector_(bool ok, double dfMin,
+                                            double dfMax, double dfMean,
+                                            double dfStdDev,
+                                            GUInt64 nValidCount) {
+    Rcpp::NumericVector out = Rcpp::NumericVector::create(
+        Rcpp::Named("min") = NA_REAL, Rcpp::Named("max") = NA_REAL,
+        Rcpp::Named("mean") = NA_REAL, Rcpp::Named("sd") = NA_REAL,
+        Rcpp::Named("valid_count") = NA_REAL);
+    if (ok) {
+        out[0] = dfMin;
+        out[1] = dfMax;
+        out[2] = dfMean;
+        out[3] = dfStdDev;
+        out[4] = static_cast<double>(nValidCount);
+    }
+    return out;
+}
+
 // Read a hyperslab from hArray. start, count and step have one value per
 // dimension, in the array's own order. Empty start and count read the whole
 // array. Values are returned as a plain vector in C order (last dimension
@@ -739,6 +769,143 @@ GDALMDArrayR *GDALMDArrayR::getGridded(
 #endif
 }
 
+bool GDALMDArrayR::adviseRead(
+        const Rcpp::Nullable<Rcpp::NumericVector> &start,
+        const Rcpp::Nullable<Rcpp::NumericVector> &count,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+    if (start.isNull() != count.isNull())
+        Rcpp::stop("'start' and 'count' must both be given, or both NULL");
+
+    const size_t nDims = GDALMDArrayGetDimensionCount(m_hArray);
+    std::vector<GUInt64> anStart(nDims, 0);
+    std::vector<size_t> anCount(nDims, 1);
+    // NULL start and count advise for the whole array
+    const bool bWholeArray = start.isNull();
+    if (!bWholeArray) {
+        Rcpp::NumericVector start_in(start);
+        Rcpp::NumericVector count_in(count);
+        if (static_cast<size_t>(start_in.size()) != nDims ||
+                static_cast<size_t>(count_in.size()) != nDims) {
+            Rcpp::stop("'start' and 'count' must have one value per "
+                       "dimension (" + std::to_string(nDims) + ")");
+        }
+        size_t nDimCount = 0;
+        GDALDimensionH *pahDims = GDALMDArrayGetDimensions(m_hArray,
+                                                           &nDimCount);
+        bool bInRange = true;
+        for (size_t i = 0; i < nDims && i < nDimCount; ++i) {
+            const double dfSize =
+                static_cast<double>(GDALDimensionGetSize(pahDims[i]));
+            if (!is_whole_in_range_(start_in[i], 0, dfSize - 1) ||
+                    !is_whole_in_range_(count_in[i], 1,
+                                        dfSize - start_in[i])) {
+                bInRange = false;
+                break;
+            }
+            anStart[i] = static_cast<GUInt64>(start_in[i]);
+            anCount[i] = static_cast<size_t>(count_in[i]);
+        }
+        if (pahDims != nullptr)
+            GDALReleaseDimensions(pahDims, nDimCount);
+        if (!bInRange)
+            Rcpp::stop("'start' and 'count' are out of range");
+    }
+
+    const CPLStringList aosOptions = options_to_csl_(options);
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 4, 0)
+    return GDALMDArrayAdviseReadEx(
+        m_hArray, bWholeArray ? nullptr : anStart.data(),
+        bWholeArray ? nullptr : anCount.data(), aosOptions.List());
+#else
+    if (aosOptions.size() > 0)
+        Rcpp::stop("'options' for adviseRead() require GDAL >= 3.4");
+    return GDALMDArrayAdviseRead(
+        m_hArray, bWholeArray ? nullptr : anStart.data(),
+        bWholeArray ? nullptr : anCount.data());
+#endif
+}
+
+Rcpp::NumericVector GDALMDArrayR::getProcessingChunkSize(
+        double max_chunk_memory) const {
+    checkAccess_();
+
+    if (!is_whole_in_range_(max_chunk_memory, 1,
+                            static_cast<double>(
+                                std::numeric_limits<size_t>::max() / 2))) {
+        Rcpp::stop("'max_chunk_memory' must be a number of bytes >= 1");
+    }
+
+    size_t nCount = 0;
+    size_t *panChunkSize = GDALMDArrayGetProcessingChunkSize(
+        m_hArray, &nCount, static_cast<size_t>(max_chunk_memory));
+    Rcpp::NumericVector out(nCount);
+    for (size_t i = 0; i < nCount; ++i)
+        out[i] = static_cast<double>(panChunkSize[i]);
+    CPLFree(panChunkSize);
+    return out;
+}
+
+Rcpp::NumericVector GDALMDArrayR::getStatistics(bool approx_ok,
+                                                bool force) const {
+    checkAccess_();
+
+    double dfMin = 0, dfMax = 0, dfMean = 0, dfStdDev = 0;
+    GUInt64 nValidCount = 0;
+    // CE_Warning is returned if there are no statistics and force is false
+    const CPLErr err = GDALMDArrayGetStatistics(
+        m_hArray, m_hDataset, approx_ok, force, &dfMin, &dfMax, &dfMean,
+        &dfStdDev, &nValidCount,
+        (force && !quiet) ? GDALTermProgressR : nullptr, nullptr);
+    if (err == CE_Failure)
+        Rcpp::stop("failed to get statistics");
+
+    return stats_to_vector_(err == CE_None, dfMin, dfMax, dfMean, dfStdDev,
+                            nValidCount);
+}
+
+Rcpp::NumericVector GDALMDArrayR::computeStatistics(
+        bool approx_ok,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+    double dfMin = 0, dfMax = 0, dfMean = 0, dfStdDev = 0;
+    GUInt64 nValidCount = 0;
+    const CPLStringList aosOptions = options_to_csl_(options);
+    int ok = FALSE;
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 8, 0)
+    ok = GDALMDArrayComputeStatisticsEx(
+        m_hArray, m_hDataset, approx_ok, &dfMin, &dfMax, &dfMean, &dfStdDev,
+        &nValidCount, quiet ? nullptr : GDALTermProgressR, nullptr,
+        aosOptions.List());
+#else
+    if (aosOptions.size() > 0)
+        Rcpp::stop("'options' for computeStatistics() require GDAL >= 3.8");
+    ok = GDALMDArrayComputeStatistics(
+        m_hArray, m_hDataset, approx_ok, &dfMin, &dfMax, &dfMean, &dfStdDev,
+        &nValidCount, quiet ? nullptr : GDALTermProgressR, nullptr);
+#endif
+    if (!ok)
+        Rcpp::stop("failed to compute statistics");
+
+    return stats_to_vector_(true, dfMin, dfMax, dfMean, dfStdDev,
+                            nValidCount);
+}
+
+bool GDALMDArrayR::cache(
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+// requires GDAL >= 3.4 for GDALMDArrayCache()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 4, 0)
+    Rcpp::stop("cache() requires GDAL >= 3.4");
+#else
+    const CPLStringList aosOptions = options_to_csl_(options);
+    return GDALMDArrayCache(m_hArray, aosOptions.List());
+#endif
+}
+
 void GDALMDArrayR::close() {
     if (m_hArray != nullptr) {
         GDALMDArrayRelease(m_hArray);
@@ -895,6 +1062,17 @@ RCPP_MODULE(mod_GDALMDArray) {
         "Return a resampled (and optionally reprojected) view of the array")
     .const_method("getGridded", &GDALMDArrayR::getGridded,
         "Return a gridded view of an array of scattered points")
+    .const_method("adviseRead", &GDALMDArrayR::adviseRead,
+        "Advise the driver of an upcoming read request")
+    .const_method("getProcessingChunkSize",
+        &GDALMDArrayR::getProcessingChunkSize,
+        "Return a chunk size for processing, given a memory limit")
+    .const_method("getStatistics", &GDALMDArrayR::getStatistics,
+        "Return statistics of the array, if available or forced")
+    .const_method("computeStatistics", &GDALMDArrayR::computeStatistics,
+        "Compute statistics of the array")
+    .const_method("cache", &GDALMDArrayR::cache,
+        "Cache the content of the array into an auxiliary file")
     .method("close", &GDALMDArrayR::close,
         "Release the array and the dataset reference")
     .const_method("show", &GDALMDArrayR::show,

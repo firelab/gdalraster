@@ -437,3 +437,106 @@ test_that("getGridded works", {
     g$close()
     g2$close()
 })
+
+test_that("adviseRead and getProcessingChunkSize work", {
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+
+    expect_true(arr$adviseRead(NULL, NULL, NULL))
+    expect_true(arr$adviseRead(c(1, 0, 0), c(2, 5, 6), NULL))
+    # reads are unchanged after the advice
+    expect_identical(arr$read(NULL, NULL, NULL), t2m_values())
+    expect_error(arr$adviseRead(c(0, 0, 0), NULL, NULL), "both")
+    expect_error(arr$adviseRead(c(0, 0), c(1, 1), NULL),
+                 "one value per dimension")
+    expect_error(arr$adviseRead(c(0, 0, 0), c(5, 5, 6), NULL),
+                 "out of range")
+    expect_error(arr$adviseRead(c(4, 0, 0), c(1, 5, 6), NULL),
+                 "out of range")
+
+    # Int16 values, the whole array is 240 bytes
+    expect_equal(arr$getProcessingChunkSize(1e6), c(4, 5, 6))
+    chunk <- arr$getProcessingChunkSize(24)
+    expect_length(chunk, 3)
+    expect_true(prod(chunk) * 2 <= 24)
+    expect_true(all(chunk >= 1 & chunk <= c(4, 5, 6)))
+    expect_error(arr$getProcessingChunkSize(0), "bytes")
+
+    arr$close()
+    expect_error(arr$adviseRead(NULL, NULL, NULL), "not open")
+    ds$close()
+})
+
+test_that("statistics methods work", {
+    # on a copy, since GDAL may save statistics next to the dataset
+    f <- file.path(tempdir(), "mdim_small_stats.nc")
+    unlink(paste0(f, ".aux.xml"))
+    file.copy(system.file("extdata/mdim_small.nc", package="gdalraster"), f,
+              overwrite = TRUE)
+    on.exit(unlink(c(f, paste0(f, ".aux.xml"))), add = TRUE)
+
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    arr$quiet <- TRUE
+    v <- t2m_values()
+    pop_sd <- function(x) {
+        x <- x[!is.na(x)]
+        sqrt(mean((x - mean(x))^2))
+    }
+
+    # not available without force
+    st <- arr$getStatistics(FALSE, FALSE)
+    expect_named(st, c("min", "max", "mean", "sd", "valid_count"))
+    expect_true(all(is.na(st)))
+
+    st <- arr$computeStatistics(FALSE, NULL)
+    expect_named(st, c("min", "max", "mean", "sd", "valid_count"))
+    expect_equal(unname(st),
+                 c(range(v, na.rm = TRUE), mean(v, na.rm = TRUE), pop_sd(v),
+                   sum(!is.na(v))))
+    expect_equal(arr$getStatistics(FALSE, FALSE), st)
+
+    # derived arrays
+    expect_equal(unname(arr$getUnscaled()$computeStatistics(FALSE, NULL)),
+                 c(range(v * 0.01, na.rm = TRUE), mean(v * 0.01, na.rm = TRUE),
+                   pop_sd(v * 0.01), sum(!is.na(v))))
+    v1 <- v[1:30]
+    st1 <- arr$getView("[0,...]")$getStatistics(FALSE, TRUE)
+    expect_equal(unname(st1),
+                 c(range(v1, na.rm = TRUE), mean(v1, na.rm = TRUE),
+                   pop_sd(v1), 29))
+
+    arr$close()
+    ds$close()
+})
+
+test_that("cache works", {
+    skip_if(gdal_version_num() < gdal_compute_version(3, 4, 0))
+
+    f <- file.path(tempdir(), "mdim_small_cache.nc")
+    file.copy(system.file("extdata/mdim_small.nc", package="gdalraster"), f,
+              overwrite = TRUE)
+    f_cache <- paste0(f, ".gmac")
+    on.exit(unlink(c(f, f_cache, paste0(f, ".aux.xml"))), add = TRUE)
+
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    tr <- arr$transpose(c(2, 1, 0))
+    expected <- tr$read(NULL, NULL, NULL)
+    expect_false(file.exists(f_cache))
+    expect_true(tr$cache(NULL))
+    expect_true(file.exists(f_cache))
+    tr$close()
+    arr$close()
+    ds$close()
+
+    # the cached array is used on a later open
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    tr <- arr$transpose(c(2, 1, 0))
+    expect_identical(tr$read(NULL, NULL, NULL), expected)
+    tr$close()
+    arr$close()
+    ds$close()
+})
