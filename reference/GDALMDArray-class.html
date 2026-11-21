@@ -11,7 +11,8 @@ read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
 dimension)
 derive new arrays without copying data: a view given a slicing
-expression, a transposed view, an unscaled view and a mask
+expression, a transposed view, an unscaled view, a mask, a resampled or
+reprojected view, and a gridded view of scattered points
 expose a 2D view of the array as a classic raster, an object of class
 GDALRaster.
 
@@ -39,7 +40,8 @@ read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
 dimension)
 derive new arrays without copying data: a view given a slicing
-expression, a transposed view, an unscaled view and a mask
+expression, a transposed view, an unscaled view, a mask, a resampled or
+reprojected view, and a gridded view of scattered points
 expose a 2D view of the array as a classic raster, an object of class
 GDALRaster.
 
@@ -125,7 +127,8 @@ An object of class <code>GDALMDArray</code> is returned by
 <li><p>read a hyperslab of the array (start, count and optional step per
 dimension)</p></li>
 <li><p>derive new arrays without copying data: a view given a slicing
-expression, a transposed view, an unscaled view and a mask</p></li>
+expression, a transposed view, an unscaled view, a mask, a resampled or
+reprojected view, and a gridded view of scattered points</p></li>
 <li><p>expose a 2D view of the array as a classic raster, an object of class
 <code><a href="GDALRaster-class.html">GDALRaster</a></code>.</p></li>
 </ul><p>An object of class <code>GDALMDArray</code> holds a reference to the dataset that
@@ -179,9 +182,11 @@ varying first (e.g., <code>time, lat, lon</code>).</p>
 <span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">transpose</span>(axes)</span>
 <span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getUnscaled</span>()</span>
 <span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getMask</span>(options)</span>
-<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
-<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getResampled</span>(new_dim_sizes, resample_alg, target_srs, options)</span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getGridded</span>(grid_options, x_array, y_array, options)</span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -328,6 +333,47 @@ the nodata value, and the attributes <code>_FillValue</code>, <code>missing_valu
 floating point types). <code>options</code> is a character vector of <code>NAME=VALUE</code>
 pairs, or <code>NULL</code> (see <code>GDALMDArray::GetMask()</code> in the GDAL API
 documentation).</p>
+<p><code>$getResampled(new_dim_sizes, resample_alg, target_srs, options)</code><br>
+Returns a view of the array resampled to new dimension sizes, and
+optionally reprojected, along its horizontal dimensions (types
+<code>"HORIZONTAL_X"</code> and <code>"HORIZONTAL_Y"</code>). Values are computed when the new
+array is read, using GDAL's warping engine, so reading a window of the new
+array reads only the part of the source array that it needs. Requires GDAL= 3.4.</p><ul><li><p><code>new_dim_sizes</code>: a numeric vector with one value per dimension giving
+the new size, or <code>NA</code> to keep a dimension unchanged (or, for the
+horizontal dimensions, to have GDAL compute the size). <code>NULL</code> is the same
+as all <code>NA</code>. Dimensions that are not horizontal must be <code>NA</code>. The new
+horizontal dimensions are evenly spaced over the extent of the source.</p></li>
+<li><p><code>resample_alg</code>: a character string, one of <code>"nearest"</code>, <code>"bilinear"</code>,
+<code>"cubic"</code>, <code>"cubicspline"</code>, <code>"lanczos"</code>, <code>"average"</code>, <code>"rms"</code> or
+<code>"mode"</code>.</p></li>
+<li><p><code>target_srs</code>: a character string giving the spatial reference system to
+reproject to, in a format accepted by <code><a href="srs_convert.html">srs_to_wkt()</a></code> (e.g.,
+<code>"EPSG:3031"</code>), or <code>""</code> to keep the spatial reference of the array. An
+error is raised if <code>target_srs</code> is given and the array has no spatial
+reference (a multidimensional VRT can add one, see the examples).</p></li>
+<li><p><code>options</code>: a character vector of <code>NAME=VALUE</code> pairs, or <code>NULL</code> (see
+<code>GDALMDArray::GetResampled()</code> in the GDAL API documentation).</p></li>
+</ul><p>The new horizontal dimensions are named <code>dimX</code> and <code>dimY</code>, with indexing
+variables of the same names holding the coordinates of the cell centres
+in the target spatial reference.</p>
+<p><code>$getGridded(grid_options, x_array, y_array, options)</code><br>
+Returns a gridded view of an array of scattered points, i.e., an array
+whose last dimension indexes the points, interpolated onto a regular grid
+using the GDAL gridding algorithms (as for <code class="command">gdal_grid</code>).
+Requires GDAL &gt;= 3.7.</p><ul><li><p><code>grid_options</code>: a character string giving the gridding algorithm and its
+parameters, as for the <code class="command">gdal_grid</code> <code>-a</code> argument, e.g.,
+<code>"invdist:power=2.0:smoothing=1.0"</code>, <code>"nearest"</code>, <code>"average"</code> or
+<code>"linear"</code>.</p></li>
+<li><p><code>x_array</code>, <code>y_array</code>: objects of class <code>GDALMDArray</code> with the X and Y
+coordinates of the points (one dimension, the same as the last dimension
+of this array), or <code>NULL</code> for both to use the arrays named in the
+<code>coordinates</code> attribute of this array.</p></li>
+<li><p><code>options</code>: a character vector of <code>NAME=VALUE</code> pairs, or <code>NULL</code>, e.g.,
+<code>"RESOLUTION=0.5"</code> for the grid spacing, and <code>"XMIN=..."</code>, <code>"XMAX=..."</code>,
+<code>"YMIN=..."</code>, <code>"YMAX=..."</code> for its extent (see <code>GDALMDArray::GetGridded()</code>
+in the GDAL API documentation).</p></li>
+</ul><p>The new dimensions are named <code>dimX</code> and <code>dimY</code>, with indexing variables of
+the same names.</p>
 </div>
 
 <div class="section">
@@ -442,6 +488,104 @@ Closes the array and releases the reference to its dataset.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## resampling and reprojection (GDAL &gt;= 3.4)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="gdal_version.html">gdal_version_num</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu"><a href="gdal_compute_version.html">gdal_compute_version</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># t2m has no spatial reference: add one with a multidimensional VRT,</span></span></span>
+<span class="r-in"><span>  <span class="co"># which reads from the source file (nothing is copied)</span></span></span>
+<span class="r-in"><span>  <span class="va">vrt</span> <span class="op">&lt;-</span> <span class="st">'&lt;VRTDataset&gt;&lt;Group name="/"&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Dimension name="time" size="4" indexingVariable="time"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Dimension name="lat" type="HORIZONTAL_Y" size="5" indexingVariable="lat"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Dimension name="lon" type="HORIZONTAL_X" size="6" indexingVariable="lon"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="time"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="time"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Source&gt;&lt;SourceFilename&gt;SRC&lt;/SourceFilename&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;SourceArray&gt;/time&lt;/SourceArray&gt;&lt;/Source&gt;&lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="lat"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="lat"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Source&gt;&lt;SourceFilename&gt;SRC&lt;/SourceFilename&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;SourceArray&gt;/lat&lt;/SourceArray&gt;&lt;/Source&gt;&lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="lon"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="lon"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Source&gt;&lt;SourceFilename&gt;SRC&lt;/SourceFilename&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;SourceArray&gt;/lon&lt;/SourceArray&gt;&lt;/Source&gt;&lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="t2m"&gt;&lt;DataType&gt;Int16&lt;/DataType&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;DimensionRef ref="time"/&gt;&lt;DimensionRef ref="lat"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;DimensionRef ref="lon"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;SRS dataAxisToSRSAxisMapping="2,1"&gt;EPSG:4326&lt;/SRS&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;NoDataValue&gt;-32767&lt;/NoDataValue&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Source&gt;&lt;SourceFilename&gt;SRC&lt;/SourceFilename&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;SourceArray&gt;/t2m&lt;/SourceArray&gt;&lt;/Source&gt;&lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">  &lt;/Group&gt;&lt;/VRTDataset&gt;'</span></span></span>
+<span class="r-in"><span>  <span class="va">vrt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"SRC"</span>, <span class="va">f</span>, <span class="va">vrt</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALMultiDimRaster</span>, <span class="va">vrt</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/t2m"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># twice the resolution, bilinear</span></span></span>
+<span class="r-in"><span>  <span class="va">arr2</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getResampled</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">10</span>, <span class="fl">12</span><span class="op">)</span>, <span class="st">"bilinear"</span>, <span class="st">""</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">arr2</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">arr2</span><span class="op">$</span><span class="fu">getCoordinateValues</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Antarctic polar stereographic, size computed by GDAL</span></span></span>
+<span class="r-in"><span>  <span class="va">arr3</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getResampled</span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"nearest"</span>, <span class="st">"EPSG:3031"</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">arr3</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">arr3</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">arr2</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 time    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 dimY   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 dimX   12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 144.9375 145.0625 145.1875 145.3125 145.4375 145.5625 145.6875 145.8125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 145.9375 146.0625 146.1875 146.3125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 time    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 dimY    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 dimX    8</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## gridding scattered points (GDAL &gt;= 3.7)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="gdal_version.html">gdal_version_num</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu"><a href="gdal_compute_version.html">gdal_compute_version</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># four points as a multidimensional VRT with inline values</span></span></span>
+<span class="r-in"><span>  <span class="va">pts</span> <span class="op">&lt;-</span> <span class="st">'&lt;VRTDataset&gt;&lt;Group name="/"&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Dimension name="n" size="4"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="x"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="n"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;InlineValuesWithValueElement&gt;&lt;Value&gt;0&lt;/Value&gt;&lt;Value&gt;10&lt;/Value&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Value&gt;0&lt;/Value&gt;&lt;Value&gt;10&lt;/Value&gt;&lt;/InlineValuesWithValueElement&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="y"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="n"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;InlineValuesWithValueElement&gt;&lt;Value&gt;0&lt;/Value&gt;&lt;Value&gt;0&lt;/Value&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Value&gt;10&lt;/Value&gt;&lt;Value&gt;10&lt;/Value&gt;&lt;/InlineValuesWithValueElement&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;Array name="v"&gt;&lt;DataType&gt;Float64&lt;/DataType&gt;&lt;DimensionRef ref="n"/&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;InlineValuesWithValueElement&gt;&lt;Value&gt;1&lt;/Value&gt;&lt;Value&gt;2&lt;/Value&gt;</span></span></span>
+<span class="r-in"><span><span class="st">      &lt;Value&gt;3&lt;/Value&gt;&lt;Value&gt;4&lt;/Value&gt;&lt;/InlineValuesWithValueElement&gt;</span></span></span>
+<span class="r-in"><span><span class="st">    &lt;/Array&gt;</span></span></span>
+<span class="r-in"><span><span class="st">  &lt;/Group&gt;&lt;/VRTDataset&gt;'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALMultiDimRaster</span>, <span class="va">pts</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">v</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/v"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/x"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/y"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">g</span> <span class="op">&lt;-</span> <span class="va">v</span><span class="op">$</span><span class="fu">getGridded</span><span class="op">(</span><span class="st">"invdist:power=2.0"</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="st">"RESOLUTION=2.5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"name"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">g</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">5</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">g</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">y</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">v</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 dimY    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 dimX    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          [,1]     [,2]     [,3]     [,4]     [,5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.000000 1.288245 1.833333 2.038461 2.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 1.331461 1.617647 2.055556 2.205883 2.168107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 2.166667 2.277778 2.500000 2.722222 2.833333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 2.831893 2.794117 2.944444 3.382353 3.668539</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 3.000000 2.961538 3.166667 3.711754 4.000000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

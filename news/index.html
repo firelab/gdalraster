@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.7.0.9013" id="gdalraster-2709013-dev">gdalraster 2.7.0.9013 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709013-dev"></a></h2>
-<ul><li><p>(internal) gdalalg.cpp: suppress compiler warning <code>-Wunused-const-variable</code> (2026-11-21)</p></li>
+<ul><li><p>class <code>GDALMDArray</code>: add methods <code>$getResampled()</code> returning a resampled and optionally reprojected view of the array (GDAL &gt;= 3.4), and <code>$getGridded()</code> returning a gridded view of an array of scattered points (GDAL &gt;= 3.7) (2026-11-22)</p></li>
+<li><p>(internal) gdalalg.cpp: suppress compiler warning <code>-Wunused-const-variable</code> (2026-11-21)</p></li>
 <li><p>class <code>GDALMDArray</code>: add methods <code>$getView()</code>, <code>$transpose()</code>, <code>$getUnscaled()</code> and <code>$getMask()</code> returning a derived array without copying data, and <code>$asClassicDataset()</code> returning a view of the array as a <code>GDALRaster</code> (<a href="https://github.com/firelab/gdalraster/issues/1032" class="external-link">#1032</a>) (2026-11-21)</p></li>
 <li><p>fix <code>GDALAlg$output()</code>: avoid memory leak: return the <code>GDALRaster</code> or <code>GDALVector</code> object itself, owned by R, instead of a copy that leaked the original object (<a href="https://github.com/firelab/gdalraster/issues/1031" class="external-link">#1031</a>) (2026-11-20)</p></li>
 <li><p>fix <code>GDALVector$fetch()</code>: errors on a short last page when <code>returnGeomAs = "BBOX"</code> or using ignored fields (<a href="https://github.com/firelab/gdalraster/issues/1028" class="external-link">#1028</a>) (2026-11-20)</p></li>
