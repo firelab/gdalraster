@@ -290,3 +290,150 @@ test_that("asClassicDataset works", {
     band1$close()
     ds$close()
 })
+
+# mdim_small.nc /t2m with a spatial reference and nodata value, as a
+# multidimensional VRT reading from the file
+t2m_vrt <- function() {
+    vrt <- '<VRTDataset><Group name="/">
+      <Dimension name="time" size="4" indexingVariable="time"/>
+      <Dimension name="lat" type="HORIZONTAL_Y" size="5" indexingVariable="lat"/>
+      <Dimension name="lon" type="HORIZONTAL_X" size="6" indexingVariable="lon"/>
+      <Array name="time"><DataType>Float64</DataType><DimensionRef ref="time"/>
+        <Source><SourceFilename>SRC</SourceFilename>
+        <SourceArray>/time</SourceArray></Source></Array>
+      <Array name="lat"><DataType>Float64</DataType><DimensionRef ref="lat"/>
+        <Source><SourceFilename>SRC</SourceFilename>
+        <SourceArray>/lat</SourceArray></Source></Array>
+      <Array name="lon"><DataType>Float64</DataType><DimensionRef ref="lon"/>
+        <Source><SourceFilename>SRC</SourceFilename>
+        <SourceArray>/lon</SourceArray></Source></Array>
+      <Array name="t2m"><DataType>Int16</DataType>
+        <DimensionRef ref="time"/><DimensionRef ref="lat"/>
+        <DimensionRef ref="lon"/>
+        <SRS dataAxisToSRSAxisMapping="2,1">EPSG:4326</SRS>
+        <NoDataValue>-32767</NoDataValue>
+        <Source><SourceFilename>SRC</SourceFilename>
+        <SourceArray>/t2m</SourceArray></Source></Array>
+    </Group></VRTDataset>'
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    gsub("SRC", f, vrt, fixed = TRUE)
+}
+
+test_that("getResampled works", {
+    skip_if(gdal_version_num() < gdal_compute_version(3, 4, 0))
+
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+
+    # resampling to the same grid is an identity
+    r1 <- arr$getResampled(NULL, "nearest", "", NULL)
+    expect_true(is(r1, "Rcpp_GDALMDArray"))
+    expect_equal(r1$getDimensions()$size, c(4, 5, 6))
+    expect_identical(r1$read(NULL, NULL, NULL), arr$read(NULL, NULL, NULL))
+    expect_equal(r1$getCoordinateValues(1), arr$getCoordinateValues(1))
+    expect_equal(r1$getCoordinateValues(2), arr$getCoordinateValues(2))
+    r1$close()
+
+    # twice the resolution over the same extent
+    r2 <- arr$getResampled(c(NA, 10, 12), "nearest", "", NULL)
+    expect_equal(r2$getDimensions()$size, c(4, 10, 12))
+    expect_equal(r2$getDimensions()$name, c("time", "dimY", "dimX"))
+    expect_equal(r2$getCoordinateValues(2),
+                 seq(145 - 0.125 + 0.0625, by = 0.125, length.out = 12))
+    expect_equal(r2$getCoordinateValues(0), c(0, 6, 12, 18))
+    a <- array(t2m_values(), dim = c(6, 5, 4))
+    v <- r2$read(c(1, 0, 0), c(1, 10, 12), NULL)
+    expect_identical(v[c(2, 4)], a[1:2, 1, 2])
+    expect_true(all(v %in% c(a[, , 2], NA)))
+    r2$close()
+
+    # argument checks
+    expect_error(arr$getResampled(c(NA, 10), "nearest", "", NULL),
+                 "one value per dimension")
+    expect_error(arr$getResampled(c(NA, 0, 12), "nearest", "", NULL),
+                 "whole numbers")
+    expect_error(arr$getResampled(NULL, "nope", "", NULL), "not valid")
+    # no spatial reference to reproject from
+    expect_error(arr$getResampled(NULL, "nearest", "EPSG:3031", NULL),
+                 "no spatial reference")
+    arr$close()
+    ds$close()
+
+    # reprojection, with a spatial reference from a VRT
+    ds <- new(GDALMultiDimRaster, t2m_vrt())
+    arr <- ds$openMDArray("/t2m")
+    expect_error(arr$getResampled(NULL, "nearest", "nope", NULL),
+                 "not a valid spatial reference")
+    r3 <- arr$getResampled(NULL, "nearest", "EPSG:3031", NULL)
+    expect_equal(r3$getDimensionCount(), 3)
+    expect_equal(r3$getDimensions()$name[1], "time")
+    expect_equal(srs_get_name(r3$getSpatialRef()),
+                 "WGS 84 / Antarctic Polar Stereographic")
+    dims <- r3$getDimensions()
+    v <- r3$read(c(0, 0, 0), c(1, dims$size[2], dims$size[3]), NULL)
+    # nearest neighbour gives only source values, or nodata outside
+    expect_true(all(v %in% c(a[, , 1], NA)))
+    expect_true(sum(!is.na(v)) > 0)
+    # x coordinates are in metres
+    expect_true(all(r3$getCoordinateValues(2) > 1e6))
+
+    # remains valid after the dataset is closed
+    arr$close()
+    ds$close()
+    expect_identical(r3$read(c(0, 0, 0), c(1, dims$size[2], dims$size[3]),
+                             NULL), v)
+    r3$close()
+})
+
+test_that("getGridded works", {
+    skip_if(gdal_version_num() < gdal_compute_version(3, 7, 0))
+
+    pts <- '<VRTDataset><Group name="/">
+      <Dimension name="n" size="4"/>
+      <Array name="x"><DataType>Float64</DataType><DimensionRef ref="n"/>
+        <InlineValuesWithValueElement><Value>0</Value><Value>10</Value>
+        <Value>0</Value><Value>10</Value></InlineValuesWithValueElement>
+      </Array>
+      <Array name="y"><DataType>Float64</DataType><DimensionRef ref="n"/>
+        <InlineValuesWithValueElement><Value>0</Value><Value>0</Value>
+        <Value>10</Value><Value>10</Value></InlineValuesWithValueElement>
+      </Array>
+      <Array name="v"><DataType>Float64</DataType><DimensionRef ref="n"/>
+        <InlineValuesWithValueElement><Value>1</Value><Value>2</Value>
+        <Value>3</Value><Value>4</Value></InlineValuesWithValueElement>
+      </Array>
+    </Group></VRTDataset>'
+
+    ds <- new(GDALMultiDimRaster, pts)
+    v <- ds$openMDArray("/v")
+    x <- ds$openMDArray("/x")
+    y <- ds$openMDArray("/y")
+
+    g <- v$getGridded("nearest", x, y, "RESOLUTION=10")
+    expect_true(is(g, "Rcpp_GDALMDArray"))
+    expect_equal(g$getDimensions()$name, c("dimY", "dimX"))
+    expect_equal(g$getDimensions()$size, c(2, 2))
+    expect_equal(g$getCoordinateValues(0), c(0, 10))
+    expect_equal(g$getCoordinateValues(1), c(0, 10))
+    # each grid node is on a point
+    expect_equal(g$read(NULL, NULL, NULL), c(1, 2, 3, 4))
+
+    g2 <- v$getGridded("invdist:power=2.0", x, y, "RESOLUTION=2.5")
+    expect_equal(g2$getDimensions()$size, c(5, 5))
+    gv <- g2$read(NULL, NULL, NULL)
+    expect_equal(gv[c(1, 5, 21, 25)], c(1, 2, 3, 4))
+    expect_true(all(gv >= 1 & gv <= 4))
+
+    expect_error(v$getGridded("", x, y, NULL), "non-empty")
+    expect_error(v$getGridded("nearest", x, NULL, NULL), "both")
+
+    # remains valid after the source arrays and the dataset are closed
+    x$close()
+    y$close()
+    v$close()
+    ds$close()
+    expect_equal(g$read(NULL, NULL, NULL), c(1, 2, 3, 4))
+    g$close()
+    g2$close()
+})
