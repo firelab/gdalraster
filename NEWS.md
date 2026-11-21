@@ -1,8 +1,8 @@
-# gdalraster 2.7.0.9012 (dev)
+# gdalraster 2.7.0.9013 (dev)
 
 * (internal) gdalalg.cpp: suppress compiler warning `-Wunused-const-variable` (2026-11-21)
 
-* class `GDALMDArray`: add methods `$getView()`, `$transpose()`, `$getUnscaled()` and `$getMask()` returning a derived array without copying data, and `$asClassicDataset()` returning a view of the array as a `GDALRaster` (2026-11-21)
+* class `GDALMDArray`: add methods `$getView()`, `$transpose()`, `$getUnscaled()` and `$getMask()` returning a derived array without copying data, and `$asClassicDataset()` returning a view of the array as a `GDALRaster` (#1032) (2026-11-21)
 
 * fix `GDALAlg$output()`: avoid memory leak: return the `GDALRaster` or `GDALVector` object itself, owned by R, instead of a copy that leaked the original object (#1031) (2026-11-20)
 
