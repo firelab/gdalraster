@@ -165,8 +165,9 @@ the dataset object is closed or garbage collected.</li>
 As discussed in <a href="https://github.com/firelab/gdalraster/discussions/766" class="external-link">#766</a>,
 the multidimensional case is “analogous to the case when cli output is a
 vector dataset.” Objects of class <code>GDALMDArray</code> are returned
-from C++ with <code>new</code> and <code>Rcpp::wrap()</code>, without
-object factories.</p>
+from C++ as a pointer to the exposed class, which R then owns and
+deletes when the object is garbage collected. This needs no object
+factory and makes no copy (see the Rcpp modules vignette and <a href="https://github.com/RcppCore/Rcpp/issues/1533" class="external-link">RcppCore/Rcpp#1533</a>).</p>
 <p>Groups, dimensions, attributes and data types are not classes. They
 are returned as plain R lists and data frames, in the same way that
 <code>GDALVector$getLayerDefn()</code> returns a feature class
@@ -186,16 +187,20 @@ and <code>GDALGroupOpenMDArrayFromFullname()</code> (GDAL &gt;=
 <div class="section level3">
 <h3 id="reading">Reading<a class="anchor" aria-label="anchor" href="#reading"></a>
 </h3>
-<p><code>GDALMDArray$read(start, count, step)</code> reads a hyperslab.
-<code>start</code> is 0-based, as are all offsets in
-<strong>gdalraster</strong> class methods, with one value per dimension
-in the array’s own dimension order. The return value is a plain vector,
-in GDAL’s order (the last dimension varies fastest), with no R
-attributes, the same as <code>GDALRaster$read()</code>. Data types
-follow <code>GDALRaster</code>: <code>readByteAsRaw</code> is supported
-as a writable field, Int64 is returned as <code><a href="https://bit64.r-lib.org/reference/bit64-package.html" class="external-link">bit64::integer64</a></code>,
-and string arrays are returned as <code>character</code>. Compound data
-types are not supported initially.</p>
+<p><code>GDALMDArray$read(start, count, step)</code> reads a hyperslab,
+or the whole array with <code>$read(NULL, NULL, NULL)</code>. As in
+other class methods, all arguments are required, and
+<code><a href="../reference/mdim_read.html">mdim_read()</a></code> provides defaults. <code>start</code> is
+0-based, as are all offsets in <strong>gdalraster</strong> class
+methods, with one value per dimension in the array’s own dimension
+order. The return value is a plain vector, in GDAL’s order (the last
+dimension varies fastest), with no R attributes, the same as
+<code>GDALRaster$read()</code>. Data types follow
+<code>GDALRaster</code>: <code>readByteAsRaw</code> is supported as a
+writable field, 64-bit integer types are returned as <code>double</code>
+(exact up to 2^53), and string arrays are returned as
+<code>character</code>. Compound data types are not supported
+initially.</p>
 <p>The stand-alone function <code><a href="../reference/mdim_read.html">mdim_read()</a></code> reads an array by
 data source name or from an open dataset, and returns the vector with a
 <code>"gis"</code> attribute, following <code><a href="../reference/read_ds.html">read_ds()</a></code>:</p>
@@ -266,7 +271,7 @@ request in the planned series where it would be added.</p>
 <span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getGroupInfo<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>path<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a></span>
 <span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>    <span class="co">// arrays (PR 2)</span></span>
-<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>    GDALMDArray <span class="op">*</span>openMDArray<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>path<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>openMDArray<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>path<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a></span>
 <span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>    <span class="co">// creation (PR 7)</span></span>
 <span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>    <span class="dt">void</span> createGroup<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>path<span class="op">);</span></span>
@@ -303,9 +308,9 @@ the documentation (to be checked in PR 2).</p>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame getDimensions<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getDataType<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getAttributes<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    SEXP getNoDataValue<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    SEXP getScale<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    SEXP getOffset<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    <span class="dt">double</span> getNoDataValue<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>    <span class="dt">double</span> getScale<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="dt">double</span> getOffset<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="bu">std::</span>string getUnit<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    <span class="bu">std::</span>string getSpatialRef<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector getBlockSize<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
@@ -313,8 +318,8 @@ the documentation (to be checked in PR 2).</p>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    SEXP getCoordinateValues<span class="op">(</span><span class="dt">int</span> dim<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a></span>
 <span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>    <span class="co">// I/O (PR 2, write in PR 7)</span></span>
-<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>    SEXP read<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>start<span class="op">,</span></span>
-<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>              <span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>count<span class="op">,</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>    SEXP read<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>start<span class="op">,</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>              <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>count<span class="op">,</span></span>
 <span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>              <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>step<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>    <span class="dt">void</span> write<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>RObject <span class="op">&amp;</span>data<span class="op">,</span></span>
 <span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>               <span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>start<span class="op">,</span></span>
@@ -325,7 +330,7 @@ the documentation (to be checked in PR 2).</p>
 <span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getView<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>view_expr<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>transpose<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>IntegerVector <span class="op">&amp;</span>axes<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getUnscaled<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getMask<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getMask<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getResampled<span class="op">(...)</span> <span class="at">const</span><span class="op">;</span>   <span class="co">// GDAL &gt;= 3.4</span></span>
 <span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getGridded<span class="op">(...)</span> <span class="at">const</span><span class="op">;</span>     <span class="co">// GDAL &gt;= 3.7</span></span>
 <span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a></span>
@@ -405,7 +410,8 @@ touches 744 chunks.</p>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALMultiDimRaster</span>, <span class="va">era5</span><span class="op">)</span></span>
 <span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/2m_temperature"</span><span class="op">)</span></span>
 <span><span class="va">arr</span><span class="op">$</span><span class="fu">getBlockSize</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span>start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">534720</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">721</span>, <span class="fl">1440</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">v</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span>start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">534720</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">721</span>, <span class="fl">1440</span><span class="op">)</span>,</span>
+<span>                          step <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The time to read one whole block is the baseline for any read on this
 array: one fetch and one decode. A planned read that touches n distinct
 chunks costs about n blocks, whatever the number of points it
@@ -435,8 +441,8 @@ around two northern poles. Time is in
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALMultiDimRaster</span>, <span class="va">gfdl</span><span class="op">)</span></span>
 <span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/tos"</span><span class="op">)</span></span>
 <span><span class="va">arr</span><span class="op">$</span><span class="fu">getAttributes</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">coordinates</span></span>
-<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lat"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lon"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lat"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lon"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <p>Mapping this array onto a regular grid is the purpose of
 <code>GDALMDArray$getGridded()</code> and <code>$getResampled()</code>
 (planned PR 4).</p>
@@ -486,6 +492,11 @@ I/O and statistics, 6 raw block references, 7 writing, 8
 </h2>
 <ul>
 <li>initial draft (2026-11-14)</li>
+<li>
+<code>openMDArray()</code> returns a pointer owned by R;
+<code>read()</code> is a single method taking <code>NULL</code> for the
+whole array; 64-bit integers are read as <code>double</code>;
+<code>getMask()</code> takes <code>options</code> (2026-11-20)</li>
 </ul>
 </div>
 <div class="section level2">

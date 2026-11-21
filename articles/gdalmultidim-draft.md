@@ -72,8 +72,11 @@ This follows `GDALVector`, which encapsulates an `OGRLayer` and the
 `GDALDataset` that contains it. As discussed in
 [\#766](https://github.com/firelab/gdalraster/discussions/766), the
 multidimensional case is “analogous to the case when cli output is a
-vector dataset.” Objects of class `GDALMDArray` are returned from C++
-with `new` and `Rcpp::wrap()`, without object factories.
+vector dataset.” Objects of class `GDALMDArray` are returned from C++ as
+a pointer to the exposed class, which R then owns and deletes when the
+object is garbage collected. This needs no object factory and makes no
+copy (see the Rcpp modules vignette and
+[RcppCore/Rcpp#1533](https://github.com/RcppCore/Rcpp/issues/1533)).
 
 Groups, dimensions, attributes and data types are not classes. They are
 returned as plain R lists and data frames, in the same way that
@@ -91,16 +94,19 @@ This needs `GDALGroupOpenGroupFromFullname()` and
 
 ### Reading
 
-`GDALMDArray$read(start, count, step)` reads a hyperslab. `start` is
-0-based, as are all offsets in **gdalraster** class methods, with one
-value per dimension in the array’s own dimension order. The return value
-is a plain vector, in GDAL’s order (the last dimension varies fastest),
-with no R attributes, the same as `GDALRaster$read()`. Data types follow
-`GDALRaster`: `readByteAsRaw` is supported as a writable field, Int64 is
-returned as
-[`bit64::integer64`](https://bit64.r-lib.org/reference/bit64-package.html),
-and string arrays are returned as `character`. Compound data types are
-not supported initially.
+`GDALMDArray$read(start, count, step)` reads a hyperslab, or the whole
+array with `$read(NULL, NULL, NULL)`. As in other class methods, all
+arguments are required, and
+[`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
+provides defaults. `start` is 0-based, as are all offsets in
+**gdalraster** class methods, with one value per dimension in the
+array’s own dimension order. The return value is a plain vector, in
+GDAL’s order (the last dimension varies fastest), with no R attributes,
+the same as `GDALRaster$read()`. Data types follow `GDALRaster`:
+`readByteAsRaw` is supported as a writable field, 64-bit integer types
+are returned as `double` (exact up to 2^53), and string arrays are
+returned as `character`. Compound data types are not supported
+initially.
 
 The stand-alone function
 [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
@@ -175,7 +181,7 @@ class GDALMultiDimRaster {
     Rcpp::List getGroupInfo(const std::string &path) const;
 
     // arrays (PR 2)
-    GDALMDArray *openMDArray(const std::string &path) const;
+    GDALMDArrayR *openMDArray(const std::string &path) const;
 
     // creation (PR 7)
     void createGroup(const std::string &path);
@@ -213,9 +219,9 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     Rcpp::DataFrame getDimensions() const;
     Rcpp::List getDataType() const;
     Rcpp::List getAttributes() const;
-    SEXP getNoDataValue() const;
-    SEXP getScale() const;
-    SEXP getOffset() const;
+    double getNoDataValue() const;
+    double getScale() const;
+    double getOffset() const;
     std::string getUnit() const;
     std::string getSpatialRef() const;
     Rcpp::NumericVector getBlockSize() const;
@@ -223,8 +229,8 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     SEXP getCoordinateValues(int dim) const;
 
     // I/O (PR 2, write in PR 7)
-    SEXP read(const Rcpp::NumericVector &start,
-              const Rcpp::NumericVector &count,
+    SEXP read(const Rcpp::Nullable<Rcpp::NumericVector> &start,
+              const Rcpp::Nullable<Rcpp::NumericVector> &count,
               const Rcpp::Nullable<Rcpp::NumericVector> &step) const;
     void write(const Rcpp::RObject &data,
                const Rcpp::NumericVector &start,
@@ -235,7 +241,7 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     GDALMDArrayR *getView(const std::string &view_expr) const;
     GDALMDArrayR *transpose(const Rcpp::IntegerVector &axes) const;
     GDALMDArrayR *getUnscaled() const;
-    GDALMDArrayR *getMask() const;
+    GDALMDArrayR *getMask(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
     GDALMDArrayR *getResampled(...) const;   // GDAL >= 3.4
     GDALMDArrayR *getGridded(...) const;     // GDAL >= 3.7
 
@@ -324,7 +330,8 @@ system.time(v <- ds$read(1, 0, 0, 1440, 721, 1440, 721))
 ds <- new(GDALMultiDimRaster, era5)
 arr <- ds$openMDArray("/2m_temperature")
 arr$getBlockSize()
-system.time(v <- arr$read(start = c(534720, 0, 0), count = c(1, 721, 1440)))
+system.time(v <- arr$read(start = c(534720, 0, 0), count = c(1, 721, 1440),
+                          step = NULL))
 ```
 
 The time to read one whole block is the baseline for any read on this
@@ -354,8 +361,8 @@ ds$getGeoTransform()  # index space only
 ds <- new(GDALMultiDimRaster, gfdl)
 arr <- ds$openMDArray("/tos")
 arr$getAttributes()$coordinates
-lat <- ds$openMDArray("/lat")$read()
-lon <- ds$openMDArray("/lon")$read()
+lat <- ds$openMDArray("/lat")$read(NULL, NULL, NULL)
+lon <- ds$openMDArray("/lon")$read(NULL, NULL, NULL)
 ```
 
 Mapping this array onto a regular grid is the purpose of
@@ -401,6 +408,9 @@ Mapping this array onto a regular grid is the purpose of
 ## Document changelog
 
 - initial draft (2026-11-14)
+- `openMDArray()` returns a pointer owned by R; `read()` is a single
+  method taking `NULL` for the whole array; 64-bit integers are read as
+  `double`; `getMask()` takes `options` (2026-11-20)
 
 ## Contributors
 

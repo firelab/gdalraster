@@ -224,9 +224,6 @@ if (isTRUE(gdal_get_driver_md("netCDF")$NETCDF_HAS_NC4 == "YES")) {
 
 f_dst <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst, creation_options = opt)
-#>  ■■■■■■■■■■■■■■■                   45% |  ETA:  0s
-#> ✔ Done (10ms)
-#> 
 info <- mdim_info(f_dst, cout = FALSE) |> yyjsonr::read_json_str()
 # str(info)
 info$structural_info
@@ -257,6 +254,9 @@ ds$close()
 ## slice along the Y axis with array view
 f_dst2 <- tempfile(fileext = ".nc")
 mdim_translate(f_src, f_dst2, array_specs = "name=Band1,view=[10:20,...]")
+#>  ■■■■■■■■                          24% |  ETA:  0s
+#> ✔ Done (53ms)
+#> 
 (ds <- mdim_as_classic(f_dst2, "Band1", 1, 0))
 #> C++ object of class <GDALRaster>
 #>   • Driver: (driverless dataset)

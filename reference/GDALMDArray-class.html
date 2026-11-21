@@ -9,7 +9,11 @@ get the nodata value, scale, offset, unit, spatial reference and block
 (chunk) size
 read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
-dimension).
+dimension)
+derive new arrays without copying data: a view given a slicing
+expression, a transposed view, an unscaled view and a mask
+expose a 2D view of the array as a classic raster, an object of class
+GDALRaster.
 
 
 An object of class GDALMDArray holds a reference to the dataset that
@@ -33,7 +37,11 @@ get the nodata value, scale, offset, unit, spatial reference and block
 (chunk) size
 read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
-dimension).
+dimension)
+derive new arrays without copying data: a view given a slicing
+expression, a transposed view, an unscaled view and a mask
+expose a 2D view of the array as a classic raster, an object of class
+GDALRaster.
 
 
 An object of class GDALMDArray holds a reference to the dataset that
@@ -115,7 +123,11 @@ An object of class <code>GDALMDArray</code> is returned by
 (chunk) size</p></li>
 <li><p>read coordinate values of a dimension</p></li>
 <li><p>read a hyperslab of the array (start, count and optional step per
-dimension).</p></li>
+dimension)</p></li>
+<li><p>derive new arrays without copying data: a view given a slicing
+expression, a transposed view, an unscaled view and a mask</p></li>
+<li><p>expose a 2D view of the array as a classic raster, an object of class
+<code><a href="GDALRaster-class.html">GDALRaster</a></code>.</p></li>
 </ul><p>An object of class <code>GDALMDArray</code> holds a reference to the dataset that
 contains it, so the array remains valid after the <code>GDALMultiDimRaster</code>
 object is closed or garbage collected.</p>
@@ -163,7 +175,13 @@ varying first (e.g., <code>time, lat, lon</code>).</p>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a></span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">read</span>(start, count, step)</span>
 <span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getView</span>(view_expr)</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">transpose</span>(axes)</span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getUnscaled</span>()</span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getMask</span>(options)</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -269,6 +287,68 @@ numeric types as <code>double</code> (64-bit integer values are exact up to 2^53
 complex types as <code>complex</code>, and string arrays as <code>character</code>. The nodata
 value is returned as <code>NA</code>, as is <code>NaN</code> for floating point types. Arrays of
 compound data type are not supported.</p>
+</div>
+
+<div class="section">
+<h3 id="derived-arrays">Derived arrays<a class="anchor" aria-label="anchor" href="#derived-arrays"></a></h3>
+
+
+<p>The methods below return a new object of class <code>GDALMDArray</code> that is a
+view of this array. No data are read or copied until the new array is
+read. The new array holds its own reference to the dataset, so it remains
+valid after this array or the dataset is closed. Its fields
+(<code>$readByteAsRaw</code>, <code>$quiet</code>) start with the values of this
+array.</p>
+<p><code>$getView(view_expr)</code><br>
+Returns a view of the array given a character string <code>view_expr</code>, using
+the same syntax as NumPy basic slicing and indexing (0-based), or field
+access by name, as described in section "View Expressions" of
+<code><a href="mdim_as_classic.html">mdim_as_classic()</a></code>. For example, <code>"[0,...]"</code> selects the first index of
+the first dimension (removing that dimension), <code>"[1:3,:,::2]"</code> takes
+indexes 1 and 2 of the first dimension and every second index of the
+third, and <code>"[::-1,...]"</code> reverses the first dimension. Note that GDAL
+renames the sliced dimensions of a view (e.g., <code>"subset_lat_2_1_2"</code>), and
+they then have no indexing variable.</p>
+<p><code>$transpose(axes)</code><br>
+Returns a view of the array with its dimensions reordered. <code>axes</code> is an
+integer vector of 0-based dimension indexes of this array, giving for each
+dimension of the new array the dimension of this array that it comes from.
+For example, for an array with dimensions <code>time, lat, lon</code>, <code>axes = c(2, 1, 0)</code> gives an array with dimensions <code>lon, lat, time</code>. A value of <code>-1</code>
+inserts a new dimension of size 1.</p>
+<p><code>$getUnscaled()</code><br>
+Returns a view of the array with the scale and offset applied
+(<code>raw_value * scale + offset</code>). The new array has data type <code>Float64</code> (or
+<code>CFloat64</code> for a complex array), no scale or offset, and the nodata value
+<code>NaN</code> if this array has a nodata value (read as <code>NA</code>).</p>
+<p><code>$getMask(options)</code><br>
+Returns a view of the array of data type Byte, with the value <code>1</code> where a
+value of this array is valid and <code>0</code> where it is not, as determined from
+the nodata value, and the attributes <code>_FillValue</code>, <code>missing_value</code>,
+<code>valid_min</code>, <code>valid_max</code> and <code>valid_range</code>, if present (and <code>NaN</code> for
+floating point types). <code>options</code> is a character vector of <code>NAME=VALUE</code>
+pairs, or <code>NULL</code> (see <code>GDALMDArray::GetMask()</code> in the GDAL API
+documentation).</p>
+</div>
+
+<div class="section">
+<h3 id="classic-raster-view">Classic raster view<a class="anchor" aria-label="anchor" href="#classic-raster-view"></a></h3>
+
+
+<p><code>$asClassicDataset(idx_xdim, idx_ydim, options)</code><br>
+Returns a view of the array as a classic (2D) raster, an object of class
+<code><a href="GDALRaster-class.html">GDALRaster</a></code>. <code>idx_xdim</code> and <code>idx_ydim</code> are the 0-based
+indexes of the dimensions to use as the X (width) and Y (height) axes.
+Any other dimensions become raster bands. <code>idx_ydim</code> is ignored for a 1D
+array. <code>options</code> is a character vector of <code>NAME=VALUE</code> pairs, or <code>NULL</code>
+(see <code>GDALMDArray::AsClassicDataset()</code> in the GDAL API documentation; it
+requires GDAL &gt;= 3.8 when not empty). The geotransform is taken from
+regularly spaced indexing variables of the X and Y dimensions. No data are
+copied: the raster reads from the array, so a view from
+<code>$getView()</code> can be used to take, e.g., one time step of a 4D array
+as a <code>GDALRaster</code>, which can be passed to any function that works on a
+<code>GDALRaster</code> (e.g., <code><a href="warp.html">warp()</a></code>, <code><a href="plot_raster.html">plot_raster()</a></code>). The <code>GDALRaster</code> remains
+valid after the array is closed. See also <code><a href="mdim_as_classic.html">mdim_as_classic()</a></code>, which opens
+a dataset and returns the same raster in one call.</p>
 <p><code>$close()</code><br>
 Closes the array and releases the reference to its dataset.</p>
 </div>
@@ -276,7 +356,8 @@ Closes the array and releases the reference to its dataset.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="GDALMultiDimRaster-class.html">GDALMultiDimRaster</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_info.html">mdim_info()</a></code></p></div>
+    <div class="dont-index"><p><a href="GDALMultiDimRaster-class.html">GDALMultiDimRaster</a>, <a href="GDALRaster-class.html">GDALRaster</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_info.html">mdim_info()</a></code>,
+<code><a href="mdim_as_classic.html">mdim_as_classic()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -329,6 +410,35 @@ Closes the array and releases the reference to its dataset.</p>
 <span class="r-in"><span><span class="co"># one grid cell, all time steps, scaled to degC</span></span></span>
 <span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="cn">NULL</span><span class="op">)</span> <span class="op">*</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getScale</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getOffset</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14.45 15.45 16.45 17.45</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the same, from a view with the scale and offset applied</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">getUnscaled</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14.45 15.45 16.45 17.45</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the first time step as a view, and its mask of valid values</span></span></span>
+<span class="r-in"><span><span class="va">v1</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getView</span><span class="op">(</span><span class="st">"[0,...]"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">v1</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">size</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5 6</span>
+<span class="r-in"><span><span class="va">v1</span><span class="op">$</span><span class="fu">getMask</span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># lon, lat, time order</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">transpose</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">name</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "lon"  "lat"  "time"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the first time step as a classic raster (lon is X, lat is Y)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">v1</span><span class="op">$</span><span class="fu">asClassicDataset</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> C++ object of class <span style="color: #0000BB;">&lt;GDALRaster&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Driver</span>: (driverless dataset)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">DSN</span>: ""</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Dimensions</span>: 6, 5, 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">CRS</span>: not set</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Pixel resolution</span>: 0.250000, 0.250000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   • <span style="font-style: italic;">Bbox</span>: 144.875000, -42.125000, 146.375000, -40.875000</span>
+<span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="fu">getGeoTransform</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 144.875   0.250   0.000 -40.875   0.000  -0.250</span>
+<span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
