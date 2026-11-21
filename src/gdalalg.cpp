@@ -28,7 +28,7 @@ using std::string_literals::operator""s;
 
 #define GDALALG_MIN_GDAL_ GDAL_COMPUTE_VERSION(3, 11, 3)
 
-constexpr char GDALALG_MIN_GDAL_MSG_[] =
+[[maybe_unused]] constexpr char GDALALG_MIN_GDAL_MSG_[] =
     "GDAL CLI bindings require GDAL >= 3.11.3";
 
 #if GDAL_VERSION_NUM >= GDALALG_MIN_GDAL_
