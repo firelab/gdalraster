@@ -24,6 +24,8 @@
     typedef struct GDALMDArrayHS *GDALMDArrayH;
 #endif
 
+class GDALRaster;
+
 class GDALMDArrayR {
  public:
     GDALMDArrayR();
@@ -54,6 +56,15 @@ class GDALMDArrayR {
               const Rcpp::Nullable<Rcpp::NumericVector> &count,
               const Rcpp::Nullable<Rcpp::NumericVector> &step) const;
 
+    GDALMDArrayR *getView(const std::string &view_expr) const;
+    GDALMDArrayR *transpose(const Rcpp::IntegerVector &axes) const;
+    GDALMDArrayR *getUnscaled() const;
+    GDALMDArrayR *getMask(
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    GDALRaster *asClassicDataset(
+        int idx_xdim, int idx_ydim,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+
     void close();
     void show() const;
 
@@ -61,6 +72,10 @@ class GDALMDArrayR {
     void checkAccess_() const;
     // takes ownership of hArray, and adds a reference to hDS
     void setHandles_(GDALMDArrayH hArray, GDALDatasetH hDS);
+    // a new object for an array derived from this one (view, transpose,
+    // etc.), taking ownership of hDerived, or an error if it is NULL
+    GDALMDArrayR *newDerived_(GDALMDArrayH hDerived,
+                              const std::string &what) const;
 
  private:
     GDALMDArrayH m_hArray {nullptr};
