@@ -18,7 +18,8 @@
 #' * read a hyperslab of the array (start, count and optional step per
 #' dimension)
 #' * derive new arrays without copying data: a view given a slicing
-#' expression, a transposed view, an unscaled view and a mask
+#' expression, a transposed view, an unscaled view, a mask, a resampled or
+#' reprojected view, and a gridded view of scattered points
 #' * expose a 2D view of the array as a classic raster, an object of class
 #' [`GDALRaster`][GDALRaster].
 #'
@@ -71,6 +72,8 @@
 #' arr$transpose(axes)
 #' arr$getUnscaled()
 #' arr$getMask(options)
+#' arr$getResampled(new_dim_sizes, resample_alg, target_srs, options)
+#' arr$getGridded(grid_options, x_array, y_array, options)
 #' arr$asClassicDataset(idx_xdim, idx_ydim, options)
 #'
 #' arr$close()
@@ -229,6 +232,54 @@
 #' pairs, or `NULL` (see `GDALMDArray::GetMask()` in the GDAL API
 #' documentation).
 #'
+#' \code{$getResampled(new_dim_sizes, resample_alg, target_srs, options)}\cr
+#' Returns a view of the array resampled to new dimension sizes, and
+#' optionally reprojected, along its horizontal dimensions (types
+#' `"HORIZONTAL_X"` and `"HORIZONTAL_Y"`). Values are computed when the new
+#' array is read, using GDAL's warping engine, so reading a window of the new
+#' array reads only the part of the source array that it needs. Requires GDAL
+#' >= 3.4.
+#' * `new_dim_sizes`: a numeric vector with one value per dimension giving
+#' the new size, or `NA` to keep a dimension unchanged (or, for the
+#' horizontal dimensions, to have GDAL compute the size). `NULL` is the same
+#' as all `NA`. Dimensions that are not horizontal must be `NA`. The new
+#' horizontal dimensions are evenly spaced over the extent of the source.
+#' * `resample_alg`: a character string, one of `"nearest"`, `"bilinear"`,
+#' `"cubic"`, `"cubicspline"`, `"lanczos"`, `"average"`, `"rms"` or
+#' `"mode"`.
+#' * `target_srs`: a character string giving the spatial reference system to
+#' reproject to, in a format accepted by [srs_to_wkt()] (e.g.,
+#' `"EPSG:3031"`), or `""` to keep the spatial reference of the array. An
+#' error is raised if `target_srs` is given and the array has no spatial
+#' reference (a multidimensional VRT can add one, see the examples).
+#' * `options`: a character vector of `NAME=VALUE` pairs, or `NULL` (see
+#' `GDALMDArray::GetResampled()` in the GDAL API documentation).
+#'
+#' The new horizontal dimensions are named `dimX` and `dimY`, with indexing
+#' variables of the same names holding the coordinates of the cell centres
+#' in the target spatial reference.
+#'
+#' \code{$getGridded(grid_options, x_array, y_array, options)}\cr
+#' Returns a gridded view of an array of scattered points, i.e., an array
+#' whose last dimension indexes the points, interpolated onto a regular grid
+#' using the GDAL gridding algorithms (as for \command{gdal_grid}).
+#' Requires GDAL >= 3.7.
+#' * `grid_options`: a character string giving the gridding algorithm and its
+#' parameters, as for the \command{gdal_grid} `-a` argument, e.g.,
+#' `"invdist:power=2.0:smoothing=1.0"`, `"nearest"`, `"average"` or
+#' `"linear"`.
+#' * `x_array`, `y_array`: objects of class `GDALMDArray` with the X and Y
+#' coordinates of the points (one dimension, the same as the last dimension
+#' of this array), or `NULL` for both to use the arrays named in the
+#' `coordinates` attribute of this array.
+#' * `options`: a character vector of `NAME=VALUE` pairs, or `NULL`, e.g.,
+#' `"RESOLUTION=0.5"` for the grid spacing, and `"XMIN=..."`, `"XMAX=..."`,
+#' `"YMIN=..."`, `"YMAX=..."` for its extent (see `GDALMDArray::GetGridded()`
+#' in the GDAL API documentation).
+#'
+#' The new dimensions are named `dimX` and `dimY`, with indexing variables of
+#' the same names.
+#'
 #' ## Classic raster view
 #'
 #' \code{$asClassicDataset(idx_xdim, idx_ydim, options)}\cr
@@ -295,6 +346,85 @@
 #'
 #' arr$close()
 #' ds$close()
+#'
+#' ## resampling and reprojection (GDAL >= 3.4)
+#' if (gdal_version_num() >= gdal_compute_version(3, 4, 0)) {
+#'   # t2m has no spatial reference: add one with a multidimensional VRT,
+#'   # which reads from the source file (nothing is copied)
+#'   vrt <- '<VRTDataset><Group name="/">
+#'     <Dimension name="time" size="4" indexingVariable="time"/>
+#'     <Dimension name="lat" type="HORIZONTAL_Y" size="5" indexingVariable="lat"/>
+#'     <Dimension name="lon" type="HORIZONTAL_X" size="6" indexingVariable="lon"/>
+#'     <Array name="time"><DataType>Float64</DataType><DimensionRef ref="time"/>
+#'       <Source><SourceFilename>SRC</SourceFilename>
+#'       <SourceArray>/time</SourceArray></Source></Array>
+#'     <Array name="lat"><DataType>Float64</DataType><DimensionRef ref="lat"/>
+#'       <Source><SourceFilename>SRC</SourceFilename>
+#'       <SourceArray>/lat</SourceArray></Source></Array>
+#'     <Array name="lon"><DataType>Float64</DataType><DimensionRef ref="lon"/>
+#'       <Source><SourceFilename>SRC</SourceFilename>
+#'       <SourceArray>/lon</SourceArray></Source></Array>
+#'     <Array name="t2m"><DataType>Int16</DataType>
+#'       <DimensionRef ref="time"/><DimensionRef ref="lat"/>
+#'       <DimensionRef ref="lon"/>
+#'       <SRS dataAxisToSRSAxisMapping="2,1">EPSG:4326</SRS>
+#'       <NoDataValue>-32767</NoDataValue>
+#'       <Source><SourceFilename>SRC</SourceFilename>
+#'       <SourceArray>/t2m</SourceArray></Source></Array>
+#'   </Group></VRTDataset>'
+#'   vrt <- gsub("SRC", f, vrt, fixed = TRUE)
+#'
+#'   ds <- new(GDALMultiDimRaster, vrt)
+#'   arr <- ds$openMDArray("/t2m")
+#'
+#'   # twice the resolution, bilinear
+#'   arr2 <- arr$getResampled(c(NA, 10, 12), "bilinear", "", NULL)
+#'   print(arr2$getDimensions()[, c("name", "size")])
+#'   print(arr2$getCoordinateValues(2))
+#'
+#'   # Antarctic polar stereographic, size computed by GDAL
+#'   arr3 <- arr$getResampled(NULL, "nearest", "EPSG:3031", NULL)
+#'   print(arr3$getDimensions()[, c("name", "size")])
+#'
+#'   arr3$close()
+#'   arr2$close()
+#'   arr$close()
+#'   ds$close()
+#' }
+#'
+#' ## gridding scattered points (GDAL >= 3.7)
+#' if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
+#'   # four points as a multidimensional VRT with inline values
+#'   pts <- '<VRTDataset><Group name="/">
+#'     <Dimension name="n" size="4"/>
+#'     <Array name="x"><DataType>Float64</DataType><DimensionRef ref="n"/>
+#'       <InlineValuesWithValueElement><Value>0</Value><Value>10</Value>
+#'       <Value>0</Value><Value>10</Value></InlineValuesWithValueElement>
+#'     </Array>
+#'     <Array name="y"><DataType>Float64</DataType><DimensionRef ref="n"/>
+#'       <InlineValuesWithValueElement><Value>0</Value><Value>0</Value>
+#'       <Value>10</Value><Value>10</Value></InlineValuesWithValueElement>
+#'     </Array>
+#'     <Array name="v"><DataType>Float64</DataType><DimensionRef ref="n"/>
+#'       <InlineValuesWithValueElement><Value>1</Value><Value>2</Value>
+#'       <Value>3</Value><Value>4</Value></InlineValuesWithValueElement>
+#'     </Array>
+#'   </Group></VRTDataset>'
+#'
+#'   ds <- new(GDALMultiDimRaster, pts)
+#'   v <- ds$openMDArray("/v")
+#'   x <- ds$openMDArray("/x")
+#'   y <- ds$openMDArray("/y")
+#'   g <- v$getGridded("invdist:power=2.0", x, y, "RESOLUTION=2.5")
+#'   print(g$getDimensions()[, c("name", "size")])
+#'   print(matrix(g$read(NULL, NULL, NULL), nrow = 5, byrow = TRUE))
+#'
+#'   g$close()
+#'   x$close()
+#'   y$close()
+#'   v$close()
+#'   ds$close()
+#' }
 NULL
 
 Rcpp::loadModule("mod_GDALMDArray", TRUE)

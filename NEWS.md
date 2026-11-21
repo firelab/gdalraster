@@ -1,5 +1,7 @@
 # gdalraster 2.7.0.9013 (dev)
 
+* class `GDALMDArray`: add methods `$getResampled()` returning a resampled and optionally reprojected view of the array (GDAL >= 3.4), and `$getGridded()` returning a gridded view of an array of scattered points (GDAL >= 3.7) (2026-11-22)
+
 * (internal) gdalalg.cpp: suppress compiler warning `-Wunused-const-variable` (2026-11-21)
 
 * class `GDALMDArray`: add methods `$getView()`, `$transpose()`, `$getUnscaled()` and `$getMask()` returning a derived array without copying data, and `$asClassicDataset()` returning a view of the array as a `GDALRaster` (#1032) (2026-11-21)

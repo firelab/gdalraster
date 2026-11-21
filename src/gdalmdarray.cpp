@@ -556,6 +556,189 @@ GDALRaster *GDALMDArrayR::asClassicDataset(
     return ds.release();
 }
 
+GDALMDArrayR *GDALMDArrayR::getResampled(
+        const Rcpp::Nullable<Rcpp::NumericVector> &new_dim_sizes,
+        const std::string &resample_alg, const std::string &target_srs,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+// requires GDAL >= 3.4 for GDALMDArrayGetResampled()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 4, 0)
+    Rcpp::stop("getResampled() requires GDAL >= 3.4");
+#else
+    GDALRIOResampleAlg eResampleAlg = GRIORA_NearestNeighbour;
+    if (EQUAL(resample_alg.c_str(), "nearest") ||
+            EQUAL(resample_alg.c_str(), "NearestNeighbour"))
+        eResampleAlg = GRIORA_NearestNeighbour;
+    else if (EQUAL(resample_alg.c_str(), "bilinear"))
+        eResampleAlg = GRIORA_Bilinear;
+    else if (EQUAL(resample_alg.c_str(), "cubic"))
+        eResampleAlg = GRIORA_Cubic;
+    else if (EQUAL(resample_alg.c_str(), "cubicspline"))
+        eResampleAlg = GRIORA_CubicSpline;
+    else if (EQUAL(resample_alg.c_str(), "lanczos"))
+        eResampleAlg = GRIORA_Lanczos;
+    else if (EQUAL(resample_alg.c_str(), "average"))
+        eResampleAlg = GRIORA_Average;
+    else if (EQUAL(resample_alg.c_str(), "rms"))
+        eResampleAlg = GRIORA_RMS;
+    else if (EQUAL(resample_alg.c_str(), "mode"))
+        eResampleAlg = GRIORA_Mode;
+    else
+        Rcpp::stop("'resample_alg' is not valid");
+
+    size_t nDims = 0;
+    GDALDimensionH *pahDims = GDALMDArrayGetDimensions(m_hArray, &nDims);
+
+    Rcpp::NumericVector sizes(nDims, NA_REAL);
+    if (new_dim_sizes.isNotNull()) {
+        sizes = Rcpp::NumericVector(new_dim_sizes);
+        if (static_cast<size_t>(sizes.size()) != nDims) {
+            GDALReleaseDimensions(pahDims, nDims);
+            Rcpp::stop("'new_dim_sizes' must have one value per dimension (" +
+                       std::to_string(nDims) + "), or be NULL");
+        }
+    }
+
+    // new dimensions of a given size are created in a MEM dataset, with the
+    // name, type and direction of the source dimension. NA (nullptr) lets
+    // GDAL keep the dimension, or compute the horizontal ones.
+    GDALDatasetH hMemDS = nullptr;
+    GDALGroupH hMemRoot = nullptr;
+    std::vector<GDALDimensionH> ahNewDims(nDims, nullptr);
+    bool bError = false;
+    std::string osError = "";
+    for (size_t i = 0; i < nDims; ++i) {
+        if (Rcpp::NumericVector::is_na(sizes[i]))
+            continue;
+        if (!is_whole_in_range_(sizes[i], 1, 1e15)) {
+            bError = true;
+            osError = "'new_dim_sizes' must be whole numbers >= 1, or NA";
+            break;
+        }
+        if (hMemDS == nullptr) {
+            GDALDriverH hMemDrv = GDALGetDriverByName("MEM");
+            if (hMemDrv != nullptr) {
+                hMemDS = GDALCreateMultiDimensional(hMemDrv, "", nullptr,
+                                                    nullptr);
+            }
+            if (hMemDS != nullptr)
+                hMemRoot = GDALDatasetGetRootGroup(hMemDS);
+            if (hMemRoot == nullptr) {
+                bError = true;
+                osError = "failed to create the new dimensions";
+                break;
+            }
+        }
+        ahNewDims[i] = GDALGroupCreateDimension(
+            hMemRoot, GDALDimensionGetName(pahDims[i]),
+            GDALDimensionGetType(pahDims[i]),
+            GDALDimensionGetDirection(pahDims[i]),
+            static_cast<GUInt64>(sizes[i]), nullptr);
+        if (ahNewDims[i] == nullptr) {
+            bError = true;
+            osError = "failed to create the new dimensions";
+            break;
+        }
+    }
+    GDALReleaseDimensions(pahDims, nDims);
+
+    OGRSpatialReferenceH hSRS = nullptr;
+    if (!bError && !target_srs.empty()) {
+        // without a source SRS, GDAL returns the array unchanged
+        OGRSpatialReferenceH hSrcSRS = GDALMDArrayGetSpatialRef(m_hArray);
+        if (hSrcSRS == nullptr) {
+            bError = true;
+            osError = "the array has no spatial reference, so it cannot be "
+                      "reprojected to 'target_srs'";
+        }
+        else {
+            OSRDestroySpatialReference(hSrcSRS);
+        }
+    }
+    if (!bError && !target_srs.empty()) {
+        hSRS = OSRNewSpatialReference(nullptr);
+        if (OSRSetFromUserInput(hSRS, target_srs.c_str()) != OGRERR_NONE) {
+            bError = true;
+            osError = "'target_srs' is not a valid spatial reference";
+        }
+        else {
+            OSRSetAxisMappingStrategy(hSRS, OAMS_TRADITIONAL_GIS_ORDER);
+        }
+    }
+
+    GDALMDArrayH hResampled = nullptr;
+    if (!bError) {
+        CPLStringList aosOptions;
+        if (options.isNotNull()) {
+            Rcpp::CharacterVector options_in(options);
+            for (R_xlen_t i = 0; i < options_in.size(); ++i)
+                aosOptions.AddString(options_in[i]);
+        }
+        hResampled = GDALMDArrayGetResampled(m_hArray, nDims,
+                                             ahNewDims.data(), eResampleAlg,
+                                             hSRS, aosOptions.List());
+    }
+
+    for (GDALDimensionH hDim : ahNewDims) {
+        if (hDim != nullptr)
+            GDALDimensionRelease(hDim);
+    }
+    if (hMemRoot != nullptr)
+        GDALGroupRelease(hMemRoot);
+    if (hMemDS != nullptr)
+        GDALReleaseDataset(hMemDS);
+    if (hSRS != nullptr)
+        OSRDestroySpatialReference(hSRS);
+
+    if (bError)
+        Rcpp::stop(osError);
+
+    return newDerived_(hResampled, "resampled array");
+#endif
+}
+
+GDALMDArrayR *GDALMDArrayR::getGridded(
+        const std::string &grid_options, SEXP x_array, SEXP y_array,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+// requires GDAL >= 3.7 for GDALMDArrayGetGridded()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 7, 0)
+    Rcpp::stop("getGridded() requires GDAL >= 3.7");
+#else
+    if (grid_options.empty())
+        Rcpp::stop("'grid_options' must be a non-empty string, e.g., "
+                   "\"invdist\"");
+
+    GDALMDArrayH hXArray = nullptr;
+    if (!Rf_isNull(x_array)) {
+        const GDALMDArrayR *x = Rcpp::as<GDALMDArrayR *>(x_array);
+        x->checkAccess_();
+        hXArray = x->getMDArrayH_();
+    }
+    GDALMDArrayH hYArray = nullptr;
+    if (!Rf_isNull(y_array)) {
+        const GDALMDArrayR *y = Rcpp::as<GDALMDArrayR *>(y_array);
+        y->checkAccess_();
+        hYArray = y->getMDArrayH_();
+    }
+    if ((hXArray == nullptr) != (hYArray == nullptr))
+        Rcpp::stop("'x_array' and 'y_array' must both be given, or both NULL");
+
+    CPLStringList aosOptions;
+    if (options.isNotNull()) {
+        Rcpp::CharacterVector options_in(options);
+        for (R_xlen_t i = 0; i < options_in.size(); ++i)
+            aosOptions.AddString(options_in[i]);
+    }
+
+    GDALMDArrayH hGridded = GDALMDArrayGetGridded(
+        m_hArray, grid_options.c_str(), hXArray, hYArray, aosOptions.List());
+    return newDerived_(hGridded, "gridded array");
+#endif
+}
+
 void GDALMDArrayR::close() {
     if (m_hArray != nullptr) {
         GDALMDArrayRelease(m_hArray);
@@ -635,6 +818,10 @@ void GDALMDArrayR::setHandles_(GDALMDArrayH hArray, GDALDatasetH hDS) {
     }
 }
 
+GDALMDArrayH GDALMDArrayR::getMDArrayH_() const {
+    return m_hArray;
+}
+
 GDALMDArrayR *GDALMDArrayR::newDerived_(GDALMDArrayH hDerived,
                                         const std::string &what) const {
     if (hDerived == nullptr)
@@ -704,6 +891,10 @@ RCPP_MODULE(mod_GDALMDArray) {
         "Return a mask array of the valid values")
     .const_method("asClassicDataset", &GDALMDArrayR::asClassicDataset,
         "Return a view of the array as a classic raster (GDALRaster)")
+    .const_method("getResampled", &GDALMDArrayR::getResampled,
+        "Return a resampled (and optionally reprojected) view of the array")
+    .const_method("getGridded", &GDALMDArrayR::getGridded,
+        "Return a gridded view of an array of scattered points")
     .method("close", &GDALMDArrayR::close,
         "Release the array and the dataset reference")
     .const_method("show", &GDALMDArrayR::show,

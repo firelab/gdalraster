@@ -65,6 +65,14 @@ class GDALMDArrayR {
         int idx_xdim, int idx_ydim,
         const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
+    GDALMDArrayR *getResampled(
+        const Rcpp::Nullable<Rcpp::NumericVector> &new_dim_sizes,
+        const std::string &resample_alg, const std::string &target_srs,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    GDALMDArrayR *getGridded(
+        const std::string &grid_options, SEXP x_array, SEXP y_array,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+
     void close();
     void show() const;
 
@@ -76,6 +84,7 @@ class GDALMDArrayR {
     // etc.), taking ownership of hDerived, or an error if it is NULL
     GDALMDArrayR *newDerived_(GDALMDArrayH hDerived,
                               const std::string &what) const;
+    GDALMDArrayH getMDArrayH_() const;
 
  private:
     GDALMDArrayH m_hArray {nullptr};
