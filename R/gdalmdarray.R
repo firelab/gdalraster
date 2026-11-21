@@ -16,7 +16,11 @@
 #' (chunk) size
 #' * read coordinate values of a dimension
 #' * read a hyperslab of the array (start, count and optional step per
-#' dimension).
+#' dimension)
+#' * derive new arrays without copying data: a view given a slicing
+#' expression, a transposed view, an unscaled view and a mask
+#' * expose a 2D view of the array as a classic raster, an object of class
+#' [`GDALRaster`][GDALRaster].
 #'
 #' An object of class `GDALMDArray` holds a reference to the dataset that
 #' contains it, so the array remains valid after the `GDALMultiDimRaster`
@@ -62,6 +66,12 @@
 #' arr$getCoordinateValues(dim)
 #'
 #' arr$read(start, count, step)
+#'
+#' arr$getView(view_expr)
+#' arr$transpose(axes)
+#' arr$getUnscaled()
+#' arr$getMask(options)
+#' arr$asClassicDataset(idx_xdim, idx_ydim, options)
 #'
 #' arr$close()
 #' ```
@@ -176,11 +186,73 @@
 #' value is returned as `NA`, as is `NaN` for floating point types. Arrays of
 #' compound data type are not supported.
 #'
+#' ## Derived arrays
+#'
+#' The methods below return a new object of class `GDALMDArray` that is a
+#' view of this array. No data are read or copied until the new array is
+#' read. The new array holds its own reference to the dataset, so it remains
+#' valid after this array or the dataset is closed. Its fields
+#' (\code{$readByteAsRaw}, \code{$quiet}) start with the values of this
+#' array.
+#'
+#' \code{$getView(view_expr)}\cr
+#' Returns a view of the array given a character string `view_expr`, using
+#' the same syntax as NumPy basic slicing and indexing (0-based), or field
+#' access by name, as described in section "View Expressions" of
+#' [mdim_as_classic()]. For example, `"[0,...]"` selects the first index of
+#' the first dimension (removing that dimension), `"[1:3,:,::2]"` takes
+#' indexes 1 and 2 of the first dimension and every second index of the
+#' third, and `"[::-1,...]"` reverses the first dimension. Note that GDAL
+#' renames the sliced dimensions of a view (e.g., `"subset_lat_2_1_2"`), and
+#' they then have no indexing variable.
+#'
+#' \code{$transpose(axes)}\cr
+#' Returns a view of the array with its dimensions reordered. `axes` is an
+#' integer vector of 0-based dimension indexes of this array, giving for each
+#' dimension of the new array the dimension of this array that it comes from.
+#' For example, for an array with dimensions `time, lat, lon`, `axes = c(2,
+#' 1, 0)` gives an array with dimensions `lon, lat, time`. A value of `-1`
+#' inserts a new dimension of size 1.
+#'
+#' \code{$getUnscaled()}\cr
+#' Returns a view of the array with the scale and offset applied
+#' (`raw_value * scale + offset`). The new array has data type `Float64` (or
+#' `CFloat64` for a complex array), no scale or offset, and the nodata value
+#' `NaN` if this array has a nodata value (read as `NA`).
+#'
+#' \code{$getMask(options)}\cr
+#' Returns a view of the array of data type Byte, with the value `1` where a
+#' value of this array is valid and `0` where it is not, as determined from
+#' the nodata value, and the attributes `_FillValue`, `missing_value`,
+#' `valid_min`, `valid_max` and `valid_range`, if present (and `NaN` for
+#' floating point types). `options` is a character vector of `NAME=VALUE`
+#' pairs, or `NULL` (see `GDALMDArray::GetMask()` in the GDAL API
+#' documentation).
+#'
+#' ## Classic raster view
+#'
+#' \code{$asClassicDataset(idx_xdim, idx_ydim, options)}\cr
+#' Returns a view of the array as a classic (2D) raster, an object of class
+#' [`GDALRaster`][GDALRaster]. `idx_xdim` and `idx_ydim` are the 0-based
+#' indexes of the dimensions to use as the X (width) and Y (height) axes.
+#' Any other dimensions become raster bands. `idx_ydim` is ignored for a 1D
+#' array. `options` is a character vector of `NAME=VALUE` pairs, or `NULL`
+#' (see `GDALMDArray::AsClassicDataset()` in the GDAL API documentation; it
+#' requires GDAL >= 3.8 when not empty). The geotransform is taken from
+#' regularly spaced indexing variables of the X and Y dimensions. No data are
+#' copied: the raster reads from the array, so a view from
+#' \code{$getView()} can be used to take, e.g., one time step of a 4D array
+#' as a `GDALRaster`, which can be passed to any function that works on a
+#' `GDALRaster` (e.g., [warp()], [plot_raster()]). The `GDALRaster` remains
+#' valid after the array is closed. See also [mdim_as_classic()], which opens
+#' a dataset and returns the same raster in one call.
+#'
 #' \code{$close()}\cr
 #' Closes the array and releases the reference to its dataset.
 #'
 #' @seealso
-#' [GDALMultiDimRaster], [mdim_read()], [mdim_info()]
+#' [GDALMultiDimRaster], [GDALRaster], [mdim_read()], [mdim_info()],
+#' [mdim_as_classic()]
 #'
 #' @examplesIf gdal_version_num() >= gdal_compute_version(3, 2, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster)
 #' f <- system.file("extdata/mdim_small.nc", package="gdalraster")
@@ -203,6 +275,23 @@
 #'
 #' # one grid cell, all time steps, scaled to degC
 #' arr$read(c(0, 2, 3), c(4, 1, 1), NULL) * arr$getScale() + arr$getOffset()
+#'
+#' # the same, from a view with the scale and offset applied
+#' arr$getUnscaled()$read(c(0, 2, 3), c(4, 1, 1), NULL)
+#'
+#' # the first time step as a view, and its mask of valid values
+#' v1 <- arr$getView("[0,...]")
+#' v1$getDimensions()$size
+#' v1$getMask(NULL)$read(NULL, NULL, NULL)
+#'
+#' # lon, lat, time order
+#' arr$transpose(c(2, 1, 0))$getDimensions()$name
+#'
+#' # the first time step as a classic raster (lon is X, lat is Y)
+#' r <- v1$asClassicDataset(1, 0, NULL)
+#' r
+#' r$getGeoTransform()
+#' r$close()
 #'
 #' arr$close()
 #' ds$close()

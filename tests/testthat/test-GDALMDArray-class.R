@@ -174,3 +174,119 @@ test_that("block size is reported for a chunked Zarr array", {
     arr$close()
     ds$close()
 })
+
+test_that("getView, transpose, getUnscaled and getMask work", {
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    expected <- t2m_values()
+    a <- array(expected, dim = c(6, 5, 4))
+
+    # a view gives the same values as the matching hyperslab read
+    v <- arr$getView("[1,2:4,::2]")
+    expect_true(is(v, "Rcpp_GDALMDArray"))
+    expect_equal(v$getDimensionCount(), 2)
+    expect_equal(v$getDimensions()$size, c(2, 3))
+    expect_identical(v$read(NULL, NULL, NULL),
+                     arr$read(c(1, 2, 0), c(1, 2, 3), c(1, 1, 2)))
+    expect_identical(v$read(NULL, NULL, NULL),
+                     as.vector(a[c(1, 3, 5), 3:4, 2]))
+    expect_equal(v$getUnit(), "degC")
+
+    # reversed dimension
+    rv <- arr$getView("[::-1,...]")
+    expect_identical(rv$read(c(0, 0, 0), c(4, 1, 1), NULL), a[1, 1, 4:1])
+    rv$close()
+
+    expect_error(arr$getView(""), "non-empty")
+    expect_error(arr$getView("[9,...]"), "failed to get view")
+
+    # views remain valid after the source array and dataset are closed
+    tr <- arr$transpose(c(2, 1, 0))
+    expect_equal(tr$getDimensions()$name, c("lon", "lat", "time"))
+    expect_identical(tr$read(NULL, NULL, NULL),
+                     as.vector(aperm(a, c(3, 2, 1))))
+    expect_equal(arr$transpose(c(-1, 0, 1, 2))$getDimensions()$size,
+                 c(1, 4, 5, 6))
+    expect_error(arr$transpose(c(0, 1, 3)), "0-based")
+    expect_error(arr$transpose(c(0, 0, 1)), "failed to get transposed")
+
+    # unscaled values
+    u <- arr$getUnscaled()
+    expect_equal(u$getDataType()$numeric_type, "Float64")
+    expect_true(is.na(u$getScale()))
+    expect_equal(u$read(NULL, NULL, NULL), expected * 0.01)
+
+    # mask of valid values
+    m <- arr$getMask(NULL)
+    expect_equal(m$getDataType()$numeric_type, "Byte")
+    expect_identical(m$read(NULL, NULL, NULL),
+                     as.integer(!is.na(expected)))
+    expect_identical(v$getMask(character(0))$read(NULL, NULL, NULL),
+                     rep(1L, 6))
+
+    # fields are carried over
+    arr$readByteAsRaw <- TRUE
+    expect_type(arr$getMask(NULL)$read(NULL, NULL, NULL), "raw")
+    arr$readByteAsRaw <- FALSE
+
+    arr$close()
+    ds$close()
+    expect_identical(v$read(NULL, NULL, NULL),
+                     as.vector(a[c(1, 3, 5), 3:4, 2]))
+    expect_equal(tr$read(c(0, 0, 0), c(1, 1, 4), NULL), a[1, 1, ])
+    expect_error(arr$getView("[0,...]"), "not open")
+    v$close()
+    tr$close()
+    u$close()
+    m$close()
+})
+
+test_that("asClassicDataset works", {
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    a <- array(t2m_values(), dim = c(6, 5, 4))
+
+    r <- arr$asClassicDataset(2, 1, NULL)
+    expect_true(is(r, "Rcpp_GDALRaster"))
+    expect_equal(r$dim(), c(6, 5, 4))
+    expect_equal(r$getGeoTransform(), c(144.875, 0.25, 0, -40.875, 0, -0.25))
+    expect_identical(r$read(3, 0, 0, 6, 5, 6, 5), as.vector(a[, , 3]))
+
+    # the same geotransform as mdim_as_classic(view_expr = )
+    v <- arr$getView("[2,...]")
+    r1 <- v$asClassicDataset(1, 0, NULL)
+    expect_equal(r1$dim(), c(6, 5, 1))
+    r2 <- mdim_as_classic(f, "t2m", 1, 0, view_expr = "[2,...]")
+    expect_equal(r1$getGeoTransform(), r2$getGeoTransform())
+    expect_equal(r1$read(1, 0, 0, 6, 5, 6, 5), r2$read(1, 0, 0, 6, 5, 6, 5))
+    r2$close()
+
+    expect_error(arr$asClassicDataset(3, 1, NULL), "idx_xdim")
+    expect_error(arr$asClassicDataset(2, -1, NULL), "idx_ydim")
+    expect_error(arr$asClassicDataset(2, 2, NULL), "different")
+
+    # the raster remains valid after the array and dataset are closed
+    arr$close()
+    v$close()
+    ds$close()
+    expect_identical(r1$read(1, 0, 0, 6, 1, 6, 1), a[, 1, 3])
+    r1$close()
+    r$close()
+
+    # statistics on a view of byte.nc, as for mdim_as_classic()
+    f2 <- system.file("extdata/byte.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f2)
+    band1 <- ds$openMDArray("/Band1")
+    v <- band1$getView("[0:10,...]")
+    r <- v$asClassicDataset(1, 0, NULL)
+    # https://github.com/OSGeo/gdal/blob/2b1c4d1fdb9377b62d821d70d022e7426940aec6/autotest/gdrivers/netcdf_multidim.py#L4036
+    expect_equal(r$getStatistics(1, FALSE, TRUE),
+                 c(74.0, 255.0, 126.82, 26.729713803182),
+                 tolerance = 0.01)
+    r$close()
+    v$close()
+    band1$close()
+    ds$close()
+})
