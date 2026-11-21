@@ -620,7 +620,7 @@ args$bbox <- c(323776.1, 5102172.0,  327466.1, 5104782.0)
 
 alg$run()
 #>  ■                                  1% |  ETA:  0s
-#> ✔ Done (9ms)
+#> ✔ Done (10ms)
 #> 
 #> [1] TRUE
 
@@ -628,7 +628,7 @@ alg$run()
 (ds_clip <- alg$output())
 #> C++ object of class <GDALRaster>
 #>   • Driver: GeoTIFF (GTiff)
-#>   • DSN: "/tmp/RtmpjPYuV9/elev_clip.tif"
+#>   • DSN: "/tmp/RtmpqnqXla/elev_clip.tif"
 #>   • Dimensions: 123, 87, 1
 #>   • CRS: NAD83 / UTM zone 12N (EPSG:26912)
 #>   • Pixel resolution: 30.000000, 30.000000
@@ -721,9 +721,6 @@ args <- list(input = ds_clip,
 #>   • Help URL: <https://gdal.org/programs/gdal_raster_hillshade.html>
 
 alg$run()
-#>  ■■                                 2% |  ETA:  0s
-#> ✔ Done (12ms)
-#> 
 #> [1] TRUE
 
 (ds_hillshade <- alg$output())
@@ -830,7 +827,7 @@ alg$run()
 (lyr <- alg$output())
 #> C++ object of class <GDALVector>
 #>   • Driver: GeoPackage (GPKG)
-#>   • DSN: "/tmp/RtmpjPYuV9/polygons_test.gpkg"
+#>   • DSN: "/tmp/RtmpqnqXla/polygons_test.gpkg"
 #>   • Layer: poly_multipoly
 #>   • CRS: NAD83 (EPSG:4269)
 #>   • Geometry: POLYGON
@@ -838,7 +835,7 @@ alg$run()
 alg$release()
 
 lyr$info()
-#> INFO: Open of `/tmp/RtmpjPYuV9/polygons_test.gpkg'
+#> INFO: Open of `/tmp/RtmpqnqXla/polygons_test.gpkg'
 #>       using driver `GPKG' successful.
 #> 
 #> Layer name: poly_multipoly
