@@ -20,6 +20,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <limits>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -448,6 +449,113 @@ SEXP GDALMDArrayR::read(const Rcpp::Nullable<Rcpp::NumericVector> &start,
                             this->readByteAsRaw);
 }
 
+GDALMDArrayR *GDALMDArrayR::getView(const std::string &view_expr) const {
+    checkAccess_();
+
+    if (view_expr.empty())
+        Rcpp::stop("'view_expr' must be a non-empty string, e.g., \"[0,...]\"");
+
+    GDALMDArrayH hView = GDALMDArrayGetView(m_hArray, view_expr.c_str());
+    return newDerived_(hView, "view for expression '" + view_expr + "'");
+}
+
+GDALMDArrayR *GDALMDArrayR::transpose(const Rcpp::IntegerVector &axes) const {
+    checkAccess_();
+
+    const int nDims = static_cast<int>(GDALMDArrayGetDimensionCount(m_hArray));
+    std::vector<int> anMapNewAxisToOldAxis;
+    for (R_xlen_t i = 0; i < axes.size(); ++i) {
+        if (axes[i] == NA_INTEGER || axes[i] < -1 || axes[i] >= nDims) {
+            Rcpp::stop("'axes' must contain 0-based dimension indexes, from "
+                       "0 to " + std::to_string(nDims - 1) + ", or -1 for "
+                       "a new axis of size 1");
+        }
+        anMapNewAxisToOldAxis.push_back(axes[i]);
+    }
+
+    GDALMDArrayH hTransposed = GDALMDArrayTranspose(
+        m_hArray, anMapNewAxisToOldAxis.size(), anMapNewAxisToOldAxis.data());
+    return newDerived_(hTransposed, "transposed array");
+}
+
+GDALMDArrayR *GDALMDArrayR::getUnscaled() const {
+    checkAccess_();
+
+    GDALMDArrayH hUnscaled = GDALMDArrayGetUnscaled(m_hArray);
+    return newDerived_(hUnscaled, "unscaled array");
+}
+
+GDALMDArrayR *GDALMDArrayR::getMask(
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+    CPLStringList aosOptions;
+    if (options.isNotNull()) {
+        Rcpp::CharacterVector options_in(options);
+        for (R_xlen_t i = 0; i < options_in.size(); ++i)
+            aosOptions.AddString(options_in[i]);
+    }
+
+    GDALMDArrayH hMask = GDALMDArrayGetMask(m_hArray, aosOptions.List());
+    return newDerived_(hMask, "mask array");
+}
+
+GDALRaster *GDALMDArrayR::asClassicDataset(
+        int idx_xdim, int idx_ydim,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
+    checkAccess_();
+
+    const int nDims = static_cast<int>(GDALMDArrayGetDimensionCount(m_hArray));
+    if (nDims < 1)
+        Rcpp::stop("a classic dataset needs an array of 1 or more dimensions");
+    if (idx_xdim == NA_INTEGER || idx_xdim < 0 || idx_xdim >= nDims) {
+        Rcpp::stop("'idx_xdim' must be a 0-based dimension index, from 0 to " +
+                   std::to_string(nDims - 1));
+    }
+    // idx_ydim is ignored by GDAL for a 1D array
+    if (nDims > 1 &&
+            (idx_ydim == NA_INTEGER || idx_ydim < 0 || idx_ydim >= nDims)) {
+        Rcpp::stop("'idx_ydim' must be a 0-based dimension index, from 0 to " +
+                   std::to_string(nDims - 1));
+    }
+    if (nDims > 1 && idx_xdim == idx_ydim)
+        Rcpp::stop("'idx_xdim' and 'idx_ydim' must be different dimensions");
+
+    CPLStringList aosOptions;
+    if (options.isNotNull()) {
+        Rcpp::CharacterVector options_in(options);
+        for (R_xlen_t i = 0; i < options_in.size(); ++i)
+            aosOptions.AddString(options_in[i]);
+    }
+
+    GDALDatasetH hClassicDS = nullptr;
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 8, 0)
+    GDALGroupH hRootGroup = nullptr;
+    if (m_hDataset != nullptr)
+        hRootGroup = GDALDatasetGetRootGroup(m_hDataset);
+    hClassicDS = GDALMDArrayAsClassicDatasetEx(
+        m_hArray, static_cast<size_t>(idx_xdim),
+        static_cast<size_t>(nDims > 1 ? idx_ydim : 0), hRootGroup,
+        aosOptions.List());
+    if (hRootGroup != nullptr)
+        GDALGroupRelease(hRootGroup);
+#else
+    if (aosOptions.size() > 0)
+        Rcpp::stop("'options' for asClassicDataset() require GDAL >= 3.8");
+    hClassicDS = GDALMDArrayAsClassicDataset(
+        m_hArray, static_cast<size_t>(idx_xdim),
+        static_cast<size_t>(nDims > 1 ? idx_ydim : 0));
+#endif
+
+    if (hClassicDS == nullptr)
+        Rcpp::stop("failed to get the array as a classic dataset");
+
+    auto ds = std::make_unique<GDALRaster>();
+    ds->setGDALDatasetH_(hClassicDS);
+    // a returned pointer to an exposed class is owned by R (see openMDArray())
+    return ds.release();
+}
+
 void GDALMDArrayR::close() {
     if (m_hArray != nullptr) {
         GDALMDArrayRelease(m_hArray);
@@ -527,6 +635,19 @@ void GDALMDArrayR::setHandles_(GDALMDArrayH hArray, GDALDatasetH hDS) {
     }
 }
 
+GDALMDArrayR *GDALMDArrayR::newDerived_(GDALMDArrayH hDerived,
+                                        const std::string &what) const {
+    if (hDerived == nullptr)
+        Rcpp::stop("failed to get " + what);
+
+    auto arr = std::make_unique<GDALMDArrayR>();
+    arr->setHandles_(hDerived, m_hDataset);
+    arr->readByteAsRaw = this->readByteAsRaw;
+    arr->quiet = this->quiet;
+    // a returned pointer to an exposed class is owned by R (see openMDArray())
+    return arr.release();
+}
+
 // ****************************************************************************
 
 RCPP_MODULE(mod_GDALMDArray) {
@@ -573,6 +694,16 @@ RCPP_MODULE(mod_GDALMDArray) {
         "Return the values of the indexing variable of a dimension")
     .const_method("read", &GDALMDArrayR::read,
         "Read the whole array or a hyperslab given start, count and step")
+    .const_method("getView", &GDALMDArrayR::getView,
+        "Return a view of the array given a view expression")
+    .const_method("transpose", &GDALMDArrayR::transpose,
+        "Return a view of the array with its axes reordered")
+    .const_method("getUnscaled", &GDALMDArrayR::getUnscaled,
+        "Return a view of the array with scale and offset applied")
+    .const_method("getMask", &GDALMDArrayR::getMask,
+        "Return a mask array of the valid values")
+    .const_method("asClassicDataset", &GDALMDArrayR::asClassicDataset,
+        "Return a view of the array as a classic raster (GDALRaster)")
     .method("close", &GDALMDArrayR::close,
         "Release the array and the dataset reference")
     .const_method("show", &GDALMDArrayR::show,
