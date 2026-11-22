@@ -17,7 +17,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdint>
 #include <cstdio>
 #include <limits>
 #include <memory>
@@ -43,17 +42,6 @@ static bool is_whole_in_range_(double x, double lo, double hi) {
     if (std::floor(x) != x)
         return false;
     return x >= lo && x <= hi;
-}
-
-static CPLStringList options_to_csl_(
-        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
-    CPLStringList aosOptions;
-    if (options.isNotNull()) {
-        Rcpp::CharacterVector options_in(options);
-        for (R_xlen_t i = 0; i < options_in.size(); ++i)
-            aosOptions.AddString(options_in[i]);
-    }
-    return aosOptions;
 }
 
 // min, max, mean, sd and valid_count as a named vector (all NA if !ok)
@@ -519,12 +507,7 @@ GDALMDArrayR *GDALMDArrayR::getMask(
         const Rcpp::Nullable<Rcpp::CharacterVector> &options) const {
     checkAccess_();
 
-    CPLStringList aosOptions;
-    if (options.isNotNull()) {
-        Rcpp::CharacterVector options_in(options);
-        for (R_xlen_t i = 0; i < options_in.size(); ++i)
-            aosOptions.AddString(options_in[i]);
-    }
+    const CPLStringList aosOptions = options_to_csl_(options);
 
     GDALMDArrayH hMask = GDALMDArrayGetMask(m_hArray, aosOptions.List());
     return newDerived_(hMask, "mask array");
@@ -551,12 +534,7 @@ GDALRaster *GDALMDArrayR::asClassicDataset(
     if (nDims > 1 && idx_xdim == idx_ydim)
         Rcpp::stop("'idx_xdim' and 'idx_ydim' must be different dimensions");
 
-    CPLStringList aosOptions;
-    if (options.isNotNull()) {
-        Rcpp::CharacterVector options_in(options);
-        for (R_xlen_t i = 0; i < options_in.size(); ++i)
-            aosOptions.AddString(options_in[i]);
-    }
+    const CPLStringList aosOptions = options_to_csl_(options);
 
     GDALDatasetH hClassicDS = nullptr;
 #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 8, 0)
@@ -699,12 +677,7 @@ GDALMDArrayR *GDALMDArrayR::getResampled(
 
     GDALMDArrayH hResampled = nullptr;
     if (!bError) {
-        CPLStringList aosOptions;
-        if (options.isNotNull()) {
-            Rcpp::CharacterVector options_in(options);
-            for (R_xlen_t i = 0; i < options_in.size(); ++i)
-                aosOptions.AddString(options_in[i]);
-        }
+        const CPLStringList aosOptions = options_to_csl_(options);
         hResampled = GDALMDArrayGetResampled(m_hArray, nDims,
                                              ahNewDims.data(), eResampleAlg,
                                              hSRS, aosOptions.List());
@@ -756,12 +729,7 @@ GDALMDArrayR *GDALMDArrayR::getGridded(
     if ((hXArray == nullptr) != (hYArray == nullptr))
         Rcpp::stop("'x_array' and 'y_array' must both be given, or both NULL");
 
-    CPLStringList aosOptions;
-    if (options.isNotNull()) {
-        Rcpp::CharacterVector options_in(options);
-        for (R_xlen_t i = 0; i < options_in.size(); ++i)
-            aosOptions.AddString(options_in[i]);
-    }
+    const CPLStringList aosOptions = options_to_csl_(options);
 
     GDALMDArrayH hGridded = GDALMDArrayGetGridded(
         m_hArray, grid_options.c_str(), hXArray, hYArray, aosOptions.List());
