@@ -161,6 +161,9 @@
 - [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
   : Read an MDArray from a multidimensional raster, with dimension
   information
+- [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)
+  : Generate an index of chunk offsets and sizes for iterating an
+  MDArray
 - [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.md)
   : Convert multidimensional data between different formats, and subset
 

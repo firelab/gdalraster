@@ -10,6 +10,8 @@ get the nodata value, scale, offset, unit, spatial reference and block
 read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
 dimension)
+advise an upcoming read, get a chunk size for processing, and compute
+statistics
 derive new arrays without copying data: a view given a slicing
 expression, a transposed view, an unscaled view, a mask, a resampled or
 reprojected view, and a gridded view of scattered points
@@ -39,6 +41,8 @@ get the nodata value, scale, offset, unit, spatial reference and block
 read coordinate values of a dimension
 read a hyperslab of the array (start, count and optional step per
 dimension)
+advise an upcoming read, get a chunk size for processing, and compute
+statistics
 derive new arrays without copying data: a view given a slicing
 expression, a transposed view, an unscaled view, a mask, a resampled or
 reprojected view, and a gridded view of scattered points
@@ -126,6 +130,8 @@ An object of class <code>GDALMDArray</code> is returned by
 <li><p>read coordinate values of a dimension</p></li>
 <li><p>read a hyperslab of the array (start, count and optional step per
 dimension)</p></li>
+<li><p>advise an upcoming read, get a chunk size for processing, and compute
+statistics</p></li>
 <li><p>derive new arrays without copying data: a view given a slicing
 expression, a transposed view, an unscaled view, a mask, a resampled or
 reprojected view, and a gridded view of scattered points</p></li>
@@ -184,9 +190,15 @@ varying first (e.g., <code>time, lat, lon</code>).</p>
 <span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getMask</span>(options)</span>
 <span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getResampled</span>(new_dim_sizes, resample_alg, target_srs, options)</span>
 <span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getGridded</span>(grid_options, x_array, y_array, options)</span>
-<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
-<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">adviseRead</span>(start, count, options)</span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getProcessingChunkSize</span>(max_chunk_memory)</span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getStatistics</span>(approx_ok, force)</span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">computeStatistics</span>(approx_ok, options)</span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">cache</span>(options)</span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -212,7 +224,8 @@ A logical value, <code>TRUE</code> to read arrays of data type Byte as <span sty
 vectors. Defaults to <code>FALSE</code> (Byte is read as <code>integer</code>).</p>
 <p><code>$quiet</code><br>
 A logical value, <code>TRUE</code> to suppress console output from class methods.
-Defaults to <code>FALSE</code>. Reserved for methods added in later releases.</p>
+Defaults to <code>FALSE</code> (e.g., a progress bar from
+<code>$computeStatistics()</code>).</p>
 </div>
 
 <div class="section">
@@ -377,6 +390,66 @@ the same names.</p>
 </div>
 
 <div class="section">
+<h3 id="chunk-aware-i-o-and-statistics">Chunk-aware I/O and statistics<a class="anchor" aria-label="anchor" href="#chunk-aware-i-o-and-statistics"></a></h3>
+
+
+<p><code>$adviseRead(start, count, options)</code><br>
+Advises the driver of an upcoming read of the hyperslab given by <code>start</code>
+and <code>count</code> (as for <code>$read()</code>, both <code>NULL</code> for the whole array).
+Many drivers ignore the advice, but it can greatly accelerate access with
+some. The Zarr driver fetches and decodes the blocks that intersect the
+hyperslab using multiple threads and keeps them in memory for the reads
+that follow on this array object (the call returns when that is done).
+<code>options</code> is a character vector of driver-specific <code>NAME=VALUE</code> pairs, or
+<code>NULL</code> (requires GDAL &gt;= 3.4 when not empty). For Zarr these are
+<code>"CACHE_SIZE=&lt;bytes&gt;"</code>, the maximum memory to use (by default half of the
+remaining GDAL block cache), and <code>"NUM_THREADS=&lt;integer&gt;|ALL_CPUS"</code> (by
+default from the <code>GDAL_NUM_THREADS</code> configuration option). Returns logical
+<code>TRUE</code> on success (ignoring the advice is a success).</p>
+<p><code>$getProcessingChunkSize(max_chunk_memory)</code><br>
+Returns a numeric vector with a chunk size along each dimension, suitable
+for processing the array piece by piece. The chunk is a multiple of the
+block size (see <code>$getBlockSize()</code>) along each dimension, within
+<code>max_chunk_memory</code> bytes, or one block if a block is larger than that. For
+an array with no block size, the chunk is built up from the last
+dimension. See <code><a href="mdim_chunk_index.html">mdim_chunk_index()</a></code> for the index of chunks of a given
+size.</p>
+<p><code>$getStatistics(approx_ok, force)</code><br>
+Returns a named numeric vector of statistics of the array values: <code>min</code>,
+<code>max</code>, <code>mean</code>, <code>sd</code> (standard deviation) and <code>valid_count</code> (the number of
+values that are not nodata). Statistics already stored for the array are
+returned if there are any. Otherwise, they are computed if <code>force</code> is
+<code>TRUE</code>, or <code>NA</code> values are returned if <code>force</code> is <code>FALSE</code>. <code>approx_ok</code> is
+a logical value, <code>TRUE</code> to allow statistics computed from a subset of the
+values (currently ignored by GDAL, which always uses all of the values).
+Statistics are of the values as stored (scale and offset not applied).</p>
+<p><code>$computeStatistics(approx_ok, options)</code><br>
+Computes statistics of the array values and returns them as a named numeric
+vector, as for <code>$getStatistics()</code>. The array is read one processing
+chunk at a time, so memory use is bounded for arrays of any size. A
+progress bar is shown unless <code>$quiet</code> is <code>TRUE</code>. <code>options</code> is a
+character vector of <code>NAME=VALUE</code> pairs, or <code>NULL</code> (requires GDAL &gt;= 3.8
+when not empty, e.g., <code>"UPDATE_METADATA=YES"</code> to store the minimum and
+maximum in the <code>actual_range</code> attribute of a netCDF or Zarr array opened
+for update). Once computed, the statistics are generally saved by GDAL
+for later calls to <code>$getStatistics()</code>, in a file <code>pam.aux.xml</code> or
+<code>&lt;filename&gt;.aux.xml</code> next to the dataset, written when the dataset is
+closed. If that location is not writable (e.g., a remote dataset), GDAL
+reports a failure to write the file at that time, which can be ignored.</p>
+<p><code>$cache(options)</code><br>
+Caches the content of the array in a file named as the dataset filename
+with the extension <code>.gmac</code> added (a netCDF dataset), or in the directory
+given by the <code>GDAL_PAM_PROXY_DIR</code> configuration option if that file cannot
+be written. Reads of the array then use the cache automatically, also in
+later sessions. The main purpose is to cache a view that is expensive to
+compute, such as a transposed array. The cache is not checked against the
+source: it must be deleted manually if the source array changes. <code>options</code>
+is a character vector of <code>NAME=VALUE</code> pairs, or <code>NULL</code>. Currently the only
+option is <code>"BLOCKSIZE=bs0,bs1,...,bsN"</code>, the block size of the cached
+array. Returns logical <code>TRUE</code> on success. Requires GDAL &gt;= 3.4.</p>
+</div>
+
+<div class="section">
 <h3 id="classic-raster-view">Classic raster view<a class="anchor" aria-label="anchor" href="#classic-raster-view"></a></h3>
 
 
@@ -402,7 +475,8 @@ Closes the array and releases the reference to its dataset.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="GDALMultiDimRaster-class.html">GDALMultiDimRaster</a>, <a href="GDALRaster-class.html">GDALRaster</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_info.html">mdim_info()</a></code>,
+    <div class="dont-index"><p><a href="GDALMultiDimRaster-class.html">GDALMultiDimRaster</a>, <a href="GDALRaster-class.html">GDALRaster</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_chunk_index.html">mdim_chunk_index()</a></code>,
+<code><a href="mdim_info.html">mdim_info()</a></code>,
 <code><a href="mdim_as_classic.html">mdim_as_classic()</a></code></p></div>
     </div>
 
@@ -461,6 +535,10 @@ Closes the array and releases the reference to its dataset.</p>
 <span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">getUnscaled</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14.45 15.45 16.45 17.45</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># a chunk size for processing within 120 bytes (60 values of Int16)</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">getProcessingChunkSize</span><span class="op">(</span><span class="fl">120</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2 5 6</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the first time step as a view, and its mask of valid values</span></span></span>
 <span class="r-in"><span><span class="va">v1</span> <span class="op">&lt;-</span> <span class="va">arr</span><span class="op">$</span><span class="fu">getView</span><span class="op">(</span><span class="st">"[0,...]"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v1</span><span class="op">$</span><span class="fu">getDimensions</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">size</span></span></span>
@@ -486,6 +564,20 @@ Closes the array and releases the reference to its dataset.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 144.875   0.250   0.000 -40.875   0.000  -0.250</span>
 <span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## statistics of the stored values, read one processing chunk at a time</span></span></span>
+<span class="r-in"><span><span class="co"># (on a copy of the file, since GDAL saves the statistics next to it)</span></span></span>
+<span class="r-in"><span><span class="va">f_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mdim_small.nc"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">f</span>, <span class="va">f_tmp</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span><span class="va">GDALMultiDimRaster</span>, <span class="va">f_tmp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">arr</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/t2m"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="va">quiet</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">computeStatistics</span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         min         max        mean          sd valid_count </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1295.0000   1885.0000   1592.3109    139.7098    119.0000 </span>
 <span class="r-in"><span><span class="va">arr</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="fu">close</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

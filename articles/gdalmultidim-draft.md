@@ -2,10 +2,37 @@
 
 Michael Sumner, Chris Toney
 
-Last modified: 2026-11-14
+Last modified: 2026-11-22
 
 Comment/discussion: see the GitHub discussion linked from this article’s
 pull request.
+
+## Status
+
+The bindings are being added to the development version of
+**gdalraster** in a series of pull requests, documented as experimental.
+As of 2026-11-22:
+
+| PR | Content | Status |
+|----|----|----|
+| 1 | `GDALMultiDimRaster`: read-only navigation by full path | merged ([\#1025](https://github.com/firelab/gdalraster/pull/1025)) |
+| 2 | `GDALMDArray`: description, hyperslab `$read()`; [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md) | merged ([\#1026](https://github.com/firelab/gdalraster/pull/1026)) |
+| 3 | `$getView()`, `$transpose()`, `$getUnscaled()`, `$getMask()`, `$asClassicDataset()` | merged ([\#1032](https://github.com/firelab/gdalraster/pull/1032)) |
+| 4 | `$getResampled()`, `$getGridded()` | merged ([\#1039](https://github.com/firelab/gdalraster/pull/1039)) |
+| 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md) | this update |
+| 6 | raw block references (GDAL \>= 3.12) | planned |
+| 7 | writing | planned |
+| 8 | `GDALAlg` integration and a package vignette | planned |
+
+See
+[`?GDALMultiDimRaster`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md),
+[`?GDALMDArray`](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md),
+[`?mdim_read`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
+and
+[`?mdim_chunk_index`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)
+for the interface as implemented. The class definitions below are kept
+as the plan for the remaining work, and may differ in detail from what
+has been merged.
 
 ## Summary
 
@@ -142,8 +169,8 @@ with `GDALRaster$getUnitType()`. No dependency on packages **units** or
 
 ## class GDALMultiDimRaster
 
-Proposed class definition. The comment on each method gives the pull
-request in the planned series where it would be added.
+Class definition. The comment on each method gives the pull request in
+the series where it was, or would be, added (PR 1 to 5 are implemented).
 
 ``` cpp
 class GDALMultiDimRaster {
@@ -170,7 +197,7 @@ class GDALMultiDimRaster {
     std::string getDriverShortName() const;
     std::string getDriverLongName() const;
     Rcpp::CharacterVector getFileList() const;
-    std::string info() const;  // via the existing mdim_info() code
+    void info() const;  // prints, via the existing mdim_info() code
     void close();
 
     // navigation by full path (PR 1)
@@ -201,9 +228,8 @@ class GDALMultiDimRaster {
 ## class GDALMDArray
 
 The C++ class needs a name other than `GDALMDArray`, which is defined by
-GDAL in `gdal_priv.h`. It would be exposed to R as `GDALMDArray` if that
-works cleanly with `RCPP_EXPOSED_CLASS` and the `Rcpp_` aliases in the
-documentation (to be checked in PR 2).
+GDAL in `gdal_priv.h`. It is named `GDALMDArrayR`, and exposed to R as
+`GDALMDArray`.
 
 ``` cpp
 class GDALMDArrayR {  // exposed to R as GDALMDArray
@@ -242,19 +268,29 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     GDALMDArrayR *transpose(const Rcpp::IntegerVector &axes) const;
     GDALMDArrayR *getUnscaled() const;
     GDALMDArrayR *getMask(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
-    GDALMDArrayR *getResampled(...) const;   // GDAL >= 3.4
-    GDALMDArrayR *getGridded(...) const;     // GDAL >= 3.7
+    // GDAL >= 3.4
+    GDALMDArrayR *getResampled(const Rcpp::Nullable<Rcpp::NumericVector> &new_dim_sizes,
+                               const std::string &resample_alg,
+                               const std::string &target_srs,
+                               const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    // GDAL >= 3.7, x_array and y_array are GDALMDArray objects or NULL
+    GDALMDArrayR *getGridded(const std::string &grid_options,
+                             SEXP x_array, SEXP y_array,
+                             const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
     // bridge to the raster data model (PR 3)
     GDALRaster *asClassicDataset(int idx_xdim, int idx_ydim,
                                  const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
     // chunk-aware I/O and statistics (PR 5)
-    void adviseRead(const Rcpp::NumericVector &start,
-                    const Rcpp::NumericVector &count,
+    bool adviseRead(const Rcpp::Nullable<Rcpp::NumericVector> &start,
+                    const Rcpp::Nullable<Rcpp::NumericVector> &count,
                     const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
-    Rcpp::NumericVector getProcessingChunkSize(double max_mem) const;
-    Rcpp::List computeStatistics(bool approx_ok) const;
+    Rcpp::NumericVector getProcessingChunkSize(double max_chunk_memory) const;
+    Rcpp::NumericVector getStatistics(bool approx_ok, bool force) const;
+    Rcpp::NumericVector computeStatistics(bool approx_ok,
+                                          const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
+    bool cache(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
     // raw block references (PR 6, GDAL >= 3.12)
     Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_idx) const;
@@ -266,9 +302,10 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
 ## Examples
 
 The examples below use public data on Google Cloud Storage, without
-credentials. Each one shows what works with **gdalraster** today,
-followed by the proposed interface. The proposed interface is not
-implemented yet, so its output is not shown.
+credentials. Each one shows what works with the released **gdalraster**
+(“today”), followed by the new interface (“proposed”), which is now
+available in the development version. Output is not shown as the
+examples are not run when the article is built.
 
 For remote Zarr, avoid a directory listing on open:
 
@@ -366,7 +403,7 @@ lon <- ds$openMDArray("/lon")$read(NULL, NULL, NULL)
 ```
 
 Mapping this array onto a regular grid is the purpose of
-`GDALMDArray$getGridded()` and `$getResampled()` (planned PR 4).
+`GDALMDArray$getGridded()` and `$getResampled()`.
 
 ## Further consideration / TBD
 
@@ -393,17 +430,15 @@ Mapping this array onto a regular grid is the purpose of
   [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.md)
   take numeric bounds only. A base R helper for CF time units with the
   standard, noleap, all_leap and 360_day calendars may be useful.
-- Block-level helpers: `GDALRaster` already has `$get_block_indexing()`,
+- Block-level helpers:
+  [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)
+  gives the start and count of each chunk of an array, for `$read()`.
+  `GDALRaster` already has `$get_block_indexing()`,
   `$getActualBlockSize()`, `$readBlock()`, `$make_chunk_index()` and
   `$readChunk()`, which work today on 2-D slices via
   [`mdim_as_classic()`](https://firelab.github.io/gdalraster/reference/mdim_as_classic.md).
   Multidimensional versions should keep the same column scheme,
   generalized to N dimensions.
-- Planned series of pull requests: 1 `GDALMultiDimRaster` read-only
-  navigation, 2 `GDALMDArray` and hyperslab read, 3 views and the
-  classic bridge, 4 resampling and gridding, 5 chunk-aware I/O and
-  statistics, 6 raw block references, 7 writing, 8 `GDALAlg` integration
-  and a vignette.
 
 ## Document changelog
 
@@ -411,6 +446,9 @@ Mapping this array onto a regular grid is the purpose of
 - `openMDArray()` returns a pointer owned by R; `read()` is a single
   method taking `NULL` for the whole array; 64-bit integers are read as
   `double`; `getMask()` takes `options` (2026-11-20)
+- add section Status: PR 1 to 5 implemented in the development version;
+  class definitions updated for `getResampled()`, `getGridded()` and the
+  chunk-aware I/O and statistics methods (2026-11-22)
 
 ## Contributors
 

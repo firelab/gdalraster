@@ -87,9 +87,91 @@
     
     
 <p>Michael Sumner, Chris Toney</p>
-<p>Last modified: 2026-11-14</p>
+<p>Last modified: 2026-11-22</p>
 <p>Comment/discussion: see the GitHub discussion linked from this
 article’s pull request.</p>
+<div class="section level2">
+<h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a>
+</h2>
+<p>The bindings are being added to the development version of
+<strong>gdalraster</strong> in a series of pull requests, documented as
+experimental. As of 2026-11-22:</p>
+<table class="table">
+<colgroup>
+<col width="19%">
+<col width="42%">
+<col width="38%">
+</colgroup>
+<thead><tr class="header">
+<th>PR</th>
+<th>Content</th>
+<th>Status</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>
+<code>GDALMultiDimRaster</code>: read-only navigation by full
+path</td>
+<td>merged (<a href="https://github.com/firelab/gdalraster/pull/1025" class="external-link">#1025</a>)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>
+<code>GDALMDArray</code>: description, hyperslab
+<code>$read()</code>; <code><a href="../reference/mdim_read.html">mdim_read()</a></code>
+</td>
+<td>merged (<a href="https://github.com/firelab/gdalraster/pull/1026" class="external-link">#1026</a>)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>
+<code>$getView()</code>, <code>$transpose()</code>,
+<code>$getUnscaled()</code>, <code>$getMask()</code>,
+<code>$asClassicDataset()</code>
+</td>
+<td>merged (<a href="https://github.com/firelab/gdalraster/pull/1032" class="external-link">#1032</a>)</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>
+<code>$getResampled()</code>, <code>$getGridded()</code>
+</td>
+<td>merged (<a href="https://github.com/firelab/gdalraster/pull/1039" class="external-link">#1039</a>)</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>
+<code>$adviseRead()</code>, <code>$getProcessingChunkSize()</code>,
+<code>$getStatistics()</code>, <code>$computeStatistics()</code>,
+<code>$cache()</code>; <code><a href="../reference/mdim_chunk_index.html">mdim_chunk_index()</a></code>
+</td>
+<td>this update</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>raw block references (GDAL &gt;= 3.12)</td>
+<td>planned</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>writing</td>
+<td>planned</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>
+<code>GDALAlg</code> integration and a package vignette</td>
+<td>planned</td>
+</tr>
+</tbody>
+</table>
+<p>See <code><a href="../reference/GDALMultiDimRaster-class.html">?GDALMultiDimRaster</a></code>, <code><a href="../reference/GDALMDArray-class.html">?GDALMDArray</a></code>,
+<code><a href="../reference/mdim_read.html">?mdim_read</a></code> and <code><a href="../reference/mdim_chunk_index.html">?mdim_chunk_index</a></code> for the
+interface as implemented. The class definitions below are kept as the
+plan for the remaining work, and may differ in detail from what has been
+merged.</p>
+</div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
@@ -234,8 +316,9 @@ Downstream packages can decode them as needed.</p>
 <div class="section level2">
 <h2 id="class-gdalmultidimraster">class GDALMultiDimRaster<a class="anchor" aria-label="anchor" href="#class-gdalmultidimraster"></a>
 </h2>
-<p>Proposed class definition. The comment on each method gives the pull
-request in the planned series where it would be added.</p>
+<p>Class definition. The comment on each method gives the pull request
+in the series where it was, or would be, added (PR 1 to 5 are
+implemented).</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="kw">class</span> GDALMultiDimRaster <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a> <span class="kw">public</span><span class="op">:</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    GDALMultiDimRaster<span class="op">();</span></span>
@@ -260,7 +343,7 @@ request in the planned series where it would be added.</p>
 <span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    <span class="bu">std::</span>string getDriverShortName<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    <span class="bu">std::</span>string getDriverLongName<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>    Rcpp<span class="op">::</span>CharacterVector getFileList<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    <span class="bu">std::</span>string info<span class="op">()</span> <span class="at">const</span><span class="op">;</span>  <span class="co">// via the existing mdim_info() code</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    <span class="dt">void</span> info<span class="op">()</span> <span class="at">const</span><span class="op">;</span>  <span class="co">// prints, via the existing mdim_info() code</span></span>
 <span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="dt">void</span> close<span class="op">();</span></span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a></span>
 <span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>    <span class="co">// navigation by full path (PR 1)</span></span>
@@ -291,10 +374,9 @@ request in the planned series where it would be added.</p>
 <h2 id="class-gdalmdarray">class GDALMDArray<a class="anchor" aria-label="anchor" href="#class-gdalmdarray"></a>
 </h2>
 <p>The C++ class needs a name other than <code>GDALMDArray</code>, which
-is defined by GDAL in <code>gdal_priv.h</code>. It would be exposed to R
-as <code>GDALMDArray</code> if that works cleanly with
-<code>RCPP_EXPOSED_CLASS</code> and the <code>Rcpp_</code> aliases in
-the documentation (to be checked in PR 2).</p>
+is defined by GDAL in <code>gdal_priv.h</code>. It is named
+<code>GDALMDArrayR</code>, and exposed to R as
+<code>GDALMDArray</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="kw">class</span> GDALMDArrayR <span class="op">{</span>  <span class="co">// exposed to R as GDALMDArray</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a> <span class="kw">public</span><span class="op">:</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="co">// read/write fields exposed to R</span></span>
@@ -331,33 +413,44 @@ the documentation (to be checked in PR 2).</p>
 <span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>transpose<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>IntegerVector <span class="op">&amp;</span>axes<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getUnscaled<span class="op">()</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getMask<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getResampled<span class="op">(...)</span> <span class="at">const</span><span class="op">;</span>   <span class="co">// GDAL &gt;= 3.4</span></span>
-<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getGridded<span class="op">(...)</span> <span class="at">const</span><span class="op">;</span>     <span class="co">// GDAL &gt;= 3.7</span></span>
-<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>    <span class="co">// bridge to the raster data model (PR 3)</span></span>
-<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>    GDALRaster <span class="op">*</span>asClassicDataset<span class="op">(</span><span class="dt">int</span> idx_xdim<span class="op">,</span> <span class="dt">int</span> idx_ydim<span class="op">,</span></span>
-<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>                                 <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>    <span class="co">// chunk-aware I/O and statistics (PR 5)</span></span>
-<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>    <span class="dt">void</span> adviseRead<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>start<span class="op">,</span></span>
-<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>                    <span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>count<span class="op">,</span></span>
-<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>                    <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector getProcessingChunkSize<span class="op">(</span><span class="dt">double</span> max_mem<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>    Rcpp<span class="op">::</span>List computeStatistics<span class="op">(</span><span class="dt">bool</span> approx_ok<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>    <span class="co">// GDAL &gt;= 3.4</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getResampled<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>new_dim_sizes<span class="op">,</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>                               <span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>resample_alg<span class="op">,</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>                               <span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>target_srs<span class="op">,</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>                               <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>    <span class="co">// GDAL &gt;= 3.7, x_array and y_array are GDALMDArray objects or NULL</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>    GDALMDArrayR <span class="op">*</span>getGridded<span class="op">(</span><span class="at">const</span> <span class="bu">std::</span>string <span class="op">&amp;</span>grid_options<span class="op">,</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>                             SEXP x_array<span class="op">,</span> SEXP y_array<span class="op">,</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>                             <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>    <span class="co">// bridge to the raster data model (PR 3)</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>    GDALRaster <span class="op">*</span>asClassicDataset<span class="op">(</span><span class="dt">int</span> idx_xdim<span class="op">,</span> <span class="dt">int</span> idx_ydim<span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>                                 <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a></span>
-<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>    <span class="co">// raw block references (PR 6, GDAL &gt;= 3.12)</span></span>
-<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getRawBlockInfo<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>block_idx<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a></span>
-<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a>    <span class="dt">void</span> close<span class="op">();</span></span>
-<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a>    <span class="co">// chunk-aware I/O and statistics (PR 5)</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a>    <span class="dt">bool</span> adviseRead<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>start<span class="op">,</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a>                    <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>NumericVector<span class="op">&gt;</span> <span class="op">&amp;</span>count<span class="op">,</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a>                    <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector getProcessingChunkSize<span class="op">(</span><span class="dt">double</span> max_chunk_memory<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector getStatistics<span class="op">(</span><span class="dt">bool</span> approx_ok<span class="op">,</span> <span class="dt">bool</span> force<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector computeStatistics<span class="op">(</span><span class="dt">bool</span> approx_ok<span class="op">,</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a>                                          <span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a>    <span class="dt">bool</span> cache<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a>    <span class="co">// raw block references (PR 6, GDAL &gt;= 3.12)</span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getRawBlockInfo<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>block_idx<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a>    <span class="dt">void</span> close<span class="op">();</span></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <p>The examples below use public data on Google Cloud Storage, without
-credentials. Each one shows what works with <strong>gdalraster</strong>
-today, followed by the proposed interface. The proposed interface is not
-implemented yet, so its output is not shown.</p>
+credentials. Each one shows what works with the released
+<strong>gdalraster</strong> (“today”), followed by the new interface
+(“proposed”), which is now available in the development version. Output
+is not shown as the examples are not run when the article is built.</p>
 <p>For remote Zarr, avoid a directory listing on open:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_config_option.html">set_config_option</a></span><span class="op">(</span><span class="st">"GDAL_DISABLE_READDIR_ON_OPEN"</span>, <span class="st">"EMPTY_DIR"</span><span class="op">)</span></span></code></pre></div>
@@ -444,8 +537,8 @@ around two northern poles. Time is in
 <span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lat"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">$</span><span class="fu">openMDArray</span><span class="op">(</span><span class="st">"/lon"</span><span class="op">)</span><span class="op">$</span><span class="fu">read</span><span class="op">(</span><span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <p>Mapping this array onto a regular grid is the purpose of
-<code>GDALMDArray$getGridded()</code> and <code>$getResampled()</code>
-(planned PR 4).</p>
+<code>GDALMDArray$getGridded()</code> and
+<code>$getResampled()</code>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -474,17 +567,14 @@ subsets that keep names are requested in GDAL <a href="https://github.com/OSGeo/
 <li>Time subsets in <code><a href="../reference/mdim_translate.html">mdim_translate()</a></code> take numeric bounds
 only. A base R helper for CF time units with the standard, noleap,
 all_leap and 360_day calendars may be useful.</li>
-<li>Block-level helpers: <code>GDALRaster</code> already has
-<code>$get_block_indexing()</code>, <code>$getActualBlockSize()</code>,
-<code>$readBlock()</code>, <code>$make_chunk_index()</code> and
-<code>$readChunk()</code>, which work today on 2-D slices via
-<code><a href="../reference/mdim_as_classic.html">mdim_as_classic()</a></code>. Multidimensional versions should keep
-the same column scheme, generalized to N dimensions.</li>
-<li>Planned series of pull requests: 1 <code>GDALMultiDimRaster</code>
-read-only navigation, 2 <code>GDALMDArray</code> and hyperslab read, 3
-views and the classic bridge, 4 resampling and gridding, 5 chunk-aware
-I/O and statistics, 6 raw block references, 7 writing, 8
-<code>GDALAlg</code> integration and a vignette.</li>
+<li>Block-level helpers: <code><a href="../reference/mdim_chunk_index.html">mdim_chunk_index()</a></code> gives the start
+and count of each chunk of an array, for <code>$read()</code>.
+<code>GDALRaster</code> already has <code>$get_block_indexing()</code>,
+<code>$getActualBlockSize()</code>, <code>$readBlock()</code>,
+<code>$make_chunk_index()</code> and <code>$readChunk()</code>, which
+work today on 2-D slices via <code><a href="../reference/mdim_as_classic.html">mdim_as_classic()</a></code>.
+Multidimensional versions should keep the same column scheme,
+generalized to N dimensions.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -497,6 +587,10 @@ I/O and statistics, 6 raw block references, 7 writing, 8
 <code>read()</code> is a single method taking <code>NULL</code> for the
 whole array; 64-bit integers are read as <code>double</code>;
 <code>getMask()</code> takes <code>options</code> (2026-11-20)</li>
+<li>add section Status: PR 1 to 5 implemented in the development
+version; class definitions updated for <code>getResampled()</code>,
+<code>getGridded()</code> and the chunk-aware I/O and statistics methods
+(2026-11-22)</li>
 </ul>
 </div>
 <div class="section level2">
