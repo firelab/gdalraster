@@ -1,5 +1,7 @@
 # gdalraster 2.7.0.9030 (dev)
 
+* `show()` methods of classes `GDALRaster`, `GDALMultiDimRaster`, `GDALVector` and `VSIFile`: print a short placeholder for an inline XML data source name (e.g., a VRT string), shorten a long DSN in the middle with "...", and print braces in a DSN literally instead of passing them to {cli} as glue expressions; `GDALMultiDimRaster$openMDArray()` and other methods that open an array or group by path now report the GDAL error message when opening fails, instead of only "not found" (2026-11-22)
+
 * class `GDALMDArray`: add methods `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()` and `$cache()`; add `mdim_chunk_index()`: index of chunk offsets and sizes for iterating an MDArray (#1040) (2026-11-22)
 
 * class `GDALMDArray`: add methods `$getResampled()` returning a resampled and optionally reprojected view of the array (GDAL >= 3.4), and `$getGridded()` returning a gridded view of an array of scattered points (GDAL >= 3.7) (#1039; 2026-11-22)

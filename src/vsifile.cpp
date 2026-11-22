@@ -323,7 +323,7 @@ int VSIFile::set_access(std::string access) {
 void VSIFile::show() const {
     cli_text_("C++ object of class {.cls VSIFile}");
     cli_ul_();
-    cli_li_("{.emph Filename}: {.str "s + get_filename() + "}");
+    cli_li_("{.emph Filename}: "s + cli_format_dsn_(get_filename()));
     cli_li_("{.emph Access}: "s + get_access());
     cli_end_();
 }

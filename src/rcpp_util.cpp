@@ -356,6 +356,58 @@ void cli_end_() {
     fn();
 }
 
+// Format a dataset name (DSN) for display in a cli message, e.g., in the
+// show() methods. An inline XML DSN (e.g., a VRT string) is replaced by a
+// short placeholder giving its root element and length. Otherwise, a DSN
+// longer than `max_len` is shortened by eliding the middle with "...", then
+// quoted, with braces escaped since cli interprets {} as glue expressions.
+// The returned string is ready to be embedded in text passed to cli_*_().
+std::string cli_format_dsn_(const std::string &dsn, std::size_t max_len) {
+    const std::size_t first = dsn.find_first_not_of(" \t\r\n");
+    if (first != std::string::npos && dsn[first] == '<') {
+        const std::size_t name_end = dsn.find_first_of(" \t\r\n/>",
+                                                       first + 1);
+        std::string root = dsn.substr(first + 1, name_end == std::string::npos
+                                                 ? std::string::npos
+                                                 : name_end - first - 1);
+        if (root.empty() || root.size() > 64 ||
+                root.find_first_of("{}") != std::string::npos) {
+            root = "";
+        }
+        else {
+            root += " ";
+        }
+        return "<inline " + root + "XML, " + std::to_string(dsn.size()) +
+               " chars>";
+    }
+
+    std::string out = dsn;
+    if (max_len >= 10 && out.size() > max_len) {
+        // keep the start and the end (usually the most informative part of a
+        // path or URL), without splitting a UTF-8 multi-byte sequence
+        std::size_t head = (max_len - 3) / 2;
+        std::size_t tail_start = out.size() - (max_len - 3 - head);
+        while (head > 0 &&
+               (static_cast<unsigned char>(out[head]) & 0xC0) == 0x80)
+            --head;
+        while (tail_start < out.size() &&
+               (static_cast<unsigned char>(out[tail_start]) & 0xC0) == 0x80)
+            ++tail_start;
+        out = out.substr(0, head) + "..." + out.substr(tail_start);
+    }
+
+    std::string escaped;
+    escaped.reserve(out.size());
+    for (char c : out) {
+        escaped += c;
+        if (c == '{' || c == '}')
+            escaped += c;
+    }
+    // quoted as plain text rather than inside a {.str } span, where an
+    // unbalanced (even if doubled) brace is a glue parse error
+    return "\"" + escaped + "\"";
+}
+
 // wrapper for cli::cat_line()
 void cli_cat_line_() {
     Rcpp::Environment pkg = Rcpp::Environment::namespace_env("cli");

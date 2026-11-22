@@ -468,7 +468,7 @@ void GDALMultiDimRaster::show() const {
     if (!isOpen()) {
         cli_text_("C++ object of class {.cls GDALMultiDimRaster}");
         cli_ul_();
-        cli_li_("{.emph Filename}: {.str "s + m_filename + "}");
+        cli_li_("{.emph Filename}: "s + cli_format_dsn_(m_filename));
         cli_li_("{.emph Dataset is closed}");
         cli_end_();
         return;
@@ -493,7 +493,7 @@ void GDALMultiDimRaster::show() const {
     cli_ul_();
     cli_li_("{.emph Driver}: "s + getDriverLongName() + " (" +
             getDriverShortName() + ")");
-    cli_li_("{.emph Filename}: {.str "s + m_filename + "}");
+    cli_li_("{.emph Filename}: "s + cli_format_dsn_(m_filename));
     cli_li_("{.emph Access}: "s + (m_eAccess == GA_ReadOnly ? "read-only" :
                                    "update"));
     cli_li_("{.emph Groups in root}: "s + std::to_string(nGroups));
@@ -523,6 +523,7 @@ GDALGroupH GDALMultiDimRaster::openGroup_(const std::string &path,
 
     const std::string full_path = mdim_normalize_path_(path);
     GDALGroupH hGroup = nullptr;
+    std::string err_msg;
 
 #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 2, 0)
     if (full_path == "/") {
@@ -530,16 +531,23 @@ GDALGroupH GDALMultiDimRaster::openGroup_(const std::string &path,
         hGroup = GDALDatasetGetRootGroup(m_hDataset);
     }
     else {
+        CPLErrorReset();
         CPLPushErrorHandler(CPLQuietErrorHandler);
         hGroup = GDALGroupOpenGroupFromFullname(m_hRootGroup,
                                                 full_path.c_str(), nullptr);
         CPLPopErrorHandler();
+        if (hGroup == nullptr && CPLGetLastErrorType() != CE_None)
+            err_msg = CPLGetLastErrorMsg();
         CPLErrorReset();
     }
 #endif
 
-    if (hGroup == nullptr && must_exist)
-        Rcpp::stop("group not found: " + full_path);
+    if (hGroup == nullptr && must_exist) {
+        if (err_msg.empty())
+            Rcpp::stop("group not found: " + full_path);
+        else
+            Rcpp::stop("failed to open group " + full_path + ": " + err_msg);
+    }
 
     return hGroup;
 }
@@ -553,19 +561,27 @@ GDALMDArrayH GDALMultiDimRaster::openMDArray_(const std::string &path,
 
     const std::string full_path = mdim_normalize_path_(path);
     GDALMDArrayH hArray = nullptr;
+    std::string err_msg;
 
 #if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 2, 0)
     if (full_path != "/") {
+        CPLErrorReset();
         CPLPushErrorHandler(CPLQuietErrorHandler);
         hArray = GDALGroupOpenMDArrayFromFullname(m_hRootGroup,
                                                   full_path.c_str(), nullptr);
         CPLPopErrorHandler();
+        if (hArray == nullptr && CPLGetLastErrorType() != CE_None)
+            err_msg = CPLGetLastErrorMsg();
         CPLErrorReset();
     }
 #endif
 
-    if (hArray == nullptr && must_exist)
-        Rcpp::stop("array not found: " + full_path);
+    if (hArray == nullptr && must_exist) {
+        if (err_msg.empty())
+            Rcpp::stop("array not found: " + full_path);
+        else
+            Rcpp::stop("failed to open array " + full_path + ": " + err_msg);
+    }
 
     return hArray;
 }

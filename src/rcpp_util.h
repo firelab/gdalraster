@@ -86,6 +86,7 @@ void cli_ul_();
 void cli_li_(const std::string &text);
 void cli_end_();
 void cli_cat_line_();
+std::string cli_format_dsn_(const std::string &dsn, std::size_t max_len = 80);
 
 SEXP as_nanoarrow_array_stream_(const Rcpp::DataFrame &df);
 

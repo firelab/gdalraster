@@ -2579,7 +2579,7 @@ void GDALVector::show() {
     cli_ul_();
     cli_li_("{.emph Driver}: "s + getDriverLongName() + " (" +
                 getDriverShortName() + ")");
-    cli_li_("{.emph DSN}: {.str "s + getDsn() + "}");
+    cli_li_("{.emph DSN}: "s + cli_format_dsn_(getDsn()));
     cli_li_("{.emph Layer}: "s + lyr_name);
     cli_li_("{.emph CRS}: "s + crs_name);
     cli_li_("{.emph Geometry}: "s + getGeomType());

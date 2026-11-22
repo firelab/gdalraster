@@ -1453,3 +1453,26 @@ test_that("/vsistdout/ redirection works", {
                        list(sql = "SELECT * FROM ynp_bnd")),
         expected_output)
 })
+
+test_that("show() escapes braces and shortens a long DSN", {
+    elev_file <- system.file("extdata/storml_elev.tif", package="gdalraster")
+
+    # braces in a DSN are printed literally, not interpreted by cli
+    f <- "/vsimem/show_{braces}.tif"
+    on.exit(vsi_unlink(f), add = TRUE)
+    translate(elev_file, f, quiet = TRUE)
+    ds <- new(GDALRaster, f)
+    out <- paste(capture_messages(show(ds)), collapse = "")
+    expect_match(out, "\"/vsimem/show_{braces}.tif\"", fixed = TRUE)
+    ds$close()
+
+    # a long DSN is shortened in the middle, keeping the file name
+    f2 <- paste0("/vsimem/", strrep("d", 100), "/storml_elev.tif")
+    on.exit(vsi_unlink(f2), add = TRUE)
+    translate(elev_file, f2, quiet = TRUE)
+    ds <- new(GDALRaster, f2)
+    out <- paste(capture_messages(show(ds)), collapse = "")
+    expect_match(out, "\"/vsimem/d+\\.\\.\\.d+/storml_elev\\.tif\"")
+    expect_no_match(out, strrep("d", 100), fixed = TRUE)
+    ds$close()
+})
