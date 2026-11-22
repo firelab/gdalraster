@@ -82,6 +82,7 @@ reference:
   - mdim_as_classic
   - mdim_info
   - mdim_read
+  - mdim_chunk_index
   - mdim_translate
 - subtitle: Geotransform conversion
 - contents:

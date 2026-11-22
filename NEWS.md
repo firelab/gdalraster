@@ -1,5 +1,7 @@
 # gdalraster 2.7.0.9020 (dev)
 
+* class `GDALMDArray`: add methods `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()` and `$cache()`; add `mdim_chunk_index()`: index of chunk offsets and sizes for iterating an MDArray (2026-11-22)
+
 * class `GDALMDArray`: add methods `$getResampled()` returning a resampled and optionally reprojected view of the array (GDAL >= 3.4), and `$getGridded()` returning a gridded view of an array of scattered points (GDAL >= 3.7) (#1039; 2026-11-22)
 
 * (internal) gdalalg.cpp: suppress compiler warning `-Wunused-const-variable` (2026-11-21)

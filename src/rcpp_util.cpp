@@ -222,6 +222,19 @@ Rcpp::CharacterVector wrap_gdal_string_list_(const CPLStringList &string_list) {
     return out;
 }
 
+// convert an optional R character vector of "NAME=VALUE" pairs to a
+// CPLStringList (empty if NULL)
+CPLStringList options_to_csl_(
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+    CPLStringList aosOptions;
+    if (options.isNotNull()) {
+        Rcpp::CharacterVector options_in(options);
+        for (R_xlen_t i = 0; i < options_in.size(); ++i)
+            aosOptions.AddString(options_in[i]);
+    }
+    return aosOptions;
+}
+
 //' Get pointer address of an R vector as a character string
 //'
 //' `get_data_ptr()` returns a character string representation of the address

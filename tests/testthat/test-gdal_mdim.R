@@ -209,3 +209,78 @@ test_that("mdim_read works", {
     expect_true(ds$isOpen())
     ds$close()
 })
+
+test_that("mdim_chunk_index works", {
+    idx <- mdim_chunk_index(c(4, 5, 6), c(2, 5, 4))
+    expect_true(is.matrix(idx))
+    expect_type(idx, "double")
+    expect_equal(colnames(idx),
+                 c("chunkoff0", "chunkoff1", "chunkoff2", "off0", "off1",
+                   "off2", "size0", "size1", "size2"))
+    expect_equal(nrow(idx), 4)
+    # last dimension varies fastest
+    expect_equal(unname(idx[, "chunkoff2"]), c(0, 1, 0, 1))
+    expect_equal(unname(idx[, "chunkoff0"]), c(0, 0, 1, 1))
+    expect_equal(unname(idx[, "off2"]), c(0, 4, 0, 4))
+    # the last chunk of a dimension is clipped
+    expect_equal(unname(idx[, "size2"]), c(4, 2, 4, 2))
+    expect_equal(unname(idx[, "size1"]), rep(5, 4))
+
+    # the chunks tile the array exactly
+    covered <- array(0L, dim = c(4, 5, 6))
+    for (i in seq_len(nrow(idx))) {
+        off <- idx[i, 4:6]
+        size <- idx[i, 7:9]
+        i0 <- off[1] + seq_len(size[1])
+        i1 <- off[2] + seq_len(size[2])
+        i2 <- off[3] + seq_len(size[3])
+        covered[i0, i1, i2] <- covered[i0, i1, i2] + 1L
+    }
+    expect_true(all(covered == 1L))
+
+    # 0 or NA means the whole dimension, and sizes are capped
+    idx <- mdim_chunk_index(c(4, 5, 6), c(0, NA, 100))
+    expect_equal(nrow(idx), 1)
+    expect_equal(unname(idx[1, ]), c(0, 0, 0, 0, 0, 0, 4, 5, 6))
+
+    # chunks that intersect a hyperslab, as whole chunks
+    idx <- mdim_chunk_index(c(4, 5, 6), c(2, 5, 4), start = c(1, 0, 3),
+                            count = c(1, 5, 1))
+    expect_equal(nrow(idx), 1)
+    expect_equal(unname(idx[1, ]), c(0, 0, 0, 0, 0, 0, 2, 5, 4))
+    idx <- mdim_chunk_index(c(4, 5, 6), c(2, 5, 4), start = c(1, 0, 3),
+                            count = c(2, 1, 2))
+    expect_equal(nrow(idx), 4)
+
+    # one dimension
+    idx <- mdim_chunk_index(10, 4)
+    expect_equal(unname(idx[, "off0"]), c(0, 4, 8))
+    expect_equal(unname(idx[, "size0"]), c(4, 4, 2))
+
+    # argument checks
+    expect_error(mdim_chunk_index(c(4, 5, 6)), "required")
+    expect_error(mdim_chunk_index("a", 1), "must be")
+    expect_error(mdim_chunk_index(c(4, 5, 6), c(2, 5)), "one value per")
+    expect_error(mdim_chunk_index(c(4, 5, 6), c(2, 5, -1)), "whole numbers")
+    expect_error(mdim_chunk_index(c(4, 0, 6), c(2, 5, 4)), "whole numbers")
+    expect_error(mdim_chunk_index(c(4, 5, 6), c(2, 5, 4), start = c(0, 0, 0)),
+                 "both")
+    expect_error(mdim_chunk_index(c(4, 5, 6), c(2, 5, 4), start = c(0, 0, 0),
+                                  count = c(5, 5, 6)), "out of range")
+    expect_error(mdim_chunk_index(c(1e6, 1e6), c(1, 1)), "too many chunks")
+
+    # from an array object: reading by chunk gives the whole array
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    # no block size in this file: one chunk
+    expect_equal(nrow(mdim_chunk_index(arr)), 1)
+    idx <- mdim_chunk_index(arr, c(1, 5, 6))
+    expect_equal(nrow(idx), 4)
+    v <- unlist(lapply(seq_len(nrow(idx)), function(i) {
+        arr$read(idx[i, 4:6], idx[i, 7:9], NULL)
+    }))
+    expect_identical(v, arr$read(NULL, NULL, NULL))
+    arr$close()
+    ds$close()
+})

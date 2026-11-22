@@ -373,3 +373,158 @@ mdim_read <- function(x, array_name, start = NULL, count = NULL, step = NULL,
     attr(v, "gis") <- gis
     return(v)
 }
+
+#' Generate an index of chunk offsets and sizes for iterating an MDArray
+#'
+#' `mdim_chunk_index()` returns a matrix of chunk indexes, start offsets and
+#' sizes for iterating I/O operations over an array of a GDAL Multidimensional
+#' Raster dataset, one row per chunk. It is the multidimensional counterpart
+#' of [make_chunk_index()]. **This function is experimental**. Its interface
+#' may change in future releases.
+#'
+#' @details
+#' The chunks tile the array exactly, on a regular grid of `chunk_size`
+#' starting at index `0` of each dimension. Chunks at the end of a dimension
+#' are clipped to the array. By default, the chunks are the blocks of the
+#' array as stored (see \code{$getBlockSize()} of class
+#' [`GDALMDArray`][GDALMDArray]), so that each row is a read of exactly one
+#' stored block: one fetch and one decode, the natural unit of cost for
+#' chunked formats such as Zarr, netCDF-4 and HDF5. A `chunk_size` from
+#' \code{$getProcessingChunkSize()} gives larger chunks, aligned to the
+#' blocks, that fit a memory limit.
+#'
+#' If `start` and `count` are given, only the chunks that intersect that
+#' hyperslab are returned (as whole chunks, i.e., not clipped to the
+#' hyperslab). This gives the stored blocks that a planned read would touch.
+#'
+#' @param x Either an object of class [`GDALMDArray`][GDALMDArray], or a
+#' numeric vector of dimension sizes (in the array's own dimension order).
+#' @param chunk_size Optional numeric vector with the chunk size along each
+#' dimension. A value of `0` or `NA` means the whole dimension. By default,
+#' the block size of the array if `x` is a `GDALMDArray` object. Required if
+#' `x` is a vector of dimension sizes.
+#' @param start Optional numeric vector of 0-based start indexes of a
+#' hyperslab, one value per dimension.
+#' @param count Optional numeric vector giving the number of values of a
+#' hyperslab along each dimension. Required if `start` is given.
+#' @returns A numeric matrix with one row per chunk and, for an array of `n`
+#' dimensions, `3 * n` named columns: `chunkoff0`, ..., `off0`, ..., `size0`,
+#' ..., where the suffix is the 0-based dimension index. `chunkoff` is the
+#' 0-based index of the chunk along the dimension, `off` is its 0-based start
+#' index and `size` is its size. Columns `off` and `size` of a row are the
+#' `start` and `count` arguments for \code{GDALMDArray$read()}. Rows are
+#' ordered with the last dimension varying fastest.
+#'
+#' @seealso
+#' [GDALMDArray], [make_chunk_index()], [mdim_read()]
+#'
+#' @examplesIf gdal_version_num() >= gdal_compute_version(3, 2, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster)
+#' # dimension sizes and chunk sizes given directly
+#' mdim_chunk_index(c(4, 5, 6), c(2, 5, 4))
+#'
+#' # the chunks that a hyperslab read would touch
+#' mdim_chunk_index(c(4, 5, 6), c(2, 5, 4), start = c(1, 0, 3),
+#'                  count = c(1, 5, 1))
+#'
+#' # iterate over an array in chunks that fit a memory limit (here 120 bytes,
+#' # i.e., 60 values of Int16)
+#' f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+#' ds <- new(GDALMultiDimRaster, f)
+#' arr <- ds$openMDArray("/t2m")
+#' idx <- mdim_chunk_index(arr, arr$getProcessingChunkSize(120))
+#' idx
+#'
+#' off_cols <- startsWith(colnames(idx), "off")
+#' size_cols <- startsWith(colnames(idx), "size")
+#' chunk_max <- numeric(nrow(idx))
+#' for (i in seq_len(nrow(idx))) {
+#'   v <- arr$read(idx[i, off_cols], idx[i, size_cols], NULL)
+#'   chunk_max[i] <- max(v, na.rm = TRUE)
+#' }
+#' chunk_max
+#'
+#' arr$close()
+#' ds$close()
+#' @export
+mdim_chunk_index <- function(x, chunk_size = NULL, start = NULL,
+                             count = NULL) {
+
+    if (is(x, "Rcpp_GDALMDArray")) {
+        dim_size <- x$getDimensions()$size
+        if (is.null(chunk_size))
+            chunk_size <- x$getBlockSize()
+    } else if (is.numeric(x)) {
+        dim_size <- as.numeric(x)
+        if (is.null(chunk_size))
+            stop("'chunk_size' is required for a vector of dimension sizes",
+                 call. = FALSE)
+    } else {
+        stop("'x' must be a GDALMDArray object or a numeric vector",
+             call. = FALSE)
+    }
+
+    ndim <- length(dim_size)
+    if (ndim == 0)
+        stop("an array of 1 or more dimensions is required", call. = FALSE)
+    if (anyNA(dim_size) || any(dim_size < 1) ||
+            any(dim_size != trunc(dim_size))) {
+        stop("dimension sizes must be whole numbers >= 1", call. = FALSE)
+    }
+
+    if (!is.numeric(chunk_size) || length(chunk_size) != ndim) {
+        stop("'chunk_size' must have one value per dimension (", ndim, ")",
+             call. = FALSE)
+    }
+    chunk_size <- as.numeric(chunk_size)
+    whole_dim <- is.na(chunk_size) | chunk_size == 0
+    chunk_size[whole_dim] <- dim_size[whole_dim]
+    if (any(chunk_size < 1) || any(chunk_size != trunc(chunk_size)))
+        stop("'chunk_size' must be whole numbers >= 0", call. = FALSE)
+    chunk_size <- pmin(chunk_size, dim_size)
+
+    if (is.null(start) != is.null(count))
+        stop("'start' and 'count' must both be given, or both NULL",
+             call. = FALSE)
+    if (is.null(start)) {
+        start <- rep(0, ndim)
+        count <- dim_size
+    }
+    if (!is.numeric(start) || !is.numeric(count) || length(start) != ndim ||
+            length(count) != ndim) {
+        stop("'start' and 'count' must have one value per dimension (", ndim,
+             ")", call. = FALSE)
+    }
+    if (anyNA(start) || anyNA(count) || any(start < 0) || any(count < 1) ||
+            any(start + count > dim_size) || any(start != trunc(start)) ||
+            any(count != trunc(count))) {
+        stop("'start' and 'count' are out of range", call. = FALSE)
+    }
+
+    # first and last chunk index along each dimension
+    chunk_first <- start %/% chunk_size
+    chunk_last <- (start + count - 1) %/% chunk_size
+    num_chunks <- prod(chunk_last - chunk_first + 1)
+    if (num_chunks > 1e7) {
+        stop("too many chunks (", format(num_chunks, scientific = FALSE),
+             "), use 'start' and 'count' or a larger 'chunk_size'",
+             call. = FALSE)
+    }
+
+    # last dimension varies fastest
+    chunkoff <- expand.grid(lapply(rev(seq_len(ndim)), function(i) {
+        seq(chunk_first[i], chunk_last[i])
+    }), KEEP.OUT.ATTRS = FALSE)
+    chunkoff <- unname(as.matrix(chunkoff))[, rev(seq_len(ndim)), drop = FALSE]
+
+    off <- sweep(chunkoff, 2, chunk_size, `*`)
+    size <- pmin(sweep(off, 2, chunk_size, `+`),
+                 matrix(dim_size, nrow = nrow(off), ncol = ndim,
+                        byrow = TRUE)) - off
+
+    out <- cbind(chunkoff, off, size)
+    storage.mode(out) <- "double"
+    dim_idx <- seq_len(ndim) - 1
+    colnames(out) <- c(paste0("chunkoff", dim_idx), paste0("off", dim_idx),
+                       paste0("size", dim_idx))
+    return(out)
+}
