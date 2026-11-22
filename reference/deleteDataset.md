@@ -58,12 +58,9 @@ file.copy(b5_file,  b5_tmp)
 
 ds <- new(GDALRaster, b5_tmp)
 ds$buildOverviews("BILINEAR", levels = c(2, 4, 8), bands = c(1))
-#>  ■■■■■■■■■■■■■■■■■■■■■■■■          76% |  ETA:  0s
-#> ✔ Done (14ms)
-#> 
 files <- ds$getFileList()
 print(files)
-#> [1] "/tmp/Rtmp2LVRn6/b5_tmp.tif"     "/tmp/Rtmp2LVRn6/b5_tmp.tif.ovr"
+#> [1] "/tmp/RtmpotvY3H/b5_tmp.tif"     "/tmp/RtmpotvY3H/b5_tmp.tif.ovr"
 ds$close()
 file.exists(files)
 #> [1] TRUE TRUE

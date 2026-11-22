@@ -1,12 +1,14 @@
 # Changelog
 
-## gdalraster 2.7.0.9020 (dev)
+## gdalraster 2.7.0.9030 (dev)
 
 - class `GDALMDArray`: add methods `$adviseRead()`,
   `$getProcessingChunkSize()`, `$getStatistics()`,
   `$computeStatistics()` and `$cache()`; add
   [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md):
-  index of chunk offsets and sizes for iterating an MDArray (2026-11-22)
+  index of chunk offsets and sizes for iterating an MDArray
+  ([\#1040](https://github.com/firelab/gdalraster/issues/1040))
+  (2026-11-22)
 
 - class `GDALMDArray`: add methods `$getResampled()` returning a
   resampled and optionally reprojected view of the array (GDAL \>= 3.4),
