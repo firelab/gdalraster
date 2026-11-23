@@ -351,7 +351,8 @@ Returns a view of the array resampled to new dimension sizes, and
 optionally reprojected, along its horizontal dimensions (types
 <code>"HORIZONTAL_X"</code> and <code>"HORIZONTAL_Y"</code>). Values are computed when the new
 array is read, using GDAL's warping engine, so reading a window of the new
-array reads only the part of the source array that it needs. Requires GDAL= 3.4.</p><ul><li><p><code>new_dim_sizes</code>: a numeric vector with one value per dimension giving
+array reads only the part of the source array that it needs.
+Requires GDAL &gt;= 3.4.</p><ul><li><p><code>new_dim_sizes</code>: a numeric vector with one value per dimension giving
 the new size, or <code>NA</code> to keep a dimension unchanged (or, for the
 horizontal dimensions, to have GDAL compute the size). <code>NULL</code> is the same
 as all <code>NA</code>. Dimensions that are not horizontal must be <code>NA</code>. The new

@@ -93,7 +93,7 @@ ds <- createCopy(format = "GTiff",
                  options = "COMPRESS=LZW",
                  return_obj = TRUE)
 #>  ■                                  0% |  ETA:  2s
-#> ✔ Done (10ms)
+#> ✔ Done (11ms)
 #> 
 
 ds$getMetadata(band = 0, domain = "IMAGE_STRUCTURE")

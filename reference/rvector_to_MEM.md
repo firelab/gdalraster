@@ -132,7 +132,7 @@ v <- sample(0:255, 20, replace = TRUE)
 (ds_mem <- rvector_to_MEM(v, xsize = 5, ysize = 4))
 #> C++ object of class <GDALRaster>
 #>   • Driver: In Memory raster, vector and multidimensional raster (MEM)
-#>   • DSN: <data pointer>
+#>   • DSN: <inline data XML, 14 chars>
 #>   • Dimensions: 5, 4, 1
 #>   • CRS: not set
 #>   • Pixel resolution: 1.000000, 1.000000
