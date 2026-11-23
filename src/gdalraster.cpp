@@ -2991,7 +2991,7 @@ void GDALRaster::show() {
     if (STARTS_WITH(dsn.c_str(), "MEM:::DATAPOINTER"))
         dsn = "<data pointer>";
 
-    cli_li_("{.emph DSN}: {.str "s + dsn + "}");
+    cli_li_("{.emph DSN}: "s + cli_format_dsn_(dsn));
     cli_li_("{.emph Dimensions}: "s + std::to_string(xsize) + ", " +
             std::to_string(ysize) + ", " + std::to_string(getRasterCount()));
     cli_li_("{.emph CRS}: "s + crs_name);

@@ -195,3 +195,42 @@ test_that("Zarr copy of the test dataset gives the same structure", {
                      "sea surface temperature")
     ds$close()
 })
+
+test_that("show() prints a placeholder for an inline VRT XML filename", {
+    vrt <- paste0('<VRTDataset><Group name="/">',
+                  '<Dimension name="x" size="3"/>',
+                  '<Array name="a"><DataType>Float64</DataType>',
+                  '<DimensionRef ref="x"/>',
+                  '<ConstantValue>1</ConstantValue></Array>',
+                  '</Group></VRTDataset>')
+    ds <- new(GDALMultiDimRaster, vrt)
+    expect_equal(ds$getDriverShortName(), "VRT")
+    msg <- paste0("<inline VRTDataset XML, ", nchar(vrt), " chars>")
+    out <- paste(capture_messages(show(ds)), collapse = "")
+    expect_match(out, msg, fixed = TRUE)
+    expect_no_match(out, "<Group", fixed = TRUE)
+    ds$close()
+    out <- paste(capture_messages(show(ds)), collapse = "")
+    expect_match(out, msg, fixed = TRUE)
+})
+
+test_that("openMDArray reports the GDAL error for an array that fails", {
+    skip_if(nrow(gdal_formats("Zarr")) == 0 ||
+                isFALSE(gdal_formats("Zarr")$multidim_raster))
+
+    # a Zarr v2 array with an unknown compressor: GDAL fails to open the
+    # array with a specific error rather than not finding it
+    zarr_dir <- file.path(tempdir(), "bad_codec.zarr")
+    on.exit(unlink(zarr_dir, recursive = TRUE))
+    dir.create(file.path(zarr_dir, "x"), recursive = TRUE)
+    writeLines('{"zarr_format": 2}', file.path(zarr_dir, ".zgroup"))
+    writeLines(paste0('{"zarr_format": 2, "shape": [4], "chunks": [2], ',
+                      '"dtype": "<f4", "compressor": {"id": "bogus"}, ',
+                      '"fill_value": 0, "order": "C", "filters": null}'),
+               file.path(zarr_dir, "x", ".zarray"))
+
+    ds <- new(GDALMultiDimRaster, zarr_dir)
+    expect_error(ds$openMDArray("/x"), "failed to open array /x: .*bogus")
+    expect_error(ds$openMDArray("/nope"), "array not found: /nope")
+    ds$close()
+})

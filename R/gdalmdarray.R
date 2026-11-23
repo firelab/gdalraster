@@ -246,8 +246,8 @@
 #' optionally reprojected, along its horizontal dimensions (types
 #' `"HORIZONTAL_X"` and `"HORIZONTAL_Y"`). Values are computed when the new
 #' array is read, using GDAL's warping engine, so reading a window of the new
-#' array reads only the part of the source array that it needs. Requires GDAL
-#' >= 3.4.
+#' array reads only the part of the source array that it needs.
+#' Requires GDAL >= 3.4.
 #' * `new_dim_sizes`: a numeric vector with one value per dimension giving
 #' the new size, or `NA` to keep a dimension unchanged (or, for the
 #' horizontal dimensions, to have GDAL compute the size). `NULL` is the same
