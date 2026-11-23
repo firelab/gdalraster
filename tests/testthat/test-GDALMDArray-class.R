@@ -276,7 +276,11 @@ test_that("asClassicDataset works", {
     r$close()
 
     # statistics on a view of byte.nc, as for mdim_as_classic()
-    f2 <- system.file("extdata/byte.nc", package="gdalraster")
+    # on a copy, since GDAL >= 3.8 saves statistics of a classic view in
+    # <filename>.aux.xml next to the dataset
+    f2 <- tempfile(fileext = ".nc")
+    file.copy(system.file("extdata/byte.nc", package="gdalraster"), f2)
+    on.exit(unlink(c(f2, paste0(f2, ".aux.xml"))), add = TRUE)
     ds <- new(GDALMultiDimRaster, f2)
     band1 <- ds$openMDArray("/Band1")
     v <- band1$getView("[0:10,...]")
