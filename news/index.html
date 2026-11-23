@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gdalraster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9030</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0.9031</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.7.0.9030" id="gdalraster-2709030-dev">gdalraster 2.7.0.9030 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709030-dev"></a></h2>
-<ul><li><p><code>show()</code> methods of classes <code>GDALRaster</code>, <code>GDALMultiDimRaster</code>, <code>GDALVector</code> and <code>VSIFile</code>: print a short placeholder for an inline XML data source name (e.g., a VRT string), shorten a long DSN in the middle with “…”, and print braces in a DSN literally instead of passing them to {cli} as glue expressions; <code>GDALMultiDimRaster$openMDArray()</code> and other methods that open an array or group by path now report the GDAL error message when opening fails, instead of only “not found” (2026-11-22)</p></li>
+<h2 class="pkg-version" data-toc-text="2.7.0.9031" id="gdalraster-2709031-dev">gdalraster 2.7.0.9031 (dev)<a class="anchor" aria-label="anchor" href="#gdalraster-2709031-dev"></a></h2>
+<ul><li><p><code>show()</code> methods of classes <code>GDALRaster</code>, <code>GDALMultiDimRaster</code>, <code>GDALVector</code> and <code>VSIFile</code>: print a short placeholder for an inline XML data source name (e.g., a VRT string), shorten a long DSN in the middle with “…”, and print braces in a DSN literally instead of passing them to {cli} as glue expressions; <code>GDALMultiDimRaster$openMDArray()</code> and other methods that open an array or group by path now report the GDAL error message when opening fails, instead of only “not found” (<a href="https://github.com/firelab/gdalraster/issues/1041" class="external-link">#1041</a>) (2026-11-22)</p></li>
 <li><p>class <code>GDALMDArray</code>: add methods <code>$adviseRead()</code>, <code>$getProcessingChunkSize()</code>, <code>$getStatistics()</code>, <code>$computeStatistics()</code> and <code>$cache()</code>; add <code><a href="../reference/mdim_chunk_index.html">mdim_chunk_index()</a></code>: index of chunk offsets and sizes for iterating an MDArray (<a href="https://github.com/firelab/gdalraster/issues/1040" class="external-link">#1040</a>) (2026-11-22)</p></li>
 <li><p>class <code>GDALMDArray</code>: add methods <code>$getResampled()</code> returning a resampled and optionally reprojected view of the array (GDAL &gt;= 3.4), and <code>$getGridded()</code> returning a gridded view of an array of scattered points (GDAL &gt;= 3.7) (<a href="https://github.com/firelab/gdalraster/issues/1039" class="external-link">#1039</a>; 2026-11-22)</p></li>
 <li><p>(internal) gdalalg.cpp: suppress compiler warning <code>-Wunused-const-variable</code> (2026-11-21)</p></li>
