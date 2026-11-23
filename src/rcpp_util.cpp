@@ -362,6 +362,8 @@ void cli_end_() {
 // longer than `max_len` is shortened by eliding the middle with "...", then
 // quoted, with braces escaped since cli interprets {} as glue expressions.
 // The returned string is ready to be embedded in text passed to cli_*_().
+// The default max_len of 76 (see rcpp_util.h) keeps the quoted DSN on one
+// line of an 80-column console when cli wraps it below an indented item.
 std::string cli_format_dsn_(const std::string &dsn, std::size_t max_len) {
     const std::size_t first = dsn.find_first_not_of(" \t\r\n");
     if (first != std::string::npos && dsn[first] == '<') {
@@ -393,7 +395,7 @@ std::string cli_format_dsn_(const std::string &dsn, std::size_t max_len) {
         while (tail_start < out.size() &&
                (static_cast<unsigned char>(out[tail_start]) & 0xC0) == 0x80)
             ++tail_start;
-        out = out.substr(0, head) + "..." + out.substr(tail_start);
+        out.replace(head, tail_start - head, "...");
     }
 
     std::string escaped;

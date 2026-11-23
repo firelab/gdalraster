@@ -255,7 +255,8 @@ Returns a view of the array resampled to new dimension sizes, and
 optionally reprojected, along its horizontal dimensions (types
 \code{"HORIZONTAL_X"} and \code{"HORIZONTAL_Y"}). Values are computed when the new
 array is read, using GDAL's warping engine, so reading a window of the new
-array reads only the part of the source array that it needs. Requires GDAL= 3.4.
+array reads only the part of the source array that it needs.
+Requires GDAL >= 3.4.
 \itemize{
 \item \code{new_dim_sizes}: a numeric vector with one value per dimension giving
 the new size, or \code{NA} to keep a dimension unchanged (or, for the
