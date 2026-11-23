@@ -515,6 +515,78 @@ test_that("statistics methods work", {
     ds$close()
 })
 
+test_that("getRawBlockInfo and getRawBlockRefs work", {
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    arr$quiet <- TRUE
+
+    if (gdal_version_num() < gdal_compute_version(3, 12, 0)) {
+        expect_error(arr$getRawBlockInfo(c(0, 0, 0)), "requires GDAL >= 3.12")
+        expect_error(arr$getRawBlockRefs(matrix(0, nrow = 1, ncol = 3)),
+                     "requires GDAL >= 3.12")
+        arr$close()
+        ds$close()
+        skip("GDAL < 3.12")
+    }
+    # the netCDF driver obtains this from the HDF5 driver
+    if (nrow(gdal_formats("HDF5")) == 0) {
+        arr$close()
+        ds$close()
+        skip("no HDF5 driver")
+    }
+
+    # one contiguous block of Int16, not compressed
+    info <- arr$getRawBlockInfo(c(0, 0, 0))
+    expect_named(info, c("filename", "offset", "size", "info", "inline_data"))
+    expect_equal(normalizePath(info$filename), normalizePath(f))
+    expect_equal(info$size, 240)
+    expect_true(info$offset > 0)
+    expect_true("ENDIANNESS=LITTLE" %in% info$info)
+    expect_null(info$inline_data)
+
+    con <- file(f, "rb")
+    seek(con, info$offset)
+    b <- readBin(con, "raw", n = info$size)
+    close(con)
+    v <- readBin(b, "integer", n = 120, size = 2, endian = "little")
+    v[v == arr$getNoDataValue()] <- NA
+    expect_identical(v, t2m_values())
+
+    refs <- arr$getRawBlockRefs(matrix(0, nrow = 1, ncol = 3))
+    expect_s3_class(refs, "data.frame")
+    expect_named(refs, c("filename", "offset", "size", "info", "inline_data"))
+    expect_equal(nrow(refs), 1)
+    expect_equal(refs$filename, info$filename)
+    expect_equal(refs$offset, info$offset)
+    expect_equal(refs$size, info$size)
+    expect_equal(refs$info[[1]], info$info)
+    expect_null(refs$inline_data[[1]])
+
+    # no rows
+    refs0 <- arr$getRawBlockRefs(matrix(0, nrow = 0, ncol = 3))
+    expect_s3_class(refs0, "data.frame")
+    expect_equal(nrow(refs0), 0)
+
+    # argument checks
+    expect_error(arr$getRawBlockInfo(c(0, 0)), "one value per dimension")
+    expect_error(arr$getRawBlockInfo(c(0, 0, -1)), "whole numbers")
+    expect_error(arr$getRawBlockInfo(c(0, 0, 0.5)), "whole numbers")
+    expect_error(arr$getRawBlockInfo(c(0, 0, NA)), "whole numbers")
+    expect_error(arr$getRawBlockRefs(matrix(0, nrow = 1, ncol = 2)),
+                 "one column per dimension")
+    expect_error(arr$getRawBlockRefs(matrix(-1, nrow = 1, ncol = 3)),
+                 "whole numbers")
+    # out of range, reported by GDAL
+    expect_error(arr$getRawBlockInfo(c(1, 0, 0)), "raw block info")
+    expect_error(arr$getRawBlockRefs(rbind(c(0, 0, 0), c(1, 0, 0))),
+                 "raw block info")
+
+    arr$close()
+    expect_error(arr$getRawBlockInfo(c(0, 0, 0)))
+    ds$close()
+})
+
 test_that("cache works", {
     skip_if(gdal_version_num() < gdal_compute_version(3, 4, 0))
 

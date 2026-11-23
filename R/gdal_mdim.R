@@ -528,3 +528,91 @@ mdim_chunk_index <- function(x, chunk_size = NULL, start = NULL,
                        paste0("size", dim_idx))
     return(out)
 }
+
+#' Raw block references of a multidimensional array
+#'
+#' `mdim_block_refs()` returns the location of the stored blocks (chunks) of
+#' an array of a GDAL Multidimensional Raster dataset: for each block, the
+#' file that contains it, and the byte offset and size of the block in that
+#' file. The blocks are not read or decoded. This is the information needed
+#' to fetch the raw bytes of a block directly (e.g., with a byte range
+#' request), or to build a table of references to the blocks of a set of
+#' files (a "virtual" dataset in the style of kerchunk or VirtualiZarr).
+#' Requires GDAL >= 3.12. **This function is experimental**. Its interface
+#' may change in future releases.
+#'
+#' @details
+#' The blocks are those of [mdim_chunk_index()] with the block size of the
+#' array as stored, optionally limited to the blocks that intersect a
+#' hyperslab given by `start` and `count`. Their locations are obtained with
+#' \code{$getRawBlockRefs()} of class [`GDALMDArray`][GDALMDArray] (see that
+#' method for details of the values returned and the formats supported).
+#'
+#' The time needed depends on the format. For netCDF-4 and HDF5, the index of
+#' blocks in the file is read once. For Zarr, each block is a file (or a part
+#' of a file) that GDAL has to query, so a remote store takes one or more
+#' network requests per block. Use `start` and `count` to limit the number of
+#' blocks.
+#'
+#' @param x An object of class [`GDALMDArray`][GDALMDArray].
+#' @param start Optional numeric vector of 0-based start indexes of a
+#' hyperslab, one value per dimension.
+#' @param count Optional numeric vector giving the number of values of a
+#' hyperslab along each dimension. Required if `start` is given.
+#' @returns A data frame with one row per block. For an array of `n`
+#' dimensions, the first `3 * n` columns are those of [mdim_chunk_index()]
+#' (`chunkoff0`, ..., `off0`, ..., `size0`, ...), followed by:
+#'   * `filename`: the file that contains the block, or `NA`
+#'   * `offset`: the offset in bytes of the block in that file, or `NA`
+#'   * `size`: the size in bytes of the block as stored, or `NA`
+#'   * `info`: list column of character vectors of driver-specific
+#'   `NAME=VALUE` pairs that describe how the block is encoded
+#'   * `inline_data`: list column with a `raw` vector for a block that the
+#'   dataset holds inline (`filename` and `offset` are then `NA`), otherwise
+#'   `NULL`
+#'
+#' A block that is missing in the dataset (all values are nodata) has `NA`
+#' for `filename`, `offset` and `size`.
+#'
+#' @seealso
+#' [GDALMDArray], [mdim_chunk_index()], [mdim_read()]
+#'
+#' @examplesIf gdal_version_num() >= gdal_compute_version(3, 12, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster) && nrow(gdal_formats("HDF5")) > 0
+#' f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+#' ds <- new(GDALMultiDimRaster, f)
+#' arr <- ds$openMDArray("/t2m")
+#'
+#' # this array is stored as one block, not compressed
+#' refs <- mdim_block_refs(arr)
+#' refs[, c("filename", "offset", "size")]
+#' refs$info[[1]]
+#'
+#' # the bytes of the block, read directly from the file and decoded
+#' con <- file(refs$filename[1], "rb")
+#' invisible(seek(con, refs$offset[1]))
+#' b <- readBin(con, "raw", n = refs$size[1])
+#' close(con)
+#' v <- readBin(b, "integer", n = length(b) / 2, size = 2, endian = "little")
+#' v[v == arr$getNoDataValue()] <- NA
+#'
+#' identical(v, arr$read(NULL, NULL, NULL))
+#'
+#' arr$close()
+#' ds$close()
+#' @export
+mdim_block_refs <- function(x, start = NULL, count = NULL) {
+
+    if (!is(x, "Rcpp_GDALMDArray"))
+        stop("'x' must be a GDALMDArray object", call. = FALSE)
+
+    if (gdal_version_num() < gdal_compute_version(3, 12, 0))
+        stop("mdim_block_refs() requires GDAL >= 3.12", call. = FALSE)
+
+    idx <- mdim_chunk_index(x, start = start, count = count)
+    ndim <- ncol(idx) / 3
+    refs <- x$getRawBlockRefs(idx[, seq_len(ndim), drop = FALSE])
+
+    out <- as.data.frame(idx)
+    out[names(refs)] <- refs
+    return(out)
+}

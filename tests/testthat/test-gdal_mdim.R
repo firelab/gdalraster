@@ -284,3 +284,82 @@ test_that("mdim_chunk_index works", {
     arr$close()
     ds$close()
 })
+
+test_that("mdim_block_refs works", {
+    expect_error(mdim_block_refs("a"), "GDALMDArray object")
+
+    f <- system.file("extdata/mdim_small.nc", package="gdalraster")
+
+    if (gdal_version_num() < gdal_compute_version(3, 12, 0)) {
+        ds <- new(GDALMultiDimRaster, f)
+        arr <- ds$openMDArray("/t2m")
+        expect_error(mdim_block_refs(arr), "requires GDAL >= 3.12")
+        arr$close()
+        ds$close()
+        skip("GDAL < 3.12")
+    }
+    skip_if(nrow(gdal_formats("HDF5")) == 0)
+
+    # as stored in the test file: one block
+    ds <- new(GDALMultiDimRaster, f)
+    arr <- ds$openMDArray("/t2m")
+    arr$quiet <- TRUE
+    refs <- mdim_block_refs(arr)
+    expect_s3_class(refs, "data.frame")
+    expect_named(refs, c(colnames(mdim_chunk_index(arr)), "filename",
+                         "offset", "size", "info", "inline_data"))
+    expect_equal(nrow(refs), 1)
+    expect_equal(refs$size, 240)
+    expect_error(mdim_block_refs(arr, start = c(0, 0, 0)), "both")
+    arr$close()
+    ds$close()
+
+    # two blocks along time, compressed
+    f2 <- tempfile(fileext = ".nc")
+    on.exit(unlink(f2), add = TRUE)
+    expect_true(mdim_translate(
+        f, f2,
+        creation_options = c("ARRAY:IF(DIM=3):BLOCKSIZE=2,5,6",
+                             "ARRAY:IF(DIM=3):COMPRESS=DEFLATE"),
+        quiet = TRUE))
+
+    ds <- new(GDALMultiDimRaster, f2)
+    arr <- ds$openMDArray("/t2m")
+    arr$quiet <- TRUE
+    expect_equal(arr$getBlockSize(), c(2, 5, 6))
+
+    refs <- mdim_block_refs(arr)
+    expect_equal(nrow(refs), 2)
+    expect_equal(refs$chunkoff0, c(0, 1))
+    expect_equal(refs$off0, c(0, 2))
+    expect_equal(normalizePath(refs$filename), rep(normalizePath(f2), 2))
+    expect_true(all(refs$size > 0 & refs$size < 120))
+    expect_true(refs$offset[2] != refs$offset[1])
+    expect_true("COMPRESSION=DEFLATE" %in% refs$info[[1]])
+    expect_identical(refs$info[[1]], refs$info[[2]])
+
+    # decode each block from its bytes
+    nodata <- arr$getNoDataValue()
+    con <- file(f2, "rb")
+    for (i in seq_len(nrow(refs))) {
+        seek(con, refs$offset[i])
+        b <- readBin(con, "raw", n = refs$size[i])
+        b <- memDecompress(b, type = "gzip")
+        expect_length(b, 120)
+        if (any(grepl("^FILTER=.*SHUFFLE", refs$info[[i]])))
+            b <- as.vector(t(matrix(b, ncol = 2)))
+        v <- readBin(b, "integer", n = 60, size = 2, endian = "little")
+        v[v == nodata] <- NA
+        expect_identical(v, arr$read(c(refs$off0[i], 0, 0), c(2, 5, 6), NULL))
+    }
+    close(con)
+
+    # the blocks that a hyperslab touches
+    refs1 <- mdim_block_refs(arr, start = c(3, 0, 0), count = c(1, 1, 1))
+    expect_equal(nrow(refs1), 1)
+    expect_equal(refs1$chunkoff0, 1)
+    expect_equal(refs1$offset, refs$offset[2])
+
+    arr$close()
+    ds$close()
+})
