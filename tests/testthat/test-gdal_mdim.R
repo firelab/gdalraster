@@ -33,7 +33,7 @@ test_that("mdim_as_classic works", {
 
     # view expressions
     f2 <- tempfile(fileext = ".nc")
-    on.exit(unlink(f2), add = TRUE)
+    on.exit(unlink(c(f2, paste0(f2, ".aux.xml"))), add = TRUE)
     file.copy(f, f2, overwrite = TRUE)
 
     ds <- mdim_as_classic(f2, "Band1", 1, 0, read_only = FALSE,
