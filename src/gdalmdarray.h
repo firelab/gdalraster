@@ -83,6 +83,10 @@ class GDALMDArrayR {
         const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
     bool cache(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
+    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_coords) const;
+    Rcpp::DataFrame getRawBlockRefs(
+        const Rcpp::NumericMatrix &block_coords) const;
+
     void close();
     void show() const;
 

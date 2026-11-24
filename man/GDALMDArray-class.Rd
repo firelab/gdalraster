@@ -86,6 +86,10 @@ arr$getProcessingChunkSize(max_chunk_memory)
 arr$getStatistics(approx_ok, force)
 arr$computeStatistics(approx_ok, options)
 arr$cache(options)
+
+arr$getRawBlockInfo(block_coords)
+arr$getRawBlockRefs(block_coords)
+
 arr$asClassicDataset(idx_xdim, idx_ydim, options)
 
 arr$close()
@@ -365,6 +369,58 @@ option is \code{"BLOCKSIZE=bs0,bs1,...,bsN"}, the block size of the cached
 array. Returns logical \code{TRUE} on success. Requires GDAL >= 3.4.
 }
 
+\subsection{Raw block references}{
+
+\code{$getRawBlockInfo(block_coords)}\cr
+Returns the location of one block (chunk) of the array as stored, without
+reading or decoding it. \code{block_coords} is a numeric vector of 0-based
+block coordinates, one value per dimension, i.e., the index of the block
+along each dimension (columns \code{chunkoff} of \code{\link[=mdim_chunk_index]{mdim_chunk_index()}}). For a
+dimension with a block size of \code{0} the only valid coordinate is \code{0}.
+Returns a named list with elements:
+\itemize{
+\item \code{filename}: the file that contains the block (may be a \verb{/vsi} path or,
+for virtual stores such as kerchunk or Icechunk references, the file the
+reference points to), or \code{NA}
+\item \code{offset}: the offset in bytes of the start of the block in that file
+(numeric, exact up to 2^53), or \code{NA}
+\item \code{size}: the size in bytes of the block as stored (i.e., compressed if
+compression is used), or \code{NA}
+\item \code{info}: character vector of driver-specific \code{NAME=VALUE} pairs that
+describe how the block is encoded
+\item \code{inline_data}: a \code{raw} vector with the content of the block if the
+dataset holds it inline and not in a file (in which case \code{filename} and
+\code{offset} are \code{NA}), otherwise \code{NULL}
+}
+
+A block that has valid coordinates but is missing in the dataset (all
+values are nodata) has \code{NA} for \code{filename}, \code{offset} and \code{size}. The
+\code{info} values depend on the format. For multi-byte data types they should
+include \code{ENDIANNESS} (\code{LITTLE} or \code{BIG}). For netCDF-4 and HDF5 they may
+include \code{COMPRESSION} (\code{DEFLATE} or \code{SZIP}) and \code{FILTER} (e.g.,
+\code{SHUFFLE}). For Zarr they may include \code{COMPRESSOR} and \code{FILTERS} (JSON
+as in the array metadata) and \code{TRANSPOSE_ORDER}. An error is raised if
+the block coordinates are out of range, or if the format driver does not
+provide this information for the array (it is available for netCDF-4,
+HDF5, Zarr and, under conditions, multidimensional VRT). Requires GDAL >=
+3.12. For netCDF-4, GDAL must also have the HDF5 driver.
+
+\code{$getRawBlockRefs(block_coords)}\cr
+Returns the locations of a set of blocks as a data frame, with one row per
+block. \code{block_coords} is a numeric matrix of 0-based block coordinates
+with one row per block and one column per dimension (e.g., the \code{chunkoff}
+columns of a matrix from \code{\link[=mdim_chunk_index]{mdim_chunk_index()}}). The data frame has columns
+\code{filename}, \code{offset}, \code{size}, \code{info} and \code{inline_data}, as described for
+\code{$getRawBlockInfo()}, of which \code{info} and \code{inline_data} are list
+columns. Rows are in the order of \code{block_coords}, with \code{NA} values for
+missing blocks. A progress bar is shown for more than one block unless
+\code{$quiet} is \code{TRUE}. For Zarr, each block is a file (or a part of a
+file) that GDAL has to query, so for a remote store this takes one or
+more network requests per block. See \code{\link[=mdim_block_refs]{mdim_block_refs()}}, which returns
+the references along with the chunk index for the whole array or for a
+hyperslab. Requires GDAL >= 3.12.
+}
+
 \subsection{Classic raster view}{
 
 \code{$asClassicDataset(idx_xdim, idx_ydim, options)}\cr
@@ -528,6 +584,6 @@ if (gdal_version_num() >= gdal_compute_version(3, 7, 0)) {
 }
 \seealso{
 \link{GDALMultiDimRaster}, \link{GDALRaster}, \code{\link[=mdim_read]{mdim_read()}}, \code{\link[=mdim_chunk_index]{mdim_chunk_index()}},
-\code{\link[=mdim_info]{mdim_info()}},
+\code{\link[=mdim_block_refs]{mdim_block_refs()}}, \code{\link[=mdim_info]{mdim_info()}},
 \code{\link[=mdim_as_classic]{mdim_as_classic()}}
 }

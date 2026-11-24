@@ -17,7 +17,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <limits>
 #include <memory>
 #include <string>
@@ -43,6 +45,20 @@ static bool is_whole_in_range_(double x, double lo, double hi) {
         return false;
     return x >= lo && x <= hi;
 }
+
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 12, 0)
+// Stop with the GDAL error message after GDALMDArrayGetRawBlockInfo() failed.
+// A driver that does not implement it returns false without a message.
+[[noreturn]] static void raw_block_info_stop_() {
+    const std::string osMsg(CPLGetLastErrorMsg());
+    CPLErrorReset();
+    if (osMsg.empty()) {
+        Rcpp::stop("failed to get raw block info (not supported for this "
+                   "array by the format driver?)");
+    }
+    Rcpp::stop("failed to get raw block info: " + osMsg);
+}
+#endif
 
 // min, max, mean, sd and valid_count as a named vector (all NA if !ok)
 static Rcpp::NumericVector stats_to_vector_(bool ok, double dfMin,
@@ -874,6 +890,177 @@ bool GDALMDArrayR::cache(
 #endif
 }
 
+Rcpp::List GDALMDArrayR::getRawBlockInfo(
+        const Rcpp::NumericVector &block_coords) const {
+    checkAccess_();
+
+// requires GDAL >= 3.12 for GDALMDArrayGetRawBlockInfo()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 12, 0)
+    Rcpp::stop("getRawBlockInfo() requires GDAL >= 3.12");
+#else
+    const size_t nDims = GDALMDArrayGetDimensionCount(m_hArray);
+    if (static_cast<size_t>(block_coords.size()) != nDims) {
+        Rcpp::stop("'block_coords' must have one value per dimension (" +
+                   std::to_string(nDims) + ")");
+    }
+    // at least one element so that the pointer passed to GDAL is not null
+    std::vector<uint64_t> anBlockCoords(std::max<size_t>(nDims, 1), 0);
+    for (size_t i = 0; i < nDims; ++i) {
+        if (!is_whole_in_range_(block_coords[i], 0,
+                                static_cast<double>(MAX_INT_AS_R_NUMERIC_)))
+            Rcpp::stop("'block_coords' must be whole numbers >= 0");
+        anBlockCoords[i] = static_cast<uint64_t>(block_coords[i]);
+    }
+
+    std::unique_ptr<GDALMDArrayRawBlockInfo,
+                    decltype(&GDALMDArrayRawBlockInfoRelease)>
+        psInfo(GDALMDArrayRawBlockInfoCreate(),
+               GDALMDArrayRawBlockInfoRelease);
+    if (!psInfo)
+        Rcpp::stop("failed to allocate raw block info");
+
+    CPLErrorReset();
+    if (!GDALMDArrayGetRawBlockInfo(m_hArray, anBlockCoords.data(),
+                                    psInfo.get())) {
+        raw_block_info_stop_();
+    }
+
+    Rcpp::List out = Rcpp::List::create(
+        Rcpp::Named("filename") = Rcpp::CharacterVector::create(NA_STRING),
+        Rcpp::Named("offset") = NA_REAL,
+        Rcpp::Named("size") = NA_REAL,
+        Rcpp::Named("info") = wrap_gdal_string_list_(
+            CPLStringList(psInfo->papszInfo, FALSE)),
+        Rcpp::Named("inline_data") = R_NilValue);
+
+    if (psInfo->pszFilename != nullptr) {
+        out["filename"] = Rcpp::CharacterVector::create(
+            Rcpp::String(psInfo->pszFilename));
+        out["offset"] = static_cast<double>(psInfo->nOffset);
+    }
+    // a missing block has no filename, no inline data and a size of 0
+    if (psInfo->pszFilename != nullptr || psInfo->pabyInlineData != nullptr)
+        out["size"] = static_cast<double>(psInfo->nSize);
+    if (psInfo->pabyInlineData != nullptr) {
+        Rcpp::RawVector inline_data =
+            Rcpp::no_init(static_cast<R_xlen_t>(psInfo->nSize));
+        if (psInfo->nSize > 0) {
+            std::memcpy(inline_data.begin(), psInfo->pabyInlineData,
+                        static_cast<size_t>(psInfo->nSize));
+        }
+        out["inline_data"] = inline_data;
+    }
+    return out;
+#endif
+}
+
+Rcpp::DataFrame GDALMDArrayR::getRawBlockRefs(
+        const Rcpp::NumericMatrix &block_coords) const {
+    checkAccess_();
+
+// requires GDAL >= 3.12 for GDALMDArrayGetRawBlockInfo()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 12, 0)
+    Rcpp::stop("getRawBlockRefs() requires GDAL >= 3.12");
+#else
+    const size_t nDims = GDALMDArrayGetDimensionCount(m_hArray);
+    if (static_cast<size_t>(block_coords.ncol()) != nDims) {
+        Rcpp::stop("'block_coords' must have one column per dimension (" +
+                   std::to_string(nDims) + ")");
+    }
+    const R_xlen_t nBlocks = block_coords.nrow();
+    for (R_xlen_t i = 0; i < block_coords.size(); ++i) {
+        if (!is_whole_in_range_(block_coords[i], 0,
+                                static_cast<double>(MAX_INT_AS_R_NUMERIC_)))
+            Rcpp::stop("'block_coords' must be whole numbers >= 0");
+    }
+
+    std::unique_ptr<GDALMDArrayRawBlockInfo,
+                    decltype(&GDALMDArrayRawBlockInfoRelease)>
+        psInfo(GDALMDArrayRawBlockInfoCreate(),
+               GDALMDArrayRawBlockInfoRelease);
+    if (!psInfo)
+        Rcpp::stop("failed to allocate raw block info");
+
+    Rcpp::CharacterVector filename(nBlocks, NA_STRING);
+    Rcpp::NumericVector offset(nBlocks, NA_REAL);
+    Rcpp::NumericVector size(nBlocks, NA_REAL);
+    Rcpp::List info(nBlocks);
+    Rcpp::List inline_data(nBlocks);
+
+    // the driver info is usually the same for every block of an array, in
+    // which case one character vector is shared by all rows
+    std::vector<std::string> aosLastInfo;
+    Rcpp::CharacterVector last_info(0);
+
+    // at least one element so that the pointer passed to GDAL is not null
+    std::vector<uint64_t> anBlockCoords(std::max<size_t>(nDims, 1), 0);
+    const bool bProgress = !quiet && nBlocks > 1;
+    if (bProgress)
+        GDALTermProgressR(0, nullptr, nullptr);
+    for (R_xlen_t i = 0; i < nBlocks; ++i) {
+        if (i % 100 == 0)
+            Rcpp::checkUserInterrupt();
+
+        for (size_t j = 0; j < nDims; ++j) {
+            anBlockCoords[j] = static_cast<uint64_t>(
+                block_coords(i, static_cast<int>(j)));
+        }
+
+        CPLErrorReset();
+        if (!GDALMDArrayGetRawBlockInfo(m_hArray, anBlockCoords.data(),
+                                        psInfo.get())) {
+            raw_block_info_stop_();
+        }
+
+        if (psInfo->pszFilename != nullptr) {
+            filename[i] = Rcpp::String(psInfo->pszFilename);
+            offset[i] = static_cast<double>(psInfo->nOffset);
+        }
+        if (psInfo->pszFilename != nullptr ||
+                psInfo->pabyInlineData != nullptr) {
+            size[i] = static_cast<double>(psInfo->nSize);
+        }
+        if (psInfo->pabyInlineData != nullptr) {
+            Rcpp::RawVector block_data =
+                Rcpp::no_init(static_cast<R_xlen_t>(psInfo->nSize));
+            if (psInfo->nSize > 0) {
+                std::memcpy(block_data.begin(), psInfo->pabyInlineData,
+                            static_cast<size_t>(psInfo->nSize));
+            }
+            inline_data[i] = block_data;
+        }
+
+        std::vector<std::string> aosInfo;
+        for (char **papszIter = psInfo->papszInfo;
+                papszIter != nullptr && *papszIter != nullptr; ++papszIter) {
+            aosInfo.emplace_back(*papszIter);
+        }
+        if (i == 0 || aosInfo != aosLastInfo) {
+            last_info = wrap_gdal_string_list_(
+                CPLStringList(psInfo->papszInfo, FALSE));
+            aosLastInfo = std::move(aosInfo);
+        }
+        info[i] = last_info;
+
+        if (bProgress) {
+            GDALTermProgressR(static_cast<double>(i + 1) /
+                                  static_cast<double>(nBlocks),
+                              nullptr, nullptr);
+        }
+    }
+
+    Rcpp::List df = Rcpp::List::create(
+        Rcpp::Named("filename") = filename,
+        Rcpp::Named("offset") = offset,
+        Rcpp::Named("size") = size,
+        Rcpp::Named("info") = info,
+        Rcpp::Named("inline_data") = inline_data);
+    df.attr("class") = Rcpp::CharacterVector{"data.frame"};
+    df.attr("row.names") = Rcpp::seq_len(nBlocks);
+    return df;
+#endif
+}
+
 void GDALMDArrayR::close() {
     if (m_hArray != nullptr) {
         GDALMDArrayRelease(m_hArray);
@@ -1041,6 +1228,10 @@ RCPP_MODULE(mod_GDALMDArray) {
         "Compute statistics of the array")
     .const_method("cache", &GDALMDArrayR::cache,
         "Cache the content of the array into an auxiliary file")
+    .const_method("getRawBlockInfo", &GDALMDArrayR::getRawBlockInfo,
+        "Return the file location of one stored block")
+    .const_method("getRawBlockRefs", &GDALMDArrayR::getRawBlockRefs,
+        "Return the file locations of stored blocks as a data frame")
     .method("close", &GDALMDArrayR::close,
         "Release the array and the dataset reference")
     .const_method("show", &GDALMDArrayR::show,

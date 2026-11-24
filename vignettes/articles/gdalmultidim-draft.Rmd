@@ -17,7 +17,7 @@ Comment/discussion: see the GitHub discussion linked from this article's pull re
 
 ## Status
 
-The bindings are being added to the development version of **gdalraster** in a series of pull requests, documented as experimental. As of 2026-11-22:
+The bindings are being added to the development version of **gdalraster** in a series of pull requests, documented as experimental. As of 2026-11-23:
 
 | PR | Content | Status |
 |----|---------|--------|
@@ -25,12 +25,12 @@ The bindings are being added to the development version of **gdalraster** in a s
 | 2 | `GDALMDArray`: description, hyperslab `$read()`; `mdim_read()` | merged ([#1026](https://github.com/firelab/gdalraster/pull/1026)) |
 | 3 | `$getView()`, `$transpose()`, `$getUnscaled()`, `$getMask()`, `$asClassicDataset()` | merged ([#1032](https://github.com/firelab/gdalraster/pull/1032)) |
 | 4 | `$getResampled()`, `$getGridded()` | merged ([#1039](https://github.com/firelab/gdalraster/pull/1039)) |
-| 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; `mdim_chunk_index()` | this update |
-| 6 | raw block references (GDAL >= 3.12) | planned |
+| 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; `mdim_chunk_index()` | merged ([#1040](https://github.com/firelab/gdalraster/pull/1040)) |
+| 6 | `$getRawBlockInfo()`, `$getRawBlockRefs()`; `mdim_block_refs()` (GDAL >= 3.12) | this update |
 | 7 | writing | planned |
 | 8 | `GDALAlg` integration and a package vignette | planned |
 
-See `?GDALMultiDimRaster`, `?GDALMDArray`, `?mdim_read` and `?mdim_chunk_index` for the interface as implemented. The class definitions below are kept as the plan for the remaining work, and may differ in detail from what has been merged.
+See `?GDALMultiDimRaster`, `?GDALMDArray`, `?mdim_read`, `?mdim_chunk_index` and `?mdim_block_refs` for the interface as implemented. The class definitions below are kept as the plan for the remaining work, and may differ in detail from what has been merged.
 
 ## Summary
 
@@ -208,7 +208,8 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     bool cache(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
     // raw block references (PR 6, GDAL >= 3.12)
-    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_idx) const;
+    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_coords) const;
+    Rcpp::DataFrame getRawBlockRefs(const Rcpp::NumericMatrix &block_coords) const;
 
     void close();
 };
