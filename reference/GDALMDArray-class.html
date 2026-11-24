@@ -196,9 +196,13 @@ varying first (e.g., <code>time, lat, lon</code>).</p>
 <span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getStatistics</span>(approx_ok, force)</span>
 <span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">computeStatistics</span>(approx_ok, options)</span>
 <span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">cache</span>(options)</span>
-<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
-<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getRawBlockInfo</span>(block_coords)</span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">getRawBlockRefs</span>(block_coords)</span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">asClassicDataset</span>(idx_xdim, idx_ydim, options)</span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a>arr<span class="sc">$</span><span class="fu">close</span>()</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -451,6 +455,55 @@ array. Returns logical <code>TRUE</code> on success. Requires GDAL &gt;= 3.4.</p
 </div>
 
 <div class="section">
+<h3 id="raw-block-references">Raw block references<a class="anchor" aria-label="anchor" href="#raw-block-references"></a></h3>
+
+
+<p><code>$getRawBlockInfo(block_coords)</code><br>
+Returns the location of one block (chunk) of the array as stored, without
+reading or decoding it. <code>block_coords</code> is a numeric vector of 0-based
+block coordinates, one value per dimension, i.e., the index of the block
+along each dimension (columns <code>chunkoff</code> of <code><a href="mdim_chunk_index.html">mdim_chunk_index()</a></code>). For a
+dimension with a block size of <code>0</code> the only valid coordinate is <code>0</code>.
+Returns a named list with elements:</p><ul><li><p><code>filename</code>: the file that contains the block (may be a <code>/vsi</code> path or,
+for virtual stores such as kerchunk or Icechunk references, the file the
+reference points to), or <code>NA</code></p></li>
+<li><p><code>offset</code>: the offset in bytes of the start of the block in that file
+(numeric, exact up to 2^53), or <code>NA</code></p></li>
+<li><p><code>size</code>: the size in bytes of the block as stored (i.e., compressed if
+compression is used), or <code>NA</code></p></li>
+<li><p><code>info</code>: character vector of driver-specific <code>NAME=VALUE</code> pairs that
+describe how the block is encoded</p></li>
+<li><p><code>inline_data</code>: a <code>raw</code> vector with the content of the block if the
+dataset holds it inline and not in a file (in which case <code>filename</code> and
+<code>offset</code> are <code>NA</code>), otherwise <code>NULL</code></p></li>
+</ul><p>A block that has valid coordinates but is missing in the dataset (all
+values are nodata) has <code>NA</code> for <code>filename</code>, <code>offset</code> and <code>size</code>. The
+<code>info</code> values depend on the format. For multi-byte data types they should
+include <code>ENDIANNESS</code> (<code>LITTLE</code> or <code>BIG</code>). For netCDF-4 and HDF5 they may
+include <code>COMPRESSION</code> (<code>DEFLATE</code> or <code>SZIP</code>) and <code>FILTER</code> (e.g.,
+<code>SHUFFLE</code>). For Zarr they may include <code>COMPRESSOR</code> and <code>FILTERS</code> (JSON
+as in the array metadata) and <code>TRANSPOSE_ORDER</code>. An error is raised if
+the block coordinates are out of range, or if the format driver does not
+provide this information for the array (it is available for netCDF-4,
+HDF5, Zarr and, under conditions, multidimensional VRT). Requires GDAL &gt;=
+3.12. For netCDF-4, GDAL must also have the HDF5 driver.</p>
+<p><code>$getRawBlockRefs(block_coords)</code><br>
+Returns the locations of a set of blocks as a data frame, with one row per
+block. <code>block_coords</code> is a numeric matrix of 0-based block coordinates
+with one row per block and one column per dimension (e.g., the <code>chunkoff</code>
+columns of a matrix from <code><a href="mdim_chunk_index.html">mdim_chunk_index()</a></code>). The data frame has columns
+<code>filename</code>, <code>offset</code>, <code>size</code>, <code>info</code> and <code>inline_data</code>, as described for
+<code>$getRawBlockInfo()</code>, of which <code>info</code> and <code>inline_data</code> are list
+columns. Rows are in the order of <code>block_coords</code>, with <code>NA</code> values for
+missing blocks. A progress bar is shown for more than one block unless
+<code>$quiet</code> is <code>TRUE</code>. For Zarr, each block is a file (or a part of a
+file) that GDAL has to query, so for a remote store this takes one or
+more network requests per block. See <code><a href="mdim_block_refs.html">mdim_block_refs()</a></code>, which returns
+the references along with the chunk index for the whole array or for a
+hyperslab. Requires GDAL &gt;= 3.12.</p>
+</div>
+
+<div class="section">
 <h3 id="classic-raster-view">Classic raster view<a class="anchor" aria-label="anchor" href="#classic-raster-view"></a></h3>
 
 
@@ -477,7 +530,7 @@ Closes the array and releases the reference to its dataset.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="GDALMultiDimRaster-class.html">GDALMultiDimRaster</a>, <a href="GDALRaster-class.html">GDALRaster</a>, <code><a href="mdim_read.html">mdim_read()</a></code>, <code><a href="mdim_chunk_index.html">mdim_chunk_index()</a></code>,
-<code><a href="mdim_info.html">mdim_info()</a></code>,
+<code><a href="mdim_block_refs.html">mdim_block_refs()</a></code>, <code><a href="mdim_info.html">mdim_info()</a></code>,
 <code><a href="mdim_as_classic.html">mdim_as_classic()</a></code></p></div>
     </div>
 

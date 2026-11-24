@@ -83,6 +83,10 @@ slowest varying first (e.g., `time, lat, lon`).
     arr$getStatistics(approx_ok, force)
     arr$computeStatistics(approx_ok, options)
     arr$cache(options)
+
+    arr$getRawBlockInfo(block_coords)
+    arr$getRawBlockRefs(block_coords)
+
     arr$asClassicDataset(idx_xdim, idx_ydim, options)
 
     arr$close()
@@ -365,6 +369,63 @@ array changes. `options` is a character vector of `NAME=VALUE` pairs, or
 block size of the cached array. Returns logical `TRUE` on success.
 Requires GDAL \>= 3.4.
 
+### Raw block references
+
+`$getRawBlockInfo(block_coords)`  
+Returns the location of one block (chunk) of the array as stored,
+without reading or decoding it. `block_coords` is a numeric vector of
+0-based block coordinates, one value per dimension, i.e., the index of
+the block along each dimension (columns `chunkoff` of
+[`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)).
+For a dimension with a block size of `0` the only valid coordinate is
+`0`. Returns a named list with elements:
+
+- `filename`: the file that contains the block (may be a `/vsi` path or,
+  for virtual stores such as kerchunk or Icechunk references, the file
+  the reference points to), or `NA`
+
+- `offset`: the offset in bytes of the start of the block in that file
+  (numeric, exact up to 2^53), or `NA`
+
+- `size`: the size in bytes of the block as stored (i.e., compressed if
+  compression is used), or `NA`
+
+- `info`: character vector of driver-specific `NAME=VALUE` pairs that
+  describe how the block is encoded
+
+- `inline_data`: a `raw` vector with the content of the block if the
+  dataset holds it inline and not in a file (in which case `filename`
+  and `offset` are `NA`), otherwise `NULL`
+
+A block that has valid coordinates but is missing in the dataset (all
+values are nodata) has `NA` for `filename`, `offset` and `size`. The
+`info` values depend on the format. For multi-byte data types they
+should include `ENDIANNESS` (`LITTLE` or `BIG`). For netCDF-4 and HDF5
+they may include `COMPRESSION` (`DEFLATE` or `SZIP`) and `FILTER` (e.g.,
+`SHUFFLE`). For Zarr they may include `COMPRESSOR` and `FILTERS` (JSON
+as in the array metadata) and `TRANSPOSE_ORDER`. An error is raised if
+the block coordinates are out of range, or if the format driver does not
+provide this information for the array (it is available for netCDF-4,
+HDF5, Zarr and, under conditions, multidimensional VRT). Requires GDAL
+\>= 3.12. For netCDF-4, GDAL must also have the HDF5 driver.
+
+`$getRawBlockRefs(block_coords)`  
+Returns the locations of a set of blocks as a data frame, with one row
+per block. `block_coords` is a numeric matrix of 0-based block
+coordinates with one row per block and one column per dimension (e.g.,
+the `chunkoff` columns of a matrix from
+[`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)).
+The data frame has columns `filename`, `offset`, `size`, `info` and
+`inline_data`, as described for `$getRawBlockInfo()`, of which `info`
+and `inline_data` are list columns. Rows are in the order of
+`block_coords`, with `NA` values for missing blocks. A progress bar is
+shown for more than one block unless `$quiet` is `TRUE`. For Zarr, each
+block is a file (or a part of a file) that GDAL has to query, so for a
+remote store this takes one or more network requests per block. See
+[`mdim_block_refs()`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md),
+which returns the references along with the chunk index for the whole
+array or for a hyperslab. Requires GDAL \>= 3.12.
+
 ### Classic raster view
 
 `$asClassicDataset(idx_xdim, idx_ydim, options)`  
@@ -396,6 +457,7 @@ Closes the array and releases the reference to its dataset.
 [GDALRaster](https://firelab.github.io/gdalraster/reference/GDALRaster-class.md),
 [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md),
 [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md),
+[`mdim_block_refs()`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md),
 [`mdim_info()`](https://firelab.github.io/gdalraster/reference/mdim_info.md),
 [`mdim_as_classic()`](https://firelab.github.io/gdalraster/reference/mdim_as_classic.md)
 

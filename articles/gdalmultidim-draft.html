@@ -95,7 +95,7 @@ article’s pull request.</p>
 </h2>
 <p>The bindings are being added to the development version of
 <strong>gdalraster</strong> in a series of pull requests, documented as
-experimental. As of 2026-11-22:</p>
+experimental. As of 2026-11-23:</p>
 <table class="table">
 <colgroup>
 <col width="19%">
@@ -146,12 +146,14 @@ path</td>
 <code>$getStatistics()</code>, <code>$computeStatistics()</code>,
 <code>$cache()</code>; <code><a href="../reference/mdim_chunk_index.html">mdim_chunk_index()</a></code>
 </td>
-<td>this update</td>
+<td>merged (<a href="https://github.com/firelab/gdalraster/pull/1040" class="external-link">#1040</a>)</td>
 </tr>
 <tr class="even">
 <td>6</td>
-<td>raw block references (GDAL &gt;= 3.12)</td>
-<td>planned</td>
+<td>
+<code>$getRawBlockInfo()</code>, <code>$getRawBlockRefs()</code>;
+<code><a href="../reference/mdim_block_refs.html">mdim_block_refs()</a></code> (GDAL &gt;= 3.12)</td>
+<td>this update</td>
 </tr>
 <tr class="odd">
 <td>7</td>
@@ -167,10 +169,10 @@ path</td>
 </tbody>
 </table>
 <p>See <code><a href="../reference/GDALMultiDimRaster-class.html">?GDALMultiDimRaster</a></code>, <code><a href="../reference/GDALMDArray-class.html">?GDALMDArray</a></code>,
-<code><a href="../reference/mdim_read.html">?mdim_read</a></code> and <code><a href="../reference/mdim_chunk_index.html">?mdim_chunk_index</a></code> for the
-interface as implemented. The class definitions below are kept as the
-plan for the remaining work, and may differ in detail from what has been
-merged.</p>
+<code><a href="../reference/mdim_read.html">?mdim_read</a></code>, <code><a href="../reference/mdim_chunk_index.html">?mdim_chunk_index</a></code> and
+<code><a href="../reference/mdim_block_refs.html">?mdim_block_refs</a></code> for the interface as implemented. The
+class definitions below are kept as the plan for the remaining work, and
+may differ in detail from what has been merged.</p>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
@@ -438,10 +440,11 @@ is defined by GDAL in <code>gdal_priv.h</code>. It is named
 <span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a>    <span class="dt">bool</span> cache<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>Nullable<span class="op">&lt;</span>Rcpp<span class="op">::</span>CharacterVector<span class="op">&gt;</span> <span class="op">&amp;</span>options<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
 <span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a></span>
 <span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a>    <span class="co">// raw block references (PR 6, GDAL &gt;= 3.12)</span></span>
-<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getRawBlockInfo<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>block_idx<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
-<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a></span>
-<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a>    <span class="dt">void</span> close<span class="op">();</span></span>
-<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a>    Rcpp<span class="op">::</span>List getRawBlockInfo<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericVector <span class="op">&amp;</span>block_coords<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame getRawBlockRefs<span class="op">(</span><span class="at">const</span> Rcpp<span class="op">::</span>NumericMatrix <span class="op">&amp;</span>block_coords<span class="op">)</span> <span class="at">const</span><span class="op">;</span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a>    <span class="dt">void</span> close<span class="op">();</span></span>
+<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>

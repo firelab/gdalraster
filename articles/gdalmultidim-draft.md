@@ -11,7 +11,7 @@ pull request.
 
 The bindings are being added to the development version of
 **gdalraster** in a series of pull requests, documented as experimental.
-As of 2026-11-22:
+As of 2026-11-23:
 
 | PR | Content | Status |
 |----|----|----|
@@ -19,17 +19,18 @@ As of 2026-11-22:
 | 2 | `GDALMDArray`: description, hyperslab `$read()`; [`mdim_read()`](https://firelab.github.io/gdalraster/reference/mdim_read.md) | merged ([\#1026](https://github.com/firelab/gdalraster/pull/1026)) |
 | 3 | `$getView()`, `$transpose()`, `$getUnscaled()`, `$getMask()`, `$asClassicDataset()` | merged ([\#1032](https://github.com/firelab/gdalraster/pull/1032)) |
 | 4 | `$getResampled()`, `$getGridded()` | merged ([\#1039](https://github.com/firelab/gdalraster/pull/1039)) |
-| 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md) | this update |
-| 6 | raw block references (GDAL \>= 3.12) | planned |
+| 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md) | merged ([\#1040](https://github.com/firelab/gdalraster/pull/1040)) |
+| 6 | `$getRawBlockInfo()`, `$getRawBlockRefs()`; [`mdim_block_refs()`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md) (GDAL \>= 3.12) | this update |
 | 7 | writing | planned |
 | 8 | `GDALAlg` integration and a package vignette | planned |
 
 See
 [`?GDALMultiDimRaster`](https://firelab.github.io/gdalraster/reference/GDALMultiDimRaster-class.md),
 [`?GDALMDArray`](https://firelab.github.io/gdalraster/reference/GDALMDArray-class.md),
-[`?mdim_read`](https://firelab.github.io/gdalraster/reference/mdim_read.md)
-and
+[`?mdim_read`](https://firelab.github.io/gdalraster/reference/mdim_read.md),
 [`?mdim_chunk_index`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)
+and
+[`?mdim_block_refs`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md)
 for the interface as implemented. The class definitions below are kept
 as the plan for the remaining work, and may differ in detail from what
 has been merged.
@@ -293,7 +294,8 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     bool cache(const Rcpp::Nullable<Rcpp::CharacterVector> &options) const;
 
     // raw block references (PR 6, GDAL >= 3.12)
-    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_idx) const;
+    Rcpp::List getRawBlockInfo(const Rcpp::NumericVector &block_coords) const;
+    Rcpp::DataFrame getRawBlockRefs(const Rcpp::NumericMatrix &block_coords) const;
 
     void close();
 };

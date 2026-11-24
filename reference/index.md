@@ -164,6 +164,8 @@
 - [`mdim_chunk_index()`](https://firelab.github.io/gdalraster/reference/mdim_chunk_index.md)
   : Generate an index of chunk offsets and sizes for iterating an
   MDArray
+- [`mdim_block_refs()`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md)
+  : Raw block references of a multidimensional array
 - [`mdim_translate()`](https://firelab.github.io/gdalraster/reference/mdim_translate.md)
   : Convert multidimensional data between different formats, and subset
 

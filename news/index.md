@@ -2,6 +2,13 @@
 
 ## gdalraster 2.7.0.9031 (dev)
 
+- class `GDALMDArray`: add methods `$getRawBlockInfo()` and
+  `$getRawBlockRefs()` returning the file, byte offset, size and
+  encoding information of stored blocks, without reading them; add
+  [`mdim_block_refs()`](https://firelab.github.io/gdalraster/reference/mdim_block_refs.md):
+  raw block references with the chunk index for an array or a hyperslab
+  (GDAL \>= 3.12) (2026-11-23)
+
 - `show()` methods of classes `GDALRaster`, `GDALMultiDimRaster`,
   `GDALVector` and `VSIFile`: print a short placeholder for an inline
   XML data source name (e.g., a VRT string), shorten a long DSN in the
