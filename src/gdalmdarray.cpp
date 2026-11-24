@@ -942,7 +942,8 @@ Rcpp::List GDALMDArrayR::getRawBlockInfo(
     if (psInfo->pszFilename != nullptr || psInfo->pabyInlineData != nullptr)
         out["size"] = static_cast<double>(psInfo->nSize);
     if (psInfo->pabyInlineData != nullptr) {
-        Rcpp::RawVector inline_data(static_cast<R_xlen_t>(psInfo->nSize));
+        Rcpp::RawVector inline_data =
+            Rcpp::no_init(static_cast<R_xlen_t>(psInfo->nSize));
         if (psInfo->nSize > 0) {
             std::memcpy(inline_data.begin(), psInfo->pabyInlineData,
                         static_cast<size_t>(psInfo->nSize));
@@ -994,6 +995,8 @@ Rcpp::DataFrame GDALMDArrayR::getRawBlockRefs(
     // at least one element so that the pointer passed to GDAL is not null
     std::vector<uint64_t> anBlockCoords(std::max<size_t>(nDims, 1), 0);
     const bool bProgress = !quiet && nBlocks > 1;
+    if (bProgress)
+        GDALTermProgressR(0, nullptr, nullptr);
     for (R_xlen_t i = 0; i < nBlocks; ++i) {
         if (i % 100 == 0)
             Rcpp::checkUserInterrupt();
@@ -1018,7 +1021,8 @@ Rcpp::DataFrame GDALMDArrayR::getRawBlockRefs(
             size[i] = static_cast<double>(psInfo->nSize);
         }
         if (psInfo->pabyInlineData != nullptr) {
-            Rcpp::RawVector block_data(static_cast<R_xlen_t>(psInfo->nSize));
+            Rcpp::RawVector block_data =
+                Rcpp::no_init(static_cast<R_xlen_t>(psInfo->nSize));
             if (psInfo->nSize > 0) {
                 std::memcpy(block_data.begin(), psInfo->pabyInlineData,
                             static_cast<size_t>(psInfo->nSize));
