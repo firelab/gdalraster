@@ -16,7 +16,9 @@
 #' * list the groups and arrays in a group
 #' * describe the dimensions of a group or an array
 #' * read the attributes of a group or an array
-#' * open an array as an object of class [`GDALMDArray`][GDALMDArray].
+#' * open an array as an object of class [`GDALMDArray`][GDALMDArray]
+#' * create groups, dimensions, arrays and attributes in a dataset opened for
+#' update, or in a new dataset (see [mdim_create()]).
 #'
 #' Groups, arrays and dimensions are addressed by their full path from the
 #' root group, e.g., `"/"`, `"/group/subgroup"` or `"/group/temperature"`. A
@@ -70,6 +72,12 @@
 #' ds$getAttributes(path)
 #' ds$getGroupInfo(path)
 #' ds$openMDArray(path)
+#'
+#' ds$createGroup(path, options)
+#' ds$createDimension(path, name, type, direction, size, options)
+#' ds$createMDArray(path, dim_paths, data_type, options)
+#' ds$setAttribute(path, name, value, data_type)
+#' ds$deleteAttribute(path, name)
 #'
 #' ds$close()
 #' ```
@@ -206,13 +214,90 @@
 #' the dataset, so it remains valid after \code{$close()} is called on this
 #' object. An error is raised if no array is found at `path`.
 #'
+#' ## Creating groups, dimensions, arrays and attributes
+#'
+#' The methods below require a dataset open for update, i.e., opened with
+#' `read_only = FALSE` or created with [mdim_create()], and a format driver
+#' that supports the operation. An error is raised if the operation fails.
+#' They have no return value unless stated otherwise. Changes may not be
+#' written to the file until the dataset is closed, which happens when
+#' \code{$close()} has been called on this object and on every array object
+#' obtained from it. That includes arrays that were not assigned a name, as
+#' in `ds$openMDArray("/x")$read(NULL, NULL, NULL)`, which stay open until
+#' garbage collected (see [gc()]). For the same reason, a file may fail to
+#' re-open for update while array objects from an earlier open still exist.
+#'
+#' \code{$createGroup(path, options)}\cr
+#' Creates a group. `path` is the full path of the new group, e.g.,
+#' `"/ocean"` or `"/ocean/surface"`. Its parent group must exist. `options`
+#' is a character vector of driver-specific `NAME=VALUE` group creation
+#' options, or `NULL`.
+#'
+#' \code{$createDimension(path, name, type, direction, size, options)}\cr
+#' Creates a dimension in the group at `path` (`"/"` for the root group).
+#' `name` is the name of the dimension, so that its full path is, e.g.,
+#' `"/time"` for `path = "/"` and `name = "time"`. `type` is a character
+#' string, generally one of `"HORIZONTAL_X"`, `"HORIZONTAL_Y"`, `"VERTICAL"`,
+#' `"TEMPORAL"`, `"PARAMETRIC"` or `""` (no type). `direction` is a character
+#' string, generally one of `"EAST"`, `"WEST"`, `"SOUTH"`, `"NORTH"`, `"UP"`,
+#' `"DOWN"`, `"FUTURE"`, `"PAST"` or `""`. `size` is the number of values
+#' along the dimension. How `type` and `direction` are stored depends on the
+#' format, and they may read back differently after the dataset is re-opened
+#' (e.g., netCDF does not store them, and derives them from CF attributes of
+#' the indexing variable such as its unit). `options` is a character vector
+#' of driver-specific `NAME=VALUE` dimension creation options, or `NULL`,
+#' e.g., `"UNLIMITED=YES"` for netCDF.
+#'
+#' \code{$createMDArray(path, dim_paths, data_type, options)}\cr
+#' Creates an array and returns it as an object of class
+#' [`GDALMDArray`][GDALMDArray]. `path` is the
+#' full path of the new array, e.g., `"/temperature"`. Its parent group must
+#' exist. `dim_paths` is a character vector of the full paths of its
+#' dimensions, in order, e.g., `c("/time", "/lat", "/lon")` (see
+#' \code{$createDimension()}), or `NULL` (or `character(0)`) for an array
+#' with no dimensions (a single value). `data_type` is a character string
+#' giving a GDAL data type name (e.g., `"Byte"`, `"Int16"`, `"Int32"`,
+#' `"Float32"`, `"Float64"`, see [`DEFAULT_NODATA`] for the full list), or
+#' `"String"` for an array of variable-length strings (not supported by all
+#' formats).
+#' `options` is a character vector of driver-specific `NAME=VALUE` array
+#' creation options, or `NULL`, e.g., `"BLOCKSIZE=1,180,360"` and
+#' `"COMPRESS=DEFLATE"` for netCDF (see the documentation of the format
+#' driver). A 1D array with the same full path as its dimension (the same
+#' group and the same name, e.g., array `"/time"` on dimension `"/time"`) is
+#' set as the indexing variable of that dimension, i.e., it holds the
+#' coordinate values of the dimension.
+#'
+#' \code{$setAttribute(path, name, value, data_type)}\cr
+#' Sets the attribute `name` of the group or array at `path`. `value` is a
+#' character, numeric, integer or logical vector, of length `1` or more and
+#' with no `NA` values (`NaN` is accepted in a numeric vector). `data_type`
+#' is the data type of the attribute. With `""` it follows `value`: String
+#' for character, Float64 for numeric, and Int32 for integer or logical.
+#' Otherwise give a GDAL data type name for numeric, integer or logical
+#' values (e.g., `"Int16"`, `"Float32"`), which are converted to that type,
+#' or `"String"` for character values. This matters for attributes that, by
+#' convention, have the data type of their array (e.g., `valid_range`,
+#' `valid_min` and `valid_max` in the CF conventions). Factors and
+#' `integer64` vectors are not accepted, convert them first. An attribute
+#' that already exists is replaced by deleting it and creating it again, so
+#' that its type and length may change (requires GDAL >= 3.8, otherwise the
+#' result depends on the format driver). The replacement is not atomic: if
+#' the new value cannot be written, the previous attribute is not restored.
+#' Some formats restrict certain attributes, e.g., netCDF requires
+#' `_FillValue` to have the data type of its array.
+#'
+#' \code{$deleteAttribute(path, name)}\cr
+#' Deletes the attribute `name` of the group or array at `path`. Requires
+#' GDAL >= 3.8.
+#'
 #' \code{$close()}\cr
 #' Closes the dataset and the root group. No return value, called for side
 #' effects.
 #'
 #' @seealso
-#' [GDALMDArray], [mdim_read()], [mdim_info()], [mdim_translate()],
-#' [mdim_as_classic()]
+#' [GDALMDArray], [mdim_create()], [mdim_read()], [mdim_info()],
+#' [mdim_translate()], [mdim_as_classic()]
 #'
 #' GDAL Multidimensional Raster Data Model:\cr
 #' \url{https://gdal.org/en/stable/user/multidim_raster_data_model.html}
@@ -242,6 +327,22 @@
 #' ds$info()
 #'
 #' ds$close()
+#'
+#' ## create a new dataset, see also mdim_create()
+#' f_new <- tempfile(fileext = ".nc")
+#' ds <- mdim_create("netCDF", f_new)
+#' ds$createDimension("/", "x", "HORIZONTAL_X", "EAST", 3, NULL)
+#' x <- ds$createMDArray("/x", "/x", "Float64", NULL)
+#' ds$setAttribute("/", "title", "a new dataset", "")
+#' ds$setAttribute("/x", "units", "degrees_east", "")
+#' x$close()
+#' ds$close()
+#'
+#' ds <- new(GDALMultiDimRaster, f_new)
+#' ds$getAttributes("/")$title
+#' ds$getDimensions("/")
+#' ds$close()
+#' \dontshow{unlink(f_new)}
 NULL
 
 Rcpp::loadModule("mod_GDALMultiDimRaster", TRUE)

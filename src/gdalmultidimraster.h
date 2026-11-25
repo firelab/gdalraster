@@ -65,9 +65,28 @@ class GDALMultiDimRaster {
     Rcpp::List getGroupInfo(const std::string &path) const;
     GDALMDArrayR *openMDArray(const std::string &path) const;
 
+    void createGroup(const std::string &path,
+                     const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+    void createDimension(const std::string &path, const std::string &name,
+                         const std::string &type, const std::string &direction,
+                         double size,
+                         const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+    GDALMDArrayR *createMDArray(
+        const std::string &path,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &dim_paths,
+        const std::string &data_type,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+    void setAttribute(const std::string &path, const std::string &name,
+                      const Rcpp::RObject &value,
+                      const std::string &data_type);
+    void deleteAttribute(const std::string &path, const std::string &name);
+
     void show() const;
 
     // methods for internal use not exported to R
+    // takes ownership of hDS, a dataset created for update
+    void setDataset_(GDALDatasetH hDS, const std::string &filename);
+    GDALDimensionH openDimension_(const std::string &path) const;
     void checkAccess_(GDALAccess access_needed) const;
     GDALGroupH openGroup_(const std::string &path, bool must_exist) const;
     GDALMDArrayH openMDArray_(const std::string &path, bool must_exist) const;
@@ -81,6 +100,12 @@ class GDALMultiDimRaster {
     GDALGroupH m_hRootGroup {nullptr};
     GDALAccess m_eAccess {GA_ReadOnly};
 };
+
+// object factory, see mdim_create() in R/gdal_mdim.R
+GDALMultiDimRaster *mdim_create(
+    const std::string &format, const Rcpp::CharacterVector &dst_filename,
+    const Rcpp::Nullable<Rcpp::CharacterVector> &root_group_options,
+    const Rcpp::Nullable<Rcpp::CharacterVector> &options);
 
 // helpers shared with the multidim classes, not exported to R
 std::string mdim_normalize_path_(const std::string &path);

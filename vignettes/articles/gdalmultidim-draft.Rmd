@@ -17,7 +17,7 @@ Comment/discussion: see the GitHub discussion linked from this article's pull re
 
 ## Status
 
-The bindings are being added to the development version of **gdalraster** in a series of pull requests, documented as experimental. As of 2026-11-23:
+The bindings are being added to the development version of **gdalraster** in a series of pull requests, documented as experimental. As of 2026-11-25:
 
 | PR | Content | Status |
 |----|---------|--------|
@@ -26,11 +26,12 @@ The bindings are being added to the development version of **gdalraster** in a s
 | 3 | `$getView()`, `$transpose()`, `$getUnscaled()`, `$getMask()`, `$asClassicDataset()` | merged ([#1032](https://github.com/firelab/gdalraster/pull/1032)) |
 | 4 | `$getResampled()`, `$getGridded()` | merged ([#1039](https://github.com/firelab/gdalraster/pull/1039)) |
 | 5 | `$adviseRead()`, `$getProcessingChunkSize()`, `$getStatistics()`, `$computeStatistics()`, `$cache()`; `mdim_chunk_index()` | merged ([#1040](https://github.com/firelab/gdalraster/pull/1040)) |
-| 6 | `$getRawBlockInfo()`, `$getRawBlockRefs()`; `mdim_block_refs()` (GDAL >= 3.12) | this update |
-| 7 | writing | planned |
+| 6 | `$getRawBlockInfo()`, `$getRawBlockRefs()`; `mdim_block_refs()` (GDAL >= 3.12) | merged ([#1043](https://github.com/firelab/gdalraster/pull/1043)) |
+| 7a | creating: `mdim_create()`; `$createGroup()`, `$createDimension()`, `$createMDArray()`, `$setAttribute()`, `$deleteAttribute()` | this update |
+| 7b | writing: `$write()` and the `$set*()` methods of `GDALMDArray` | planned |
 | 8 | `GDALAlg` integration and a package vignette | planned |
 
-See `?GDALMultiDimRaster`, `?GDALMDArray`, `?mdim_read`, `?mdim_chunk_index` and `?mdim_block_refs` for the interface as implemented. The class definitions below are kept as the plan for the remaining work, and may differ in detail from what has been merged.
+See `?GDALMultiDimRaster`, `?GDALMDArray`, `?mdim_read`, `?mdim_chunk_index`, `?mdim_block_refs` and `?mdim_create` for the interface as implemented. The class definitions below are kept as the plan for the remaining work, and may differ in detail from what has been merged.
 
 ## Summary
 
@@ -127,17 +128,20 @@ class GDALMultiDimRaster {
     // arrays (PR 2)
     GDALMDArrayR *openMDArray(const std::string &path) const;
 
-    // creation (PR 7)
-    void createGroup(const std::string &path);
+    // creation (PR 7a), a new dataset comes from mdim_create()
+    void createGroup(const std::string &path,
+                     const Rcpp::Nullable<Rcpp::CharacterVector> &options);
     void createDimension(const std::string &path, const std::string &name,
                          const std::string &type, const std::string &direction,
-                         double size);
-    GDALMDArray *createMDArray(const std::string &path,
-                               const Rcpp::CharacterVector &dim_paths,
-                               const std::string &data_type,
-                               const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+                         double size,
+                         const Rcpp::Nullable<Rcpp::CharacterVector> &options);
+    GDALMDArrayR *createMDArray(const std::string &path,
+                                const Rcpp::Nullable<Rcpp::CharacterVector> &dim_paths,
+                                const std::string &data_type,
+                                const Rcpp::Nullable<Rcpp::CharacterVector> &options);
     void setAttribute(const std::string &path, const std::string &name,
-                      const Rcpp::RObject &value);
+                      const Rcpp::RObject &value,
+                      const std::string &data_type);
     void deleteAttribute(const std::string &path, const std::string &name);
 };
 ```
@@ -169,14 +173,19 @@ class GDALMDArrayR {  // exposed to R as GDALMDArray
     Rcpp::List getInfo() const;  // all of the above in one call
     SEXP getCoordinateValues(int dim) const;
 
-    // I/O (PR 2, write in PR 7)
+    // I/O (PR 2, write and set methods in PR 7b)
     SEXP read(const Rcpp::Nullable<Rcpp::NumericVector> &start,
               const Rcpp::Nullable<Rcpp::NumericVector> &count,
               const Rcpp::Nullable<Rcpp::NumericVector> &step) const;
     void write(const Rcpp::RObject &data,
-               const Rcpp::NumericVector &start,
-               const Rcpp::NumericVector &count,
+               const Rcpp::Nullable<Rcpp::NumericVector> &start,
+               const Rcpp::Nullable<Rcpp::NumericVector> &count,
                const Rcpp::Nullable<Rcpp::NumericVector> &step);
+    void setNoDataValue(double nodata);
+    void setScale(double scale);
+    void setOffset(double offset);
+    void setUnit(const std::string &unit);
+    void setSpatialRef(const std::string &srs);
 
     // derived arrays, each returns a new GDALMDArray (PR 3, PR 4)
     GDALMDArrayR *getView(const std::string &view_expr) const;

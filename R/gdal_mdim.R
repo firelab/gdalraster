@@ -616,3 +616,104 @@ mdim_block_refs <- function(x, start = NULL, count = NULL) {
     out[names(refs)] <- refs
     return(out)
 }
+
+#' Create a new multidimensional raster dataset
+#'
+#' `mdim_create()` creates a new, empty dataset in a format that supports the
+#' GDAL Multidimensional Raster Data Model (e.g., netCDF, Zarr, or the
+#' in-memory MEM format), and returns it open for update as an object of class
+#' [`GDALMultiDimRaster`][GDALMultiDimRaster]. Dimensions, arrays, groups and
+#' attributes are then added with methods of that class.
+#' Wrapper of `GDALCreateMultiDimensional()` in the GDAL API. Requires
+#' GDAL >= 3.2. **This function is experimental**. Its interface may change
+#' in future releases.
+#'
+#' @details
+#' Data may not be written to the file until the dataset is closed, which
+#' happens when \code{$close()} has been called on the returned object and on
+#' every array object obtained from it.
+#'
+#' Only some of the formats with multidimensional support can be created
+#' (currently netCDF, Zarr, TileDB, VRT and MEM, depending on the GDAL version
+#' and build). A format driver can be checked with
+#' `gdal_get_driver_md(format, "DCAP_CREATE_MULTIDIMENSIONAL")`, which returns
+#' `"YES"` if it supports this. Note that the `rw_flag` column of
+#' [gdal_formats()] describes the driver as a whole, including its classic
+#' raster and vector support. To convert an existing dataset to another
+#' format, or to subset it, see [mdim_translate()].
+#'
+#' @param format Character string giving a format driver short name
+#' (e.g., `"netCDF"`, `"Zarr"`, `"MEM"`).
+#' @param dst_filename Character string giving the filename to create (may be
+#' an empty string for the MEM format).
+#' @param root_group_options Optional character vector of driver-specific
+#' `NAME=VALUE` options for the creation of the root group.
+#' @param options Optional character vector of driver-specific `NAME=VALUE`
+#' dataset creation options (e.g., `"FORMAT=NC4"` for netCDF).
+#' @returns An object of class [`GDALMultiDimRaster`][GDALMultiDimRaster],
+#' open for update.
+#'
+#' @seealso
+#' [GDALMultiDimRaster], [GDALMDArray], [mdim_translate()], [mdim_read()]
+#'
+#' @examplesIf gdal_version_num() >= gdal_compute_version(3, 2, 0) && isTRUE(gdal_formats("netCDF")$multidim_raster)
+#' f <- tempfile(fileext = ".nc")
+#' ds <- mdim_create("netCDF", f)
+#' ds
+#'
+#' ds$createDimension("/", "time", "TEMPORAL", "", 2, NULL)
+#' ds$createDimension("/", "lat", "HORIZONTAL_Y", "NORTH", 2, NULL)
+#' ds$createDimension("/", "lon", "HORIZONTAL_X", "EAST", 3, NULL)
+#'
+#' # coordinate arrays, named as their dimensions
+#' time <- ds$createMDArray("/time", "/time", "Int32", NULL)
+#' ds$setAttribute("/time", "units", "days since 2020-01-01", "")
+#' lat <- ds$createMDArray("/lat", "/lat", "Float64", NULL)
+#' ds$setAttribute("/lat", "units", "degrees_north", "")
+#' lon <- ds$createMDArray("/lon", "/lon", "Float64", NULL)
+#' ds$setAttribute("/lon", "units", "degrees_east", "")
+#'
+#' # a data array of Int16, one block per time step, compressed
+#' sst <- ds$createMDArray("/sst", c("/time", "/lat", "/lon"), "Int16",
+#'                         c("BLOCKSIZE=1,2,3", "COMPRESS=DEFLATE"))
+#' ds$setAttribute("/sst", "long_name", "sea surface temperature", "")
+#' ds$setAttribute("/sst", "valid_range", c(-200L, 4000L), "Int16")
+#' ds$setAttribute("/", "title", "mdim_create() example", "")
+#' sst
+#'
+#' # close the arrays and the dataset to write the file
+#' time$close()
+#' lat$close()
+#' lon$close()
+#' sst$close()
+#' ds$close()
+#'
+#' ds <- new(GDALMultiDimRaster, f)
+#' ds$getMDArrayNames("/")
+#' ds$getDimensions("/sst")
+#' ds$getAttributes("/sst")
+#' ds$close()
+#' \dontshow{unlink(f)}
+#' @export
+mdim_create <- function(format, dst_filename, root_group_options = NULL,
+                        options = NULL) {
+
+    if (missing(format) || !is.character(format) || length(format) != 1 ||
+            is.na(format)) {
+        stop("'format' must be a character string", call. = FALSE)
+    }
+    if (missing(dst_filename) || !is.character(dst_filename) ||
+            length(dst_filename) != 1 || is.na(dst_filename)) {
+        stop("'dst_filename' must be a character string", call. = FALSE)
+    }
+    if (!is.null(root_group_options) && !is.character(root_group_options))
+        stop("'root_group_options' must be a character vector or NULL",
+             call. = FALSE)
+    if (!is.null(options) && !is.character(options))
+        stop("'options' must be a character vector or NULL", call. = FALSE)
+
+    # signature for the mdim_create() object factory
+    ds <- new(GDALMultiDimRaster, format, dst_filename, root_group_options,
+              options)
+    return(ds)
+}
