@@ -15,6 +15,7 @@
 #include <Rcpp.h>
 
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,6 +33,15 @@ constexpr int MDIM_MIN_GDAL_ = GDAL_COMPUTE_VERSION(3, 2, 0);
 // ****************************************************************************
 // helpers not exported to R
 // ****************************************************************************
+
+// Split a full path into the path of the parent group and the name
+static void mdim_split_path_(const std::string &path, std::string &parent,
+                             std::string &name) {
+    const std::string full_path = mdim_normalize_path_(path);
+    const size_t pos = full_path.rfind('/');
+    parent = pos == 0 ? "/" : full_path.substr(0, pos);
+    name = full_path.substr(pos + 1);
+}
 
 // Normalize a full path to a group or array: "" -> "/", ensure a leading
 // "/", and drop a trailing "/" except for the root group
@@ -464,6 +474,324 @@ GDALMDArrayR *GDALMultiDimRaster::openMDArray(const std::string &path) const {
     return arr.release();
 }
 
+void GDALMultiDimRaster::createGroup(
+        const std::string &path,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+    checkAccess_(GA_Update);
+
+    std::string parent, name;
+    mdim_split_path_(path, parent, name);
+    if (name.empty())
+        Rcpp::stop("'path' must be the full path of the group to create");
+
+    const CPLStringList aosOptions = options_to_csl_(options);
+    GDALGroupH hParent = openGroup_(parent, true);
+    GDALGroupH hGroup = GDALGroupCreateGroup(hParent, name.c_str(),
+                                             aosOptions.List());
+    GDALGroupRelease(hParent);
+    if (hGroup == nullptr)
+        Rcpp::stop("failed to create group: " + mdim_normalize_path_(path));
+    GDALGroupRelease(hGroup);
+}
+
+void GDALMultiDimRaster::createDimension(
+        const std::string &path, const std::string &name,
+        const std::string &type, const std::string &direction, double size,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+    checkAccess_(GA_Update);
+
+    if (name.empty())
+        Rcpp::stop("'name' is required");
+    if (Rcpp::NumericVector::is_na(size) || !std::isfinite(size) ||
+            std::floor(size) != size || size < 1 ||
+            size > static_cast<double>(MAX_INT_AS_R_NUMERIC_)) {
+        Rcpp::stop("'size' must be a whole number >= 1");
+    }
+
+    const CPLStringList aosOptions = options_to_csl_(options);
+    GDALGroupH hGroup = openGroup_(path, true);
+    GDALDimensionH hDim = GDALGroupCreateDimension(
+        hGroup, name.c_str(), type.c_str(), direction.c_str(),
+        static_cast<GUInt64>(size), aosOptions.List());
+    GDALGroupRelease(hGroup);
+    if (hDim == nullptr) {
+        Rcpp::stop("failed to create dimension '" + name + "' in group: " +
+                   mdim_normalize_path_(path));
+    }
+    GDALDimensionRelease(hDim);
+}
+
+GDALMDArrayR *GDALMultiDimRaster::createMDArray(
+        const std::string &path,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &dim_paths_in,
+        const std::string &data_type,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+    checkAccess_(GA_Update);
+
+    // NULL is an array with no dimensions, as character(0)
+    Rcpp::CharacterVector dim_paths;
+    if (dim_paths_in.isNotNull())
+        dim_paths = Rcpp::CharacterVector(dim_paths_in);
+
+    std::string parent, name;
+    mdim_split_path_(path, parent, name);
+    if (name.empty())
+        Rcpp::stop("'path' must be the full path of the array to create");
+
+    // released on any exit below
+    GDALGroupH hGroup = openGroup_(parent, true);
+
+    GDALExtendedDataTypeH hDT = nullptr;
+    if (EQUAL(data_type.c_str(), "String")) {
+        hDT = GDALExtendedDataTypeCreateString(0);
+    }
+    else {
+        const GDALDataType eDT = GDALGetDataTypeByName(data_type.c_str());
+        if (eDT == GDT_Unknown) {
+            GDALGroupRelease(hGroup);
+            Rcpp::stop("'data_type' is unknown: " + data_type);
+        }
+        hDT = GDALExtendedDataTypeCreate(eDT);
+    }
+    if (hDT == nullptr) {
+        GDALGroupRelease(hGroup);
+        Rcpp::stop("failed to create the data type");
+    }
+
+    // released on any exit below
+    std::vector<GDALDimensionH> ahDims;
+    std::string err_msg;
+
+    for (R_xlen_t i = 0; i < dim_paths.size() && err_msg.empty(); ++i) {
+        if (Rcpp::CharacterVector::is_na(dim_paths[i])) {
+            err_msg = "'dim_paths' has NA";
+            continue;
+        }
+        const std::string dim_path(dim_paths[i]);
+        GDALDimensionH hDim = openDimension_(dim_path);
+        if (hDim == nullptr)
+            err_msg = "dimension not found: " + mdim_normalize_path_(dim_path);
+        else
+            ahDims.push_back(hDim);
+    }
+
+    GDALMDArrayH hArray = nullptr;
+    if (err_msg.empty()) {
+        const CPLStringList aosOptions = options_to_csl_(options);
+        hArray = GDALGroupCreateMDArray(
+            hGroup, name.c_str(), ahDims.size(),
+            ahDims.empty() ? nullptr : ahDims.data(), hDT, aosOptions.List());
+        if (hArray == nullptr)
+            err_msg = "failed to create array: " + mdim_normalize_path_(path);
+    }
+
+    // a 1D array with the full path of its dimension (same group, same name)
+    // is the indexing variable of that dimension (some drivers do this
+    // themselves, or only on re-opening)
+    if (hArray != nullptr && ahDims.size() == 1) {
+        const char *pszDimName = GDALDimensionGetFullName(ahDims[0]);
+        if (pszDimName != nullptr &&
+                mdim_normalize_path_(path) == pszDimName) {
+            CPLPushErrorHandler(CPLQuietErrorHandler);
+            GDALDimensionSetIndexingVariable(ahDims[0], hArray);
+            CPLPopErrorHandler();
+            CPLErrorReset();
+        }
+    }
+
+    GDALGroupRelease(hGroup);
+    for (GDALDimensionH hDim : ahDims)
+        GDALDimensionRelease(hDim);
+    GDALExtendedDataTypeRelease(hDT);
+
+    if (!err_msg.empty())
+        Rcpp::stop(err_msg);
+
+    auto arr = std::make_unique<GDALMDArrayR>();
+    arr->setHandles_(hArray, m_hDataset);
+    return arr.release();
+}
+
+void GDALMultiDimRaster::setAttribute(const std::string &path,
+                                      const std::string &name,
+                                      const Rcpp::RObject &value,
+                                      const std::string &data_type) {
+    checkAccess_(GA_Update);
+
+    if (name.empty())
+        Rcpp::stop("'name' is required");
+
+    if (Rf_isFactor(value) || Rf_inherits(value, "integer64")) {
+        Rcpp::stop("'value' must not be a factor or integer64 (convert with "
+                   "as.character() or as.numeric())");
+    }
+
+    const bool is_string = Rcpp::is<Rcpp::CharacterVector>(value);
+    const bool is_int = Rcpp::is<Rcpp::IntegerVector>(value) ||
+                        Rcpp::is<Rcpp::LogicalVector>(value);
+    const bool is_double = Rcpp::is<Rcpp::NumericVector>(value);
+    if (value.isNULL() || !(is_string || is_int || is_double) ||
+            Rf_xlength(value) < 1) {
+        Rcpp::stop("'value' must be a character, numeric, integer or logical "
+                   "vector of length >= 1");
+    }
+    const R_xlen_t nValues = Rf_xlength(value);
+
+    // the data type of the attribute, inferred from 'value' if not given
+    GDALDataType eDT = is_int ? GDT_Int32 : GDT_Float64;
+    if (!data_type.empty()) {
+        const bool want_string = EQUAL(data_type.c_str(), "String");
+        if (!want_string) {
+            eDT = GDALGetDataTypeByName(data_type.c_str());
+            if (eDT == GDT_Unknown)
+                Rcpp::stop("'data_type' is unknown: " + data_type);
+        }
+        if (want_string != is_string) {
+            Rcpp::stop("'data_type' must be \"String\" for a character "
+                       "'value', and a numeric type otherwise");
+        }
+    }
+
+    // the values to write, checked before the attribute is created
+    CPLStringList aosValues;
+    std::vector<double> adfValues;
+    if (is_string) {
+        const Rcpp::CharacterVector v(value);
+        for (R_xlen_t i = 0; i < nValues; ++i) {
+            if (Rcpp::CharacterVector::is_na(v[i]))
+                Rcpp::stop("'value' must not have NA");
+            aosValues.AddString(v[i]);
+        }
+    }
+    else {
+        const Rcpp::NumericVector v = Rcpp::as<Rcpp::NumericVector>(value);
+        for (R_xlen_t i = 0; i < nValues; ++i) {
+            // NaN is a valid value, NA is not
+            if (ISNA(v[i]))
+                Rcpp::stop("'value' must not have NA");
+            adfValues.push_back(v[i]);
+        }
+    }
+
+    GDALGroupH hGroup = openGroup_(path, false);
+    GDALMDArrayH hArray = nullptr;
+    if (hGroup == nullptr)
+        hArray = openMDArray_(path, false);
+    if (hGroup == nullptr && hArray == nullptr) {
+        Rcpp::stop("no group or array found at path: " +
+                   mdim_normalize_path_(path));
+    }
+
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 8, 0)
+    // replace an existing attribute, which may differ in type or length
+    CPLPushErrorHandler(CPLQuietErrorHandler);
+    GDALAttributeH hExisting = hGroup != nullptr ?
+        GDALGroupGetAttribute(hGroup, name.c_str()) :
+        GDALMDArrayGetAttribute(hArray, name.c_str());
+    if (hExisting != nullptr) {
+        GDALAttributeRelease(hExisting);
+        if (hGroup != nullptr)
+            GDALGroupDeleteAttribute(hGroup, name.c_str(), nullptr);
+        else
+            GDALMDArrayDeleteAttribute(hArray, name.c_str(), nullptr);
+    }
+    CPLPopErrorHandler();
+    CPLErrorReset();
+#endif
+
+    GDALExtendedDataTypeH hDT = nullptr;
+    if (is_string)
+        hDT = GDALExtendedDataTypeCreateString(0);
+    else
+        hDT = GDALExtendedDataTypeCreate(eDT);
+
+    // one value is a scalar attribute, otherwise a 1D array
+    const GUInt64 nSize = static_cast<GUInt64>(nValues);
+    const size_t nAttrDims = nValues == 1 ? 0 : 1;
+    GDALAttributeH hAttr = nullptr;
+    if (hGroup != nullptr) {
+        hAttr = GDALGroupCreateAttribute(hGroup, name.c_str(), nAttrDims,
+                                         &nSize, hDT, nullptr);
+    }
+    else {
+        hAttr = GDALMDArrayCreateAttribute(hArray, name.c_str(), nAttrDims,
+                                           &nSize, hDT, nullptr);
+    }
+    GDALExtendedDataTypeRelease(hDT);
+
+    int ok = FALSE;
+    if (hAttr != nullptr) {
+        if (is_string && nValues == 1)
+            ok = GDALAttributeWriteString(hAttr, aosValues[0]);
+        else if (is_string)
+            ok = GDALAttributeWriteStringArray(hAttr, aosValues.List());
+        else
+            ok = GDALAttributeWriteDoubleArray(hAttr, adfValues.data(),
+                                               adfValues.size());
+        GDALAttributeRelease(hAttr);
+
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 8, 0)
+        if (!ok) {
+            // do not leave an attribute without its value
+            CPLPushErrorHandler(CPLQuietErrorHandler);
+            if (hGroup != nullptr)
+                GDALGroupDeleteAttribute(hGroup, name.c_str(), nullptr);
+            else
+                GDALMDArrayDeleteAttribute(hArray, name.c_str(), nullptr);
+            CPLPopErrorHandler();
+            CPLErrorReset();
+        }
+#endif
+    }
+
+    if (hGroup != nullptr)
+        GDALGroupRelease(hGroup);
+    else
+        GDALMDArrayRelease(hArray);
+
+    if (hAttr == nullptr) {
+        Rcpp::stop("failed to create attribute '" + name + "' on: " +
+                   mdim_normalize_path_(path));
+    }
+    if (!ok) {
+        Rcpp::stop("failed to write attribute '" + name + "' on: " +
+                   mdim_normalize_path_(path));
+    }
+}
+
+void GDALMultiDimRaster::deleteAttribute(const std::string &path,
+                                         const std::string &name) {
+    checkAccess_(GA_Update);
+
+// requires GDAL >= 3.8 for GDALGroupDeleteAttribute()
+#if GDAL_VERSION_NUM < GDAL_COMPUTE_VERSION(3, 8, 0)
+    Rcpp::stop("deleteAttribute() requires GDAL >= 3.8");
+#else
+    if (name.empty())
+        Rcpp::stop("'name' is required");
+
+    bool ok = false;
+    GDALGroupH hGroup = openGroup_(path, false);
+    if (hGroup != nullptr) {
+        ok = GDALGroupDeleteAttribute(hGroup, name.c_str(), nullptr);
+        GDALGroupRelease(hGroup);
+    }
+    else {
+        GDALMDArrayH hArray = openMDArray_(path, false);
+        if (hArray == nullptr) {
+            Rcpp::stop("no group or array found at path: " +
+                       mdim_normalize_path_(path));
+        }
+        ok = GDALMDArrayDeleteAttribute(hArray, name.c_str(), nullptr);
+        GDALMDArrayRelease(hArray);
+    }
+    if (!ok) {
+        Rcpp::stop("failed to delete attribute '" + name + "' on: " +
+                   mdim_normalize_path_(path));
+    }
+#endif
+}
+
 void GDALMultiDimRaster::show() const {
     if (!isOpen()) {
         cli_text_("C++ object of class {.cls GDALMultiDimRaster}");
@@ -512,6 +840,51 @@ void GDALMultiDimRaster::checkAccess_(GDALAccess access_needed) const {
 
     if (access_needed == GA_Update && m_eAccess == GA_ReadOnly)
         Rcpp::stop("dataset is read-only");
+}
+
+void GDALMultiDimRaster::setDataset_(GDALDatasetH hDS,
+                                     const std::string &filename) {
+    close();
+    m_filename = filename;
+    m_hDataset = hDS;
+    m_hRootGroup = GDALDatasetGetRootGroup(m_hDataset);
+    if (m_hRootGroup == nullptr) {
+        GDALReleaseDataset(m_hDataset);
+        m_hDataset = nullptr;
+        Rcpp::stop("failed to get the root group");
+    }
+    m_eAccess = GA_Update;
+}
+
+// Open a dimension by full path, i.e., the full path of its group and its
+// name. The caller must release the returned handle with
+// GDALDimensionRelease(). Returns nullptr if not found.
+GDALDimensionH GDALMultiDimRaster::openDimension_(
+        const std::string &path) const {
+
+    std::string parent, name;
+    mdim_split_path_(path, parent, name);
+
+    GDALGroupH hGroup = openGroup_(parent, false);
+    if (hGroup == nullptr)
+        return nullptr;
+
+    size_t nCount = 0;
+    GDALDimensionH *pahDims = GDALGroupGetDimensions(hGroup, &nCount, nullptr);
+    GDALGroupRelease(hGroup);
+
+    GDALDimensionH hDim = nullptr;
+    for (size_t i = 0; i < nCount; ++i) {
+        const char *pszName = GDALDimensionGetName(pahDims[i]);
+        if (hDim == nullptr && pszName != nullptr && name == pszName)
+            hDim = pahDims[i];
+        else
+            GDALDimensionRelease(pahDims[i]);
+    }
+    // the array of handles only (GDALReleaseDimensions() would also release
+    // the handle that is returned)
+    CPLFree(pahDims);
+    return hDim;
 }
 
 // Open a group by full path. The caller must release the returned handle
@@ -587,6 +960,50 @@ GDALMDArrayH GDALMultiDimRaster::openMDArray_(const std::string &path,
 }
 
 // ****************************************************************************
+// object factory
+// ****************************************************************************
+
+// Create a new multidimensional dataset, open for update.
+// Implemented as a GDALMultiDimRaster object factory registered in
+// RCPP_MODULE(mod_GDALMultiDimRaster).
+// Unique function signature based on number of parameters.
+// Called in R with `ds <- new(GDALMultiDimRaster, ...)` giving all 4
+// parameters, as in mdim_create() in R/gdal_mdim.R.
+GDALMultiDimRaster *mdim_create(
+        const std::string &format, const Rcpp::CharacterVector &dst_filename,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &root_group_options,
+        const Rcpp::Nullable<Rcpp::CharacterVector> &options) {
+
+    if (GDAL_VERSION_NUM < MDIM_MIN_GDAL_)
+        Rcpp::stop("mdim_create() requires GDAL >= 3.2");
+
+    GDALDriverH hDriver = GDALGetDriverByName(format.c_str());
+    if (hDriver == nullptr)
+        Rcpp::stop("failed to get driver for the specified format");
+
+    CSLConstList papszDriverMD = GDALGetMetadata(hDriver, nullptr);
+    if (!CPLFetchBool(papszDriverMD, GDAL_DCAP_CREATE_MULTIDIMENSIONAL, FALSE))
+        Rcpp::stop("driver does not support multidimensional create");
+
+    const std::string dst_filename_in =
+        Rcpp::as<std::string>(check_gdal_filename(dst_filename));
+
+    const CPLStringList aosRootGroupOptions =
+        options_to_csl_(root_group_options);
+    const CPLStringList aosOptions = options_to_csl_(options);
+
+    GDALDatasetH hDstDS = GDALCreateMultiDimensional(
+        hDriver, dst_filename_in.c_str(), aosRootGroupOptions.List(),
+        aosOptions.List());
+    if (hDstDS == nullptr)
+        Rcpp::stop("mdim_create() failed");
+
+    auto ds = std::make_unique<GDALMultiDimRaster>();
+    ds->setDataset_(hDstDS, dst_filename_in);
+    return ds.release();
+}
+
+// ****************************************************************************
 
 RCPP_MODULE(mod_GDALMultiDimRaster) {
     Rcpp::class_<GDALMultiDimRaster>("GDALMultiDimRaster")
@@ -604,6 +1021,12 @@ RCPP_MODULE(mod_GDALMultiDimRaster) {
                  Rcpp::Nullable<Rcpp::CharacterVector>>
         ("Usage: new(GDALMultiDimRaster, filename, read_only, open_options, "
          "shared, allowed_drivers)")
+
+    // mdim_create() object factory with 4 parameters
+    .factory<const std::string&, const Rcpp::CharacterVector&,
+             const Rcpp::Nullable<Rcpp::CharacterVector>&,
+             const Rcpp::Nullable<Rcpp::CharacterVector>&>
+             (mdim_create)
 
     // exposed read/write fields
     .field("infoOptions", &GDALMultiDimRaster::infoOptions)
@@ -641,6 +1064,16 @@ RCPP_MODULE(mod_GDALMultiDimRaster) {
         "Return a list describing a group, by full path")
     .const_method("openMDArray", &GDALMultiDimRaster::openMDArray,
         "Open an array by full path, returning an object of class GDALMDArray")
+    .method("createGroup", &GDALMultiDimRaster::createGroup,
+        "Create a group, by full path")
+    .method("createDimension", &GDALMultiDimRaster::createDimension,
+        "Create a dimension in a group")
+    .method("createMDArray", &GDALMultiDimRaster::createMDArray,
+        "Create an array, returning an object of class GDALMDArray")
+    .method("setAttribute", &GDALMultiDimRaster::setAttribute,
+        "Set an attribute of a group or array, by full path")
+    .method("deleteAttribute", &GDALMultiDimRaster::deleteAttribute,
+        "Delete an attribute of a group or array, by full path")
     .const_method("show", &GDALMultiDimRaster::show,
         "S4 show()")
 

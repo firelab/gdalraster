@@ -18,7 +18,9 @@ methods to:
 \item list the groups and arrays in a group
 \item describe the dimensions of a group or an array
 \item read the attributes of a group or an array
-\item open an array as an object of class \code{\link{GDALMDArray}}.
+\item open an array as an object of class \code{\link{GDALMDArray}}
+\item create groups, dimensions, arrays and attributes in a dataset opened for
+update, or in a new dataset (see \code{\link[=mdim_create]{mdim_create()}}).
 }
 
 Groups, arrays and dimensions are addressed by their full path from the
@@ -74,6 +76,12 @@ ds$getDimensions(path)
 ds$getAttributes(path)
 ds$getGroupInfo(path)
 ds$openMDArray(path)
+
+ds$createGroup(path, options)
+ds$createDimension(path, name, type, direction, size, options)
+ds$createMDArray(path, dim_paths, data_type, options)
+ds$setAttribute(path, name, value, data_type)
+ds$deleteAttribute(path, name)
 
 ds$close()
 }\if{html}{\out{</div>}}
@@ -216,6 +224,84 @@ array, e.g., \code{"/temperature"} or \code{"/group/temperature"}) and returns a
 object of class \code{\link{GDALMDArray}}. The array holds a reference to
 the dataset, so it remains valid after \code{$close()} is called on this
 object. An error is raised if no array is found at \code{path}.
+}
+
+\subsection{Creating groups, dimensions, arrays and attributes}{
+
+The methods below require a dataset open for update, i.e., opened with
+\code{read_only = FALSE} or created with \code{\link[=mdim_create]{mdim_create()}}, and a format driver
+that supports the operation. An error is raised if the operation fails.
+They have no return value unless stated otherwise. Changes may not be
+written to the file until the dataset is closed, which happens when
+\code{$close()} has been called on this object and on every array object
+obtained from it. That includes arrays that were not assigned a name, as
+in \code{ds$openMDArray("/x")$read(NULL, NULL, NULL)}, which stay open until
+garbage collected (see \code{\link[=gc]{gc()}}). For the same reason, a file may fail to
+re-open for update while array objects from an earlier open still exist.
+
+\code{$createGroup(path, options)}\cr
+Creates a group. \code{path} is the full path of the new group, e.g.,
+\code{"/ocean"} or \code{"/ocean/surface"}. Its parent group must exist. \code{options}
+is a character vector of driver-specific \code{NAME=VALUE} group creation
+options, or \code{NULL}.
+
+\code{$createDimension(path, name, type, direction, size, options)}\cr
+Creates a dimension in the group at \code{path} (\code{"/"} for the root group).
+\code{name} is the name of the dimension, so that its full path is, e.g.,
+\code{"/time"} for \code{path = "/"} and \code{name = "time"}. \code{type} is a character
+string, generally one of \code{"HORIZONTAL_X"}, \code{"HORIZONTAL_Y"}, \code{"VERTICAL"},
+\code{"TEMPORAL"}, \code{"PARAMETRIC"} or \code{""} (no type). \code{direction} is a character
+string, generally one of \code{"EAST"}, \code{"WEST"}, \code{"SOUTH"}, \code{"NORTH"}, \code{"UP"},
+\code{"DOWN"}, \code{"FUTURE"}, \code{"PAST"} or \code{""}. \code{size} is the number of values
+along the dimension. How \code{type} and \code{direction} are stored depends on the
+format, and they may read back differently after the dataset is re-opened
+(e.g., netCDF does not store them, and derives them from CF attributes of
+the indexing variable such as its unit). \code{options} is a character vector
+of driver-specific \code{NAME=VALUE} dimension creation options, or \code{NULL},
+e.g., \code{"UNLIMITED=YES"} for netCDF.
+
+\code{$createMDArray(path, dim_paths, data_type, options)}\cr
+Creates an array and returns it as an object of class
+\code{\link{GDALMDArray}}. \code{path} is the
+full path of the new array, e.g., \code{"/temperature"}. Its parent group must
+exist. \code{dim_paths} is a character vector of the full paths of its
+dimensions, in order, e.g., \code{c("/time", "/lat", "/lon")} (see
+\code{$createDimension()}), or \code{NULL} (or \code{character(0)}) for an array
+with no dimensions (a single value). \code{data_type} is a character string
+giving a GDAL data type name (e.g., \code{"Byte"}, \code{"Int16"}, \code{"Int32"},
+\code{"Float32"}, \code{"Float64"}, see \code{\link{DEFAULT_NODATA}} for the full list), or
+\code{"String"} for an array of variable-length strings (not supported by all
+formats).
+\code{options} is a character vector of driver-specific \code{NAME=VALUE} array
+creation options, or \code{NULL}, e.g., \code{"BLOCKSIZE=1,180,360"} and
+\code{"COMPRESS=DEFLATE"} for netCDF (see the documentation of the format
+driver). A 1D array with the same full path as its dimension (the same
+group and the same name, e.g., array \code{"/time"} on dimension \code{"/time"}) is
+set as the indexing variable of that dimension, i.e., it holds the
+coordinate values of the dimension.
+
+\code{$setAttribute(path, name, value, data_type)}\cr
+Sets the attribute \code{name} of the group or array at \code{path}. \code{value} is a
+character, numeric, integer or logical vector, of length \code{1} or more and
+with no \code{NA} values (\code{NaN} is accepted in a numeric vector). \code{data_type}
+is the data type of the attribute. With \code{""} it follows \code{value}: String
+for character, Float64 for numeric, and Int32 for integer or logical.
+Otherwise give a GDAL data type name for numeric, integer or logical
+values (e.g., \code{"Int16"}, \code{"Float32"}), which are converted to that type,
+or \code{"String"} for character values. This matters for attributes that, by
+convention, have the data type of their array (e.g., \code{valid_range},
+\code{valid_min} and \code{valid_max} in the CF conventions). Factors and
+\code{integer64} vectors are not accepted, convert them first. An attribute
+that already exists is replaced by deleting it and creating it again, so
+that its type and length may change (requires GDAL >= 3.8, otherwise the
+result depends on the format driver). The replacement is not atomic: if
+the new value cannot be written, the previous attribute is not restored.
+Some formats restrict certain attributes, e.g., netCDF requires
+\verb{_FillValue} to have the data type of its array.
+
+\code{$deleteAttribute(path, name)}\cr
+Deletes the attribute \code{name} of the group or array at \code{path}. Requires
+GDAL >= 3.8.
 
 \code{$close()}\cr
 Closes the dataset and the root group. No return value, called for side
@@ -249,11 +335,27 @@ ds$infoOptions <- c("-array", "t2m", "-detailed", "-limit", "2")
 ds$info()
 
 ds$close()
+
+## create a new dataset, see also mdim_create()
+f_new <- tempfile(fileext = ".nc")
+ds <- mdim_create("netCDF", f_new)
+ds$createDimension("/", "x", "HORIZONTAL_X", "EAST", 3, NULL)
+x <- ds$createMDArray("/x", "/x", "Float64", NULL)
+ds$setAttribute("/", "title", "a new dataset", "")
+ds$setAttribute("/x", "units", "degrees_east", "")
+x$close()
+ds$close()
+
+ds <- new(GDALMultiDimRaster, f_new)
+ds$getAttributes("/")$title
+ds$getDimensions("/")
+ds$close()
+\dontshow{unlink(f_new)}
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\link{GDALMDArray}, \code{\link[=mdim_read]{mdim_read()}}, \code{\link[=mdim_info]{mdim_info()}}, \code{\link[=mdim_translate]{mdim_translate()}},
-\code{\link[=mdim_as_classic]{mdim_as_classic()}}
+\link{GDALMDArray}, \code{\link[=mdim_create]{mdim_create()}}, \code{\link[=mdim_read]{mdim_read()}}, \code{\link[=mdim_info]{mdim_info()}},
+\code{\link[=mdim_translate]{mdim_translate()}}, \code{\link[=mdim_as_classic]{mdim_as_classic()}}
 
 GDAL Multidimensional Raster Data Model:\cr
 \url{https://gdal.org/en/stable/user/multidim_raster_data_model.html}
